@@ -1,0 +1,24 @@
+textarea {
+  resize: none;
+}
+
+/*
+.row {
+  background-color: rgba(39, 143, 143, 0.3);
+  background-size: cover;
+}
+
+ */
+
+.d-flex {
+  display: grid;
+}
+
+button[disabled]{
+  background-color: #278F8F;
+  color: white;
+}
+
+label{
+  user-select: none;
+}

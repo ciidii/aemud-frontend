@@ -1,0 +1,47 @@
+html,body{
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.div-1 {
+  background-color: rgba(208, 156, 10, 0.8);
+}
+
+.div-2 {
+  background-color: rgba(208, 156, 10, 0);
+}
+.logo{
+  width: 40%;
+}
+.mosque-ucad{
+  font-family: police-lieu sans-serif;
+  background-color: #278F8F;
+  text-align: justify;
+  color: white;
+  vertical-align: center;
+}
+
+.container-fluid{
+  display: grid;
+}
+.text-center{
+  vertical-align: center;
+}
+.h2{
+  color: white;
+  font-family: police-titre, serif;
+}
+.row-1{
+  font-family: police-autre, sans-serif;
+}
+.container-fluid2{
+  align-content: center;
+  justify-content: center;
+}
+.btn-connexion{
+  background-color: #278F8F;
+}
+label{
+  color: #278F8F;
+}

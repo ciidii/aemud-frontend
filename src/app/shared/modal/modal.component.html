@@ -1,0 +1,53 @@
+<div class="modal modal-lg shadow-lg" id="myModal" #myModal>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h4
+          class="modal-title text-center"> {{ memberDetails?.firstname | titlecase }} {{ memberDetails?.name | uppercase }}</h4>
+        <button type="button" (click)="closeModal(memberDetails)" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <p *ngIf="memberDetails?.nationality!=''"><strong>Nationnalité:</strong> {{ memberDetails?.nationality }}</p>
+        <p *ngIf="memberDetails?.birthday!=''"><strong>Date de Naissance:</strong> {{ memberDetails?.birthday }}</p>
+        <p *ngIf="memberDetails?.maritalStatus!=''"><strong>Situation
+          Matrimoniale: </strong> {{ memberDetails?.maritalStatus }}</p>
+        <p *ngIf="memberDetails?.addressInDakar!=''"><strong>Adresse à
+          Dakar:</strong> {{ memberDetails?.addressInDakar }}</p>
+        <p *ngIf="memberDetails?.holidayAddress!=''"><strong>Adresse
+          Vaccances: </strong> {{ memberDetails?.holidayAddress }}
+        </p>
+        <p *ngIf="memberDetails?.addressToCampus!=''"><strong>Adresse au
+          campus</strong> {{ memberDetails?.addressToCampus }}
+        </p>
+        <p *ngIf="memberDetails?.numberPhone!=''"><strong>Téléphone: </strong> {{ memberDetails?.numberPhone }}</p>
+        <p *ngIf="memberDetails?.email!=''"><strong>Email: </strong> {{ memberDetails?.email }}</p>
+        <p *ngIf="memberDetails?.personToCall!=''"><strong>Personne à contacter en cas
+          Danger: </strong> {{ memberDetails?.personToCall }}</p>
+        <p *ngIf="memberDetails?.faculty!=''"><strong>Faculté - Institut - Ecole: </strong> {{ memberDetails?.faculty }}
+        </p>
+        <p *ngIf="memberDetails?.departmentOrYear!=''"><strong>Département / Année
+          d’étude: </strong> {{ memberDetails?.departmentOrYear }}</p>
+        <p *ngIf="memberDetails?.bourse"><strong>Situation sociale: </strong> {{ memberDetails?.bourse?.lebelle }}</p>
+        <p *ngIf="memberDetails?.participatedActivity!=''"><strong>Participé aux activités de L’AEMUD
+          :</strong> {{ memberDetails?.participatedActivity }}</p>
+        <p *ngIf="memberDetails?.aemudCourseParticipated!=''"><strong>A participé aux cours de
+          l'AEMUD:</strong> {{ memberDetails?.aemudCourseParticipated }}</p>
+        <p *ngIf="memberDetails?.politicOrganisation!=''"><strong>>Est membre de l'organisation
+          politique:</strong> {{ memberDetails?.politicOrganisation }}</p>
+        <p *ngIf="memberDetails?.yearOfMembership"><strong>Année
+          d’adhésion:</strong> {{ memberDetails?.yearOfMembership?.year_ }}</p>
+        <p *ngIf="memberDetails?.twinsName!=''"><strong>Nom du jumeau:</strong> {{ memberDetails?.twinsName }}</p>
+        <p *ngIf="memberDetails?.commission"><strong>CommissionModel: </strong> {{ memberDetails?.commission?.name }}</p>
+        <p *ngIf="memberDetails?.clubs"><strong>Clubs: </strong > <span *ngFor="let club of memberDetails.clubs">{{ club.name }}</span></p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="handleEdit(memberDetails)" type="button" class="btn btn-outline-primary"
+                data-bs-dismiss="modal"><i class="bi bi-pencil"></i>
+        </button>
+        <button (click)="handleDelete(memberDetails)" type="button" class="btn btn-danger" data-bs-dismiss="modal"><i
+          class="bi bi-trash"></i></button>
+      </div>
+    </div>
+  </div>
+</div>

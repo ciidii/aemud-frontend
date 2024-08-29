@@ -1,0 +1,30 @@
+body{
+
+}
+.reach-bar{
+  background-color: #D09C0AFF;
+}
+
+.container {
+  max-width: 1200px;
+}
+
+.card {
+  border: none;
+}
+
+.card-body {
+  padding: 2rem;
+}
+
+.table {
+  margin-top: 1rem;
+}
+
+.page-link {
+  cursor: pointer;
+}
+
+.page-link:hover {
+  text-decoration: none;
+}

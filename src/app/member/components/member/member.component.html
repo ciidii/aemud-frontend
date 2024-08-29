@@ -1,0 +1,106 @@
+<div class="container my-5">
+  <div class="card shadow">
+    <div class="card-body">
+      <div class="row mb-3">
+        <div class="col-md-5">
+          <input [(ngModel)]="appState.memberState.keyword" placeholder="Rechercher" class="form-control" type="text" (ngModelChange)="searchMember()">
+        </div>
+        <div class="col-md-3">
+          <select [(ngModel)]="appState.memberState.criteria" class="form-control">
+            <option value="firstname">Prénom</option>
+            <option value="name" selected>Nom</option>
+            <option value="addressToCampus">Adresse au campus</option>
+            <option value="email">Email</option>
+            <option value="numberPhone">Numéro de Téléphone</option>
+            <option value="personToCall">Personne à appeler</option>
+          </select>
+        </div>
+        <div class="col-md-2">
+          <button [disabled]="!appState.memberState.keyword" (click)="searchMember()" class="btn btn-outline-success w-100">
+            <i class="bi bi-search"></i>
+          </button>
+        </div>
+        <div class="col-md-2">
+          <button class="btn btn-outline-success w-100">
+            Filtrer <i class="bi bi-sliders"></i>
+          </button>
+        </div>
+      </div>
+
+      <div *ngIf="appState.memberState.keyword && appState.memberState.submitSearch" class="mb-3">
+        <p>Résultat<span *ngIf="appState.memberState.numberOfResult >= 1">s</span>: {{ appState.memberState.numberOfResult }}</p>
+      </div>
+
+      <div *ngIf="appState.memberState.members; else noMembers">
+        <table class="table table-striped">
+          <thead>
+          <tr>
+            <th>Prénom</th>
+            <th>Nom</th>
+            <th>Adresse au campus</th>
+            <th>Email</th>
+            <th>Numéro de Téléphone</th>
+            <th>Personne à appeler</th>
+            <th>Action</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let member of appState.memberState.members">
+            <td>{{ member.firstname }}</td>
+            <td>{{ member.name }}</td>
+            <td>{{ member.addressToCampus }}</td>
+            <td>{{ member.email }}</td>
+            <td>{{ member.numberPhone }}</td>
+            <td>{{ member.personToCall }}</td>
+            <td>
+              <button class="btn btn-outline-success" (click)="openModal(member)">
+                <i class="bi bi-eye"></i> Afficher
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+
+        <nav *ngIf="appState.memberState.totalPages > 1" aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            <li class="page-item" [ngClass]="{'disabled': appState.memberState.currentPage === 1}">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage - 1)" aria-label="Previous" [attr.aria-disabled]="appState.memberState.currentPage === 1 ? true : null">
+                <span aria-hidden="true">&laquo;</span>
+              </button>
+            </li>
+            <li *ngIf="getPages()[0] !== 1" class="page-item">
+              <button class="page-link" (click)="nextPage(1)">1</button>
+            </li>
+            <li *ngIf="getPages()[0] > 2" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item" [ngClass]="{'active': appState.memberState.currentPage === page}">
+              <button (click)="nextPage(page)" class="page-link">
+                {{ page }}
+              </button>
+            </li>
+            <li *ngIf="getPages().slice(-1)[0] < appState.memberState.totalPages - 1" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
+            <li *ngIf="getPages().slice(-1)[0] !== appState.memberState.totalPages" class="page-item">
+              <button class="page-link" (click)="nextPage(appState.memberState.totalPages)">{{ appState.memberState.totalPages }}</button>
+            </li>
+            <li class="page-item" [ngClass]="{'disabled': appState.memberState.currentPage === appState.memberState.totalPages}">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage + 1)" aria-label="Next" [attr.aria-disabled]="appState.memberState.currentPage === appState.memberState.totalPages ? true : null">
+                <span aria-hidden="true">&raquo;</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+
+      </div>
+      <ng-template #noMembers>
+        <div class="text-center my-4">
+          <h4 class="text-danger">Aucun membre trouvé !</h4>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<app-modal></app-modal>

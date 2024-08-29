@@ -1,0 +1,54 @@
+<div class="row">
+  <div class="col-md-6 div-1 vh-100">
+    <div class="container-fluid p-3 vh-100">
+      <div class="row p-0">
+        <div class="col p-0  d-flex justify-content-center align-items-center">
+          <img class="logo img-fluid text-center" src="../../../assets/background/logo_aemud_Plan_de_travail_1.png" alt="logo">
+        </div>
+      </div>
+      <div class="row d-flex justify-content-center align-items-center">
+        <div class="p-0 col-lg-9 mosque-ucad  rounded">
+          <p class="text-center mosque-ucad"><i class="bi bi-geo-alt"></i> Grande mosquée UCAD, Université Cheikh Anta
+            Diop de Dakar</p>
+        </div>
+      </div>
+      <div class="row row-1">
+        <h2 class="h2"> CENTRE ISLAMIQUE FIABLE POUR SUIVRE LE CORAN ET LA SOUNA</h2>
+      </div>
+      <div class="row">
+        <h2 class="h2 row-1"> Bienvenue dans le formulaire d'<span class="text-black">adhesion</span> de l'AEMUD</h2>
+      </div>
+      <div class="row align-content-end">
+        <h2 class="h2 text-center mt-5">Sécretariat général</h2>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-6 div-2 vh-100">
+    <div class="row"></div>
+    <div class="row container-fluid2 vh-100">
+      <div class="col-md-9">
+        <div class="card">
+          <div class="card-header text-center">Veuillez entrer vos coordonées pour vous connecter</div>
+          <div class="card-body">
+            <form [formGroup]="formGroup" (ngSubmit)="handleLogin()">
+              <div>
+                <label class="form-label">Nom d'utilisateur</label>
+                <input class="form-control" formControlName="username">
+              </div>
+              <div>
+                <label class="form-label">Mot de passe</label>
+                <input type="password" class="form-control" formControlName="password">
+              </div>
+              <div>
+                <button [disabled]="formGroup.invalid" type="submit"
+                        class="btn-connexion mt-3 form-control btn btn-primary">Connexion
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row"></div>
+  </div>
+</div>

@@ -1,0 +1,26 @@
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand" href="#">
+      AEMUD</a>
+    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+        <li class="nav-item">
+          <a class="nav-link active" aria-current="page" routerLink="/welcome/home">Acceil</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/welcome/member">Membres</a>
+        </li>
+
+        <li class="nav-item dropdown">
+          <a class="nav-link " routerLink="/welcome/add" id="navbarDropdown" role="button"
+             aria-expanded="false">
+            Intégrer
+          </a>
+        </li>
+      </ul>
+      <form class="d-flex">
+        <button class="btn btn-outline-success" routerLink="/" type="submit">Deconnexion</button>
+      </form>
+    </div>
+  </div>
+</nav>
