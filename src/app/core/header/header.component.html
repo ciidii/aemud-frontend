@@ -1,25 +1,32 @@
 <nav class="navbar navbar-expand-lg navbar-dark">
   <div class="container-fluid">
-    <a class="navbar-brand" href="#">
+    <a class="navbar-brand" [routerLink]="['/shared/home']">
       AEMUD</a>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
         <li class="nav-item">
-          <a class="nav-link active" aria-current="page" routerLink="/welcome/home">Acceil</a>
+          <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+             routerLink="/shared/home">Acceil</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/welcome/member">Membres</a>
+          <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+             routerLink="/members/member/register-form">membres</a>
         </li>
-
-        <li class="nav-item dropdown">
-          <a class="nav-link " routerLink="/welcome/add" id="navbarDropdown" role="button"
-             aria-expanded="false">
-            Intégrer
-          </a>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Cotisation</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Configuration</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Messagerie</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Jumellage</a>
         </li>
       </ul>
       <form class="d-flex">
-        <button class="btn btn-outline-success" routerLink="/" type="submit">Deconnexion</button>
+        <button class="btn btn-outline-success" routerLink="/" type="submit" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Deconnexion</button>
       </form>
     </div>
   </div>

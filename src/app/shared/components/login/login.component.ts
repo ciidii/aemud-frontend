@@ -7,23 +7,26 @@ import {Router} from "@angular/router";
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent implements OnInit{
-  formGroup!:FormGroup;
-  constructor(private formBuilder:FormBuilder,private router:Router) {
+export class LoginComponent implements OnInit {
+  formGroup!: FormGroup;
+
+  constructor(private formBuilder: FormBuilder, private router: Router) {
   }
+
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group(
       {
-        username: this.formBuilder.control('',[Validators.required]),
-        password:this.formBuilder.control('', [Validators.required])
+        username: this.formBuilder.control('', [Validators.required]),
+        password: this.formBuilder.control('', [Validators.required])
       }
     )
   }
+
+
   handleLogin() {
-    if (this.formGroup.value.username=="aemud" && this.formGroup.value.password=="passer"){
+    if (this.formGroup.value.username == "aemud" && this.formGroup.value.password == "passer") {
       this.router.navigateByUrl("shared/home")
-    }
-    else {
+    } else {
       this.router.navigateByUrl("/")
     }
     console.log(this.formGroup.value.username);

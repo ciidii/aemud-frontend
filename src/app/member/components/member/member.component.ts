@@ -1,6 +1,6 @@
 import {Component, OnInit, signal, ViewChild} from '@angular/core';
 import {MemberModel} from "../../model/member.model";
-import {ModalComponent} from "../../../shared/modal/modal.component";
+import {ModalComponent} from "../../../shared/components/modal/modal.component";
 import {MemberService} from "../../service/member.service";
 import {MemberCommunicationService} from "../../service/member-communication.service";
 import {AppStateService} from "../../service/app-state-service";
