@@ -7,7 +7,7 @@ import {StepperDataService} from "../../services/stepper-data.service";
   templateUrl: './main-form-step-1.component.html',
   styleUrls: ['./main-form-step-1.component.css']
 })
-export class MainFormStep1Component implements OnInit{
+export class MainFormStep1Component implements OnInit {
   @Output() next = new EventEmitter<void>();
 
   membershipInfoFormGroup!: FormGroup;
@@ -22,6 +22,7 @@ export class MainFormStep1Component implements OnInit{
 
   onPersonalInfoSaved(personalInfo: FormGroup) {
     this.personalInfoFormGroup = personalInfo;
+    alert("Les données personnelles sont enregisté")
   }
 
   onNext() {

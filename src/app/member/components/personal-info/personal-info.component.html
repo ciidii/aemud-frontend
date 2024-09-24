@@ -73,6 +73,7 @@
                 formControlName="birthday"
                 class="form-control"
                 [ngClass]="{ 'is-invalid': personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched }"
+                [max]="maxDate"
               />
               <div
                 *ngIf="personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched"
@@ -84,14 +85,14 @@
         </div>
 
         <div class="mb-3">
-          <label for="maritalStatus" class="form-label">État civil</label>
+          <label for="maritalStatus" class="form-label">Situation Matrimoniale</label>
           <input
             type="text"
             id="maritalStatus"
             formControlName="maritalStatus"
             class="form-control"
             [ngClass]="{ 'is-invalid': personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched }"
-            placeholder="Entrez votre état civil"
+            placeholder="Situation Matrimoniale "
           />
           <div
             *ngIf="personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched"
@@ -108,7 +109,7 @@
     <div class="col-auto">
     </div>
     <div class="col-auto">
-      <button (click)="onSave()" class="btn btn-outline-success"><i class="bi bi-floppy2"></i> Enregister</button>
+      <button [disabled]="personalInfo.invalid" (click)="onSave()" class="btn btn-outline-success"><i class="bi bi-floppy2"></i> Enregister</button>
     </div>
   </div>
 </div>

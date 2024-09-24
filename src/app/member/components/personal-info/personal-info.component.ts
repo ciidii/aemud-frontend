@@ -9,11 +9,15 @@ import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 export class PersonalInfoComponent implements OnInit {
   personalInfo!: FormGroup
   @Output() personalInfoEmitter = new EventEmitter<FormGroup>
+  maxDate!: string;
 
   constructor(private _formBuilder: FormBuilder) {
   }
 
   ngOnInit(): void {
+    const today = new Date();
+    const tenYearsAgo = new Date(today.getFullYear() - 10, today.getMonth(), today.getDate());
+    this.maxDate = tenYearsAgo.toISOString().split('T')[0];
     this.personalInfo = this._formBuilder.group({
       name: ['', [Validators.required, Validators.minLength(2)]],
       firstname: ['', [Validators.required, Validators.minLength(2)]],
