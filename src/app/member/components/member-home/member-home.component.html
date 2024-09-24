@@ -2,19 +2,13 @@
   <div class="row no-gutters">
     <div class="col-md-2 sidebar sticky-sidebar">
       <ul class="nav flex-column">
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" routerLink="/members/member/register-form">
-            <i class="fas fa-home"></i> Formulaire
+        <li *ngFor="let nav of asideNavContent" class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+             routerLink="{{nav.link}}">
+            <i class="fas fa-home"></i>{{nav.title}}
           </a>
         </li>
-        <hr>
-        <li class="nav-item">
-          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }" routerLink="/members/member/list-members">
-            <i class="fas fa-user-friends"></i> Contacts
-          </a>
-        </li>
-        <hr>
-        <!-- Ajoutez d'autres éléments de menu ici -->
+
       </ul>
     </div>
     <div class="col-md-10 content-area">

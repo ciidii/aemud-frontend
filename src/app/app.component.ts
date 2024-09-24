@@ -1,5 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {filter, interval, map, Observable} from "rxjs";
+import {ActivatedRoute, NavigationEnd, Router} from "@angular/router";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
@@ -7,20 +9,31 @@ import {filter, interval, map, Observable} from "rxjs";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit {
-  title = 'Aceuil';
-  inter$!: Observable<number>
 
-  constructor() {
+
+  constructor(
+    private activatedRoute:ActivatedRoute,
+    private titleService:Title,
+    private router:Router
+  ) {
   }
 
   ngOnInit(): void {
-    this.inter$ = interval(1000);
-
-    this.inter$.pipe(
-      filter(value => value % 3 === 0),
-      map(value => value % 2 === 0 ?
-        `Je suis ${value} et je suis pair` :
-        `Je suis ${value} et je suis impair`
-      )).subscribe(value => console.log(value));
+    this.router.events
+      .pipe(
+        filter(event => event instanceof NavigationEnd), // Filtrer uniquement les fins de navigation
+        map(() => {
+          let route = this.activatedRoute.firstChild;
+          while (route!.firstChild) {
+            route = route!.firstChild;
+          }
+          return route!.snapshot.data['title']; // Récupérer le titre défini dans les routes
+        })
+      )
+      .subscribe((title: string) => {
+        if (title) {
+          this.titleService.setTitle(title); // Définir le titre
+        }
+      });
   }
 }

@@ -1,7 +1,7 @@
 import {Component, ElementRef, ViewChild} from '@angular/core';
 import {MemberModel} from "../../../member/model/member.model";
-import {MemberService} from "../../../member/service/member.service";
-import {MemberCommunicationService} from "../../../member/service/member-communication.service";
+import {MemberService} from "../../../member/services/member.service";
+import {MemberCommunicationService} from "../../../member/services/member-communication.service";
 import {Router} from "@angular/router";
 
 @Component({

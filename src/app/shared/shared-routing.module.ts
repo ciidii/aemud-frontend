@@ -7,8 +7,8 @@ import {WelcomePageComponent} from "./components/welcome-page/welcome-page.compo
 const routes: Routes = [
   {
     path: "", component: WelcomePageComponent, children: [
-      {path: "login", component: LoginComponent},
-      {path: "home", component: HomeComponent},
+      {path: "login", component: LoginComponent,data:{title:"AEMUD - Connexion"}},
+      {path: "home", component: HomeComponent,data:{title:"AEMUD - Acceuil"}},
     ]
   }
 ];

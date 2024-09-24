@@ -1,0 +1,114 @@
+<div class="container mt-2">
+  <form [formGroup]="personalInfo" novalidate>
+    <!-- Personal Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0 text-center">Informations personnelles</h5>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom</label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched }"
+                placeholder="Entrez votre nom"
+              />
+              <div
+                *ngIf="personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched"
+                class="invalid-feedback">
+                Le nom est requis et doit comporter au moins 2 caractères.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="firstname" class="form-label">Prénom</label>
+              <input
+                type="text"
+                id="firstname"
+                formControlName="firstname"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched }"
+                placeholder="Entrez votre prénom"
+              />
+              <div
+                *ngIf="personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched"
+                class="invalid-feedback">
+                Le prénom est requis et doit comporter au moins 2 caractères.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="nationality" class="form-label">Nationalité</label>
+              <input
+                type="text"
+                id="nationality"
+                formControlName="nationality"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched }"
+                placeholder="Entrez votre nationalité"
+              />
+              <div
+                *ngIf="personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched"
+                class="invalid-feedback">
+                La nationalité est requise.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="birthday" class="form-label">Date de naissance</label>
+              <input
+                type="date"
+                id="birthday"
+                formControlName="birthday"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched }"
+              />
+              <div
+                *ngIf="personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched"
+                class="invalid-feedback">
+                La date de naissance est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label for="maritalStatus" class="form-label">État civil</label>
+          <input
+            type="text"
+            id="maritalStatus"
+            formControlName="maritalStatus"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched }"
+            placeholder="Entrez votre état civil"
+          />
+          <div
+            *ngIf="personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched"
+            class="invalid-feedback">
+            L'état civil est requis.
+          </div>
+        </div>
+      </div>
+    </div>
+  </form>
+</div>
+<div class="d-grid gap-2 mt-4">
+  <div class="row justify-content-end">
+    <div class="col-auto">
+    </div>
+    <div class="col-auto">
+      <button (click)="onSave()" class="btn btn-outline-success"><i class="bi bi-floppy2"></i> Enregister</button>
+    </div>
+  </div>
+</div>

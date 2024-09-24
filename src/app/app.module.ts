@@ -1,5 +1,5 @@
 import {APP_INITIALIZER, ErrorHandler, NgModule} from '@angular/core';
-import {BrowserModule} from '@angular/platform-browser';
+import {BrowserModule, Title} from '@angular/platform-browser';
 
 import {AppRoutingModule} from './app-routing.module';
 import {AppComponent} from './app.component';
@@ -10,7 +10,7 @@ import {WelcomePageComponent} from './shared/components/welcome-page/welcome-pag
 import {HomeComponent} from './shared/components/home/home.component';
 import {HeaderComponent} from './core/header/header.component';
 import {MemberComponent} from './member/components/member/member.component';
-import {AddMemberComponent} from './member/components/add-member/add-member.component';
+import {BootstrapStepperFormComponent} from './member/components/bootstrap-stepper-form/bootstrap-stepper-form.component';
 import {ModalComponent} from './shared/components/modal/modal.component';
 import {HttpClientModule} from "@angular/common/http";
 import {EditMemberComponent} from './member/components/edit-member/edit-member.component';
@@ -19,6 +19,8 @@ import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import * as Sentry from '@sentry/angular';
 import {Router} from "@angular/router";
 import {GlobalErrorHandlerService} from "./shared/services/global-error-handler.service";
+import {MemberModule} from "./member/member.module";
+import { MainFormStep2Component } from './member/components/main-form-step-2/main-form-step-2.component';
 
 @NgModule({
   declarations: [
@@ -28,9 +30,10 @@ import {GlobalErrorHandlerService} from "./shared/services/global-error-handler.
     HomeComponent,
     HeaderComponent,
     MemberComponent,
-    AddMemberComponent,
+    BootstrapStepperFormComponent,
     ModalComponent,
     EditMemberComponent,
+    MainFormStep2Component,
   ],
   imports: [
     BrowserModule,
@@ -40,7 +43,8 @@ import {GlobalErrorHandlerService} from "./shared/services/global-error-handler.
     HttpClientModule,
     FormsModule,
     ToastrModule.forRoot(),
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    MemberModule
 
   ],
   providers: [{
@@ -58,7 +62,11 @@ import {GlobalErrorHandlerService} from "./shared/services/global-error-handler.
       },
       deps: [Sentry.TraceService],
       multi: true,
+    },
+    {
+      provide:Title
     }
+
   ],
   bootstrap: [AppComponent]
 })

@@ -1,14 +1,14 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MemberService} from "../../service/member.service";
+import {MemberService} from "../../services/member.service";
 import {ClubModel} from "../../model/club.model";
 import {CommissionModel} from "../../model/commission.model";
 import {BourseModel} from "../../model/bourse.model";
 import {ResponseEntityApi} from "../../../core/model/responseEntityApi";
-import {BourseService} from "../../service/bourse.service";
-import {ClubService} from "../../service/club.service";
-import {CommissionService} from "../../service/commission.service";
+import {BourseService} from "../../services/bourse.service";
+import {ClubService} from "../../services/club.service";
+import {CommissionService} from "../../services/commission.service";
 import {YearOfMembeship} from "../../../core/model/yearOfMembeship";
 import {MemberModel} from "../../model/member.model";
 import {ToastrService} from "ngx-toastr";

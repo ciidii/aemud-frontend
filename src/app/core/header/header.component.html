@@ -8,21 +8,9 @@
           <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
              routerLink="/shared/home">Acceil</a>
         </li>
-        <li class="nav-item">
+        <li *ngFor="let hc of headerContent"  class="nav-item">
           <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-             routerLink="/members/member/register-form">membres</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Cotisation</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Configuration</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Messagerie</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" routerLink="/welcome/member" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Jumellage</a>
+             routerLink="{{hc.retourLinh}}">{{hc.title}}</a>
         </li>
       </ul>
       <form class="d-flex">
