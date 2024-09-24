@@ -21,8 +21,7 @@ export class MainFormStep1Component implements OnInit {
   }
 
   onPersonalInfoSaved(personalInfo: FormGroup) {
-    this.personalInfoFormGroup = personalInfo;
-    alert("Les données personnelles sont enregisté")
+    this.stepperContentService.setMemberPersonalInfo(personalInfo.value)
   }
 
   onNext() {
