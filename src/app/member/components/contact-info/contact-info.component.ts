@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {StepperDataService} from "../../services/stepper-data.service";
+import {StepperDataService} from "../../../core/services/stepper-data.service";
 
 @Component({
   selector: 'app-contact-info',
@@ -10,7 +10,7 @@ import {StepperDataService} from "../../services/stepper-data.service";
 export class ContactInfoComponent implements OnInit {
   @Output() next = new EventEmitter<void>();
   @Output() previous = new EventEmitter<void>();
-  @Output() contactInfoEvent  = new EventEmitter<FormGroup>
+  @Output() contactInfoEvent = new EventEmitter<FormGroup>
   contactFormGroup!: FormGroup;
 
   constructor(private _formBuilder: FormBuilder, private stepperDataService: StepperDataService) {
@@ -24,7 +24,7 @@ export class ContactInfoComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       personToCalls: this._formBuilder.array([]),
     });
-
+    this.addPersonToCall()
     // Récupérer les données précédemment enregistrées si elles existent
     const savedData = this.stepperDataService.getStepData(2);
     if (savedData) {
@@ -65,7 +65,7 @@ export class ContactInfoComponent implements OnInit {
   }
 
   onSave() {
-      this.stepperDataService.setFormData(2, this.contactFormGroup.value);
-      this.contactInfoEvent.emit(this.contactFormGroup)
+    this.stepperDataService.setFormData(2, this.contactFormGroup.value);
+    this.contactInfoEvent.emit(this.contactFormGroup)
   }
 }

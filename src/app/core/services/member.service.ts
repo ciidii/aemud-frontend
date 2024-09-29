@@ -1,11 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {MemberModel} from "../model/member.model";
-import {ResponsePageableApi} from "../../core/model/responsePageableApi";
-import {RequestPageableVO} from "../../core/model/requestPageableVO";
+import {MemberModel} from "../../member/model/member.model";
+import {ResponsePageableApi} from "../models/responsePageableApi";
+import {RequestPageableVO} from "../models/requestPageableVO";
 import {AppStateService} from "./app-state-service";
-import {ResponseEntityApi} from "../../core/model/responseEntityApi";
+import {ResponseEntityApi} from "../models/responseEntityApi";
 
 @Injectable({
   providedIn: 'root'

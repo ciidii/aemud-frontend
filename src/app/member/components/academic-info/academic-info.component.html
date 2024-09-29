@@ -4,30 +4,18 @@
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">
-          <div class="col-md-6">
+          <div class="col-md-12">
             <div class="mb-3">
-              <label for="memberID" class="form-label">ID Membre</label>
+              <label for="studiesLevel" class="form-label">Niveau d'étude</label>
               <input
                 type="text"
-                id="memberID"
-                formControlName="memberID"
+                id="studiesLevel"
+                formControlName="studiesLevel"
                 class="form-control"
+                [ngClass]="{ 'is-invalid': academicFormGroup.get('studiesLevel')?.invalid && academicFormGroup.get('studiesLevel')?.touched }"
+                placeholder="Niveau d'étude"
               />
-            </div>
-          </div>
-
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="idYear" class="form-label">Année d'inscription</label>
-              <input
-                type="number"
-                id="idYear"
-                formControlName="idYear"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': academicFormGroup.get('idYear')?.invalid && academicFormGroup.get('idYear')?.touched }"
-                placeholder="Entrez l'année"
-              />
-              <div *ngIf="academicFormGroup.get('idYear')?.invalid && academicFormGroup.get('idYear')?.touched"
+              <div *ngIf="academicFormGroup.get('studiesLevel')?.invalid && academicFormGroup.get('studiesLevel')?.touched"
                    class="invalid-feedback">
                 L'année est requise.
               </div>
@@ -113,7 +101,7 @@
       </div>
     </div>
     <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-success" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
+      <button class="btn btn-outline-success" (click)="onSave()" [disabled]="academicFormGroup.invalid"><i class="bi bi-floppy2"></i> Enregister</button>
     </div>
   </form>
 </div>

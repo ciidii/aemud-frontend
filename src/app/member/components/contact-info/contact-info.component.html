@@ -6,37 +6,6 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="memberID" class="form-label">ID Membre</label>
-              <input
-                type="text"
-                id="memberID"
-                formControlName="memberID"
-                class="form-control"
-              />
-            </div>
-          </div>
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="idYear" class="form-label">Année d'inscription</label>
-              <input
-                type="number"
-                id="idYear"
-                formControlName="idYear"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': contactFormGroup.get('idYear')?.invalid && contactFormGroup.get('idYear')?.touched }"
-                placeholder="Entrez l'année"
-              />
-              <div *ngIf="contactFormGroup.get('idYear')?.invalid && contactFormGroup.get('idYear')?.touched"
-                   class="invalid-feedback">
-                L'année est requise.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
               <label for="numberPhone" class="form-label">Numéro de Téléphone</label>
               <input
                 type="text"
@@ -158,13 +127,13 @@
               </div>
 
               <div class="col-md-6">
-                <button type="button" class="btn btn-danger mt-4" (click)="removePersonToCall(i)">Supprimer</button>
+                <button type="button" class="btn btn-danger mt-4" (click)="removePersonToCall(i)" [disabled]="i==0">Supprimer</button>
               </div>
             </div>
             <hr/>
           </div>
         </div>
-        <button type="button" class="btn btn-outline-success" (click)="addPersonToCall()">Ajouter une personne</button>
+        <button [disabled]="personToCalls.length>=2" type="button" class="btn btn-outline-success" (click)="addPersonToCall()">Ajouter une personne</button>
       </div>
     </div>
 

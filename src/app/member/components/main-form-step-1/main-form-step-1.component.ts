@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormGroup} from "@angular/forms";
-import {StepperDataService} from "../../services/stepper-data.service";
+import {StepperDataService} from "../../../core/services/stepper-data.service";
 
 @Component({
   selector: 'app-main-form-step-1',

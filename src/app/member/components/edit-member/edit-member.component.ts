@@ -1,17 +1,15 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MemberService} from "../../services/member.service";
+import {MemberService} from "../../../core/services/member.service";
 import {ClubModel} from "../../model/club.model";
 import {CommissionModel} from "../../model/commission.model";
-import {BourseModel} from "../../model/bourse.model";
-import {ResponseEntityApi} from "../../../core/model/responseEntityApi";
-import {BourseService} from "../../services/bourse.service";
-import {ClubService} from "../../services/club.service";
-import {CommissionService} from "../../services/commission.service";
-import {YearOfMembeship} from "../../../core/model/yearOfMembeship";
+import {BourseModel} from "../../../core/models/bourses/bourse.model";
+import {BourseService} from "../../../core/services/Bourse/bourse.service";
+import {YearOfMembeship} from "../../../core/models/yearOfMembeship";
 import {MemberModel} from "../../model/member.model";
 import {ToastrService} from "ngx-toastr";
+import {CommissionService} from "../../../core/services/commission/commission.service";
 
 @Component({
   selector: 'app-edit-member',
@@ -22,7 +20,7 @@ export class EditMemberComponent implements OnInit {
   memberGroup!: FormGroup;
   clubs!: ClubModel[];
   commissions!: CommissionModel[];
-  bourses!:BourseModel[];
+  bourses!: BourseModel[];
   memberId!: number;
   aemudActivities!: any
   aemudCourses!: any;
@@ -34,10 +32,9 @@ export class EditMemberComponent implements OnInit {
               private memberService: MemberService,
               private router: Router,
               private activeRouter: ActivatedRoute,
-              private clubService:ClubService,
               private commissionService: CommissionService,
               private bourseService: BourseService,
-              private toaster:ToastrService
+              private toaster: ToastrService
   ) {
   }
 
@@ -45,20 +42,39 @@ export class EditMemberComponent implements OnInit {
     this.memberGroup = this.createForm();
     this.getClubsFromDb();
     this.getCommissionFromDb();
-    this.bourseService.getAllBourse().subscribe({next: response=>{
-        if (response.status=="OK" && response.result=="Succeeded"){
+    this.bourseService.getAllBourse().subscribe({
+      next: response => {
+        if (response.status == "OK" && response.result == "Succeeded") {
           this.bourses = response.data;
           console.log(this.bourses)
-        }else {
+        } else {
           console.log("Failed to fetch data", response.error);
         }
-      },error:err => {
-        console.log("Error fetching data", err)}});
+      }, error: err => {
+        console.log("Error fetching data", err)
+      }
+    });
 
-    this.aemudActivities = [{value:"no",id:"activezAEMUDNon", label:"Non"}, {value:"yes",id:"activezAEMUDOui",label:"Oui"},];
-    this.aemudCourses = [{value:"no",id:"coursIslamiqueAEMUDNon", label:"Non"}, {value:"yes",id:"coursIslamiqueAEMUDOui",label:"Oui"},];
-    this.otherCourses = [{value:"no",id:"autreCoursIslamiqueNon", label:"Non"}, {value:"yes",id:"autreCoursIslamiqueOui",label:"Oui"},];
-    this.politicalOrganisation = [{value:"no",id:"organisationPolitiqueNon", label:"Non"}, {value:"yes",id:"organisationPolitiqueOui",label:"Oui"},];
+    this.aemudActivities = [{value: "no", id: "activezAEMUDNon", label: "Non"}, {
+      value: "yes",
+      id: "activezAEMUDOui",
+      label: "Oui"
+    },];
+    this.aemudCourses = [{value: "no", id: "coursIslamiqueAEMUDNon", label: "Non"}, {
+      value: "yes",
+      id: "coursIslamiqueAEMUDOui",
+      label: "Oui"
+    },];
+    this.otherCourses = [{value: "no", id: "autreCoursIslamiqueNon", label: "Non"}, {
+      value: "yes",
+      id: "autreCoursIslamiqueOui",
+      label: "Oui"
+    },];
+    this.politicalOrganisation = [{value: "no", id: "organisationPolitiqueNon", label: "Non"}, {
+      value: "yes",
+      id: "organisationPolitiqueOui",
+      label: "Oui"
+    },];
     this.memberId = this.activeRouter.snapshot.params['id'];
     this.putDataFromDbOnForm()
   }
@@ -69,7 +85,7 @@ export class EditMemberComponent implements OnInit {
       {
         next: member => {
           this.toaster.success("Les modifications enregistrer")
-          this.router.navigateByUrl(`welcome/member`)
+          this.router.navigateByUrl(`welcome/member`).then(r => true)
         },
         error: err => {
           this.toaster.error("Une erreur c'est produite")
@@ -78,14 +94,15 @@ export class EditMemberComponent implements OnInit {
       }
     )
   }
-  private bindMember(){
+
+  private bindMember() {
     let clubs: ClubModel[];
     let club = new ClubModel();
-    let commission =  new CommissionModel();
+    let commission = new CommissionModel();
     let yearOfMemberShip = new YearOfMembeship();
     let bourse = new BourseModel();
     this.memberModel = new MemberModel();
-    this.memberModel.id=this.memberId;
+    this.memberModel.id = this.memberId;
     this.memberModel.name = this.memberGroup.get("name")?.value;
     this.memberModel.firstname = this.memberGroup.get("firstname")?.value;
     this.memberModel.nationality = this.memberGroup.get("nationality")?.value;
@@ -108,9 +125,9 @@ export class EditMemberComponent implements OnInit {
     this.memberModel.pay = this.memberGroup.get("pay")?.value;
     club.id = this.memberGroup.get("club")?.value
     commission.id = this.memberGroup.get("commission")?.value;
-    bourse.bourseId =  this.memberGroup.get("bourse")?.value;
+    bourse.bourseId = this.memberGroup.get("bourse")?.value;
     yearOfMemberShip.idYear = 1;
-    clubs =  new Array(club);
+    clubs = new Array(club);
     this.memberModel.clubs = clubs;
     this.memberModel.commission = commission;
     this.memberModel.yearOfMembership = yearOfMemberShip;
@@ -118,7 +135,8 @@ export class EditMemberComponent implements OnInit {
     return this.memberModel;
 
   }
-  private createForm(){
+
+  private createForm() {
     return this.formBuilder.group({
       name: this.formBuilder.control(''),
       firstname: this.formBuilder.control(''),
@@ -151,41 +169,31 @@ export class EditMemberComponent implements OnInit {
 
     });
   }
-  private getClubsFromDb(){
-    this.clubService.getAllClubs().subscribe(
-      (response: ResponseEntityApi<ClubModel[]>) => {
-        if (response.status === 'OK' && response.result === 'Succeeded') {
-          this.clubs = response.data;
-        } else {
-          console.error('Failed to fetch data', response.error);
-        }
-      },
-      (error) => {
-        console.error('Error fetching data', error);
-      }
-    );
+
+  private getClubsFromDb() {
   }
-  private getCommissionFromDb(){
-    this.commissionService.getAllCommission().subscribe({
-      next:response=>{
-        if (response.status=="OK" && response.result=="Succeeded"){
+
+  private getCommissionFromDb() {
+    this.commissionService.getCommissions().subscribe({
+      next: response => {
+        if (response.status == "OK" && response.result == "Succeeded") {
           this.commissions = response.data;
-        }else {
+        } else {
           console.log("Failed to fetch data", response.error);
         }
       },
-      error:err => {
+      error: err => {
         console.log("Error fetching data", err)
       }
     });
   }
 
-  private putDataFromDbOnForm(){
+  private putDataFromDbOnForm() {
     this.memberService.getMemberById(this.memberId)
       .subscribe(
         {
           next: member => {
-            if (member.result=="Succeeded" && member.status=="OK"){
+            if (member.result == "Succeeded" && member.status == "OK") {
               this.memberGroup = this.formBuilder.group({
                 id: this.formBuilder.control(this.memberId),
                 name: this.formBuilder.control(member?.data?.name, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
@@ -202,13 +210,13 @@ export class EditMemberComponent implements OnInit {
                 faculty: this.formBuilder.control(member.data.faculty, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
                 departmentOrYear: this.formBuilder.control(member.data.departmentOrYear, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
                 bourse: this.formBuilder.control(member.data.bourse, [Validators.required]),
-                doYouParticipateAemudActivity: this.formBuilder.control(member.data.participatedActivity==null?'no':'yes', [Validators.required]),
+                doYouParticipateAemudActivity: this.formBuilder.control(member.data.participatedActivity == null ? 'no' : 'yes', [Validators.required]),
                 participatedActivity: this.formBuilder.control(member.data.participatedActivity),
-                doYouParticipateAemudCourse: this.formBuilder.control(member.data.doYouParticipateAemudCourse==null?'no':'yes', [Validators.required]),
+                doYouParticipateAemudCourse: this.formBuilder.control(member.data.doYouParticipateAemudCourse == null ? 'no' : 'yes', [Validators.required]),
                 aemudCourseParticipated: this.formBuilder.control(member.data.aemudCourseParticipated),
-                doYouParticipatedOtherCourse: this.formBuilder.control(member.data.doYouParticipatedOtherCourse==null?'no':'yes', [Validators.required]),
+                doYouParticipatedOtherCourse: this.formBuilder.control(member.data.doYouParticipatedOtherCourse == null ? 'no' : 'yes', [Validators.required]),
                 otherCourseParticipated: this.formBuilder.control(member.data.otherCourseParticipated),
-                areYouMemberOfPoliticOrganisation: this.formBuilder.control(member.data.areYouMemberOfPoliticOrganisation==null?'no':'yes', [Validators.required]),
+                areYouMemberOfPoliticOrganisation: this.formBuilder.control(member.data.areYouMemberOfPoliticOrganisation == null ? 'no' : 'yes', [Validators.required]),
                 politicOrganisation: this.formBuilder.control(member.data.politicOrganisation),
                 yearOfMembership: this.formBuilder.control(member.data.yearOfMembership.year_, [Validators.required, Validators.minLength(4), Validators.maxLength(4)]),
                 twinsName: this.formBuilder.control(member.data.twinsName),
@@ -217,11 +225,11 @@ export class EditMemberComponent implements OnInit {
                 pay: this.formBuilder.control(member.data.pay, [Validators.required]),
 
               });
-              if (this.memberGroup.value.participatedActivity!=null){
+              if (this.memberGroup.value.participatedActivity != null) {
               }
-            }else {
+            } else {
               this.memberGroup = this.formBuilder.group({});
-              console.log("Error while fetching data-----------------------------------------------------------"+member.error)
+              console.log("Error while fetching data-----------------------------------------------------------" + member.error)
             }
           },
           error: err => {

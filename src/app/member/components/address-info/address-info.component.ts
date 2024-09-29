@@ -1,6 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {StepperDataService} from "../../services/stepper-data.service";
+import {StepperDataService} from "../../../core/services/stepper-data.service";
 
 @Component({
   selector: 'app-address-info',
@@ -18,7 +18,7 @@ export class AddressInfoComponent implements OnInit {
 
   ngOnInit() {
     this.addressFormGroup = this._formBuilder.group({
-      memberID: [{value: '', disabled: true}, [Validators.required]],
+      memberID: [{value: '', disabled: true}],
       idYear: ['', [Validators.required, Validators.min(1)]],
       addressInDakar: ['', [Validators.required, Validators.minLength(10)]],
       holidayAddress: ['', [Validators.required, Validators.minLength(10)]],

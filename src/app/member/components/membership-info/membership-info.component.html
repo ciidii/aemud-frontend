@@ -5,22 +5,7 @@
         <h5 class="mb-0 text-center">Informations d'adhésion</h5>
       </div>
       <div class="card-body">
-        <div class="mb-3">
-          <label for="yearOfMembership" class="form-label">Année d'adhésion</label>
-          <input
-            type="number"
-            id="yearOfMembership"
-            formControlName="yearOfMembership"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': membershipFormGroup.get('yearOfMembership')?.invalid && membershipFormGroup.get('yearOfMembership')?.touched }"
-            placeholder="Entrez l'année d'adhésion"
-          />
-          <div
-            *ngIf="membershipFormGroup.get('yearOfMembership')?.invalid && membershipFormGroup.get('yearOfMembership')?.touched"
-            class="invalid-feedback">
-            L'année d'adhésion est requise.
-          </div>
-        </div>
+
         <div class="mb-3">
           <label for="yearOfBac" class="form-label">Année de bac</label>
           <input
@@ -37,7 +22,7 @@
           </div>
         </div>
         <div class="mb-3">
-          <label for="yearOfMembership" class="form-label">BAC: Série</label>
+          <label for="bacSeries" class="form-label">BAC: Série</label>
           <input
             id="bacSeries"
             formControlName="bacSeries"
@@ -51,7 +36,7 @@
             La série au bac
           </div>
           <div class="mb-3">
-            <label for="yearOfMembership" class="form-label">BAC: Mention</label>
+            <label for="bacMention" class="form-label">BAC: Mention</label>
             <input
               id="bacMention"
               formControlName="bacMention"
@@ -66,7 +51,7 @@
             </div>
           </div>
           <div class="mb-3">
-            <label for="yearOfMembership" class="form-label">Etablissement d'origine</label>
+            <label for="legacyInstitution" class="form-label">Etablissement d'origine</label>
             <input
               id="legacyInstitution"
               formControlName="legacyInstitution"
@@ -78,23 +63,6 @@
               *ngIf="membershipFormGroup.get('legacyInstitution')?.invalid && membershipFormGroup.get('legacyInstitution')?.touched"
               class="invalid-feedback">
               L'Etablissement d'origine est obligatoire
-            </div>
-          </div>
-
-          <div class="mb-3">
-            <label for="pay" class="form-label">Montant payé</label>
-            <input
-              type="number"
-              id="pay"
-              formControlName="pay"
-              class="form-control"
-              [ngClass]="{ 'is-invalid': membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched }"
-              placeholder="Montant payé"
-            />
-            <div
-              *ngIf="membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched"
-              class="invalid-feedback">
-              Le montant payé est requis.
             </div>
           </div>
 
@@ -170,10 +138,8 @@
           <div class="mb-3">
             <label for="commission" class="form-label">Commission</label>
             <select id="commission" formControlName="commission" class="form-control">
-              <option value="">Sélectionnez une commission</option>
-              <option value="commission1">Commission 1</option>
-              <option value="commission2">Commission 2</option>
-              <option value="commission3">Commission 3</option>
+              <option value="" [defaultSelected]="1==1" disabled>Sélectionnez une commission</option>
+              <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}</option>
             </select>
             <div
               *ngIf="membershipFormGroup.get('commission')?.invalid && membershipFormGroup.get('commission')?.touched"
@@ -185,10 +151,8 @@
           <div class="mb-3">
             <label for="clubs" class="form-label">Clubs</label>
             <select id="clubs" formControlName="clubs" class="form-control">
-              <option value="">Sélectionnez un club</option>
-              <option value="club1">Club 1</option>
-              <option value="club2">Club 2</option>
-              <option value="club3">Club 3</option>
+              <option value="" [defaultSelected]="1==1" disabled>Sélectionnez un club</option>
+              <option *ngFor="let club of clubs" value="{{club.id}}">{{ club.name }}</option>
             </select>
             <div *ngIf="membershipFormGroup.get('clubs')?.invalid && membershipFormGroup.get('clubs')?.touched"
                  class="invalid-feedback">
@@ -199,15 +163,29 @@
           <div class="mb-3">
             <label for="bourse" class="form-label">Bourse</label>
             <select id="bourse" formControlName="bourse" class="form-control">
-              <option value="">Sélectionnez une bourse</option>
-              <option value="bourse1">Bourse 1</option>
-              <option value="bourse2">Bourse 2</option>
-              <option value="bourse3">Bourse 3</option>
+              <option value="" [defaultSelected]="1==1" disabled>Sélectionnez une bourse</option>
+              <option *ngFor="let bourse of bourses" value="{{bourse.bourseId}}">{{ bourse.lebelle }}</option>
             </select>
             <div *ngIf="membershipFormGroup.get('bourse')?.invalid && membershipFormGroup.get('bourse')?.touched"
                  class="invalid-feedback">
               La bourse est requise.
             </div>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label for="pay" class="form-label">Montant payé</label>
+          <input
+            type="number"
+            id="pay"
+            formControlName="pay"
+            class="form-control"
+            [ngClass]="{ 'is-invalid': membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched }"
+            placeholder="Montant payé"
+          />
+          <div
+            *ngIf="membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched"
+            class="invalid-feedback">
+            Le montant payé est requis.
           </div>
         </div>
       </div>
@@ -219,7 +197,7 @@
     <div class="col-auto">
     </div>
     <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-success" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
+      <button class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
     </div>
   </div>
 </div>

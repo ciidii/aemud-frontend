@@ -1,11 +1,11 @@
 import {Component, OnInit, signal, ViewChild} from '@angular/core';
 import {MemberModel} from "../../model/member.model";
 import {ModalComponent} from "../../../shared/components/modal/modal.component";
-import {MemberService} from "../../services/member.service";
-import {MemberCommunicationService} from "../../services/member-communication.service";
-import {AppStateService} from "../../services/app-state-service";
+import {MemberService} from "../../../core/services/member.service";
+import {MemberCommunicationService} from "../../../core/services/member-communication.service";
+import {AppStateService} from "../../../core/services/app-state-service";
 import {Router} from "@angular/router";
-import {RequestPageableVO} from "../../../core/model/requestPageableVO";
+import {RequestPageableVO} from "../../../core/models/requestPageableVO";
 
 @Component({
   selector: 'app-member',

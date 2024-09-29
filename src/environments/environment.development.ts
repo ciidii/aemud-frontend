@@ -5,6 +5,7 @@ export const environment = {
   identity_API_URL: 'https://dev.identity.com',
   storage_API_URL: 'https://dev.storage.com',
   users_API_URL: 'https://dev.user.com',
+  API_URL:"http://localhost:8080/aemud/api/v1",
   features: [
     {
       name: 'loggingSystem',

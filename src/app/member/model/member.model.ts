@@ -1,7 +1,7 @@
 import {ClubModel} from "./club.model";
 import {CommissionModel} from "./commission.model";
-import {YearOfMembeship} from "../../core/model/yearOfMembeship";
-import {BourseModel} from "./bourse.model";
+import {YearOfMembeship} from "../../core/models/yearOfMembeship";
+import {BourseModel} from "../../core/models/bourses/bourse.model";
 
 export class MemberModel {
   id!:number
