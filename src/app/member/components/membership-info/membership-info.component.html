@@ -197,7 +197,12 @@
     <div class="col-auto">
     </div>
     <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
+      <button *ngIf="!stepperService.membershipInfoSaved" class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onSave()"><i
+        class="bi bi-floppy2"></i> Enregister
+      </button>
+      <button *ngIf="stepperService.membershipInfoSaved" class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onModify()"><i
+        class="bi bi-floppy2"></i> Modifier
+      </button>
     </div>
   </div>
 </div>

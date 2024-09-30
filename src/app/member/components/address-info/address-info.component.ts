@@ -1,6 +1,7 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
+import {UtilsService} from "../../../core/services/utils.service";
 
 @Component({
   selector: 'app-address-info',
@@ -13,37 +14,41 @@ export class AddressInfoComponent implements OnInit {
   @Output() addressInfoEvent = new EventEmitter<FormGroup>();
   addressFormGroup!: FormGroup;
 
-  constructor(private _formBuilder: FormBuilder, private stepperDataService: StepperDataService) {
+  constructor(private _formBuilder: FormBuilder,
+              protected stepperDataService: StepperDataService,
+              private utilsService: UtilsService
+  ) {
   }
 
   ngOnInit() {
-    this.addressFormGroup = this._formBuilder.group({
-      memberID: [{value: '', disabled: true}],
-      idYear: ['', [Validators.required, Validators.min(1)]],
-      addressInDakar: ['', [Validators.required, Validators.minLength(10)]],
-      holidayAddress: ['', [Validators.required, Validators.minLength(10)]],
-      addressToCampus: ['', [Validators.required, Validators.minLength(10)]],
-    });
-
-    const savedData = this.stepperDataService.getStepData(2);
-    if (savedData) {
-      this.addressFormGroup.patchValue(savedData);
+    var addressInfoLocalStorage;
+    const local = localStorage.getItem("addressInfo");
+    if (local) {
+      addressInfoLocalStorage = JSON.parse(local)
     }
+    this.addressFormGroup = this._formBuilder.group({
+      memberID: [{value: addressInfoLocalStorage?.memberID || '', disabled: true}],
+      idYear: [addressInfoLocalStorage?.idYear || '', [Validators.required, Validators.min(1)]],
+      addressInDakar: [addressInfoLocalStorage?.addressInDakar || '', [Validators.required, Validators.minLength(3)]],
+      holidayAddress: [addressInfoLocalStorage?.holidayAddress || '', [Validators.required, Validators.minLength(3)]],
+      addressToCampus: [addressInfoLocalStorage?.addressToCampus || '', [Validators.required, Validators.minLength(3)]],
+    });
+    this.toggleAddressInfoSaved();
   }
 
   onSave() {
     this.addressInfoEvent.emit(this.addressFormGroup)
+    this.toggleAddressInfoSaved()
   }
 
-  /*
-  onNext() {
-    // Enregistrer les données de l'étape 2
-    this.stepperDataService.setFormData(2, this.addressFormGroup.value);
-    this.next.emit();
+  toggleAddressInfoSaved() {
+    this.utilsService.togglePersonalInfoSaved(this.addressFormGroup, this.stepperDataService.addressInfoSaved)
   }
 
-  onPrevious() {
-    this.previous.emit();
+  onModify() {
+    this.stepperDataService.changeAddressInfoState()
+    this.toggleAddressInfoSaved()
   }
-   */
+
+  protected readonly onchange = onchange;
 }

@@ -127,19 +127,26 @@
               </div>
 
               <div class="col-md-6">
-                <button type="button" class="btn btn-danger mt-4" (click)="removePersonToCall(i)" [disabled]="i==0">Supprimer</button>
+                <button type="button" class="btn btn-danger mt-4" (click)="removePersonToCall(i)" [disabled]="i==0 || stepperDataService.contactInfoSaved">
+                  Supprimer
+                </button>
               </div>
             </div>
             <hr/>
           </div>
         </div>
-        <button [disabled]="personToCalls.length>=2" type="button" class="btn btn-outline-success" (click)="addPersonToCall()">Ajouter une personne</button>
+        <button [disabled]="personToCalls.length>=2 || stepperDataService.contactInfoSaved" type="button" class="btn btn-outline-success"
+                (click)="addPersonToCall()">Ajouter une personne
+        </button>
       </div>
     </div>
 
     <!-- Submit Button -->
-    <div class="d-flex justify-content-end mt-4">
+    <div *ngIf="!stepperDataService.contactInfoSaved" class="d-flex justify-content-end mt-4">
       <button class="btn btn-outline-success" (click)=" onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
+    </div>
+    <div *ngIf="stepperDataService.contactInfoSaved" class="d-flex justify-content-end mt-4">
+      <button class="btn btn-outline-success" (click)=" onModify()"><i class="bi bi-floppy2"></i> Modifier</button>
     </div>
   </form>
 </div>

@@ -108,8 +108,15 @@
   <div class="row justify-content-end">
     <div class="col-auto">
     </div>
-    <div class="col-auto">
-      <button [disabled]="personalInfo.invalid" (click)="onSave()" class="btn btn-outline-success"><i class="bi bi-floppy2"></i> Enregister</button>
+    <div *ngIf="!steeperData.personalInfoSaved" class="col-auto">
+      <button [disabled]="personalInfo.invalid" (click)="onSave()" class="btn btn-outline-success"><i
+        class="bi bi-floppy2"></i> Enregister
+      </button>
+    </div>
+    <div *ngIf="steeperData.personalInfoSaved" class="col-auto">
+      <button [disabled]="personalInfo.invalid" (click)="onModify()" class="btn btn-outline-success"><i
+        class="bi bi-floppy2"></i> Modifier
+      </button>
     </div>
   </div>
 </div>

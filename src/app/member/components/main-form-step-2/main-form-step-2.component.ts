@@ -1,5 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormGroup} from "@angular/forms";
+import {StepperDataService} from "../../../core/services/stepper-data.service";
 
 @Component({
   selector: 'app-main-form-step-2',
@@ -12,19 +13,22 @@ export class MainFormStep2Component implements OnInit {
   addressInfoForm!: FormGroup;
   @Output() previous = new EventEmitter<void>();
 
+  constructor(private stepperService: StepperDataService) {
+  }
+
   ngOnInit(): void {
   }
 
   onAcademicInfoSubmit(form: FormGroup) {
-    this.academicInfoForm = form;
+    this.stepperService.setAcademicInfo(form.value)
   }
 
   onContactInfoSubmit(form: FormGroup) {
-    this.contactInfoForm = form;
+    this.stepperService.setContactInfo(form.value)
   }
 
   onAddressInfoSubmit(form: FormGroup) {
-    this.addressInfoForm = form;
+    this.stepperService.setAddressInfo(form.value)
   }
 
   onPrevious() {

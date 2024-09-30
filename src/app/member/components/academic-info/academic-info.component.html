@@ -15,8 +15,9 @@
                 [ngClass]="{ 'is-invalid': academicFormGroup.get('studiesLevel')?.invalid && academicFormGroup.get('studiesLevel')?.touched }"
                 placeholder="Niveau d'étude"
               />
-              <div *ngIf="academicFormGroup.get('studiesLevel')?.invalid && academicFormGroup.get('studiesLevel')?.touched"
-                   class="invalid-feedback">
+              <div
+                *ngIf="academicFormGroup.get('studiesLevel')?.invalid && academicFormGroup.get('studiesLevel')?.touched"
+                class="invalid-feedback">
                 L'année est requise.
               </div>
             </div>
@@ -100,8 +101,15 @@
         </div>
       </div>
     </div>
-    <div class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-success" (click)="onSave()" [disabled]="academicFormGroup.invalid"><i class="bi bi-floppy2"></i> Enregister</button>
+    <div *ngIf="!stepperData.academicInfoSaved" class="d-flex justify-content-end mt-4">
+      <button class="btn btn-outline-success" (click)="onSave()" [disabled]="academicFormGroup.invalid"><i
+        class="bi bi-floppy2"></i> Enregister
+      </button>
+    </div>
+    <div *ngIf="stepperData.academicInfoSaved" class="d-flex justify-content-end mt-4">
+      <button class="btn btn-outline-success" (click)="onModify()" [disabled]="academicFormGroup.invalid"><i
+        class="bi bi-floppy2"></i> Modifier
+      </button>
     </div>
   </form>
 </div>

@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
-import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
 import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
 import {ToastrService} from "ngx-toastr";
 import {Commission} from "../../../core/models/Commission/Commission";
@@ -10,6 +9,7 @@ import {Clubs} from "../../../core/models/clubs/Clubs";
 import {ClubService} from "../../../core/services/clubs/club.service";
 import {BourseService} from "../../../core/services/Bourse/bourse.service";
 import {BourseModel} from "../../../core/models/bourses/bourse.model";
+import {UtilsService} from "../../../core/services/utils.service";
 
 @Component({
   selector: 'app-membership-info',
@@ -27,45 +27,34 @@ export class MembershipInfoComponent implements OnInit {
   constructor(
     private _formBuilder: FormBuilder,
     private stepperDataService: StepperDataService,
-    private yearOfSessionService: YearOfSessionServiceService,
     private toaster: ToastrService,
     private commissionService: CommissionService,
     private clubService: ClubService,
-    private bourseService: BourseService
+    private bourseService: BourseService,
+    private utilsService: UtilsService,
+    protected stepperService: StepperDataService
   ) {
   }
 
   ngOnInit() {
-    this.yearOfSessionService.getCurrentYear().subscribe({
-
-      next: data => {
-        if (data.status == "OK" && data.result == "Succeeded") {
-          this.session = data.data;
-          console.log(data.data.id)
-        } else {
-          this.toaster.error("Une erreurs inattendu c'est produit côte server")
-        }
-      },
-      error: err => {
-        this.toaster.error("Une erreur inattendu c'est produite côté server")
-      }
-    });
-
+    const local = localStorage.getItem("membershipInfo");
+    var membershipInfoLocalStorage;
+    if (local) {
+      membershipInfoLocalStorage = JSON.parse(local)
+    }
     this.membershipFormGroup = this._formBuilder.group({
-      yearOfMembership: [{value: this.session?.id, disabled: true}, [Validators.required, Validators.min(1)]],
-      yearOfBac: ['', [Validators.required, Validators.minLength(3)]],
-      bacSeries: ['', [Validators.required, Validators.minLength(2)]],
-      bacMention: ['', [Validators.required, Validators.minLength(3)]],
-      legacyInstitution: ['', [Validators.required, Validators.minLength(3)]],
-      pay: ['', [Validators.required, Validators.minLength(1)]],
-      aemudCourses: ['', [Validators.required]],
-      otherCourses: ['', [Validators.required, Validators.minLength(5)]],
-      participatedActivity: ['', [Validators.required]],
-      politicOrganisation: ['', [Validators.required]],
-      commission: ['', [Validators.required, Validators.min(1)]],
-      clubs: ['', [Validators.required, Validators.min(1)]],
-      bourse: ['', [Validators.required, Validators.min(1)]]
-
+      yearOfBac: [membershipInfoLocalStorage.yearOfBac || '', [Validators.required, Validators.minLength(3)]],
+      bacSeries: [membershipInfoLocalStorage.bacSeries || '', [Validators.required, Validators.minLength(2)]],
+      bacMention: [membershipInfoLocalStorage.bacMention || '', [Validators.required, Validators.minLength(3)]],
+      legacyInstitution: [membershipInfoLocalStorage.legacyInstitution || '', [Validators.required, Validators.minLength(3)]],
+      pay: [membershipInfoLocalStorage.pay || '', [Validators.required, Validators.minLength(1)]],
+      aemudCourses: [membershipInfoLocalStorage.aemudCourses || '', [Validators.required]],
+      otherCourses: [membershipInfoLocalStorage.otherCourses || '', [Validators.required, Validators.minLength(5)]],
+      participatedActivity: [membershipInfoLocalStorage.participatedActivity || '', [Validators.required]],
+      politicOrganisation: [membershipInfoLocalStorage.politicOrganisation || '', [Validators.required]],
+      commission: [membershipInfoLocalStorage.commission || '', [Validators.required, Validators.min(1)]],
+      clubs: [membershipInfoLocalStorage.clubs || '', [Validators.required, Validators.min(1)]],
+      bourse: [membershipInfoLocalStorage.bourse || '', [Validators.required, Validators.min(1)]]
     });
 
     this.commissionService.getCommissions().subscribe({
@@ -107,28 +96,22 @@ export class MembershipInfoComponent implements OnInit {
     if (savedData) {
       this.membershipFormGroup.patchValue(savedData);
     }
-
-
-  }
-  checkInvalidControls(formGroup:FormGroup) {
-    const invalid = [];
-    const controls = formGroup.controls;
-
-    for (const name in controls) {
-      if (controls[name].invalid) {
-        invalid.push(name);
-        console.log(`Le champ ${name} est invalide :`, controls[name].errors);
-      }
-    }
-
-    return invalid;
+    this.toggleMembershipInfo();
+    this.utilsService.checkInvalidControls(this.membershipFormGroup)
   }
 
   onSave() {
     this.membershipFormEmitter.emit(this.membershipFormGroup)
+    this.toggleMembershipInfo();
   }
 
-  /*
+  toggleMembershipInfo() {
+    this.utilsService.togglePersonalInfoSaved(this.membershipFormGroup, this.stepperService.membershipInfoSaved)
+    console.log(this.stepperService.membershipInfoSaved)
+  }
 
-   */
+  onModify() {
+    this.stepperService.changeMemberInfoState()
+    this.toggleMembershipInfo()
+  }
 }

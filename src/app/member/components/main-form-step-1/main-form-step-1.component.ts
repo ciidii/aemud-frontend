@@ -9,15 +9,11 @@ import {StepperDataService} from "../../../core/services/stepper-data.service";
 })
 export class MainFormStep1Component implements OnInit {
   @Output() next = new EventEmitter<void>();
-
-  membershipInfoFormGroup!: FormGroup;
-  personalInfoFormGroup!: FormGroup;
-
-  constructor(private stepperContentService: StepperDataService) {
+  constructor(public stepperContentService: StepperDataService) {
   }
 
   onMembershipInfoSaved(formGroup: FormGroup) {
-    this.membershipInfoFormGroup = formGroup;
+    this.stepperContentService.setMemberMembershipInfo(formGroup.value)
   }
 
   onPersonalInfoSaved(personalInfo: FormGroup) {
