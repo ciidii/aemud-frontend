@@ -27,14 +27,14 @@ export class ContactInfoComponent implements OnInit {
       contactInfoLocalStorage = JSON.parse(local)
     }
     this.contactFormGroup = this._formBuilder.group({
-      memberID: [{value: contactInfoLocalStorage?.memberID || '', disabled: true}, [Validators.required]],
-      idYear: [contactInfoLocalStorage?.idYear || '', [Validators.required, Validators.min(1)]],
+      memberID: [null],
+      idYear: [null],
       numberPhone: [contactInfoLocalStorage?.numberPhone || '', [Validators.required, Validators.pattern(/^\+221\d{9}$/)]],
       email: [contactInfoLocalStorage?.email || '', [Validators.required, Validators.email]],
       personToCalls: this._formBuilder.array([]),
     });
     if (contactInfoLocalStorage?.personToCalls.length > 0) {
-      for (let personToCall in contactInfoLocalStorage.personToCalls) {
+      for (let personToCall of contactInfoLocalStorage.personToCalls) {
         this.addPersonToCall(personToCall)
       }
     } else {
@@ -49,7 +49,6 @@ export class ContactInfoComponent implements OnInit {
 
   addPersonToCall(person?: any): void {
     if (this.personToCalls.length >= 2) {
-      alert("Vous ne pouvez ajouter que deux personnes à contacter.");
       return;
     }
 

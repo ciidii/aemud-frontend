@@ -35,6 +35,7 @@ export class AcademicInfoComponent implements OnInit {
       next: data => {
         if (data.status == "OK" && data.result == "Succeeded") {
           this.session = data.data;
+          console.log(this.session.id)
         } else {
           this.toaster.error("Une errreur s'est prouduite Coté server")
         }
@@ -44,17 +45,14 @@ export class AcademicInfoComponent implements OnInit {
     });
 
     this.academicFormGroup = this._formBuilder.group({
-      idYear: [{value: this.session?.id, disabled: true}, [Validators.min(1)]],
-      studiesLevel: [academicInfoLocalStorage.studiesLevel || '', [Validators.required, Validators.minLength(3)]],
-      university: [academicInfoLocalStorage.university || '', [Validators.required, Validators.minLength(3)]],
-      faculty: [academicInfoLocalStorage.faculty || '', [Validators.required, Validators.minLength(3)]],
-      department: [academicInfoLocalStorage.department || '', [Validators.required, Validators.minLength(3)]],
-      section: [academicInfoLocalStorage.section || '', [Validators.required, Validators.minLength(3)]],
+      memberID: [''],
+      idYear: [''],
+      studiesLevel: [academicInfoLocalStorage?.studiesLevel || '', [Validators.required, Validators.minLength(3)]],
+      university: [academicInfoLocalStorage?.university || '', [Validators.required, Validators.minLength(3)]],
+      faculty: [academicInfoLocalStorage?.faculty || '', [Validators.required, Validators.minLength(3)]],
+      department: [academicInfoLocalStorage?.department || '', [Validators.required, Validators.minLength(3)]],
+      section: [academicInfoLocalStorage?.section || '', [Validators.required, Validators.minLength(3)]],
     });
-    const savedData = this.stepperData.getStepData(1);
-    if (savedData) {
-      this.academicFormGroup.patchValue(savedData);
-    }
     this.toggleAcademicInfoSaved()
   }
 

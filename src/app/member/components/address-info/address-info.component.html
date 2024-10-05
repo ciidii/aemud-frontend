@@ -66,7 +66,7 @@
       </div>
     </div>
     <div *ngIf="!stepperDataService.addressInfoSaved" class="d-flex justify-content-end mt-4">
-      <button class="btn btn-outline-success" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
+      <button class="btn btn-outline-success" [disabled]="addressFormGroup.invalid" (click)="onSave()"><i class="bi bi-floppy2"></i> Enregister</button>
     </div>
     <div *ngIf="stepperDataService.addressInfoSaved" class="d-flex justify-content-end mt-4">
       <button class="btn btn-outline-success" (click)="onModify()"><i class="bi bi-floppy2"></i> Modifier</button>

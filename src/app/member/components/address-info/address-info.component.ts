@@ -27,8 +27,8 @@ export class AddressInfoComponent implements OnInit {
       addressInfoLocalStorage = JSON.parse(local)
     }
     this.addressFormGroup = this._formBuilder.group({
-      memberID: [{value: addressInfoLocalStorage?.memberID || '', disabled: true}],
-      idYear: [addressInfoLocalStorage?.idYear || '', [Validators.required, Validators.min(1)]],
+      memberID: [''],
+      idYear: [''],
       addressInDakar: [addressInfoLocalStorage?.addressInDakar || '', [Validators.required, Validators.minLength(3)]],
       holidayAddress: [addressInfoLocalStorage?.holidayAddress || '', [Validators.required, Validators.minLength(3)]],
       addressToCampus: [addressInfoLocalStorage?.addressToCampus || '', [Validators.required, Validators.minLength(3)]],

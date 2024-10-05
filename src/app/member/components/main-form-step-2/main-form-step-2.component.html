@@ -19,10 +19,16 @@
   <div class="d-grid gap-2 mt-4">
     <div class="row justify-content-end">
       <div class="col-auto">
-        <button class="btn btn-outline-secondary" (click)="onPrevious()">Précedent</button>
+        <button class="btn btn-outline-secondary"
+                [disabled]="!stepperService.academicInfoSaved || !stepperService.addressInfoSaved || !stepperService.contactInfoSaved"
+                (click)="onPrevious()">Précedent
+        </button>
       </div>
       <div class="col-auto">
-        <button class="btn btn-outline-success">Soumettre</button>
+        <button class="btn btn-outline-success"
+                [disabled]="!stepperService.academicInfoSaved || !stepperService.addressInfoSaved || !stepperService.contactInfoSaved"
+                (click)="onSubmit()">Soumettre
+        </button>
       </div>
     </div>
   </div>

@@ -17,10 +17,10 @@ export class MemberHomeComponent implements OnInit {
         link: "/members/member/list-members",
         title: "Liste des membres"
       }, {
-        link: "/members/member/list-members",
+        link: "formmmmm",
         title: "Réinscription"
       }, {
-        link: "/members/member/register-form",
+        link: "/members/member/register-formmmmm",
         title: "Liste Réincription"
       },
     ]

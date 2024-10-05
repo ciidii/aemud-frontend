@@ -19,7 +19,6 @@ import {UtilsService} from "../../../core/services/utils.service";
 export class MembershipInfoComponent implements OnInit {
   @Output() membershipFormEmitter = new EventEmitter<FormGroup>();
   membershipFormGroup!: FormGroup;
-  session!: YearOfSessionResponse;
   commissions!: Array<Commission>
   clubs!: Array<Clubs>
   bourses!: Array<BourseModel>
@@ -43,18 +42,19 @@ export class MembershipInfoComponent implements OnInit {
       membershipInfoLocalStorage = JSON.parse(local)
     }
     this.membershipFormGroup = this._formBuilder.group({
-      yearOfBac: [membershipInfoLocalStorage.yearOfBac || '', [Validators.required, Validators.minLength(3)]],
-      bacSeries: [membershipInfoLocalStorage.bacSeries || '', [Validators.required, Validators.minLength(2)]],
-      bacMention: [membershipInfoLocalStorage.bacMention || '', [Validators.required, Validators.minLength(3)]],
-      legacyInstitution: [membershipInfoLocalStorage.legacyInstitution || '', [Validators.required, Validators.minLength(3)]],
-      pay: [membershipInfoLocalStorage.pay || '', [Validators.required, Validators.minLength(1)]],
-      aemudCourses: [membershipInfoLocalStorage.aemudCourses || '', [Validators.required]],
-      otherCourses: [membershipInfoLocalStorage.otherCourses || '', [Validators.required, Validators.minLength(5)]],
-      participatedActivity: [membershipInfoLocalStorage.participatedActivity || '', [Validators.required]],
-      politicOrganisation: [membershipInfoLocalStorage.politicOrganisation || '', [Validators.required]],
-      commission: [membershipInfoLocalStorage.commission || '', [Validators.required, Validators.min(1)]],
-      clubs: [membershipInfoLocalStorage.clubs || '', [Validators.required, Validators.min(1)]],
-      bourse: [membershipInfoLocalStorage.bourse || '', [Validators.required, Validators.min(1)]]
+      yearOfMembership: [null],
+      yearOfBac: [membershipInfoLocalStorage?.yearOfBac || '', [Validators.required, Validators.minLength(3)]],
+      bacSeries: [membershipInfoLocalStorage?.bacSeries || '', [Validators.required, Validators.minLength(2)]],
+      bacMention: [membershipInfoLocalStorage?.bacMention || '', [Validators.required, Validators.minLength(3)]],
+      legacyInstitution: [membershipInfoLocalStorage?.legacyInstitution || '', [Validators.required, Validators.minLength(3)]],
+      pay: [true, [Validators.required, Validators.minLength(1)]],
+      aemudCourses: [membershipInfoLocalStorage?.aemudCourses || '', [Validators.required]],
+      otherCourses: [membershipInfoLocalStorage?.otherCourses || '', [Validators.required, Validators.minLength(5)]],
+      participatedActivity: [membershipInfoLocalStorage?.participatedActivity || '', [Validators.required]],
+      politicOrganisation: [membershipInfoLocalStorage?.politicOrganisation || '', [Validators.required]],
+      commission: [membershipInfoLocalStorage?.commission || '', [Validators.required, Validators.min(1)]],
+      clubs: [membershipInfoLocalStorage?.clubs || null, [Validators.required, Validators.min(1)]],
+      bourse: [membershipInfoLocalStorage?.bourse || '', [Validators.required, Validators.min(1)]]
     });
 
     this.commissionService.getCommissions().subscribe({
@@ -90,12 +90,6 @@ export class MembershipInfoComponent implements OnInit {
         this.toaster.error("Une erreur c'est produite du côté server")
       }
     })
-
-
-    const savedData = this.stepperDataService.getStepData(2);
-    if (savedData) {
-      this.membershipFormGroup.patchValue(savedData);
-    }
     this.toggleMembershipInfo();
     this.utilsService.checkInvalidControls(this.membershipFormGroup)
   }

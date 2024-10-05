@@ -13,6 +13,7 @@ export class StepperDataService {
 
   private formData: any = {
     member: {
+      id:null,
       personalInfo: {},
       membershipInfo: {}
     },
@@ -41,7 +42,6 @@ export class StepperDataService {
       this._membershipInfoSaved = true
     } else {
     }
-
   }
 
   setAcademicInfo(data: any) {
@@ -51,6 +51,14 @@ export class StepperDataService {
       this._academicInfoSaved = true
     } else {
     }
+
+  }
+  setAllFormsUnsaved(){
+  this._personalInfoSaved = false;
+  this._membershipInfoSaved = false;
+  this._academicInfoSaved = false;
+  this._addressInfoSaved = false;
+  this._contactInfoSaved = false;
 
   }
 
@@ -112,6 +120,7 @@ export class StepperDataService {
   set contactInfoSaved(value: boolean) {
     this._contactInfoSaved = value;
   }
+
 
   clearFormData() {
     this.formData = {};
