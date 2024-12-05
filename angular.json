@@ -84,13 +84,13 @@
           "builder": "@angular-devkit/build-angular:dev-server",
           "configurations": {
             "production": {
-              "browserTarget": "amued-frontend:build:production"
+              "buildTarget": "amued-frontend:build:production"
             },
             "development": {
-              "browserTarget": "amued-frontend:build:development"
+              "buildTarget": "amued-frontend:build:development"
             },
             "staging": {
-              "browserTarget": "amued-frontend:build:staging"
+              "buildTarget": "amued-frontend:build:staging"
             }
           },
           "defaultConfiguration": "development"
@@ -98,7 +98,7 @@
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "amued-frontend:build"
+            "buildTarget": "amued-frontend:build"
           }
         },
         "test": {
