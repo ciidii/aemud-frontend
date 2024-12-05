@@ -1,10 +1,19 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {MemberModule} from "../../member.module";
+import {AppModule} from "../../../app.module";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-add-member',
   templateUrl: './bootstrap-stepper-form.component.html',
-  styleUrls: ['./bootstrap-stepper-form.component.css']
+  styleUrls: ['./bootstrap-stepper-form.component.css'],
+  imports: [
+    MemberModule,
+    AppModule,
+    NgIf
+  ],
+  standalone: true
 })
 export class BootstrapStepperFormComponent implements OnInit {
   currentStep = 1;

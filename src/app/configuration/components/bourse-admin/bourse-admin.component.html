@@ -1,0 +1,78 @@
+<div class="container mt-4">
+  <!-- Section de gestion des bourses -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-header text-white">
+      <h3 class="mb-0">Gérer les Bourses</h3>
+    </div>
+    <div class="card-body">
+      <!-- Tableau des bourses -->
+      <table class="table table-hover">
+        <thead class="thead-light">
+        <tr>
+          <th>Libellé</th>
+          <th>Montant</th>
+          <th class="text-center">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let bourse of bourses">
+          <td>{{ bourse.lebelle }}</td>
+          <td>{{ bourse.montant | currency }}</td>
+          <td class="text-center">
+            <button class="btn btn-outline-warning btn-sm me-2">
+              <i class="bi bi-pencil"></i> Modifier
+            </button>
+            <button class="btn btn-outline-danger btn-sm">
+              <i class="bi bi-trash"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+      <!-- Bouton Ajouter une Bourse -->
+      <div class="d-flex justify-content-end mt-3">
+        <button (click)="handleDisplayForm()" class="btn btn-success">
+          <i class="bi bi-plus-circle"></i> Ajouter une Bourse
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="container mt-4">
+    <!-- Formulaire réactif -->
+    <div *ngIf="displayForm" class="card shadow-sm mb-4">
+      <div class="card-header">
+        <h4 class="mb-0">Ajouter une Bourse</h4>
+      </div>
+      <div class="card-body">
+        <form [formGroup]="bourseForm" (ngSubmit)="onSubmit()">
+          <div class="mb-3">
+            <label for="lebelle" class="form-label">Libellé de la Bourse</label>
+            <input type="text" id="lebelle" class="form-control" formControlName="lebelle">
+            <!-- Correction : Accéder aux erreurs avec ['propriété'] -->
+            <div *ngIf="bourseForm.get('lebelle')?.invalid && bourseForm.get('lebelle')?.touched" class="text-danger">
+              <small *ngIf="bourseForm.get('lebelle')?.errors?.['required']">Le libellé est requis.</small>
+              <small *ngIf="bourseForm.get('lebelle')?.errors?.['minlength']">Le libellé doit avoir au moins 3
+                caractères.</small>
+            </div>
+          </div>
+
+          <div class="mb-3">
+            <label for="montant" class="form-label">Montant</label>
+            <input type="number" id="montant" class="form-control" formControlName="montant">
+            <!-- Correction : Accéder aux erreurs avec ['propriété'] -->
+            <div *ngIf="bourseForm.get('montant')?.invalid && bourseForm.get('montant')?.touched" class="text-danger">
+              <small *ngIf="bourseForm.get('montant')?.errors?.['required']">Le montant est requis.</small>
+              <small *ngIf="bourseForm.get('montant')?.errors?.['min']">Le montant doit être supérieur à 0.</small>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-end">
+            <button type="submit" class="btn btn-outline-success" [disabled]="bourseForm.invalid">Enregistrer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>

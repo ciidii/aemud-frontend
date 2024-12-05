@@ -9,28 +9,28 @@ import {FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {WelcomePageComponent} from './shared/components/welcome-page/welcome-page.component';
 import {HomeComponent} from './shared/components/home/home.component';
 import {HeaderComponent} from './core/header/header.component';
-import {MemberComponent} from './member/components/member/member.component';
-import {BootstrapStepperFormComponent} from './member/components/bootstrap-stepper-form/bootstrap-stepper-form.component';
-import {ModalComponent} from './shared/components/modal/modal.component';
+import {ListMemberComponent} from './member/components/list-member/list-member.component';
+import {
+  BootstrapStepperFormComponent
+} from './member/components/bootstrap-stepper-form/bootstrap-stepper-form.component';
+import {ModalComponent} from './member/components/modal/modal.component';
 import {HttpClientModule} from "@angular/common/http";
 import {EditMemberComponent} from './member/components/edit-member/edit-member.component';
 import {ToastrModule} from "ngx-toastr";
 import {BrowserAnimationsModule} from "@angular/platform-browser/animations";
 import * as Sentry from '@sentry/angular';
 import {Router} from "@angular/router";
-import {GlobalErrorHandlerService} from "./shared/services/global-error-handler.service";
 import {MemberModule} from "./member/member.module";
-import { MainFormStep2Component } from './member/components/main-form-step-2/main-form-step-2.component';
+import {MainFormStep2Component} from './member/components/main-form-step-2/main-form-step-2.component';
+import {ConfigurationModule} from "./configuration/configuration.module";
 
 @NgModule({
   declarations: [
     AppComponent,
     LoginComponent,
     WelcomePageComponent,
-    HomeComponent,
     HeaderComponent,
-    MemberComponent,
-    BootstrapStepperFormComponent,
+    ListMemberComponent,
     ModalComponent,
     EditMemberComponent,
     MainFormStep2Component,
@@ -44,7 +44,9 @@ import { MainFormStep2Component } from './member/components/main-form-step-2/mai
     FormsModule,
     ToastrModule.forRoot(),
     BrowserAnimationsModule,
-    MemberModule
+    MemberModule,
+    ConfigurationModule,
+    HomeComponent
 
   ],
   providers: [{
@@ -64,9 +66,13 @@ import { MainFormStep2Component } from './member/components/main-form-step-2/mai
       multi: true,
     },
     {
-      provide:Title
+      provide: Title
     }
 
+  ],
+  exports: [
+    HeaderComponent,
+    MainFormStep2Component
   ],
   bootstrap: [AppComponent]
 })

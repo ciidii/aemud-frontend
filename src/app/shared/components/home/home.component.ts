@@ -1,10 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {CardContentService} from "../../services/card-content.service";
+import {RouterLink} from "@angular/router";
+import {NgForOf} from "@angular/common";
 
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css']
+  styleUrls: ['./home.component.css'],
+  imports: [
+    RouterLink,
+    NgForOf
+  ],
+  standalone: true
 })
 export class HomeComponent implements OnInit {
   cardContents !: any

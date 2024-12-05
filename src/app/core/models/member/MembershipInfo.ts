@@ -9,7 +9,7 @@ export interface MembershipInfo {
   otherCourses: string;
   participatedActivity: string;
   politicOrganisation: string;
-  commission: string;
-  clubs: number[];
-  bourse: string;
+  commission: any;
+  clubs: any;
+  bourse: any;
 }

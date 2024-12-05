@@ -1,0 +1,57 @@
+<!-- member-detail.component.html -->
+<div class="member-container">
+  <h2>{{ member.member.personalInfo.firstname }} {{ member.member.personalInfo.name }}</h2>
+
+  <!-- Informations personnelles -->
+  <div class="section">
+    <h3>Informations personnelles</h3>
+    <p><strong>Nom :</strong> {{ member.member.personalInfo.firstname }} {{ member.member.personalInfo.name }}</p>
+    <p><strong>Nationalité :</strong> {{ member.member.personalInfo.nationality }}</p>
+    <p><strong>Date de naissance :</strong> {{ member.member.personalInfo.birthday | date: 'longDate' }}</p>
+    <p><strong>Statut marital :</strong> {{ member.member.personalInfo.maritalStatus }}</p>
+  </div>
+
+  <!-- Informations d'adhésion -->
+  <div class="section">
+    <h3>Informations d'adhésion</h3>
+    <p><strong>Année d'adhésion :</strong> {{ member.member.membershipInfo.yearOfMembership }}</p>
+    <p><strong>Institution :</strong> {{ member.member.membershipInfo.legacyInstitution }}</p>
+    <p><strong>Série du Bac :</strong> {{ member.member.membershipInfo.bacSeries }}</p>
+    <p><strong>Mention du Bac :</strong> {{ member.member.membershipInfo.bacMention }}</p>
+    <p><strong>Cours AEMUD :</strong> {{ member.member.membershipInfo.aemudCourses }}</p>
+    <p><strong>Autres cours :</strong> {{ member.member.membershipInfo.otherCourses }}</p>
+    <p><strong>Activité participée :</strong> {{ member.member.membershipInfo.participatedActivity }}</p>
+    <p><strong>Organisation politique :</strong> {{ member.member.membershipInfo.politicOrganisation }}</p>
+    <p><strong>Commission :</strong> {{ member.member.membershipInfo.commission.name }}</p>
+    <p><strong>Clubs :</strong>
+    <ul>
+      <li *ngFor="let club of member.member.membershipInfo.clubs">{{ club.name }}</li>
+    </ul>
+    <p><strong>Bourse :</strong> {{ member.member.membershipInfo.bourse.lebelle }}
+  </div>
+
+  <!-- Informations d'adresse -->
+  <div class="section">
+    <h3>Informations d'adresse</h3>
+    <p><strong>Adresse à Dakar :</strong> {{ member.addressInfo.addressInDakar }}</p>
+    <p><strong>Adresse de vacances :</strong> {{ member.addressInfo.holidayAddress }}</p>
+    <p><strong>Adresse sur le campus :</strong> {{ member.addressInfo.addressToCampus }}</p>
+  </div>
+
+  <!-- Informations de contact -->
+  <div class="section">
+    <h3>Informations de contact</h3>
+    <p><strong>Numéro de téléphone :</strong> {{ member.contactInfo.numberPhone }}</p>
+    <p><strong>Email :</strong> {{ member.contactInfo.email }}</p>
+    <div *ngIf="member.contactInfo.personToCalls.length">
+      <h4>Contacts d'urgence :</h4>
+      <ul>
+        <li *ngFor="let contact of member.contactInfo.personToCalls">
+          <p><strong>Nom :</strong> {{ contact.firstname }} {{ contact.lastname }}</p>
+          <p><strong>Numéro de téléphone :</strong> {{ contact.requiredNumberPhone }}</p>
+          <p><strong>Relation :</strong> {{ contact.relationship }}</p>
+        </li>
+      </ul>
+    </div>
+  </div>
+</div>

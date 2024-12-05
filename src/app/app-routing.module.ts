@@ -12,7 +12,11 @@ const routes: Routes = [
   }
   ,
   {
-    path: "**", component: LoginComponent
+    path: "configurations",
+    loadChildren: () => import("./configuration/configuration.module").then(m => m.ConfigurationModule)
+  },
+  {
+    path: "**", component: LoginComponent, data: {title: "AEMUD - Connexion"}
   }
 ];
 

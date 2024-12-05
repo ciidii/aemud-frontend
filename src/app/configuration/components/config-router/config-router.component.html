@@ -1,0 +1,29 @@
+<div class="container-fluid p-0">
+  <div class="row no-gutters">
+    <div class="col-md-2 sidebar sticky-sidebar">
+      <ul class="nav flex-column">
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+             routerLink="/configurations/config/home">
+            <i class="fas fa-home"></i>Gérer les Bourses
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+             routerLink="/configurations/config/commission-admin">
+            <i class="fas fa-home"></i>Gérer les commissions
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
+             routerLink="/configurations/config/club-admin">
+            <i class="fas fa-home"></i>Gérer les clubs
+          </a>
+        </li>
+      </ul>
+    </div>
+    <div class="col-md-10 content-area">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>

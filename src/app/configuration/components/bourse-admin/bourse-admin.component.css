@@ -1,0 +1,14 @@
+.card-header {
+  background-color: #278F8F; /* Couleur personnalisée */
+  color: white;
+}
+
+.btn-outline-warning:hover,
+.btn-outline-danger:hover {
+  background-color: #278F8F; /* Couleur sur hover */
+  color: white;
+}
+
+.btn-outline-success:hover {
+  background-color: rgba(208, 156, 10, 1);
+}

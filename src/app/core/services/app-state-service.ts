@@ -1,19 +1,19 @@
 import {Injectable} from '@angular/core';
-import {MemberModel} from "../../member/model/member.model";
+import {MemberData} from "../models/member/MemberData";
 
 @Injectable({
   providedIn: 'root'
 })
 export class AppStateService {
   public memberState: any = {
-    members: Array<MemberModel>,
+    members: [] as MemberData[],
     keyword: "",
     criteria: "name",
     totalPages: 0,
     pageSize: 10,
     currentPage: 1,
-    status:"",
-    errorMessage:""
+    status: "",
+    errorMessage: ""
   }
 
   constructor() {

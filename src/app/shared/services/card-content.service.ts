@@ -1,10 +1,10 @@
-import { Injectable } from '@angular/core';
+import {Injectable} from '@angular/core';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CardContentService {
- private cardContent = [
+  private cardContent = [
     {
       imageUrl: "bi bi-person-lines-fill",
       title: "Membres",
@@ -24,7 +24,7 @@ export class CardContentService {
       title: "Configurations",
       description: "Configurations du système",
       linkTitle: "Configurations",
-      retourLinh: "#"
+      retourLinh: "/configurations/config/home"
     },
     {
       imageUrl: "bi bi-chat-right-dots-fill",
@@ -41,8 +41,11 @@ export class CardContentService {
       retourLinh: "#"
     },
   ]
-  constructor() { }
-  public getCardContent(){
-   return this.cardContent;
+
+  constructor() {
+  }
+
+  public getCardContent() {
+    return this.cardContent;
   }
 }

@@ -1,0 +1,54 @@
+<div class="container mt-4">
+  <div class="d-flex justify-content-end mb-3">
+    <button (click)="handleDisplayForm()" class="btn btn-success">
+      <i class="bi bi-plus-circle"></i> Ajouter une Commission
+    </button>
+  </div>
+
+  <!-- Formulaire réactif -->
+  <div *ngIf="displayForm" class="card shadow-sm mb-4">
+    <div class="card-header bg-light">
+      <h4 class="mb-0">Ajouter / Modifier une Commission</h4>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="commissionForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom de la Commission</label>
+          <input type="text" id="name" class="form-control" formControlName="name">
+          <!-- Correction : Accéder aux erreurs avec ['propriété'] -->
+          <div *ngIf="commissionForm.get('name')?.invalid && commissionForm.get('name')?.touched" class="text-danger">
+            <small *ngIf="commissionForm.get('name')?.errors?.['required']">Le nom est requis.</small>
+            <small *ngIf="commissionForm.get('name')?.errors?.['minlength']">Le nom doit avoir au moins 3
+              caractères.</small>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-primary" [disabled]="commissionForm.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- Table de gestion des commissions -->
+  <div class="section">
+    <h2>Gérer les Commissions</h2>
+    <table class="table table-bordered">
+      <thead>
+      <tr>
+        <th>Nom</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let commission of commissions">
+        <td>{{ commission.name }}</td>
+        <td>
+          <button class="btn btn-sm btn-warning">Modifier</button>
+          <button class="btn btn-sm btn-danger">Supprimer</button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

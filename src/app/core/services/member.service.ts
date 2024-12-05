@@ -7,29 +7,32 @@ import {RequestPageableVO} from "../models/requestPageableVO";
 import {AppStateService} from "./app-state-service";
 import {ResponseEntityApi} from "../models/responseEntityApi";
 import {environment} from "../../../environments/environment.development";
+import {MemberData} from "../models/member/MemberData";
+import {Member} from "../models/member/Member";
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
-  url: string = `http://localhost:8080/aemud/api/v1`;
+  url: string = environment.API_URL;
 
   constructor(private httpClient: HttpClient, private appState: AppStateService) {
   }
 
-  public getAllMember(requestPageableVO: RequestPageableVO): Observable<ResponsePageableApi<Array<MemberModel>>> {
+  public getAllMember(requestPageableVO: RequestPageableVO): Observable<ResponsePageableApi<Array<MemberData>>> {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json"),
       params: new HttpParams().set("page", this.appState.memberState.currentPage).set("rpp", this.appState.memberState.pageSize)
     }
-    return this.httpClient.get<ResponsePageableApi<Array<MemberModel>>>(`${this.url}` + "/members/all", options);
+    return this.httpClient.get<ResponsePageableApi<Array<MemberData>>>(`${this.url}` + "/members/all", options);
   }
 
 
-  public deleteMember(member: MemberModel): Observable<any> {
+  public deleteMember(member: MemberData): Observable<any> {
+    var number = member.member.id as unknown as number;
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json"),
-      params: new HttpParams().set("userId", member.id),
+      params: new HttpParams().set("userId", number),
     }
     return this.httpClient.delete<Array<MemberModel>>(`${this.url}/members`, options);
   }
@@ -45,12 +48,12 @@ export class MemberService {
     return this.httpClient.get<Array<MemberModel>>(`${this.url}/members?${criteria}_like=${keyword}&_page=${currentPage}&_limit=${pageSize}`, {observe: 'response'});
   }
 
-  getMemberById(memberId: number): Observable<ResponseEntityApi<MemberModel>> {
+  getMemberById(memberId: number): Observable<ResponseEntityApi<MemberData>> {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json"),
-      params: new HttpParams().set("userId", memberId),
+      params: new HttpParams().set("member-id", memberId),
     }
-    return this.httpClient.get<ResponseEntityApi<MemberModel>>(`${this.url}/members`, options);
+    return this.httpClient.get<ResponseEntityApi<MemberData>>(`${this.url}/members`, options);
   }
 
   updateMember(memberChange: MemberModel) {

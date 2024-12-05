@@ -12,6 +12,6 @@ export class HeaderComponent implements OnInit{
   }
 
   ngOnInit(): void {
-      this.headerContent = this.cardContent.getCardContent()
+    this.headerContent = this.cardContent.getCardContent()
   }
 }

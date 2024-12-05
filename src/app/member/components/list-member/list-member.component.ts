@@ -1,19 +1,18 @@
-import {Component, OnInit, signal, ViewChild} from '@angular/core';
-import {MemberModel} from "../../model/member.model";
-import {ModalComponent} from "../../../shared/components/modal/modal.component";
+import {Component, OnInit} from '@angular/core';
 import {MemberService} from "../../../core/services/member.service";
 import {MemberCommunicationService} from "../../../core/services/member-communication.service";
 import {AppStateService} from "../../../core/services/app-state-service";
-import {Router} from "@angular/router";
 import {RequestPageableVO} from "../../../core/models/requestPageableVO";
+import {AddressService} from "../../../core/services/address.service";
+import {ToastrService} from "ngx-toastr";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-member',
-  templateUrl: './member.component.html',
-  styleUrls: ['./member.component.css']
+  templateUrl: './list-member.component.html',
+  styleUrls: ['./list-member.component.css']
 })
-export class MemberComponent implements OnInit {
-  @ViewChild(ModalComponent, {static: false}) modal?: ModalComponent;
+export class ListMemberComponent implements OnInit {
   private readonly MAX_PAGES_DISPLAYED = 3;
 
   constructor(
@@ -39,34 +38,37 @@ export class MemberComponent implements OnInit {
     )
   }
 
-  openModal(member: MemberModel) {
-    this.modal?.openModal(member);
-  }
-
   public searchMember() {
     this.appState.setMemberState({
       status: "LOADING"
     })
-   let  requestPegeableVO =new   RequestPageableVO(1,10);
+    let requestPegeableVO = new RequestPageableVO(1, 10);
     this.memberService.getAllMember(requestPegeableVO)
       .subscribe(
-        response => {
-            this.appState.memberState.members = response.items;
+        {
+          next: response => {
+            this.appState.memberState.members = response.items
             this.appState.memberState.pageSize = requestPegeableVO.rpp;
             this.appState.memberState.totalPages = response.pages;
-          this.appState.setMemberState({
-            status: "LOADED"
-          })
-        },
-        error => {
-          this.appState.setMemberState({
-            status: "ERROR",
-            errorMessage: error.errorMessage
-          })
+            console.log(this.appState.memberState.members)
+            this.appState.setMemberState({
+              status: "LOADED"
+            })
+          },
+          error: err => {
+            this.appState.setMemberState({
+              status: "ERROR",
+              errorMessage: err.errorMessage
+            })
+          }
         }
       );
 
   };
+
+  displayMemberDetails(id: number) {
+    this.router.navigateByUrl(`/members/member/member-details/${id}`)
+  }
 
   nextPage(page: number) {
     this.appState.memberState.currentPage = page;
@@ -80,7 +82,7 @@ export class MemberComponent implements OnInit {
     const maxPages = this.MAX_PAGES_DISPLAYED;
 
     if (totalPages <= maxPages) {
-      return Array.from({ length: totalPages }, (_, i) => i + 1);
+      return Array.from({length: totalPages}, (_, i) => i + 1);
     }
 
     let startPage: number;
@@ -97,6 +99,6 @@ export class MemberComponent implements OnInit {
       endPage = currentPage + Math.floor(maxPages / 2);
     }
 
-    return Array.from({ length: endPage - startPage + 1 }, (_, i) => startPage + i);
+    return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
   }
 }

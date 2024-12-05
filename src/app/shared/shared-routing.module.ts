@@ -9,7 +9,8 @@ const routes: Routes = [
     path: "", component: WelcomePageComponent, children: [
       {path: "login", component: LoginComponent,data:{title:"AEMUD - Connexion"}},
       {path: "home", component: HomeComponent,data:{title:"AEMUD - Acceuil"}},
-    ]
+    ],
+    data:{title:"AEMUD - Connexion"}
   }
 ];
 

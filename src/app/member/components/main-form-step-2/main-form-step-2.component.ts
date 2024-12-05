@@ -51,12 +51,14 @@ export class MainFormStep2Component implements OnInit {
         this.resetLocalStorage()
         this.stepperService.setAllFormsUnsaved()
         this.router.navigateByUrl("/members/member/list-members")
-        this.toaster.error("Une erreur de c'est produit lors de registration")
+      },
+      error:err => {
+        this.toaster.error("Une erreur s'est produit lors de l'ajout")
       }
     });
   }
 
-  resetLocalStorage() {
+    resetLocalStorage() {
     localStorage.removeItem("academicInfo")
     localStorage.removeItem("addressInfo")
     localStorage.removeItem("contactInfo")

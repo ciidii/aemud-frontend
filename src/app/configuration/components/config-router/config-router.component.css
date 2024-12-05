@@ -24,19 +24,17 @@
 }
 
 
-.nav-link:hover,.active {
+.nav-link:hover, .active {
   background-color: #f8f8f8;
   color: #000;
 }
 
-/* Zone de contenu */
 .content-area {
   background-color: #f9f9f9;
   min-height: 100vh;
   padding: 30px;
 }
 
-/* Sticky sidebar */
 .sticky-sidebar {
   position: sticky;
   top: 0;

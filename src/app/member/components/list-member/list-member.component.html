@@ -3,7 +3,8 @@
     <div class="card-body">
       <div class="row mb-3">
         <div class="col-md-5">
-          <input [(ngModel)]="appState.memberState.keyword" placeholder="Rechercher" class="form-control" type="text" (ngModelChange)="searchMember()">
+          <input [(ngModel)]="appState.memberState.keyword" placeholder="Rechercher" class="form-control" type="text"
+                 (ngModelChange)="searchMember()">
         </div>
         <div class="col-md-3">
           <select [(ngModel)]="appState.memberState.criteria" class="form-control">
@@ -16,7 +17,8 @@
           </select>
         </div>
         <div class="col-md-2">
-          <button [disabled]="!appState.memberState.keyword" (click)="searchMember()" class="btn btn-outline-success w-100">
+          <button [disabled]="!appState.memberState.keyword" (click)="searchMember()"
+                  class="btn btn-outline-success w-100">
             <i class="bi bi-search"></i>
           </button>
         </div>
@@ -28,7 +30,8 @@
       </div>
 
       <div *ngIf="appState.memberState.keyword && appState.memberState.submitSearch" class="mb-3">
-        <p>Résultat<span *ngIf="appState.memberState.numberOfResult >= 1">s</span>: {{ appState.memberState.numberOfResult }}</p>
+        <p>Résultat<span
+          *ngIf="appState.memberState.numberOfResult >= 1">s</span>: {{ appState.memberState.numberOfResult }}</p>
       </div>
 
       <div *ngIf="appState.memberState.members; else noMembers">
@@ -40,20 +43,18 @@
             <th>Adresse au campus</th>
             <th>Email</th>
             <th>Numéro de Téléphone</th>
-            <th>Personne à appeler</th>
             <th>Action</th>
           </tr>
           </thead>
           <tbody>
           <tr *ngFor="let member of appState.memberState.members">
-            <td>{{ member.firstname }}</td>
-            <td>{{ member.name }}</td>
-            <td>{{ member.addressToCampus }}</td>
-            <td>{{ member.email }}</td>
-            <td>{{ member.numberPhone }}</td>
-            <td>{{ member.personToCall }}</td>
+            <td>{{ member.member.personalInfo.firstname }}</td>
+            <td>{{ member.member.personalInfo.name }}</td>
+            <td>{{ member.addressInfo.addressToCampus }}</td>
+            <td>{{ member.contactInfo.email }}</td>
+            <td>{{ member.contactInfo.numberPhone }}</td>
             <td>
-              <button class="btn btn-outline-success" (click)="openModal(member)">
+              <button (click)="displayMemberDetails(member.member.id)" class="btn btn-outline-success">
                 <i class="bi bi-eye"></i> Afficher
               </button>
             </td>
@@ -64,7 +65,8 @@
         <nav *ngIf="appState.memberState.totalPages > 1" aria-label="Page navigation">
           <ul class="pagination justify-content-center">
             <li class="page-item" [ngClass]="{'disabled': appState.memberState.currentPage === 1}">
-              <button class="page-link" (click)="nextPage(appState.memberState.currentPage - 1)" aria-label="Previous" [attr.aria-disabled]="appState.memberState.currentPage === 1 ? true : null">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage - 1)" aria-label="Previous"
+                      [attr.aria-disabled]="appState.memberState.currentPage === 1 ? true : null">
                 <span aria-hidden="true">&laquo;</span>
               </button>
             </li>
@@ -74,7 +76,8 @@
             <li *ngIf="getPages()[0] > 2" class="page-item disabled">
               <span class="page-link">...</span>
             </li>
-            <li *ngFor="let page of getPages()" class="page-item" [ngClass]="{'active': appState.memberState.currentPage === page}">
+            <li *ngFor="let page of getPages()" class="page-item"
+                [ngClass]="{'active': appState.memberState.currentPage === page}">
               <button (click)="nextPage(page)" class="page-link">
                 {{ page }}
               </button>
@@ -83,10 +86,14 @@
               <span class="page-link">...</span>
             </li>
             <li *ngIf="getPages().slice(-1)[0] !== appState.memberState.totalPages" class="page-item">
-              <button class="page-link" (click)="nextPage(appState.memberState.totalPages)">{{ appState.memberState.totalPages }}</button>
+              <button class="page-link"
+                      (click)="nextPage(appState.memberState.totalPages)">{{ appState.memberState.totalPages }}
+              </button>
             </li>
-            <li class="page-item" [ngClass]="{'disabled': appState.memberState.currentPage === appState.memberState.totalPages}">
-              <button class="page-link" (click)="nextPage(appState.memberState.currentPage + 1)" aria-label="Next" [attr.aria-disabled]="appState.memberState.currentPage === appState.memberState.totalPages ? true : null">
+            <li class="page-item"
+                [ngClass]="{'disabled': appState.memberState.currentPage === appState.memberState.totalPages}">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage + 1)" aria-label="Next"
+                      [attr.aria-disabled]="appState.memberState.currentPage === appState.memberState.totalPages ? true : null">
                 <span aria-hidden="true">&raquo;</span>
               </button>
             </li>
@@ -102,5 +109,3 @@
     </div>
   </div>
 </div>
-
-<app-modal></app-modal>

@@ -2,7 +2,7 @@ import {MembershipInfo} from "./MembershipInfo";
 import {PersonalInfo} from "./PersonalInfo";
 
 export interface Member {
-  id: string | null;
+  id: number;
   personalInfo: PersonalInfo;
   membershipInfo: MembershipInfo;
 }

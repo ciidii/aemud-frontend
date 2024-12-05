@@ -194,37 +194,6 @@ export class EditMemberComponent implements OnInit {
         {
           next: member => {
             if (member.result == "Succeeded" && member.status == "OK") {
-              this.memberGroup = this.formBuilder.group({
-                id: this.formBuilder.control(this.memberId),
-                name: this.formBuilder.control(member?.data?.name, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-                firstname: this.formBuilder.control(member.data.firstname, [Validators.required, Validators.minLength(3), Validators.maxLength(50)]),
-                nationality: this.formBuilder.control(member.data.nationality, [Validators.required, Validators.minLength(3), Validators.maxLength(20)]),
-                birthday: this.formBuilder.control(member.data.birthday, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                maritalStatus: this.formBuilder.control(member.data.maritalStatus, [Validators.required]),
-                addressInDakar: this.formBuilder.control(member.data.addressInDakar, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                addressToCampus: this.formBuilder.control(member.data.addressToCampus, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                holidayAddress: this.formBuilder.control(member.data.holidayAddress, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                numberPhone: this.formBuilder.control(member.data.numberPhone, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                email: this.formBuilder.control(member.data.email, [Validators.email, Validators.minLength(3), Validators.maxLength(100)]),
-                personToCall: this.formBuilder.control(member.data.personToCall, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                faculty: this.formBuilder.control(member.data.faculty, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                departmentOrYear: this.formBuilder.control(member.data.departmentOrYear, [Validators.required, Validators.minLength(3), Validators.maxLength(100)]),
-                bourse: this.formBuilder.control(member.data.bourse, [Validators.required]),
-                doYouParticipateAemudActivity: this.formBuilder.control(member.data.participatedActivity == null ? 'no' : 'yes', [Validators.required]),
-                participatedActivity: this.formBuilder.control(member.data.participatedActivity),
-                doYouParticipateAemudCourse: this.formBuilder.control(member.data.doYouParticipateAemudCourse == null ? 'no' : 'yes', [Validators.required]),
-                aemudCourseParticipated: this.formBuilder.control(member.data.aemudCourseParticipated),
-                doYouParticipatedOtherCourse: this.formBuilder.control(member.data.doYouParticipatedOtherCourse == null ? 'no' : 'yes', [Validators.required]),
-                otherCourseParticipated: this.formBuilder.control(member.data.otherCourseParticipated),
-                areYouMemberOfPoliticOrganisation: this.formBuilder.control(member.data.areYouMemberOfPoliticOrganisation == null ? 'no' : 'yes', [Validators.required]),
-                politicOrganisation: this.formBuilder.control(member.data.politicOrganisation),
-                yearOfMembership: this.formBuilder.control(member.data.yearOfMembership.year_, [Validators.required, Validators.minLength(4), Validators.maxLength(4)]),
-                twinsName: this.formBuilder.control(member.data.twinsName),
-                commission: this.formBuilder.control(member.data.commission.id, [Validators.required]),
-                club: this.formBuilder.control(member.data.clubs?.at(0)?.id),
-                pay: this.formBuilder.control(member.data.pay, [Validators.required]),
-
-              });
               if (this.memberGroup.value.participatedActivity != null) {
               }
             } else {

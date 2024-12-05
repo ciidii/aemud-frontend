@@ -1,7 +1,6 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
-import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
 import {ToastrService} from "ngx-toastr";
 import {Commission} from "../../../core/models/Commission/Commission";
 import {CommissionService} from "../../../core/services/commission/commission.service";
@@ -25,7 +24,6 @@ export class MembershipInfoComponent implements OnInit {
 
   constructor(
     private _formBuilder: FormBuilder,
-    private stepperDataService: StepperDataService,
     private toaster: ToastrService,
     private commissionService: CommissionService,
     private clubService: ClubService,
@@ -91,7 +89,6 @@ export class MembershipInfoComponent implements OnInit {
       }
     })
     this.toggleMembershipInfo();
-    this.utilsService.checkInvalidControls(this.membershipFormGroup)
   }
 
   onSave() {
@@ -100,8 +97,7 @@ export class MembershipInfoComponent implements OnInit {
   }
 
   toggleMembershipInfo() {
-    this.utilsService.togglePersonalInfoSaved(this.membershipFormGroup, this.stepperService.membershipInfoSaved)
-    console.log(this.stepperService.membershipInfoSaved)
+    this.utilsService.togglePersonalInfoSaved(this.membershipFormGroup, this.stepperService.membershipInfoSaved);
   }
 
   onModify() {
