@@ -6,17 +6,20 @@ import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
 import {AcademicInfoComponent} from "../academic-info/academic-info.component";
 import {AddressInfoComponent} from "../address-info/address-info.component";
+import {ContactInfoComponent} from '../contact-info/contact-info.component';
 
 
 @Component({
   selector: 'app-main-form-step-2',
   templateUrl: './main-form-step-2.component.html',
-  styleUrls: ['./main-form-step-2.component.css']
+  styleUrls: ['./main-form-step-2.component.css'],
+  standalone: true,
+  imports: [AcademicInfoComponent, AddressInfoComponent, ContactInfoComponent]
 })
 export class MainFormStep2Component implements OnInit {
   @Output() previous = new EventEmitter<void>();
-  @ViewChild(AcademicInfoComponent,{static:false}) academicInfoComponent!:AcademicInfoComponent
-  @ViewChild(AddressInfoComponent,{static:false}) addressAcademicInfo!:AddressInfoComponent
+  @ViewChild(AcademicInfoComponent, {static: false}) academicInfoComponent!: AcademicInfoComponent
+  @ViewChild(AddressInfoComponent, {static: false}) addressAcademicInfo!: AddressInfoComponent
 
   constructor(protected stepperService: StepperDataService,
               private memberService: MemberService,
@@ -52,13 +55,13 @@ export class MainFormStep2Component implements OnInit {
         this.stepperService.setAllFormsUnsaved()
         this.router.navigateByUrl("/members/member/list-members")
       },
-      error:err => {
+      error: err => {
         this.toaster.error("Une erreur s'est produit lors de l'ajout")
       }
     });
   }
 
-    resetLocalStorage() {
+  resetLocalStorage() {
     localStorage.removeItem("academicInfo")
     localStorage.removeItem("addressInfo")
     localStorage.removeItem("contactInfo")

@@ -1,9 +1,13 @@
 import {Component, OnInit} from '@angular/core';
+import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
+import {NgFor} from '@angular/common';
 
 @Component({
-  selector: 'app-member-home',
-  templateUrl: './member-home.component.html',
-  styleUrls: ['./member-home.component.css']
+    selector: 'app-member-home',
+    templateUrl: './member-home.component.html',
+    styleUrls: ['./member-home.component.css'],
+    standalone: true,
+    imports: [NgFor, RouterLinkActive, RouterLink, RouterOutlet]
 })
 export class MemberHomeComponent implements OnInit {
   asideNavContent!: any;
@@ -12,16 +16,22 @@ export class MemberHomeComponent implements OnInit {
     this.asideNavContent = [
       {
         link: "/members/member/register-form",
-        title: "Formulaire"
+        title: "Formulaire",
+        disabled:""
       }, {
         link: "/members/member/list-members",
-        title: "Liste des membres"
+        title: "Liste des membres",
+        disabled:""
+
       }, {
-        link: "formmmmm",
-        title: "Réinscription"
+        link: "#",
+        title: "Réinscription",
+        disabled:"disabled"
+
       }, {
-        link: "/members/member/register-formmmmm",
-        title: "Liste Réincription"
+        link: "#",
+        title: "Liste Réincription",
+        disabled:"disabled"
       },
     ]
   }

@@ -1,10 +1,38 @@
 /// <reference types="@angular/localize" />
 
-import {platformBrowserDynamic} from '@angular/platform-browser-dynamic';
-
-import {AppModule} from './app/app.module';
 import * as Sentry from "@sentry/angular";
 import {environment} from "./environments/environment.development";
+import {AppComponent} from './app/app.component';
+import {provideAnimations} from '@angular/platform-browser/animations';
+import {LoginComponent} from './app/shared/components/login/login.component';
+import {ToastrModule} from 'ngx-toastr';
+import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
+import {ReactiveFormsModule} from '@angular/forms';
+import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
+import {bootstrapApplication, BrowserModule, Title} from '@angular/platform-browser';
+import {provideRouter, Router, Routes} from '@angular/router';
+import {APP_INITIALIZER, ErrorHandler, importProvidersFrom} from '@angular/core';
+
+const routes: Routes = [
+  {
+    path: "shared", loadChildren: () => import("./app/shared/shared-routing.module").then(m => m.SharedRoutingModule),
+    title: "Accueil",
+  },
+  {
+    path: "members", loadChildren: () => import("./app/member/member.route").then(m => m.MemberRoute),
+    title: "Members",
+  },
+  {
+    path: "configurations",
+    loadChildren: () => import("./app/configuration/config.route").then(m => m.ConfigRoute),
+    title: "Configuration",
+  },
+  {
+    path: "**", component: LoginComponent,
+    title: "Not Found"
+  }
+];
+
 
 Sentry.init({
   dsn: environment.features[0].sentryDsn,
@@ -21,5 +49,31 @@ Sentry.init({
   replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
 });
 
-platformBrowserDynamic().bootstrapModule(AppModule)
+bootstrapApplication(AppComponent, {
+  providers: [
+    importProvidersFrom(BrowserModule, NgbModule, ReactiveFormsModule, ToastrModule.forRoot()),
+    {
+      provide: ErrorHandler,
+      useValue: Sentry.createErrorHandler({
+        showDialog: false,
+      }),
+    }, {
+      provide: Sentry.TraceService,
+      deps: [Router],
+    },
+    {
+      provide: APP_INITIALIZER,
+      useFactory: () => () => {
+      },
+      deps: [Sentry.TraceService],
+      multi: true,
+    },
+    {
+      provide: Title
+    },
+    provideHttpClient(withInterceptorsFromDi()),
+    provideRouter(routes),
+    provideAnimations()
+  ]
+})
   .catch(err => console.error(err));

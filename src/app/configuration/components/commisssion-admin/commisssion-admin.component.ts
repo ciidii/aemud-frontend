@@ -2,12 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {CommissionModel} from "../../../member/model/commission.model";
 import {CommissionService} from "../../../core/services/commission/commission.service";
 import {ToastrService} from "ngx-toastr";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgFor, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-commisssion-admin',
   templateUrl: './commisssion-admin.component.html',
-  styleUrls: ['./commisssion-admin.component.css']
+  styleUrls: ['./commisssion-admin.component.css'],
+  standalone: true,
+  imports: [NgIf, FormsModule, ReactiveFormsModule, NgFor]
 })
 export class CommisssionAdminComponent implements OnInit {
   commissions!: CommissionModel[]
@@ -16,7 +19,8 @@ export class CommisssionAdminComponent implements OnInit {
 
   constructor(private commissionService: CommissionService, private toaster: ToastrService, private fb: FormBuilder) {
     this.commissionForm = this.fb.group({
-      name: ['', [Validators.required, Validators.minLength(3)]]
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      id: ['']
     });
   }
 
@@ -48,12 +52,12 @@ export class CommisssionAdminComponent implements OnInit {
     if (this.commissionForm.valid) {
       this.commissionService.addCommission(this.commissionForm.value).subscribe({
         next: resp => {
-          if (resp.status=="OK"){
+          if (resp.status == "OK") {
             this.toaster.success("Commissions aoujouté avec succées")
             this.commissionForm.reset();
             this.displayForm = false; // Masquer le formulaire après soumission
             this.getAllCommissions()
-          }else {
+          } else {
             this.toaster.error("Une erreur s'est produite")
           }
         }, error: err => {
@@ -61,5 +65,41 @@ export class CommisssionAdminComponent implements OnInit {
         }
       })
     }
+  }
+
+  onDelete(commissionID: number) {
+    this.commissionService.deleteCommission(commissionID).subscribe({
+      next: response => {
+        if (response.status == "OK") {
+          this.toaster.success("Suppression Réussi")
+          this.getAllCommissions();
+        } else {
+          console.log("Un erreur s'est produite")
+        }
+      },
+      error: err => {
+        if (err.error.status == "CONFLICT") {
+          this.toaster.error("Suppression Impossible");
+        }
+      }
+    })
+  }
+
+  onUpdate(commissionId: number) {
+    this.commissionService.getSingleCommission(commissionId).subscribe({
+      next: response => {
+        if (response.status == "OK") {
+          this.commissionForm.get("name")?.setValue(response.data.name);
+          this.commissionForm.get("id")?.setValue(commissionId)
+          this.handleDisplayForm()
+          //this.commissionService.addCommission(this.commissionForm.value)
+          this.getAllCommissions();
+        }
+        console.log("Une erreur s'est produite")
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 }

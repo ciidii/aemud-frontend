@@ -1,0 +1,119 @@
+<div [style]="{'display': shouldDisplayModal() ? 'block' : 'none'}" class="modal fade show" tabindex="-1"
+     data-bs-backdrop="static" role="dialog">
+  <div class="modal-dialog modal-lg modal-dialog-centered">
+    <div class="modal-content shadow">
+      <!-- Modal Header -->
+      <div class="modal-header bg-white text-black text-center">
+        <h5 class="modal-title fw-bold">Options de Colonnes</h5>
+        <button (click)="closePopupColumnPrinter()" type="button" class="btn-close btn-close-black"
+                aria-label="Close"></button>
+      </div>
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <p class="text-muted">Sélectionnez les colonnes que vous souhaitez inclure dans le fichier excel.</p>
+        <form [formGroup]="memberForm" (ngSubmit)="onSubmit()">
+          <!-- Section: Informations personnelles -->
+          <div class="mb-4">
+            <h5 class="border-bottom pb-2 mb-3 align-content-center">Informations personnelles</h5>
+            <div formGroupName="personalInfo" class="row gy-2">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="name" type="checkbox" class="form-check-input" formControlName="name"/>
+                  <label for="name" class="form-check-label">Nom</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="firstname" type="checkbox" class="form-check-input" formControlName="firstname"/>
+                  <label for="firstname" class="form-check-label">Prénom</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="nationality" type="checkbox" class="form-check-input" formControlName="nationality"/>
+                  <label for="nationality" class="form-check-label">Nationalité</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="birthday" type="checkbox" class="form-check-input" formControlName="birthday"/>
+                  <label for="birthday" class="form-check-label">Date de naissance</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="maritalStatus" type="checkbox" class="form-check-input" formControlName="maritalStatus"/>
+                  <label for="maritalStatus" class="form-check-label">État civil</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Informations académiques -->
+          <div class="mb-4">
+            <h5 class="border-bottom pb-2 mb-3">Informations académiques</h5>
+            <div formGroupName="academicInfo" class="row gy-2">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="studiesLevel" type="checkbox" class="form-check-input" formControlName="studiesLevel"/>
+                  <label for="studiesLevel" class="form-check-label">Niveau d'études</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="university" type="checkbox" class="form-check-input" formControlName="university"/>
+                  <label for="university" class="form-check-label">Université</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="faculty" type="checkbox" class="form-check-input" formControlName="faculty"/>
+                  <label for="faculty" class="form-check-label">Faculté</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="department" type="checkbox" class="form-check-input" formControlName="department"/>
+                  <label for="department" class="form-check-label">Département</label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Section: Adresse -->
+          <div class="mb-4">
+            <h5 class="border-bottom pb-2 mb-3">Adresse</h5>
+            <div formGroupName="addressInfo" class="row gy-2">
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="addressInDakar" type="checkbox" class="form-check-input" formControlName="addressInDakar"/>
+                  <label for="addressInDakar" class="form-check-label">Adresse à Dakar</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="holidayAddress" type="checkbox" class="form-check-input" formControlName="holidayAddress"/>
+                  <label for="holidayAddress" class="form-check-label">Adresse pendant les vacances</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-check">
+                  <input id="addressToCampus" type="checkbox" class="form-check-input"
+                         formControlName="addressToCampus"/>
+                  <label for="addressToCampus" class="form-check-label">Adresse sur le campus</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <!-- Modal Footer -->
+          <div class="modal-footer">
+            <button (click)="closePopupColumnPrinter()" type="button" class="btn btn-outline-secondary">
+              Annuler
+            </button>
+            <button type="button" (click)="exportToExcel()" class="btn btn-outline-success">Imprimer</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

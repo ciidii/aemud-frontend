@@ -28,3 +28,16 @@ body{
 .page-link:hover {
   text-decoration: none;
 }
+
+.pagination .page-item .page-link {
+  background-color: #f8f9fa;
+  border-color: #dee2e6;
+  color: black;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.pagination .page-item.active .page-link {
+  background-color: #278F8F;
+  border-color: #D09C0AFF;
+  color: white;
+}

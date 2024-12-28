@@ -1,12 +1,15 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
 import {UtilsService} from "../../../core/services/utils.service";
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-address-info',
-  templateUrl: './address-info.component.html',
-  styleUrls: ['./address-info.component.css']
+    selector: 'app-address-info',
+    templateUrl: './address-info.component.html',
+    styleUrls: ['./address-info.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf]
 })
 export class AddressInfoComponent implements OnInit {
   @Output() next = new EventEmitter<void>();

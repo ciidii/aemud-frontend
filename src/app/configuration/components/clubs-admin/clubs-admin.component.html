@@ -1,67 +1,56 @@
-<div class="container mt-4">
-  <!-- Section de gestion des bourses -->
-  <div class="card shadow-sm mb-4">
-    <div class="card-header text-white">
-      <h3 class="mb-0">Gérer les Bourses</h3>
+<div class="container py-5">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">Gestion des Commissions</h2>
+    <button (click)="handleDisplayForm()" class="btn btn-outline-success shadow-sm">
+      <i class="bi bi-plus-circle me-1"></i> Ajouter un Club
+    </button>
+  </div>
+  <div *ngIf="displayForm" class="card shadow mb-4">
+    <div class="card-header bg-light">
+      <h4 class="mb-0">Ajouter un Club</h4>
     </div>
     <div class="card-body">
-      <!-- Tableau des bourses -->
-      <table class="table table-hover">
-        <thead class="thead-light">
-        <tr>
-          <th>Libellé</th>
-          <th>Montant</th>
-          <th class="text-center">Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr *ngFor="let club of clubs">
-          <td>{{ club.name }}</td>
-          <td class="text-center">
-            <button class="btn btn-outline-warning btn-sm me-2">
-              <i class="bi bi-pencil"></i> Modifier
-            </button>
-            <button class="btn btn-outline-danger btn-sm">
-              <i class="bi bi-trash"></i> Supprimer
-            </button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-      <!-- Bouton Ajouter une Bourse -->
-      <div class="d-flex justify-content-end mt-3">
-        <button (click)="handleDisplayForm()" class="btn btn-success">
-          <i class="bi bi-plus-circle"></i> Ajouter une Bourse
-        </button>
+      <form [formGroup]="clubForm" (ngSubmit)="onSubmit()">
+        <div class="mb-3">
+          <label for="name" class="form-label">Nom du Club</label>
+          <input type="text" id="name" class="form-control" formControlName="name">
+          <div *ngIf="clubForm.get('name')?.invalid && clubForm.get('name')?.touched" class="text-danger">
+            <small *ngIf="clubForm.get('name')?.errors?.['required']">Le nom est requis.</small>
+            <small *ngIf="clubForm.get('name')?.errors?.['minlength']">Le nom doit avoir au moins 3 caractères.</small>
+          </div>
+        </div>
+
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-outline-success px-4" [disabled]="clubForm.invalid">Enregistrer</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  <div class="card shadow mb-4">
+    <div class="card-body">
+      <div class="table-responsive">
+        <table class="table table-striped">
+          <thead class="table-primary">
+          <tr>
+            <th>Nom</th>
+            <th class="text-end">Actions</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let club of clubs">
+            <td>{{ club.name }}</td>
+            <td class="text-end">
+              <button (click)="onUpdate(club.id)" class="btn btn-warning btn-sm me-2">
+                <i class="bi bi-pencil"></i> Modifier
+              </button>
+              <button (click)="deleteClub(club.id)" class="btn btn-danger btn-sm">
+                <i class="bi bi-trash"></i> Supprimer
+              </button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
       </div>
     </div>
   </div>
-
-  <div class="container mt-4">
-    <!-- Formulaire réactif -->
-    <div *ngIf="displayForm" class="card shadow-sm mb-4">
-      <div class="card-header">
-        <h4 class="mb-0">Ajouter une Bourse</h4>
-      </div>
-      <div class="card-body">
-        <form [formGroup]="clubForm" (ngSubmit)="onSubmit()">
-          <div class="mb-3">
-            <label for="name" class="form-label">Libellé de la Bourse</label>
-            <input type="text" id="name" class="form-control" formControlName="name">
-            <!-- Correction : Accéder aux erreurs avec ['propriété'] -->
-            <div *ngIf="clubForm.get('name')?.invalid && clubForm.get('name')?.touched" class="text-danger">
-              <small *ngIf="clubForm.get('name')?.errors?.['required']">Le libellé est requis.</small>
-              <small *ngIf="clubForm.get('name')?.errors?.['minlength']">Le libellé doit avoir au moins 3
-                caractères.</small>
-            </div>
-          </div>
-
-          <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-outline-success" [disabled]="clubForm.invalid">Enregistrer</button>
-          </div>
-        </form>
-      </div>
-    </div>
-  </div>
-
 </div>

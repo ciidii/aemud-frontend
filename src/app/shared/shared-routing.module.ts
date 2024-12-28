@@ -7,16 +7,18 @@ import {WelcomePageComponent} from "./components/welcome-page/welcome-page.compo
 const routes: Routes = [
   {
     path: "", component: WelcomePageComponent, children: [
-      {path: "login", component: LoginComponent,data:{title:"AEMUD - Connexion"}},
-      {path: "home", component: HomeComponent,data:{title:"AEMUD - Acceuil"}},
+      {
+        path: "login", component: LoginComponent,
+        title: "AEMUD - Connexion"
+      },
+      {path: "home", component: HomeComponent, title: "AEMUD - Acceuil"},
     ],
-    data:{title:"AEMUD - Connexion"}
+    title: "AEMUD - Connexion"
   }
 ];
 
 @NgModule({
-  imports: [RouterModule.forChild(routes)],
-  exports: [RouterModule]
+  imports: [RouterModule.forChild(routes)]
 })
 export class SharedRoutingModule {
 

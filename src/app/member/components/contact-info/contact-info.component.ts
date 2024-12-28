@@ -1,12 +1,15 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormArray, FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
 import {UtilsService} from "../../../core/services/utils.service";
+import {NgClass, NgFor, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-contact-info',
-  templateUrl: './contact-info.component.html',
-  styleUrls: ['./contact-info.component.css']
+    selector: 'app-contact-info',
+    templateUrl: './contact-info.component.html',
+    styleUrls: ['./contact-info.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
 })
 export class ContactInfoComponent implements OnInit {
   @Output() next = new EventEmitter<void>();

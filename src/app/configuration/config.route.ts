@@ -5,21 +5,23 @@ import {ConfigRouterComponent} from "./components/config-router/config-router.co
 import {BourseAdminComponent} from "./components/bourse-admin/bourse-admin.component";
 import {CommisssionAdminComponent} from "./components/commisssion-admin/commisssion-admin.component";
 import {ClubsAdminComponent} from "./components/clubs-admin/clubs-admin.component";
+import {SessionComponent} from "./components/session/session.component";
 
 const routes: Routes = [
   {
     path: "config", component: WelcomePageComponent, children: [
       {
         path: "", component: ConfigRouterComponent, children: [
-          {path: "home", component: BourseAdminComponent, data: {title: "Bourse - administration"}},
+          {path: "home", component: BourseAdminComponent, title: "Bourse - administration"},
           {
             path: "commission-admin",
             component: CommisssionAdminComponent,
-            data: {title: "Commissions - administration"}
+            title: "Commissions - administration"
           },
-          {path: "club-admin", component: ClubsAdminComponent, data: {title: "Clubs - administration"}},
+          {path: "club-admin", component: ClubsAdminComponent, title: "Clubs - administration"},
+          {path:"session-admin",component:SessionComponent,title:"Sessions -  Administration"}
         ],
-        data: {title: "Paramétrage de l'application"}
+        title: "Paramétrage de l'application"
       }
     ]
   }

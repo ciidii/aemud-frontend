@@ -9,7 +9,7 @@
              routerLink="/shared/home">Acceil</a>
         </li>
         <li *ngFor="let hc of headerContent"  class="nav-item">
-          <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
+          <a class="nav-link {{hc.disabled}}" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
              routerLink="{{hc.retourLinh}}">{{hc.title}}</a>
         </li>
       </ul>

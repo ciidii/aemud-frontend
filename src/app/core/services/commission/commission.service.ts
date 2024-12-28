@@ -1,5 +1,5 @@
 import {Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {Commission} from "../../models/Commission/Commission";
 import {ResponseEntityApi} from "../../models/responseEntityApi";
@@ -23,5 +23,15 @@ export class CommissionService {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
     return this.http.post<ResponseEntityApi<CommissionModel>>(environment.API_URL + `/commissions`, club, options);
+  }
+
+  deleteCommission(commissionID: number): Observable<ResponseEntityApi<void>> {
+    let params = new HttpParams().set("commissionId", commissionID);
+    return this.http.delete<ResponseEntityApi<void>>(environment.API_URL + "/commissions", {params})
+  }
+
+  getSingleCommission(commissionId: number): Observable<ResponseEntityApi<CommissionModel>> {
+    let params = new HttpParams().set("commissionId", commissionId)
+    return this.http.get<ResponseEntityApi<CommissionModel>>(environment.API_URL + "/commissions", {params})
   }
 }

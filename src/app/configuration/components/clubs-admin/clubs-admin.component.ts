@@ -2,12 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {ClubModel} from "../../../member/model/club.model";
 import {ClubService} from "../../../core/services/clubs/club.service";
 import {ToastrService} from "ngx-toastr";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgFor, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-clubs-admin',
   templateUrl: './clubs-admin.component.html',
-  styleUrls: ['./clubs-admin.component.css']
+  styleUrls: ['./clubs-admin.component.css'],
+  standalone: true,
+  imports: [NgFor, NgIf, FormsModule, ReactiveFormsModule]
 })
 export class ClubsAdminComponent implements OnInit {
   clubs!: ClubModel[];
@@ -21,6 +24,7 @@ export class ClubsAdminComponent implements OnInit {
     this.getAllClubs()
     this.clubForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
+      id: [''],
     });
   }
 
@@ -47,6 +51,9 @@ export class ClubsAdminComponent implements OnInit {
         next: resp => {
           if (resp.status == "OK") {
             this.toaster.success("Cubs ajoutés avec succée")
+            this.clubForm.reset();
+            this.getAllClubs();
+            this.handleDisplayForm()
           } else {
             this.toaster.error("Une erreur c'est produite")
           }
@@ -55,5 +62,39 @@ export class ClubsAdminComponent implements OnInit {
         }
       })
     }
+  }
+
+  deleteClub(clubId: number) {
+    this.clubService.deleteClub(clubId).subscribe({
+      next: response => {
+        if (response.status == "OK") {
+          this.toaster.success("Suppression Réussi");
+          this.getAllClubs();
+        } else {
+          console.log("Un erreur s'est produite")
+        }
+      },
+      error: err => {
+        if (err.error.status == "CONFLICT") {
+          this.toaster.error("Supression Impossible")
+        }
+        console.log("Un erreur s'est produite")
+      }
+    })
+  }
+
+  onUpdate(clubId: number) {
+    this.clubService.getSingleClub(clubId).subscribe({
+      next: resp => {
+        if (resp.status == "OK") {
+          this.clubForm.get("name")?.setValue(resp.data.name);
+          this.clubForm.get("id")?.setValue(resp.data.id);
+          this.handleDisplayForm();
+        }
+      },
+      error: err => {
+        console.log(err)
+      }
+    })
   }
 }

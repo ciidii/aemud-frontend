@@ -1,4 +1,4 @@
-export class ClubModel {
+export class  ClubModel {
    id!:number
    name!:String
 }

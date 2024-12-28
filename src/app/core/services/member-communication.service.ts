@@ -1,5 +1,4 @@
 import {Injectable} from '@angular/core';
-import {MemberModel} from "../../member/model/member.model";
 import {Subject} from "rxjs";
 import {MemberData} from "../models/member/MemberData";
 

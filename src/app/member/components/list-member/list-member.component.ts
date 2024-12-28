@@ -1,70 +1,74 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit, ViewChild} from '@angular/core';
 import {MemberService} from "../../../core/services/member.service";
-import {MemberCommunicationService} from "../../../core/services/member-communication.service";
 import {AppStateService} from "../../../core/services/app-state-service";
-import {RequestPageableVO} from "../../../core/models/requestPageableVO";
-import {AddressService} from "../../../core/services/address.service";
-import {ToastrService} from "ngx-toastr";
 import {Router} from "@angular/router";
+import {NgClass, NgFor, NgIf} from '@angular/common';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FilterPopupComponent} from "../filter-popup/filter-popup.component";
+import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
+import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
+import {ColumnPrinterComponent} from "../column-printer/column-printer.component";
 
 @Component({
   selector: 'app-member',
   templateUrl: './list-member.component.html',
-  styleUrls: ['./list-member.component.css']
+  styleUrls: ['./list-member.component.css'],
+  standalone: true,
+  imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent]
 })
 export class ListMemberComponent implements OnInit {
   private readonly MAX_PAGES_DISPLAYED = 3;
+  yearOFSession: YearOfSessionResponse[] = [];
+
+  @ViewChild(FilterPopupComponent) modal?: FilterPopupComponent;
+  @ViewChild(ColumnPrinterComponent) columnPrinterModal?: ColumnPrinterComponent
+  public searchCriteria = [
+    {criteria: "firstname", displayedValue: "Prénom"},
+    {criteria: "name", displayedValue: "Nom"}
+  ]
 
   constructor(
     private memberService: MemberService,
-    private memberCommunicationService: MemberCommunicationService,
     public appState: AppStateService,
-    private router: Router
+    private yearOfSessionService: YearOfSessionServiceService,
+    private router: Router,
+    private fb: FormBuilder
   ) {
   }
 
-  displayAllMemberAgain() {
-    if (!this.appState.memberState.keyword) {
-      this.searchMember();
-    }
-  }
 
   ngOnInit(): void {
-    this.searchMember();
-    this.memberCommunicationService.deleteMember$.subscribe(
-      value => {
-        this.searchMember();
+    this.yearOfSessionService
+      .getYears().subscribe(
+      {
+        next: resp => {
+          if (resp.status == "OK") {
+            this.yearOFSession = resp.data
+          }
+        },
+        error: err => {
+          console.log("une erreur c'est produite lors de récuppération de l'année")
+        }
       }
     )
-  }
 
-  public searchMember() {
-    this.appState.setMemberState({
-      status: "LOADING"
-    })
-    let requestPegeableVO = new RequestPageableVO(1, 10);
-    this.memberService.getAllMember(requestPegeableVO)
-      .subscribe(
-        {
-          next: response => {
-            this.appState.memberState.members = response.items
-            this.appState.memberState.pageSize = requestPegeableVO.rpp;
-            this.appState.memberState.totalPages = response.pages;
-            console.log(this.appState.memberState.members)
-            this.appState.setMemberState({
-              status: "LOADED"
-            })
-          },
-          error: err => {
-            this.appState.setMemberState({
-              status: "ERROR",
-              errorMessage: err.errorMessage
-            })
-          }
+    this.yearOfSessionService.getCurrentYear().subscribe({
+      next: resp => {
+        if (resp.status == "OK") {
+          this.appState.memberState.filters.year = resp.data.id;
+          this.searchMemberByCriteria()
+        } else {
+          console.log("Une erreur s'est produite")
         }
-      );
-
-  };
+      },
+      error: err => {
+        console.log("une erreur s'est produite")
+      }
+    });
+    if (!this.appState.memberState.keyword) {
+      this.searchMemberByCriteria();
+    }
+  }
 
   displayMemberDetails(id: number) {
     this.router.navigateByUrl(`/members/member/member-details/${id}`)
@@ -72,10 +76,36 @@ export class ListMemberComponent implements OnInit {
 
   nextPage(page: number) {
     this.appState.memberState.currentPage = page;
-    this.searchMember();
+    console.log(this.appState)
+    this.searchMemberByCriteria()
   }
 
+  searchMemberByCriteria() {
+    this.memberService.searchMember(this.appState.memberState.keyword, this.appState.memberState.criteria, this.appState.memberState.filters).subscribe({
+        next: data => {
+          this.appState.memberState.members = data.items;
+          this.appState.memberState.currentPage = data.page
+          this.appState.memberState.totalPages = data.pages;
+        },
+        error: err => {
+          console.log(err)
+        }
+      }
+    );
+  }
 
+  open() {
+    this.modal?.openModal();
+  }
+
+  openColumnPrinterModal() {
+    if (this.columnPrinterModal) {
+      this.columnPrinterModal.openPopupColumPrinter();
+      console.log('Modal ouvert');
+    } else {
+      console.error('ColumnPrinterComponent non initialisé');
+    }
+  }
   getPages(): number[] {
     const totalPages = this.appState.memberState.totalPages;
     const currentPage = this.appState.memberState.currentPage;
@@ -101,4 +131,5 @@ export class ListMemberComponent implements OnInit {
 
     return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
   }
+
 }

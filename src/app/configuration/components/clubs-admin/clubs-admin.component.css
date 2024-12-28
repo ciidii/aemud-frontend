@@ -1,14 +1,18 @@
 .card-header {
-  background-color: #278F8F; /* Couleur personnalisée */
-  color: white;
+  font-weight: bold;
 }
-
-.btn-outline-warning:hover,
-.btn-outline-danger:hover {
-  background-color: #278F8F; /* Couleur sur hover */
-  color: white;
+.btn {
+  font-size: 0.9rem;
 }
-
-.btn-outline-success:hover {
-  background-color: rgba(208, 156, 10, 1);
+table {
+  font-size: 0.9rem;
+}
+@media (max-width: 768px) {
+  .btn {
+    width: 100%;
+    margin-bottom: 0.5rem;
+  }
+  td .btn {
+    width: auto;
+  }
 }

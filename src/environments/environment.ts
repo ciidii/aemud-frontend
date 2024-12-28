@@ -1,6 +1,6 @@
 export const environment = {
   name: 'stage',
-  production: true,
+  production: false ,
   apiKey: 'http://localhost:8080',
   identity_API_URL: 'https://identity.com',
   storage_API_URL: 'https://storage.com',

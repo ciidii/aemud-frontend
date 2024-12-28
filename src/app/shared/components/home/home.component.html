@@ -10,7 +10,7 @@
         </div>
         <div class="card-body text-center">
           <p class="card-text">{{ cardContent.description }}</p>
-          <a routerLink="{{cardContent.retourLinh}}" class="btn btn-outline-success btn-block mt-3">
+          <a routerLink="{{cardContent.retourLinh}}" class="btn btn-outline-success btn-block mt-3 {{cardContent.disabled}}">
             {{ cardContent.linkTitle }} <i class="bi bi-arrow-right"></i>
           </a>
         </div>

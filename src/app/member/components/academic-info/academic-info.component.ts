@@ -1,15 +1,18 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
 import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
 import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
 import {ToastrService} from "ngx-toastr";
 import {UtilsService} from "../../../core/services/utils.service";
+import {NgClass, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-academic-info',
   templateUrl: './academic-info.component.html',
-  styleUrls: ['./academic-info.component.css']
+  styleUrls: ['./academic-info.component.css'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf]
 })
 export class AcademicInfoComponent implements OnInit {
 
@@ -66,7 +69,7 @@ export class AcademicInfoComponent implements OnInit {
   }
 
   onModify() {
-    this.stepperData.changeAddressInfoState()
+    this.stepperData.changeAcademicInfoState()
     this.toggleAcademicInfoSaved()
   }
 }

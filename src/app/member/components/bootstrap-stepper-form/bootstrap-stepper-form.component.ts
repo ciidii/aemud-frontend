@@ -1,17 +1,21 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, Validators} from "@angular/forms";
-import {MemberModule} from "../../member.module";
-import {AppModule} from "../../../app.module";
+
+
 import {NgIf} from "@angular/common";
+import {RouterModule} from "@angular/router";
+import {MainFormStep1Component} from "../main-form-step-1/main-form-step-1.component";
+import {MainFormStep2Component} from "../main-form-step-2/main-form-step-2.component";
 
 @Component({
   selector: 'app-add-member',
   templateUrl: './bootstrap-stepper-form.component.html',
   styleUrls: ['./bootstrap-stepper-form.component.css'],
   imports: [
-    MemberModule,
-    AppModule,
-    NgIf
+    NgIf,
+    RouterModule,
+    MainFormStep1Component,
+    MainFormStep2Component,
   ],
   standalone: true
 })

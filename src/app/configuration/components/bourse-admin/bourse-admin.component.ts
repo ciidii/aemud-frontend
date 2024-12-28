@@ -2,12 +2,15 @@ import {Component, OnInit} from '@angular/core';
 import {BourseModel} from "../../../core/models/bourses/bourse.model";
 import {BourseService} from "../../../core/services/Bourse/bourse.service";
 import {ToastrService} from "ngx-toastr";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CurrencyPipe, NgFor, NgIf} from '@angular/common';
 
 @Component({
   selector: 'app-bourse-admin',
   templateUrl: './bourse-admin.component.html',
-  styleUrls: ['./bourse-admin.component.css']
+  styleUrls: ['./bourse-admin.component.css'],
+  standalone: true,
+  imports: [NgFor, NgIf, FormsModule, ReactiveFormsModule, CurrencyPipe]
 })
 export class BourseAdminComponent implements OnInit {
   bourses!: BourseModel[]
@@ -21,7 +24,8 @@ export class BourseAdminComponent implements OnInit {
     this.getAllBourses();
     this.bourseForm = this.fb.group({
       lebelle: ['', [Validators.required, Validators.minLength(3)]],
-      montant: ['', [Validators.required, Validators.min(1)]]
+      montant: ['', [Validators.required, Validators.min(1)]],
+      bourseId:['']
     });
   }
 
@@ -51,6 +55,7 @@ export class BourseAdminComponent implements OnInit {
           if (resp.status == "OK") {
             this.toaster.success("Bourse ajouter avec succées")
             this.bourseForm.reset()
+            this.getAllBourses()
           } else {
             this.toaster.error("Une erreur S'est produite")
           }
@@ -61,5 +66,39 @@ export class BourseAdminComponent implements OnInit {
     } else {
       console.log('Formulaire non valide');
     }
+  }
+
+  deleteBourse(bourseId: number) {
+    this.bourseService.deleteBourse(bourseId).subscribe({
+      next: resp => {
+        if (resp.status == "OK") {
+          this.toaster.success("Suppression Réussi")
+          this.getAllBourses()
+        } else {
+          this.toaster.error("Une erreur s'est produite")
+        }
+      }, error: err => {
+        if (err.error.status) {
+          this.toaster.error("Suppression Impossible")
+        } else {
+          console.log("Une erreur s'est produite")
+        }
+      }
+    })
+  }
+
+  onUpdate(bourseId: number) {
+    this.bourseService.getBourseById(bourseId).subscribe({
+      next: resp => {
+        if (resp.status == "OK") {
+          this.bourseForm.get("lebelle")?.setValue(resp.data.lebelle);
+          this.bourseForm.get("montant")?.setValue(resp.data.montant);
+          this.bourseForm.get("bourseId")?.setValue(resp.data.bourseId);
+          this.handleDisplayForm()
+        }
+      }, error: err => {
+        console.log(err)
+      }
+    })
   }
 }

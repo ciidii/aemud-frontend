@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from "@angular/forms";
 import {MemberService} from "../../../core/services/member.service";
 import {ClubModel} from "../../model/club.model";
 import {CommissionModel} from "../../model/commission.model";
@@ -10,11 +10,14 @@ import {YearOfMembeship} from "../../../core/models/yearOfMembeship";
 import {MemberModel} from "../../model/member.model";
 import {ToastrService} from "ngx-toastr";
 import {CommissionService} from "../../../core/services/commission/commission.service";
+import {NgFor, NgIf} from '@angular/common';
 
 @Component({
-  selector: 'app-edit-member',
-  templateUrl: './edit-member.component.html',
-  styleUrls: ['./edit-member.component.css']
+    selector: 'app-edit-member',
+    templateUrl: './edit-member.component.html',
+    styleUrls: ['./edit-member.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgFor, NgIf]
 })
 export class EditMemberComponent implements OnInit {
   memberGroup!: FormGroup;

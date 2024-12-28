@@ -1,5 +1,5 @@
 import {Component, EventEmitter, OnInit, Output} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {StepperDataService} from "../../../core/services/stepper-data.service";
 import {ToastrService} from "ngx-toastr";
 import {Commission} from "../../../core/models/Commission/Commission";
@@ -9,17 +9,21 @@ import {ClubService} from "../../../core/services/clubs/club.service";
 import {BourseService} from "../../../core/services/Bourse/bourse.service";
 import {BourseModel} from "../../../core/models/bourses/bourse.model";
 import {UtilsService} from "../../../core/services/utils.service";
+import {NgClass, NgFor, NgIf} from '@angular/common';
+import {ClubModel} from "../../model/club.model";
 
 @Component({
-  selector: 'app-membership-info',
-  templateUrl: './membership-info.component.html',
-  styleUrls: ['./membership-info.component.css']
+    selector: 'app-membership-info',
+    templateUrl: './membership-info.component.html',
+    styleUrls: ['./membership-info.component.css'],
+    standalone: true,
+    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
 })
 export class MembershipInfoComponent implements OnInit {
   @Output() membershipFormEmitter = new EventEmitter<FormGroup>();
   membershipFormGroup!: FormGroup;
   commissions!: Array<Commission>
-  clubs!: Array<Clubs>
+  clubs!: Array<ClubModel>
   bourses!: Array<BourseModel>
 
   constructor(
