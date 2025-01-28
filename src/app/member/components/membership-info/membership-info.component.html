@@ -23,13 +23,28 @@
         </div>
         <div class="mb-3">
           <label for="bacSeries" class="form-label">BAC: Série</label>
-          <input
+          <select
             id="bacSeries"
             formControlName="bacSeries"
             class="form-control"
             [ngClass]="{ 'is-invalid': membershipFormGroup.get('bacSeries')?.invalid && membershipFormGroup.get('bacSeries')?.touched }"
-            placeholder="Entrez votre serie au bac"
-          />
+          >
+            <option [defaultSelected]="1==1" value="" disabled selected>-- Sélectionnez votre série --</option>
+            <option value="S1">Série S1</option>
+            <option value="S2">Série S2</option>
+            <option value="S3">Série S3</option>
+            <option value="L1">Série L'1</option>
+            <option value="L2">Série L2</option>
+            <option value="Technique">Technique</option>
+            <option value="G">Série G</option>
+          </select>
+          <div
+            *ngIf="membershipFormGroup.get('bacSeries')?.invalid && membershipFormGroup.get('bacSeries')?.touched"
+            class="invalid-feedback"
+          >
+            Veuillez sélectionner une série valide pour votre BAC.
+          </div>
+
           <div
             *ngIf="membershipFormGroup.get('bacSeries')?.invalid && membershipFormGroup.get('bacSeries')?.touched"
             class="invalid-feedback">
@@ -37,19 +52,27 @@
           </div>
           <div class="mb-3">
             <label for="bacMention" class="form-label">BAC: Mention</label>
-            <input
+            <select
               id="bacMention"
               formControlName="bacMention"
               class="form-control"
               [ngClass]="{ 'is-invalid': membershipFormGroup.get('bacMention')?.invalid && membershipFormGroup.get('bacMention')?.touched }"
-              placeholder="Entrez la mention au BAC"
-            />
+            >
+              <option value="" disabled selected>-- Sélectionnez votre mention --</option>
+              <option value="Très Bien">Très Bien</option>
+              <option value="Bien">Bien</option>
+              <option value="Assez Bien">Assez Bien</option>
+              <option value="Passable">Passable</option>
+              <option value="Sans Mention">Sans Mention</option>
+            </select>
             <div
               *ngIf="membershipFormGroup.get('bacMention')?.invalid && membershipFormGroup.get('bacMention')?.touched"
-              class="invalid-feedback">
-              La mention au BAC
+              class="invalid-feedback"
+            >
+              Veuillez sélectionner une mention valide pour votre BAC.
             </div>
           </div>
+
           <div class="mb-3">
             <label for="legacyInstitution" class="form-label">Etablissement d'origine</label>
             <input
@@ -84,7 +107,7 @@
           </div>
 
           <div class="mb-3">
-            <label for="otherCourses" class="form-label">Autres cours</label>
+            <label for="otherCourses" class="form-label">Avez-vous suivi d'autres cours ? </label>
             <input
               type="text"
               id="otherCourses"
@@ -172,22 +195,6 @@
             </div>
           </div>
         </div>
-        <div class="mb-3">
-          <label for="pay" class="form-label">Montant payé</label>
-          <input
-            type="number"
-            id="pay"
-            formControlName="pay"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched }"
-            placeholder="Montant payé"
-          />
-          <div
-            *ngIf="membershipFormGroup.get('pay')?.invalid && membershipFormGroup.get('pay')?.touched"
-            class="invalid-feedback">
-            Le montant payé est requis.
-          </div>
-        </div>
       </div>
     </div>
   </form>
@@ -197,10 +204,12 @@
     <div class="col-auto">
     </div>
     <div class="d-flex justify-content-end mt-4">
-      <button *ngIf="!stepperService.membershipInfoSaved" class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onSave()"><i
+      <button *ngIf="!stepperService.membershipInfoSaved" class="btn btn-outline-success"
+              [disabled]="membershipFormGroup.invalid" (click)="onSave()"><i
         class="bi bi-floppy2"></i> Enregister
       </button>
-      <button *ngIf="stepperService.membershipInfoSaved" class="btn btn-outline-success" [disabled]="membershipFormGroup.invalid" (click)="onModify()"><i
+      <button *ngIf="stepperService.membershipInfoSaved" class="btn btn-outline-success"
+              [disabled]="membershipFormGroup.invalid" (click)="onModify()"><i
         class="bi bi-floppy2"></i> Modifier
       </button>
     </div>

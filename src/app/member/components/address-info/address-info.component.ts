@@ -5,11 +5,11 @@ import {UtilsService} from "../../../core/services/utils.service";
 import {NgClass, NgIf} from '@angular/common';
 
 @Component({
-    selector: 'app-address-info',
-    templateUrl: './address-info.component.html',
-    styleUrls: ['./address-info.component.css'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf]
+  selector: 'app-address-info',
+  templateUrl: './address-info.component.html',
+  styleUrls: ['./address-info.component.css'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf]
 })
 export class AddressInfoComponent implements OnInit {
   @Output() next = new EventEmitter<void>();
@@ -30,8 +30,6 @@ export class AddressInfoComponent implements OnInit {
       addressInfoLocalStorage = JSON.parse(local)
     }
     this.addressFormGroup = this._formBuilder.group({
-      memberID: [''],
-      idYear: [''],
       addressInDakar: [addressInfoLocalStorage?.addressInDakar || '', [Validators.required, Validators.minLength(3)]],
       holidayAddress: [addressInfoLocalStorage?.holidayAddress || '', [Validators.required, Validators.minLength(3)]],
       addressToCampus: [addressInfoLocalStorage?.addressToCampus || '', [Validators.required, Validators.minLength(3)]],

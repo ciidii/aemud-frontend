@@ -1,5 +1,7 @@
 import {Injectable} from '@angular/core';
 import {UtilsService} from "./utils.service";
+import {FormGroup} from "@angular/forms";
+
 
 @Injectable({
   providedIn: 'root'
@@ -11,24 +13,77 @@ export class StepperDataService {
   private _addressInfoSaved: boolean = false;
   private _contactInfoSaved: boolean = false;
 
-  private formData: any = {
-    member: {
-      id:null,
-      personalInfo: {},
-      membershipInfo: {}
+  formData: any = {
+    id: null,
+    personalInfo: {
+      name: "",
+      firstname: "",
+      nationality: "",
+      birthday: "",
+      maritalStatus: ""
+    },
+    membershipInfo: {
+      yearOfBac: "",
+      bacSeries: "",
+      bacMention: "",
+      legacyInstitution: "",
+      aemudCourses: "",
+      otherCourses: "",
+      participatedActivity: "",
+      politicOrganisation: "",
+      commission: [],
+      clubs: [],
+      bourse: "",
+
     },
     academicInfo: {},
     addressInfo: {},
-    contactInfo: {}
+    contactInfo: {},
+    bourseId: {bourseId: {}},
+    clubsId: [{id: {}}],
+    commissionsId: [{id: {}}]
   };
 
   constructor(private utilsService: UtilsService) {
   }
 
+  formatMemberFormData(formGroup: FormGroup) {
+    let formRequest = {
+      id: null,
+      personalInfo: {
+        name: "",
+        firstname: "",
+        nationality: "",
+        birthday: "",
+        maritalStatus: ""
+      },
+      membershipInfo: {
+        yearOfBac: "",
+        bacSeries: "",
+        bacMention: "",
+        legacyInstitution: "",
+        aemudCourses: "",
+        otherCourses: "",
+        participatedActivity: "",
+        politicOrganisation: "",
+        commission: [],
+        clubs: [],
+        bourse: "",
+
+      },
+      academicInfo: {},
+      addressInfo: {},
+      contactInfo: {},
+      bourseId: {bourseId: {}},
+      clubsId: [{id: {}}],
+      commissionsId: [{id: {}}]
+    };
+  }
+
   setMemberPersonalInfo(data: any) {
-    this.formData.member.personalInfo = data;
-    if (this.formData.member.personalInfo !== null) {
-      localStorage.setItem("personalInfo", JSON.stringify(this.formData.member.personalInfo))
+    this.formData.personalInfo = data;
+    if (this.formData.personalInfo !== null) {
+      localStorage.setItem("personalInfo", JSON.stringify(this.formData.personalInfo))
       this._personalInfoSaved = true
     } else {
     }
@@ -36,12 +91,30 @@ export class StepperDataService {
   }
 
   setMemberMembershipInfo(data: any) {
-    this.formData.member.membershipInfo = data;
-    if (this.formData.member.membershipInfo !== null) {
-      localStorage.setItem("membershipInfo", JSON.stringify(this.formData.member.membershipInfo))
+    this.formData.membershipInfo = data;
+    if (this.formData.membershipInfo !== null) {
+      localStorage.setItem("membershipInfo", JSON.stringify(this.formData.membershipInfo))
       this._membershipInfoSaved = true
     } else {
     }
+  }
+
+  setMemberBourseInfo(data: any) {
+    this.formData.bourseId.bourseId = data;
+    localStorage.setItem("bourseId", JSON.stringify(this.formData.membershipInfo))
+    this._membershipInfoSaved = true
+  }
+
+  setMemberClubsInfo(data: any) {
+    this.formData.clubsId[0].id = data;
+    localStorage.setItem("clubsId", JSON.stringify(this.formData.membershipInfo))
+    this._membershipInfoSaved = true
+  }
+
+  setMemberCommissionInfo(data: any) {
+    this.formData.commissionsId[0].id = data;
+    localStorage.setItem("commissionsId", JSON.stringify(this.formData.membershipInfo))
+    this._membershipInfoSaved = true
   }
 
   setAcademicInfo(data: any) {
@@ -53,12 +126,13 @@ export class StepperDataService {
     }
 
   }
-  setAllFormsUnsaved(){
-  this._personalInfoSaved = false;
-  this._membershipInfoSaved = false;
-  this._academicInfoSaved = false;
-  this._addressInfoSaved = false;
-  this._contactInfoSaved = false;
+
+  setAllFormsUnsaved() {
+    this._personalInfoSaved = false;
+    this._membershipInfoSaved = false;
+    this._academicInfoSaved = false;
+    this._addressInfoSaved = false;
+    this._contactInfoSaved = false;
 
   }
 
@@ -81,6 +155,7 @@ export class StepperDataService {
     }
 
   }
+
 
   get personalInfoSaved(): boolean {
     return this._personalInfoSaved;
@@ -106,6 +181,10 @@ export class StepperDataService {
 
   getFormData() {
     return this.formData;
+  }
+
+  formatMemberData() {
+
   }
 
   getStepData(step: number) {

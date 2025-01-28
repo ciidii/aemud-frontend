@@ -8,7 +8,7 @@ export class AppStateService {
   public memberState: any = {
     members: [] as MemberData[],
     keyword: "",
-    criteria: "0",
+    criteria: "",
     filters: {
       club: null,
       year: null,

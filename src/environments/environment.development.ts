@@ -1,11 +1,11 @@
 export const environment = {
   name: 'developments',
   production: true,
-  apiKey: 'http://localhost:8080',
+  apiKey: 'http://localhost:8081',
   identity_API_URL: 'https://dev.identity.com',
   storage_API_URL: 'https://dev.storage.com',
   users_API_URL: 'https://dev.user.com',
-  API_URL:"http://localhost:8080/aemud/api/v1",
+  API_URL:"http://localhost:8081/aemud/api/v1",
   features: [
     {
       name: 'loggingSystem',

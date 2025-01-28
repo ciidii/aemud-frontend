@@ -48,17 +48,12 @@ export class AcademicInfoComponent implements OnInit {
     });
 
     this.academicFormGroup = this._formBuilder.group({
-      memberID: [''],
-      idYear: [''],
       studiesLevel: [academicInfoLocalStorage?.studiesLevel || '', [Validators.required, Validators.minLength(3)]],
-      university: [academicInfoLocalStorage?.university || '', [Validators.required, Validators.minLength(3)]],
-      faculty: [academicInfoLocalStorage?.faculty || '', [Validators.required, Validators.minLength(3)]],
-      department: [academicInfoLocalStorage?.department || '', [Validators.required, Validators.minLength(3)]],
-      section: [academicInfoLocalStorage?.section || '', [Validators.required, Validators.minLength(3)]],
+      institutionName: [academicInfoLocalStorage?.institutionName || '', [Validators.required, Validators.minLength(3)]],
+      studiesDomain: [academicInfoLocalStorage?.studiesDomain || '', [Validators.required, Validators.minLength(3)]]
     });
     this.toggleAcademicInfoSaved()
   }
-
   onSave() {
     this.academicInfoEvent.emit(this.academicFormGroup);
     this.toggleAcademicInfoSaved()

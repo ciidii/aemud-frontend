@@ -4,8 +4,15 @@ import {AddressInfo} from "./AddressInfo";
 import {ContactInfo} from "./ContactInfo";
 
 export interface MemberData {
-  member: Member;
-  academicInfo: AcademicInfo;
-  addressInfo: AddressInfo;
-  contactInfo: ContactInfo;
+  id: null,
+  personalInfo: {
+
+  },
+  membershipInfo: {},
+  academicInfo: {},
+  addressInfo: {},
+  contactInfo: {},
+  bourseId: {bourseId: {}},
+  clubsId: [{id: {}}],
+  commissionsId: [{id: {}}]
 }

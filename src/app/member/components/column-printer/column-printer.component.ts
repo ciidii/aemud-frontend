@@ -4,6 +4,7 @@ import {MemberData} from "../../../core/models/member/MemberData";
 import * as XLSX from "xlsx";
 import {MemberService} from "../../../core/services/member.service";
 import {AppStateService} from "../../../core/services/app-state-service";
+import {Profile} from "../../../core/profile.model";
 
 @Component({
   selector: 'app-column-printer',
@@ -14,11 +15,11 @@ import {AppStateService} from "../../../core/services/app-state-service";
   ],
   styleUrls: ['./column-printer.component.css']
 })
-export class ColumnPrinterComponent implements OnInit{
+export class ColumnPrinterComponent implements OnInit {
   openModal = signal(false);
   memberForm!: FormGroup;
 
-  constructor(private fb: FormBuilder,private memberService:MemberService,private appState:AppStateService) {
+  constructor(private fb: FormBuilder, private memberService: MemberService, private appState: AppStateService) {
   }
 
   onSubmit(): void {
@@ -59,7 +60,7 @@ export class ColumnPrinterComponent implements OnInit{
     });
   }
 
-  print(){
+  print() {
     console.log(this.memberForm.value)
   }
 
@@ -73,7 +74,7 @@ export class ColumnPrinterComponent implements OnInit{
     })
   }
 
-  printToExcel(members: MemberData[]) {
+  printToExcel(members: Profile[]) {
     // Récupérer les colonnes sélectionnées par l'utilisateur
     const selectedColumns = {
       personalInfo: this.memberForm.get('personalInfo')?.value,
@@ -82,24 +83,24 @@ export class ColumnPrinterComponent implements OnInit{
     };
 
     // Construire dynamiquement les données à inclure dans Excel
-    const membersData = members.map((member: MemberData) => {
+    const membersData = members.map((member: Profile) => {
       const row: any = {};
 
       // Ajouter les champs personnels si cochés
-      if (selectedColumns.personalInfo.name && member.member?.personalInfo) {
-        row['Nom'] = member.member.personalInfo.name;
+      if (selectedColumns.personalInfo.name && member?.personalInfo) {
+        row['Nom'] = member.personalInfo.name;
       }
-      if (selectedColumns.personalInfo.firstname && member.member?.personalInfo) {
-        row['Prénom'] = member.member.personalInfo.firstname;
+      if (selectedColumns.personalInfo.firstname && member?.personalInfo) {
+        row['Prénom'] = member.personalInfo.firstname;
       }
-      if (selectedColumns.personalInfo.nationality && member.member?.personalInfo) {
-        row['Nationalité'] = member.member.personalInfo.nationality;
+      if (selectedColumns.personalInfo.nationality && member?.personalInfo) {
+        row['Nationalité'] = member.personalInfo.nationality;
       }
-      if (selectedColumns.personalInfo.birthday && member.member?.personalInfo) {
-        row['Date de Naissance'] = member.member.personalInfo.birthday;
+      if (selectedColumns.personalInfo.birthday && member?.personalInfo) {
+        row['Date de Naissance'] = member.personalInfo.birthday;
       }
-      if (selectedColumns.personalInfo.maritalStatus && member.member?.personalInfo) {
-        row['État Civil'] = member.member.personalInfo.maritalStatus;
+      if (selectedColumns.personalInfo.maritalStatus && member?.personalInfo) {
+        row['État Civil'] = member.personalInfo.maritalStatus;
       }
 
       // Ajouter les champs académiques si cochés
@@ -107,13 +108,10 @@ export class ColumnPrinterComponent implements OnInit{
         row['Niveau d’Études'] = member.academicInfo.studiesLevel;
       }
       if (selectedColumns.academicInfo.university && member.academicInfo) {
-        row['Université'] = member.academicInfo.university;
+        row['Université'] = member.academicInfo.institutionName;
       }
       if (selectedColumns.academicInfo.faculty && member.academicInfo) {
-        row['Faculté'] = member.academicInfo.faculty;
-      }
-      if (selectedColumns.academicInfo.department && member.academicInfo) {
-        row['Département'] = member.academicInfo.department;
+        row['Faculté'] = member.academicInfo.studiesDomain;
       }
 
       // Ajouter les champs d'adresse si cochés

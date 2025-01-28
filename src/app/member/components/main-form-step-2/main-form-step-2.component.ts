@@ -37,6 +37,7 @@ export class MainFormStep2Component implements OnInit {
 
   onContactInfoSubmit(form: FormGroup) {
     this.stepperService.setContactInfo(form.value)
+    console.log(this.stepperService.getFormData())
   }
 
   onAddressInfoSubmit(form: FormGroup) {
@@ -51,7 +52,7 @@ export class MainFormStep2Component implements OnInit {
     this.memberService.addMember(this.stepperService.getFormData()).subscribe({
       next: response => {
         this.toaster.success("Ajouter avec succées")
-        this.resetLocalStorage()
+       // this.resetLocalStorage()
         this.stepperService.setAllFormsUnsaved()
         this.router.navigateByUrl("/members/member/list-members")
       },

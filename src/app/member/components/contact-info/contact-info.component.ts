@@ -5,11 +5,11 @@ import {UtilsService} from "../../../core/services/utils.service";
 import {NgClass, NgFor, NgIf} from '@angular/common';
 
 @Component({
-    selector: 'app-contact-info',
-    templateUrl: './contact-info.component.html',
-    styleUrls: ['./contact-info.component.css'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
+  selector: 'app-contact-info',
+  templateUrl: './contact-info.component.html',
+  styleUrls: ['./contact-info.component.css'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
 })
 export class ContactInfoComponent implements OnInit {
   @Output() next = new EventEmitter<void>();
@@ -30,8 +30,6 @@ export class ContactInfoComponent implements OnInit {
       contactInfoLocalStorage = JSON.parse(local)
     }
     this.contactFormGroup = this._formBuilder.group({
-      memberID: [null],
-      idYear: [null],
       numberPhone: [contactInfoLocalStorage?.numberPhone || '', [Validators.required, Validators.pattern(/^\+221\d{9}$/)]],
       email: [contactInfoLocalStorage?.email || '', [Validators.required, Validators.email]],
       personToCalls: this._formBuilder.array([]),

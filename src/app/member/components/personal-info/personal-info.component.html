@@ -86,14 +86,11 @@
 
         <div class="mb-3">
           <label for="maritalStatus" class="form-label">Situation Matrimoniale</label>
-          <input
-            type="text"
-            id="maritalStatus"
-            formControlName="maritalStatus"
-            class="form-control"
-            [ngClass]="{ 'is-invalid': personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched }"
-            placeholder="Situation Matrimoniale "
-          />
+          <select id="maritalStatus" formControlName="maritalStatus" class="form-control">
+            <option value="" [defaultSelected]="1==1" disabled>Sélectionnez</option>
+            <option value="MARRIED">Célibataire</option>
+            <option value="SINGLE">Marié</option>
+          </select>
           <div
             *ngIf="personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched"
             class="invalid-feedback">
@@ -103,6 +100,7 @@
       </div>
     </div>
   </form>
+
 </div>
 <div class="d-grid gap-2 mt-4">
   <div class="row justify-content-end">
@@ -114,8 +112,8 @@
       </button>
     </div>
     <div *ngIf="steeperData.personalInfoSaved" class="col-auto">
-      <button [disabled]="personalInfo.invalid" (click)="onModify()" class="btn btn-outline-success"><i
-        class="bi bi-floppy2"></i> Modifier
+      <button [disabled]="personalInfo.invalid" (click)="onModify()" class="btn btn-outline-success">
+        <i class="bi bi-floppy2"></i>Modifier
       </button>
     </div>
   </div>

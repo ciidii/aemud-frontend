@@ -5,19 +5,23 @@ import {MembershipInfoComponent} from '../membership-info/membership-info.compon
 import {PersonalInfoComponent} from '../personal-info/personal-info.component';
 
 @Component({
-    selector: 'app-main-form-step-1',
-    templateUrl: './main-form-step-1.component.html',
-    styleUrls: ['./main-form-step-1.component.css'],
-    standalone: true,
-    imports: [PersonalInfoComponent, MembershipInfoComponent]
+  selector: 'app-main-form-step-1',
+  templateUrl: './main-form-step-1.component.html',
+  styleUrls: ['./main-form-step-1.component.css'],
+  standalone: true,
+  imports: [PersonalInfoComponent, MembershipInfoComponent]
 })
 export class MainFormStep1Component implements OnInit {
   @Output() next = new EventEmitter<void>();
+
   constructor(public stepperContentService: StepperDataService) {
   }
 
   onMembershipInfoSaved(formGroup: FormGroup) {
     this.stepperContentService.setMemberMembershipInfo(formGroup.value)
+    this.stepperContentService.setMemberClubsInfo(formGroup.get("clubs")?.value)
+    this.stepperContentService.setMemberCommissionInfo(formGroup.get("commission")?.value)
+    this.stepperContentService.setMemberBourseInfo(formGroup.get("bourse")?.value)
   }
 
   onPersonalInfoSaved(personalInfo: FormGroup) {

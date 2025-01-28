@@ -3,11 +3,11 @@ import {MemberService} from "../../../core/services/member.service";
 import {AppStateService} from "../../../core/services/app-state-service";
 import {Router} from "@angular/router";
 import {NgClass, NgFor, NgIf} from '@angular/common';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FilterPopupComponent} from "../filter-popup/filter-popup.component";
-import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
 import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
 import {ColumnPrinterComponent} from "../column-printer/column-printer.component";
+import {formToJSON} from "axios";
 
 @Component({
   selector: 'app-member',
@@ -30,7 +30,6 @@ export class ListMemberComponent implements OnInit {
   constructor(
     private memberService: MemberService,
     public appState: AppStateService,
-    private yearOfSessionService: YearOfSessionServiceService,
     private router: Router,
     private fb: FormBuilder
   ) {
@@ -38,33 +37,6 @@ export class ListMemberComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.yearOfSessionService
-      .getYears().subscribe(
-      {
-        next: resp => {
-          if (resp.status == "OK") {
-            this.yearOFSession = resp.data
-          }
-        },
-        error: err => {
-          console.log("une erreur c'est produite lors de récuppération de l'année")
-        }
-      }
-    )
-
-    this.yearOfSessionService.getCurrentYear().subscribe({
-      next: resp => {
-        if (resp.status == "OK") {
-          this.appState.memberState.filters.year = resp.data.id;
-          this.searchMemberByCriteria()
-        } else {
-          console.log("Une erreur s'est produite")
-        }
-      },
-      error: err => {
-        console.log("une erreur s'est produite")
-      }
-    });
     if (!this.appState.memberState.keyword) {
       this.searchMemberByCriteria();
     }
@@ -76,7 +48,6 @@ export class ListMemberComponent implements OnInit {
 
   nextPage(page: number) {
     this.appState.memberState.currentPage = page;
-    console.log(this.appState)
     this.searchMemberByCriteria()
   }
 
@@ -84,6 +55,7 @@ export class ListMemberComponent implements OnInit {
     this.memberService.searchMember(this.appState.memberState.keyword, this.appState.memberState.criteria, this.appState.memberState.filters).subscribe({
         next: data => {
           this.appState.memberState.members = data.items;
+          console.log(this.appState.memberState.members)
           this.appState.memberState.currentPage = data.page
           this.appState.memberState.totalPages = data.pages;
         },
@@ -106,6 +78,7 @@ export class ListMemberComponent implements OnInit {
       console.error('ColumnPrinterComponent non initialisé');
     }
   }
+
   getPages(): number[] {
     const totalPages = this.appState.memberState.totalPages;
     const currentPage = this.appState.memberState.currentPage;
@@ -132,4 +105,5 @@ export class ListMemberComponent implements OnInit {
     return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
   }
 
+  protected readonly formToJSON = formToJSON;
 }

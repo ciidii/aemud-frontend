@@ -57,13 +57,13 @@
             </thead>
             <tbody>
             <tr *ngFor="let member of appState.memberState.members">
-              <td>{{ member.member.personalInfo.firstname }}</td>
-              <td>{{ member.member.personalInfo.name }}</td>
+              <td>{{ member.personalInfo.firstname}}</td>
+              <td>{{ member.personalInfo.name }}</td>
               <td>{{ member.addressInfo.addressToCampus }}</td>
               <td>{{ member.contactInfo.email }}</td>
               <td>{{ member.contactInfo.numberPhone }}</td>
               <td>
-                <button (click)="displayMemberDetails(member.member.id)"
+                <button (click)="displayMemberDetails(member.id)"
                         class="btn btn-outline-success btn-sm">
                   <i class="bi bi-eye"></i> Afficher
                 </button>

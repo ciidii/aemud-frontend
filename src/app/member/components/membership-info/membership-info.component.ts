@@ -13,11 +13,11 @@ import {NgClass, NgFor, NgIf} from '@angular/common';
 import {ClubModel} from "../../model/club.model";
 
 @Component({
-    selector: 'app-membership-info',
-    templateUrl: './membership-info.component.html',
-    styleUrls: ['./membership-info.component.css'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
+  selector: 'app-membership-info',
+  templateUrl: './membership-info.component.html',
+  styleUrls: ['./membership-info.component.css'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule, NgClass, NgIf, NgFor]
 })
 export class MembershipInfoComponent implements OnInit {
   @Output() membershipFormEmitter = new EventEmitter<FormGroup>();
@@ -44,12 +44,10 @@ export class MembershipInfoComponent implements OnInit {
       membershipInfoLocalStorage = JSON.parse(local)
     }
     this.membershipFormGroup = this._formBuilder.group({
-      yearOfMembership: [null],
       yearOfBac: [membershipInfoLocalStorage?.yearOfBac || '', [Validators.required, Validators.minLength(3)]],
       bacSeries: [membershipInfoLocalStorage?.bacSeries || '', [Validators.required, Validators.minLength(2)]],
       bacMention: [membershipInfoLocalStorage?.bacMention || '', [Validators.required, Validators.minLength(3)]],
       legacyInstitution: [membershipInfoLocalStorage?.legacyInstitution || '', [Validators.required, Validators.minLength(3)]],
-      pay: [true, [Validators.required, Validators.minLength(1)]],
       aemudCourses: [membershipInfoLocalStorage?.aemudCourses || '', [Validators.required]],
       otherCourses: [membershipInfoLocalStorage?.otherCourses || '', [Validators.required, Validators.minLength(5)]],
       participatedActivity: [membershipInfoLocalStorage?.participatedActivity || '', [Validators.required]],

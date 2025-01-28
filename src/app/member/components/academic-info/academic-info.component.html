@@ -1,6 +1,5 @@
 <div class="container mt-2">
   <form [formGroup]="academicFormGroup" novalidate>
-    <!-- Member Info Section -->
     <div class="card mb-4">
       <div class="card-body">
         <div class="row">
@@ -27,17 +26,18 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="university" class="form-label">Université</label>
+              <label for="institutionName" class="form-label">Université</label>
               <input
                 type="text"
-                id="university"
-                formControlName="university"
+                id="institutionName"
+                formControlName="institutionName"
                 class="form-control"
-                [ngClass]="{ 'is-invalid': academicFormGroup.get('university')?.invalid && academicFormGroup.get('university')?.touched }"
+                [ngClass]="{ 'is-invalid': academicFormGroup.get('institutionName')?.invalid && academicFormGroup.get('institutionName')?.touched }"
                 placeholder="Entrez le nom de l'université"
               />
-              <div *ngIf="academicFormGroup.get('university')?.invalid && academicFormGroup.get('university')?.touched"
-                   class="invalid-feedback">
+              <div
+                *ngIf="academicFormGroup.get('institutionName')?.invalid && academicFormGroup.get('institutionName')?.touched"
+                class="invalid-feedback">
                 Le nom de l'université est requis et doit comporter au moins 3 caractères.
               </div>
             </div>
@@ -45,59 +45,23 @@
 
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="faculty" class="form-label">Faculté</label>
+              <label for="studiesDomain" class="form-label">Domaine d'études</label>
               <input
                 type="text"
-                id="faculty"
-                formControlName="faculty"
+                id="studiesDomain"
+                formControlName="studiesDomain"
                 class="form-control"
-                [ngClass]="{ 'is-invalid': academicFormGroup.get('faculty')?.invalid && academicFormGroup.get('faculty')?.touched }"
-                placeholder="Entrez le nom de la faculté"
+                [ngClass]="{ 'is-invalid': academicFormGroup.get('studiesDomain')?.invalid && academicFormGroup.get('studiesDomain')?.touched }"
+                placeholder="Votre domaine d'études"
               />
-              <div *ngIf="academicFormGroup.get('faculty')?.invalid && academicFormGroup.get('faculty')?.touched"
-                   class="invalid-feedback">
-                Le nom de la faculté est requis et doit comporter au moins 3 caractères.
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="department" class="form-label">Département</label>
-              <input
-                type="text"
-                id="department"
-                formControlName="department"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': academicFormGroup.get('department')?.invalid && academicFormGroup.get('department')?.touched }"
-                placeholder="Entrez le nom du département"
-              />
-              <div *ngIf="academicFormGroup.get('department')?.invalid && academicFormGroup.get('department')?.touched"
-                   class="invalid-feedback">
-                Le nom du département est requis et doit comporter au moins 3 caractères.
+              <div
+                *ngIf="academicFormGroup.get('studiesDomain')?.invalid && academicFormGroup.get('studiesDomain')?.touched"
+                class="invalid-feedback">
+                Le domaine d'études  est requis et doit comporter au moins 3 caractères.
               </div>
             </div>
           </div>
 
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label for="section" class="form-label">Section</label>
-              <input
-                type="text"
-                id="section"
-                formControlName="section"
-                class="form-control"
-                [ngClass]="{ 'is-invalid': academicFormGroup.get('section')?.invalid && academicFormGroup.get('section')?.touched }"
-                placeholder="Entrez la section"
-              />
-              <div *ngIf="academicFormGroup.get('section')?.invalid && academicFormGroup.get('section')?.touched"
-                   class="invalid-feedback">
-                La section est requise et doit comporter au moins 3 caractères.
-              </div>
-            </div>
-          </div>
         </div>
       </div>
     </div>
