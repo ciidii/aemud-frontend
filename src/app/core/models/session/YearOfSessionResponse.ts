@@ -1,5 +1,5 @@
 export interface YearOfSessionResponse {
   id: number;
-  year_: number;
+  session: number;
   currentYear: boolean;
 }

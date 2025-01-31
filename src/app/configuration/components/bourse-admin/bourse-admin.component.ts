@@ -1,9 +1,11 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, LOCALE_ID, NgModule, OnInit} from '@angular/core';
 import {BourseModel} from "../../../core/models/bourses/bourse.model";
 import {BourseService} from "../../../core/services/Bourse/bourse.service";
 import {ToastrService} from "ngx-toastr";
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CurrencyPipe, NgFor, NgIf} from '@angular/common';
+import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {CurrencyPipe, NgFor, NgIf, registerLocaleData} from '@angular/common';
+import localeFr from '@angular/common/locales/fr';
+
 
 @Component({
   selector: 'app-bourse-admin',
@@ -25,7 +27,8 @@ export class BourseAdminComponent implements OnInit {
     this.bourseForm = this.fb.group({
       lebelle: ['', [Validators.required, Validators.minLength(3)]],
       montant: ['', [Validators.required, Validators.min(1)]],
-      bourseId:['']
+      bourseId: [''],
+      members: this.fb.array([]),
     });
   }
 

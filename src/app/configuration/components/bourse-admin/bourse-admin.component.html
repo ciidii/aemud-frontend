@@ -1,10 +1,17 @@
 <div class="container mt-4">
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2 class="mb-0">Gestion des Bourses</h2>
-    <button (click)="handleDisplayForm()" class="btn btn-outline-success shadow-sm">
+    <button *ngIf="!displayForm; else closeButton" (click)="handleDisplayForm()"
+            class="btn btn-outline-success shadow-sm">
       <i class="bi bi-plus-circle me-1"></i> Ajouter Une Bourse
     </button>
+    <ng-template #closeButton>
+      <button (click)="handleDisplayForm()" class="btn btn-outline-danger shadow-sm">
+        <i class="bi bi-x-circle me-1"></i> Annuler
+      </button>
+    </ng-template>
   </div>
+
 
   <div class="container mt-4">
     <div *ngIf="displayForm" class="card shadow-sm mb-4">
@@ -34,7 +41,9 @@
           </div>
 
           <div class="d-flex justify-content-end">
-            <button type="submit" class="btn btn-outline-success" [disabled]="bourseForm.invalid">Enregistrer</button>
+            <button type="submit" class="btn btn-outline-success" [disabled]="bourseForm.invalid || !bourseForm.dirty">
+              Enregistrer
+            </button>
           </div>
         </form>
       </div>
@@ -55,7 +64,7 @@
         <tbody>
         <tr *ngFor="let bourse of bourses">
           <td>{{ bourse.lebelle }}</td>
-          <td>{{ bourse.montant | currency }}</td>
+          <td>{{ bourse.montant | currency: 'XOF' : 'symbol' : '1.0-0' : 'fr' }}</td>
           <td class="text-center">
             <button (click)="onUpdate(bourse.bourseId)" class="btn btn-outline-warning btn-sm me-2">
               <i class="bi bi-pencil"></i> Modifier

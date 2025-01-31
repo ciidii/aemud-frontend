@@ -11,7 +11,10 @@ import {ReactiveFormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {bootstrapApplication, BrowserModule, Title} from '@angular/platform-browser';
 import {provideRouter, Router, Routes} from '@angular/router';
-import {APP_INITIALIZER, ErrorHandler, importProvidersFrom} from '@angular/core';
+import {APP_INITIALIZER, ErrorHandler, importProvidersFrom, LOCALE_ID} from '@angular/core';
+import {registerLocaleData} from "@angular/common";
+import localeFr from '@angular/common/locales/fr';
+registerLocaleData(localeFr);
 
 const routes: Routes = [
   {
@@ -73,7 +76,8 @@ bootstrapApplication(AppComponent, {
     },
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(routes),
-    provideAnimations()
+    provideAnimations(),
+    { provide: LOCALE_ID, useValue: 'fr' }
   ]
 })
   .catch(err => console.error(err));

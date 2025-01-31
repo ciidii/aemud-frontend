@@ -20,7 +20,8 @@ export class CommisssionAdminComponent implements OnInit {
   constructor(private commissionService: CommissionService, private toaster: ToastrService, private fb: FormBuilder) {
     this.commissionForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
-      id: ['']
+      id: [''],
+      members: this.fb.array([])
     });
   }
 

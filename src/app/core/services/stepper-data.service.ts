@@ -39,9 +39,9 @@ export class StepperDataService {
     academicInfo: {},
     addressInfo: {},
     contactInfo: {},
-    bourseId: {bourseId: {}},
-    clubsId: [{id: {}}],
-    commissionsId: [{id: {}}]
+    bourse: {bourseId: {}},
+    clubs: [{id: {}}],
+      commissions: [{id: {}}]
   };
 
   constructor(private utilsService: UtilsService) {
@@ -100,19 +100,19 @@ export class StepperDataService {
   }
 
   setMemberBourseInfo(data: any) {
-    this.formData.bourseId.bourseId = data;
+    this.formData.bourse.bourseId = data;
     localStorage.setItem("bourseId", JSON.stringify(this.formData.membershipInfo))
     this._membershipInfoSaved = true
   }
 
   setMemberClubsInfo(data: any) {
-    this.formData.clubsId[0].id = data;
+    this.formData.clubs[0].id = data;
     localStorage.setItem("clubsId", JSON.stringify(this.formData.membershipInfo))
     this._membershipInfoSaved = true
   }
 
   setMemberCommissionInfo(data: any) {
-    this.formData.commissionsId[0].id = data;
+    this.formData.commissions[0].id = data;
     localStorage.setItem("commissionsId", JSON.stringify(this.formData.membershipInfo))
     this._membershipInfoSaved = true
   }

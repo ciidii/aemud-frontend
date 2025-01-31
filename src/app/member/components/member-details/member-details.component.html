@@ -145,8 +145,8 @@
                   <div class="col-auto">
                   </div>
                   <div class="d-flex justify-content-end mt-3">
-                    <button class="btn btn-outline-success me-2">Enregistrer</button>
-                    <button class="btn btn-outline-secondary" (click)="toggleEditMembershipInfo()">Annuler</button>
+                    <button [disabled]="!this.memberForm.get('personalInfo')?.dirty" class="btn btn-outline-success me-2">Enregistrer</button>
+                    <button class="btn btn-outline-secondary" (click)="togglePersonalInfoInfo()">Annuler</button>
                   </div>
                 </div>
               </div>

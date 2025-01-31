@@ -1,11 +1,16 @@
 <div class="container py-5">
   <div class="d-flex justify-content-between align-items-center mb-4">
-    <h2 class="mb-0">Gestion des Commissions</h2>
-    <button (click)="handleDisplayForm()" class="btn btn-outline-success shadow-sm">
-      <i class="bi bi-plus-circle me-1"></i> Ajouter une Commission
+    <h2 class="mb-0">Commissions</h2>
+    <button *ngIf="!displayForm; else closeButton" (click)="handleDisplayForm()"
+            class="btn btn-outline-success shadow-sm">
+      <i class="bi bi-plus-circle me-1"></i> Ajouter Une commission
     </button>
+    <ng-template #closeButton>
+      <button (click)="handleDisplayForm()" class="btn btn-outline-danger shadow-sm">
+        <i class="bi bi-x-circle me-1"></i> Annuler
+      </button>
+    </ng-template>
   </div>
-
   <div *ngIf="displayForm" class="card shadow mb-4">
     <div class="card-header">
       <h5 class="mb-0">Ajouter / Modifier une Commission</h5>
@@ -23,7 +28,7 @@
         </div>
 
         <div class="d-flex justify-content-end">
-          <button type="submit" class="btn btn-outline-success px-4" [disabled]="commissionForm.invalid">Enregistrer
+          <button type="submit" class="btn btn-outline-success px-4" [disabled]="commissionForm.invalid || !commissionForm.dirty">Enregistrer
           </button>
         </div>
       </form>

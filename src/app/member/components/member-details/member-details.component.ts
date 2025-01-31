@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {MemberService} from "../../../core/services/member.service";
 import {Title} from "@angular/platform-browser";
 import {Profile} from "../../../core/profile.model";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
+import {JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommissionService} from "../../../core/services/commission/commission.service";
@@ -23,7 +23,8 @@ import {BourseModel} from "../../../core/models/bourses/bourse.model";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    JsonPipe
   ]
 })
 export class MemberDetailsComponent implements OnInit {
@@ -266,8 +267,12 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   onPersonalInfoChangeSave() {
-    this.member.personalInfo = this.memberForm.get("personalInfo")?.value
-    this.updateMember(this.member)
+    if (this.memberForm.get("personalInfo")?.dirty){
+      this.member.personalInfo = this.memberForm.get("personalInfo")?.value
+      this.updateMember(this.member);
+      this.togglePersonalInfoInfo();
+    }
+
   }
 
   onMembershipInfoSave() {

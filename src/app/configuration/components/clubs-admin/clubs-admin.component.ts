@@ -25,6 +25,7 @@ export class ClubsAdminComponent implements OnInit {
     this.clubForm = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(3)]],
       id: [''],
+      members:this.fb.array([])
     });
   }
 

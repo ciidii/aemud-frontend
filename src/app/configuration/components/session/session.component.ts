@@ -1,6 +1,6 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
 import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
 import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
@@ -12,7 +12,8 @@ import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionR
     FormsModule,
     NgForOf,
     NgIf,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    NgClass
   ],
   templateUrl: './session.component.html',
   styleUrl: './session.component.css'
@@ -21,14 +22,13 @@ export class SessionComponent implements OnInit {
   sessions!: YearOfSessionResponse[]
   sessionForm: FormGroup;
   displayForm = false;
-  sessionsCanDelete: { [key: number]: boolean } = {};
 
   constructor(private sessionService: YearOfSessionServiceService,
               private toaster: ToastrService,
               private fb: FormBuilder
   ) {
     this.sessionForm = this.fb.group({
-      year_: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
+      session: ['', [Validators.required, Validators.minLength(4), Validators.maxLength(4)]],
       id: [''],
       currentYear: ['']
     });
@@ -86,7 +86,7 @@ export class SessionComponent implements OnInit {
     this.sessionService.getPaticulerYear(sessionID).subscribe({
       next: resp => {
         if (resp.status == "OK") {
-          this.sessionForm.get("year_")?.setValue(resp.data.year_);
+          this.sessionForm.get("session")?.setValue(resp.data.session);
           this.sessionForm.get("id")?.setValue(resp.data.id)
           this.sessionForm.get("currentYear")?.setValue(resp.data.currentYear)
           console.log(this.sessionForm.value)
