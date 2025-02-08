@@ -47,39 +47,6 @@ export class StepperDataService {
   constructor(private utilsService: UtilsService) {
   }
 
-  formatMemberFormData(formGroup: FormGroup) {
-    let formRequest = {
-      id: null,
-      personalInfo: {
-        name: "",
-        firstname: "",
-        nationality: "",
-        birthday: "",
-        maritalStatus: ""
-      },
-      membershipInfo: {
-        yearOfBac: "",
-        bacSeries: "",
-        bacMention: "",
-        legacyInstitution: "",
-        aemudCourses: "",
-        otherCourses: "",
-        participatedActivity: "",
-        politicOrganisation: "",
-        commission: [],
-        clubs: [],
-        bourse: "",
-
-      },
-      academicInfo: {},
-      addressInfo: {},
-      contactInfo: {},
-      bourseId: {bourseId: {}},
-      clubsId: [{id: {}}],
-      commissionsId: [{id: {}}]
-    };
-  }
-
   setMemberPersonalInfo(data: any) {
     this.formData.personalInfo = data;
     if (this.formData.personalInfo !== null) {

@@ -2,23 +2,22 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MemberService} from "../../../core/services/member.service";
 import {AppStateService} from "../../../core/services/app-state-service";
 import {Router} from "@angular/router";
-import {NgClass, NgFor, NgIf} from '@angular/common';
-import {FormBuilder, FormsModule, ReactiveFormsModule} from '@angular/forms';
+import {NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FilterPopupComponent} from "../filter-popup/filter-popup.component";
-import {YearOfSessionResponse} from "../../../core/models/session/YearOfSessionResponse";
 import {ColumnPrinterComponent} from "../column-printer/column-printer.component";
 import {formToJSON} from "axios";
+import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
 
 @Component({
   selector: 'app-member',
   templateUrl: './list-member.component.html',
   styleUrls: ['./list-member.component.css'],
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent]
+  imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent, NgSwitch, NgSwitchCase, NgSwitchDefault]
 })
 export class ListMemberComponent implements OnInit {
   private readonly MAX_PAGES_DISPLAYED = 3;
-  yearOFSession: YearOfSessionResponse[] = [];
 
   @ViewChild(FilterPopupComponent) modal?: FilterPopupComponent;
   @ViewChild(ColumnPrinterComponent) columnPrinterModal?: ColumnPrinterComponent
@@ -31,13 +30,28 @@ export class ListMemberComponent implements OnInit {
     private memberService: MemberService,
     public appState: AppStateService,
     private router: Router,
-    private fb: FormBuilder
+    private sessionService: YearOfSessionServiceService
   ) {
   }
 
 
   ngOnInit(): void {
+
+    this.sessionService.getCurrentYear().subscribe({
+      next: resp => {
+        if (resp.status == "OK") {
+          this.appState.memberState.filters.year = resp.data.id
+          this.searchMemberByCriteria();
+
+        } else {
+        }
+      },
+      error: err => {
+        console.error("Une erreur s'est produit");
+      }
+    });
     if (!this.appState.memberState.keyword) {
+      console.log(this.appState.memberState.filters.year)
       this.searchMemberByCriteria();
     }
   }
@@ -55,7 +69,7 @@ export class ListMemberComponent implements OnInit {
     this.memberService.searchMember(this.appState.memberState.keyword, this.appState.memberState.criteria, this.appState.memberState.filters).subscribe({
         next: data => {
           this.appState.memberState.members = data.items;
-          console.log(this.appState.memberState.members)
+          console.log("-----------" + data.items)
           this.appState.memberState.currentPage = data.page
           this.appState.memberState.totalPages = data.pages;
         },

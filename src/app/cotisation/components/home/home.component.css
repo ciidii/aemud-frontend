@@ -1,0 +1,45 @@
+.sidebar {
+  background-color: #ffffff;
+  color: #333;
+  min-height: 100vh;
+  padding: 0;
+  box-shadow: 2px 0 8px rgba(0, 0, 0, 0.05);
+  border-right: 1px solid #e0e0e0;
+}
+
+.nav-link {
+  color: #333;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  font-size: 14px;
+  transition: background-color 0.2s, color 0.2s ease;
+  text-decoration: none;
+}
+
+
+.nav-link i {
+  margin-right: 10px;
+  font-size: 18px;
+}
+
+
+.nav-link:hover,.active {
+  background-color: #f8f8f8;
+  color: #000;
+}
+
+/* Zone de contenu */
+.content-area {
+  background-color: #f9f9f9;
+  min-height: 100vh;
+  padding: 30px;
+}
+
+/* Sticky sidebar */
+.sticky-sidebar {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow-y: auto;
+}

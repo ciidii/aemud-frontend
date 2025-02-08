@@ -14,6 +14,7 @@ import {provideRouter, Router, Routes} from '@angular/router';
 import {APP_INITIALIZER, ErrorHandler, importProvidersFrom, LOCALE_ID} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
+
 registerLocaleData(localeFr);
 
 const routes: Routes = [
@@ -29,6 +30,10 @@ const routes: Routes = [
     path: "configurations",
     loadChildren: () => import("./app/configuration/config.route").then(m => m.ConfigRoute),
     title: "Configuration",
+  }, {
+    path: "contribution",
+    loadChildren: () => import("./app/cotisation/cotisation.module").then(m => m.CotisationModule),
+    title: "cotisation",
   },
   {
     path: "**", component: LoginComponent,
@@ -77,7 +82,7 @@ bootstrapApplication(AppComponent, {
     provideHttpClient(withInterceptorsFromDi()),
     provideRouter(routes),
     provideAnimations(),
-    { provide: LOCALE_ID, useValue: 'fr' }
+    {provide: LOCALE_ID, useValue: 'fr'}
   ]
 })
   .catch(err => console.error(err));

@@ -49,19 +49,55 @@
             <tr>
               <th>Prénom</th>
               <th>Nom</th>
-              <th>Adresse au campus</th>
               <th>Email</th>
               <th>Numéro de Téléphone</th>
+              <th>Payement</th>
+              <th>Inscription Status</th>
               <th>Action</th>
             </tr>
             </thead>
             <tbody>
             <tr *ngFor="let member of appState.memberState.members">
-              <td>{{ member.personalInfo.firstname}}</td>
+              <td>{{ member.personalInfo.firstname }}</td>
               <td>{{ member.personalInfo.name }}</td>
-              <td>{{ member.addressInfo.addressToCampus }}</td>
               <td>{{ member.contactInfo.email }}</td>
               <td>{{ member.contactInfo.numberPhone }}</td>
+              <td [ngClass]="{'table-success': member.registration[0].statusPayment,
+                      'table-danger': !member.registration[0].statusPayment}">
+                <i *ngIf="member.registration[0].statusPayment" class="bi bi-check-circle-fill text-success"></i>
+                <i *ngIf="!member.registration[0].statusPayment" class="bi bi-x-circle-fill text-danger"></i>
+                {{ member.registration[0].statusPayment ? 'Payé' : 'Non Payé' }}
+              </td>
+
+              <!-- Statut d'Inscription -->
+              <td [ngClass]="{
+            'table-warning': member.registration[0].registrationStatus === 'PENDING',
+            'table-success': member.registration[0].registrationStatus === 'APPROVED',
+            'table-danger': member.registration[0].registrationStatus === 'REJECTED',
+            'table-secondary': member.registration[0].registrationStatus === 'EXPIRED'
+          }" class="text-center">
+
+                <!-- Icônes selon le statut -->
+                <ng-container [ngSwitch]="member.registration[0].registrationStatus">
+                  <i *ngSwitchCase="'PENDING'"
+                     class="bi bi-hourglass-split text-warning fs-5"
+                     title="En attente"></i>
+                  <i *ngSwitchCase="'APPROVED'"
+                     class="bi bi-check-circle-fill text-success fs-5"
+                     title="Approuvé"></i>
+                  <i *ngSwitchCase="'REJECTED'"
+                     class="bi bi-x-octagon-fill text-danger fs-5"
+                     title="Rejeté"></i>
+                  <i *ngSwitchCase="'EXPIRED'"
+                     class="bi bi-exclamation-circle-fill text-secondary fs-5"
+                     title="Expiré"></i>
+                  <i *ngSwitchDefault
+                     class="bi bi-question-circle-fill text-muted fs-5"
+                     title="Statut Inconnu"></i>
+                </ng-container>
+                {{ member.registration[0].registrationStatus }}
+              </td>
+
               <td>
                 <button (click)="displayMemberDetails(member.id)"
                         class="btn btn-outline-success btn-sm">

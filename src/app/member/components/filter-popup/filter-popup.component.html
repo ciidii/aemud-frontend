@@ -27,7 +27,7 @@
             <label for="yearFilter" class="form-label">Année</label>
             <select id="yearFilter" formControlName="year" class="form-select">
               <option value="">Toutes</option>
-              <option *ngFor="let year of years"  [value]="year.id">{{ year.year_ }}</option>
+              <option *ngFor="let year of years" [defaultSelected]="year.currentYear"  [value]="year.id">{{ year.session }}</option>
             </select>
           </div>
         </form>

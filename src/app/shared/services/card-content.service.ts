@@ -18,8 +18,8 @@ export class CardContentService {
       title: "Contisation",
       description: "Gestions des cotisations des membres",
       linkTitle: "Gérer cotisations",
-      retourLinh: "/members/member/modal-test",
-      disabled:"disabled"
+      retourLinh: "/contribution/contribute",
+      disabled:""
     },
     {
       imageUrl: "bi bi-gear-fill",

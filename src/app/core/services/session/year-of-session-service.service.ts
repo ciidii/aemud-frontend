@@ -4,6 +4,7 @@ import {Observable} from "rxjs";
 import {ResponseEntityApi} from "../../models/responseEntityApi";
 import {YearOfSessionResponse} from "../../models/session/YearOfSessionResponse";
 import {environment} from "../../../../environments/environment.development";
+import {MonthData} from "../MonthData";
 
 @Injectable({
   providedIn: 'root'
@@ -41,5 +42,9 @@ export class YearOfSessionServiceService {
   deleletSession(id: number): Observable<ResponseEntityApi<void>> {
     let params = new HttpParams().set("sessionid", id);
     return this.http.delete<ResponseEntityApi<void>>(environment.API_URL + '/session', {params})
+  }
+
+  public getMonth(): Observable<ResponseEntityApi<MonthData[]>> {
+    return this.http.get<ResponseEntityApi<MonthData[]>>(environment.API_URL + '/month');
   }
 }

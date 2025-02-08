@@ -23,8 +23,12 @@ const routes: Routes = [
             loadComponent: () => import("./components/member-details/member-details.component").then(md => md.MemberDetailsComponent),
           },
           {
-            path: "modal-test",
-            loadComponent: () => import("./components/filter-popup/filter-popup.component").then(md => md.FilterPopupComponent),
+            path: "registration",
+            loadComponent: () => import("./components/registration/registration.component").then(md => md.RegistrationComponent),
+          },
+          {
+            path: "dashbord",
+            loadComponent: () => import("./components/dashbord/dashbord.component").then(md => md.DashbordComponent),
           },
         ]
       },

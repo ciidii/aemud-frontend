@@ -1,35 +1,83 @@
-import {ClubModel} from "./club.model";
-import {CommissionModel} from "./commission.model";
-import {YearOfMembeship} from "../../core/models/yearOfMembeship";
-import {BourseModel} from "../../core/models/bourses/bourse.model";
+export interface PersonalInfo {
+  name: string;
+  firstname: string;
+  nationality: string;
+  gender: string | null;
+  birthday: number[];
+  maritalStatus: string;
+}
 
-export class MemberModel {
-  id!:number
-  name!: string
-  firstname!: string
-  nationality!: string
-  birthday!: string
-  maritalStatus!: string
-  addressInDakar!: string
-  holidayAddress!: string
-  numberPhone!: string
-  email!: string
-  personToCall!: string
-  faculty!: string
-  departmentOrYear!: string
-  bourse!: BourseModel
-  doYouParticipateAemudActivity!: string
-  participatedActivity!: string
-  addressToCampus!:string
-  doYouParticipateAemudCourse!: string
-  aemudCourseParticipated!: string
-  doYouParticipatedOtherCourse!: string
-  otherCourseParticipated!: string
-  areYouMemberOfPoliticOrganisation!: string
-  politicOrganisation!: string
-  yearOfMembership!: YearOfMembeship
-  twinsName!: string
-  commission!: CommissionModel
-  clubs!: ClubModel[]
-  pay!: string
+export interface MembershipInfo {
+  legacyInstitution: string;
+  bacSeries: string;
+  bacMention: string;
+  yearOfBac: string;
+  aemudCourses: string;
+  otherCourses: string;
+  participatedActivity: string;
+  politicOrganisation: string;
+}
+
+export interface AcademicInfo {
+  institutionName: string;
+  studiesDomain: string;
+  studiesLevel: string;
+}
+
+export interface AddressInfo {
+  addressInDakar: string;
+  holidayAddress: string;
+  addressToCampus: string;
+}
+
+export interface PersonToCall {
+  lastname: string;
+  firstname: string;
+  requiredNumberPhone: string;
+  optionalNumberPhone: string;
+  relationship: string;
+}
+
+export interface ContactInfo {
+  numberPhone: string;
+  email: string;
+  personToCalls: PersonToCall[];
+}
+
+export interface Bourse {
+  bourseId: string;
+  lebelle: string;
+  montant: number;
+}
+
+export interface Club {
+  id: string;
+  name: string;
+}
+
+export interface Commission {
+  id: string;
+  name: string;
+}
+
+export interface Registration {
+  member: string;
+  session: number;
+  dateInscription: number[]; // [YYYY, MM, DD]
+  registrationType: string;
+  statusPayment: boolean;
+  registrationStatus: string;
+}
+
+export interface Member {
+  id: string;
+  personalInfo: PersonalInfo;
+  membershipInfo: MembershipInfo;
+  academicInfo: AcademicInfo;
+  addressInfo: AddressInfo;
+  contactInfo: ContactInfo;
+  bourse: Bourse | null;
+  clubs: Club[];
+  commissions: Commission[];
+  registration: Registration[];
 }

@@ -15,6 +15,11 @@ export class MemberHomeComponent implements OnInit {
   ngOnInit(): void {
     this.asideNavContent = [
       {
+        link: "/members/member/dashbord",
+        title: "Tableau de bord",
+        disabled:""
+      },
+      {
         link: "/members/member/register-form",
         title: "Formulaire",
         disabled:""
@@ -24,14 +29,10 @@ export class MemberHomeComponent implements OnInit {
         disabled:""
 
       }, {
-        link: "#",
+        link: "/members/member/registration",
         title: "Réinscription",
-        disabled:"disabled"
+        disabled:""
 
-      }, {
-        link: "#",
-        title: "Liste Réincription",
-        disabled:"disabled"
       },
     ]
   }

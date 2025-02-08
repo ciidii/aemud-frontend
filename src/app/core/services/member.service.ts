@@ -1,7 +1,7 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {MemberModel} from "../../member/model/member.model";
+import {Member} from "../../member/model/member.model";
 import {ResponsePageableApi} from "../models/responsePageableApi";
 import {RequestPageableVO} from "../models/requestPageableVO";
 import {AppStateService} from "./app-state-service";
@@ -34,7 +34,7 @@ export class MemberService {
     }
     // @ts-ignore
     let params = new HttpParams().set("memberId", memberId)
-    return this.httpClient.delete<Array<MemberModel>>(`${this.url}/members`, {params});
+    return this.httpClient.delete<Array<Member>>(`${this.url}/members`, {params});
   }
 
   addMember(member: any) {
@@ -44,7 +44,37 @@ export class MemberService {
     return this.httpClient.post<any>(environment.API_URL + `/members`, member, options);
   }
 
-  searchMember(keyword: string, criteria: string, filters: any): Observable<ResponsePageableApi<Array<MemberData>>> {
+  register(registrationRequestWithNumberPhone: any) {
+    let options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
+    }
+    return this.httpClient.post<any>(environment.API_URL + `/registration/number-phone`, registrationRequestWithNumberPhone, options);
+  }
+
+  getRegistrationBySession(sessionId: string) {
+    let options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
+    }
+    let params = new HttpParams()
+      .set("session", sessionId)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/registration-peer-session`, {params});
+  }
+
+  getPayedOrNoPayedSessionCountPeerSession(sessionId: string, statusPayment: boolean) {
+    let params = new HttpParams()
+      .set("session", sessionId)
+      .set("statusPayment", statusPayment)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/payed-or-no-payed`, {params});
+  }
+
+  getNewOrRenewalAdherentForASession(sessionId: string, registrationType: string) {
+    let params = new HttpParams()
+      .set("session", sessionId)
+      .set("typeInscription", registrationType)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/new-inscription-session`, {params});
+  }
+
+  searchMember(keyword: string, criteria: string, filters: any): Observable<ResponsePageableApi<Array<Member>>> {
     let params = new HttpParams()
       .set("criteria", criteria)
       .set("value", keyword)
@@ -52,9 +82,9 @@ export class MemberService {
       .set("rpp", this.appState.memberState.pageSize)
       .set("club", filters?.club ? filters?.club : "")
       .set("commission", filters?.commission ? filters?.commission : "")
-      .set("year", filters?.year ? filters?.year : "");
+      .set("sessionIdForRegistration", filters?.year ? filters?.year : "");
 
-    return this.httpClient.get<ResponsePageableApi<Array<MemberData>>>(`${environment.API_URL}/members/search`, {params});
+    return this.httpClient.get<ResponsePageableApi<Array<Member>>>(`${environment.API_URL}/members/search`, {params});
   }
 
   searchMemberToPrint(keyword: string, criteria: string, filters: any): Observable<ResponseEntityApi<Array<Profile>>> {

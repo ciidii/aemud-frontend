@@ -1,0 +1,33 @@
+.hover-effect {
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.hover-effect:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+}
+
+.card {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+.input-group-text {
+  border-radius: 8px 0 0 8px;
+}
+
+.form-select {
+  border-radius: 0 8px 8px 0;
+}
+
+.text-primary {
+  color: #0d6efd !important;
+}
+
+.text-success {
+  color: #198754 !important;
+}
+
+.text-danger {
+  color: #dc3545 !important;
+}

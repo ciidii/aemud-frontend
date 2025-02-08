@@ -33,5 +33,10 @@ export class BourseService {
     let params = new HttpParams().set("bourseId", bourseId)
     return this.httpClient.get<ResponseEntityApi<BourseModel>>(environment.API_URL + "/bourses", {params});
   }
+
+  getBourseAmount(numberPhone: string): Observable<ResponseEntityApi<number>> {
+    let params = new HttpParams().set("numberPhone", numberPhone)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + "/bourses/member-Contribution-amount", {params});
+  }
 }
 
