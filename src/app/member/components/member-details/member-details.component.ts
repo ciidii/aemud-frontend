@@ -1,17 +1,17 @@
 import {Component, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
-import {MemberService} from "../../../core/services/member.service";
+import {MemberService} from "../../core/member.service";
 import {Title} from "@angular/platform-browser";
-import {Profile} from "../../../core/profile.model";
-import {JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {ToastrService} from "ngx-toastr";
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {CommissionService} from "../../../core/services/commission/commission.service";
-import {ClubService} from "../../../core/services/clubs/club.service";
-import {BourseService} from "../../../core/services/Bourse/bourse.service";
-import {Commission} from "../../../core/models/Commission/Commission";
-import {ClubModel} from "../../model/club.model";
-import {BourseModel} from "../../../core/models/bourses/bourse.model";
+import {CommissionService} from "../../../core/services/commission.service";
+import {ClubService} from "../../../core/services/club.service";
+import {BourseService} from "../../../core/services/bourse.service";
+import {CommissionModel} from "../../../core/models/commission.model";
+import {BourseModel} from "../../../core/models/bourse.model";
+import {ClubModel} from "../../../core/models/club.model";
+import {MemberModel} from "../../../core/models/member.model";
 
 @Component({
   selector: 'app-member-details',
@@ -23,16 +23,15 @@ import {BourseModel} from "../../../core/models/bourses/bourse.model";
     FormsModule,
     NgIf,
     ReactiveFormsModule,
-    NgClass,
-    JsonPipe
+    NgClass
   ]
 })
 export class MemberDetailsComponent implements OnInit {
   memberID: string | null = "";
   memberForm!: FormGroup;
-  commissions!: Array<Commission>;
+  commissions!: Array<CommissionModel>;
   clubs!: Array<ClubModel>;
-  member!: Profile;
+  member!: MemberModel;
   bourses!: Array<BourseModel>
   isEditingMembershipInfo: boolean = false;
   isEditingAcademicInfo: boolean = false;
@@ -122,7 +121,7 @@ export class MemberDetailsComponent implements OnInit {
   }
 
 
-  initTitle(member: Profile | undefined) {
+  initTitle(member: MemberModel | undefined) {
     if (member?.personalInfo) {
       this.titleService.setTitle(`${member.personalInfo.name} ${member.personalInfo.firstname}`)
     } else {
@@ -176,7 +175,7 @@ export class MemberDetailsComponent implements OnInit {
     this.isPersonalInfoEditing = !this.isPersonalInfoEditing;
   }
 
-  initMemberForm(member: Profile) {
+  initMemberForm(member: MemberModel) {
     if (!member) {
       console.error("Les données du membre ne sont pas disponibles.");
       return;
@@ -267,7 +266,7 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   onPersonalInfoChangeSave() {
-    if (this.memberForm.get("personalInfo")?.dirty){
+    if (this.memberForm.get("personalInfo")?.dirty) {
       this.member.personalInfo = this.memberForm.get("personalInfo")?.value
       this.updateMember(this.member);
       this.togglePersonalInfoInfo();
@@ -292,7 +291,7 @@ export class MemberDetailsComponent implements OnInit {
   }
 
 
-  updateMember(member: Profile) {
+  updateMember(member: MemberModel) {
     this.memberService.updateMember(this.member).subscribe({
       next: resp => {
         this.toaster.success("Modification Réussi")

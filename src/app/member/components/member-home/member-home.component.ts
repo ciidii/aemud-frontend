@@ -3,7 +3,7 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from '@angular/router';
 import {NgFor} from '@angular/common';
 
 @Component({
-    selector: 'app-member-home',
+    selector: 'app-member-shell',
     templateUrl: './member-home.component.html',
     styleUrls: ['./member-home.component.css'],
     standalone: true,
@@ -15,7 +15,7 @@ export class MemberHomeComponent implements OnInit {
   ngOnInit(): void {
     this.asideNavContent = [
       {
-        link: "/members/member/dashbord",
+        link: "/members/member/list-contribution",
         title: "Tableau de bord",
         disabled:""
       },
@@ -29,7 +29,7 @@ export class MemberHomeComponent implements OnInit {
         disabled:""
 
       }, {
-        link: "/members/member/registration",
+        link: "/members/member/member-registration",
         title: "Réinscription",
         disabled:""
 

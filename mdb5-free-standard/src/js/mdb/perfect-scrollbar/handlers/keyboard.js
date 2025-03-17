@@ -119,7 +119,7 @@ export default function (i) {
       case 34: // page down
         deltaY = -i.containerHeight;
         break;
-      case 36: // home
+      case 36: // shell
         deltaY = i.contentHeight;
         break;
       case 35: // end

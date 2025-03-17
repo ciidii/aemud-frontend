@@ -1,0 +1,22 @@
+<div class="container py-4">
+  <!-- Section Personal Info -->
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <app-info-personal (personalInfoEmitter)="onPersonalInfoSaved($event)"></app-info-personal>
+    </div>
+  </div>
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <app-info-membership (membershipFormEmitter)="onMembershipInfoSaved($event)"></app-info-membership>
+    </div>
+  </div>
+
+  <!-- Bouton Suivant -->
+  <div class="d-grid mt-4">
+    <div class="row justify-content-end">
+      <div class="col-auto">
+        <button [disabled]="!stepperContentService.membershipInfoSaved || !stepperContentService.personalInfoSaved" class="btn btn-outline-secondary btn-lg px-4" (click)="onNext()">Suivant</button>
+      </div>
+    </div>
+  </div>
+</div>

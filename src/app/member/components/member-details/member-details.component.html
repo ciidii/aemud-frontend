@@ -346,7 +346,7 @@
                       </div>
                     </div>
                     <div class="mb-3">
-                      <label for="commission" class="form-label">Commission</label>
+                      <label for="commission" class="form-label">CommissionModel</label>
                       <select id="commission" formControlName="commission" class="form-control">
                         <option value="" [defaultSelected]="1==1" disabled>Sélectionnez une commission</option>
                         <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}
@@ -360,7 +360,7 @@
                     </div>
 
                     <div class="mb-3">
-                      <label for="clubs" class="form-label">Clubs</label>
+                      <label for="clubs" class="form-label">ClubModel</label>
                       <select id="clubs" formControlName="clubs" class="form-control">
                         <option value="" [defaultSelected]="1==1" disabled>Sélectionnez un club</option>
                         <option *ngFor="let club of clubs" value="{{club.id}}">{{ club.name }}</option>

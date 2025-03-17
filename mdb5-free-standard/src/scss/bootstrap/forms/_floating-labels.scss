@@ -21,7 +21,7 @@
     text-overflow: ellipsis;
     white-space: nowrap;
     pointer-events: none;
-    border: $input-border-width solid transparent; // Required for aligning label's text with the input as it affects inner box model
+    border: $input-border-width solid transparent; // Required for aligning label's text with the input as it affects inner box core
     transform-origin: 0 0;
     @include transition($form-floating-transition);
   }

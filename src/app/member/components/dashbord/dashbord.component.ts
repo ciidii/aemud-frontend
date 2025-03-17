@@ -1,11 +1,11 @@
 import {Component, OnInit} from '@angular/core';
-import {YearOfSessionServiceService} from "../../../core/services/session/year-of-session-service.service";
-import {MemberService} from "../../../core/services/member.service";
+import {YearOfSessionService} from "../../../core/services/year-of-session.service";
+import {MemberService} from "../../core/member.service";
 import {FormsModule} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 
 @Component({
-  selector: 'app-dashbord',
+  selector: 'app-list-contribution',
   standalone: true,
   imports: [
     NgForOf,
@@ -27,7 +27,7 @@ export class DashbordComponent implements OnInit {
   sessionId!: string;
 
   constructor(
-    private sessionService: YearOfSessionServiceService,
+    private sessionService: YearOfSessionService,
     private memberService: MemberService
   ) {
   }

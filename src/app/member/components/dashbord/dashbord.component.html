@@ -1,14 +1,14 @@
 <div class="container my-5">
-  <h2 class="text-center mb-4 display-5 fw-bold text-primary">Tableau de Bord</h2>
+  <h2 class="text-center mb-4 display-5 fw-bold">Tableau de Bord</h2>
 
   <!-- Sélecteur d'année -->
   <div class="row justify-content-center mb-4">
     <div class="col-md-4">
       <div class="input-group">
-        <label for="yearSelect" class="input-group-text bg-primary text-white border-primary">
+        <label for="yearSelect" class="input-group-text bg-primary text-white">
           <i class="bi bi-calendar"></i>
         </label>
-        <select [(ngModel)]="sessionId" (ngModelChange)="reloadStat()" class="form-select border-primary shadow-sm" id="yearSelect">
+        <select [(ngModel)]="sessionId" (ngModelChange)="reloadStat()" class="form-select shadow-sm" id="yearSelect">
           <option *ngFor="let year of years" [value]="year.id">{{ year.session }}</option>
         </select>
       </div>

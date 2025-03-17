@@ -41,7 +41,7 @@ export class StepperDataService {
     contactInfo: {},
     bourse: {bourseId: {}},
     clubs: [{id: {}}],
-      commissions: [{id: {}}]
+    commissions: [{id: {}}]
   };
 
   constructor(private utilsService: UtilsService) {

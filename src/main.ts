@@ -28,12 +28,16 @@ const routes: Routes = [
   },
   {
     path: "configurations",
-    loadChildren: () => import("./app/configuration/config.route").then(m => m.ConfigRoute),
+    loadChildren: () => import("./app/configuration/config.routes").then(m => m.ConfigRoutes),
     title: "Configuration",
   }, {
     path: "contribution",
-    loadChildren: () => import("./app/cotisation/cotisation.module").then(m => m.CotisationModule),
+    loadChildren: () => import("./app/cotisation/contribution.route").then(m => m.ContributionRoute),
     title: "cotisation",
+  }, {
+    path: "notification",
+    loadChildren: () => import("./app/notification/notification.route").then(m => m.NotificationRoute),
+    title: "Notification",
   },
   {
     path: "**", component: LoginComponent,
@@ -54,7 +58,7 @@ Sentry.init({
   tracePropagationTargets: ["localhost", "http://localhost:4300"],
   // Session Replay
   replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session, change the sample rate to 100% when sampling sessions where errors occur.
+  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session-admin-page, change the sample rate to 100% when sampling sessions where errors occur.
 });
 
 bootstrapApplication(AppComponent, {

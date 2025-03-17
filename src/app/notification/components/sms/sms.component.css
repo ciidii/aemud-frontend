@@ -1,0 +1,169 @@
+/* Styles généraux */
+.container {
+  max-width: 1200px;
+}
+
+/* Titre */
+h2 {
+  font-size: 1.75rem;
+  color: #2c3e50;
+}
+
+/* Boutons d'action */
+.btn {
+  font-weight: 500;
+  padding: 10px 20px;
+  border-radius: 8px;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+.btn-primary:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.btn-success {
+  background-color: #28a745;
+  border-color: #28a745;
+}
+
+.btn-success:hover {
+  background-color: #218838;
+  border-color: #218838;
+}
+
+/* Tableau */
+.card {
+  border: none;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+  background-color: #f8f9fa;
+  font-size: 1.1rem;
+  padding: 16px;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table {
+  margin-bottom: 0;
+}
+
+.table thead th {
+  font-weight: 600;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.table tbody tr {
+  transition: background-color 0.2s ease-in-out;
+}
+
+.table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Badges */
+.badge {
+  font-size: 0.9rem;
+  padding: 6px 12px;
+}
+
+.bg-success {
+  background-color: #28a745 !important;
+}
+
+.bg-warning {
+  background-color: #ffc107 !important;
+}
+
+.bg-danger {
+  background-color: #dc3545 !important;
+}
+
+/* Bouton Annuler */
+.btn-outline-danger {
+  border-color: #dc3545;
+  color: #dc3545;
+}
+
+.btn-outline-danger:hover {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Icônes */
+.bi {
+  font-size: 1rem;
+  vertical-align: middle;
+}
+
+/* Styles pour l'affichage du solde */
+.card-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.card-text {
+  font-size: 0.9rem;
+}
+
+.display-4 {
+  font-size: 2.5rem;
+  color: #007bff;
+}
+
+/* Styles pour le bouton de recharge */
+.btn-outline-primary {
+  border-color: #007bff;
+  color: #007bff;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-outline-primary:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+.bi-arrow-repeat {
+  font-size: 1rem;
+}
+
+/* Styles pour la pagination */
+.pagination {
+  margin: 0;
+}
+
+.page-item {
+  cursor: pointer;
+}
+
+.page-item.disabled .page-link {
+  pointer-events: none;
+  opacity: 0.6;
+}
+
+.page-item.active .page-link {
+  background-color: #007bff;
+  border-color: #007bff;
+  color: white;
+}
+
+.page-link {
+  color: #007bff;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+  transition: all 0.2s ease-in-out;
+}
+
+.page-link:hover {
+  background-color: #f8f9fa;
+  color: #0056b3;
+}

@@ -27,11 +27,12 @@ export class LoginComponent implements OnInit {
 
   handleLogin() {
     if (this.formGroup.value.username == "aemud" && this.formGroup.value.password == "passer") {
-      this.router.navigateByUrl("shared/home")
+      console.log(this.formGroup.value.username);
+      this.router.navigateByUrl("shared/shell")
     } else {
       this.router.navigateByUrl("/")
     }
-    console.log(this.formGroup.value.username);
+
 
   }
 }

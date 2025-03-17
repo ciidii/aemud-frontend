@@ -1,0 +1,23 @@
+/* Styles pour les colonnes */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espace entre les colonnes */
+}
+
+.col-md-6 {
+  flex: 1;
+  min-width: 300px; /* Largeur minimale pour éviter un écrasement sur les petits écrans */
+}
+
+/* Amélioration de la zone de texte */
+textarea.form-control {
+  min-height: 150px; /* Hauteur minimale pour le texte */
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}

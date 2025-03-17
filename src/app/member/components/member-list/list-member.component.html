@@ -1,0 +1,148 @@
+<div class="container my-5">
+  <div class="card shadow-sm rounded border-0">
+    <div class="card-body">
+      <!-- Section de recherche et sélection de critères -->
+      <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="col-lg-6 col-md-6 me-3">
+          <input [(ngModel)]="appState.memberState.keyword"
+                 placeholder="Rechercher un membre..."
+                 class="form-control form-control-lg shadow-sm"
+                 type="text"
+                 (ngModelChange)="searchMemberByCriteria()">
+        </div>
+        <div class="col-lg-4 col-md-5">
+          <select [(ngModel)]="appState.memberState.criteria"
+                  class="form-select form-select-lg shadow-sm">
+            <option value="0" [selected]="true" [disabled]="true">Sélectionnez un critère</option>
+            <option *ngFor="let sc of searchCriteria" [value]="sc.criteria">
+              {{ sc.displayedValue }}
+            </option>
+          </select>
+        </div>
+      </div>
+
+      <div class="d-flex justify-content-end mb-4">
+        <button (click)="openColumnPrinterModal()"
+                class="btn btn-outline-success shadow-sm me-2">
+          <i class="bi bi-printer"></i> Exporter
+        </button>
+        <button (click)="open()"
+                class="btn btn-outline-success shadow-sm me-2">
+          <i class="bi bi-sliders"></i> Filtrer
+        </button>
+        <button (click)="openPopupForNotificationModal()"
+                class="btn btn-outline-success shadow-sm">
+          <i class="bi bi-envelope-check"></i> Enregistrer et Notifier
+        </button>
+      </div>
+
+      <!-- Résultats de recherche -->
+      <div *ngIf="appState.memberState.keyword"
+           class="alert alert-success text-center shadow-sm mb-4">
+        <strong>Résultat<span *ngIf="appState.memberState.members.length >= 2">s</span> :</strong>
+        {{ appState.memberState.members.length }}
+      </div>
+
+      <!-- Tableau des membres -->
+      <div *ngIf="appState.memberState.members.length > 0; else noMembers">
+        <div class="table-responsive">
+          <table class="table table-hover align-middle table-borderless shadow-sm">
+            <thead class="table-light">
+            <tr>
+              <th>Prénom</th>
+              <th>Nom</th>
+              <th>Email</th>
+              <th>Numéro de Téléphone</th>
+              <th>Payement</th>
+              <th>Inscription Status</th>
+              <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr *ngFor="let member of appState.memberState.members" class="hover-effect">
+              <td>{{ member.personalInfo.firstname }}</td>
+              <td>{{ member.personalInfo.name }}</td>
+              <td>{{ member.contactInfo.email }}</td>
+              <td>{{ member.contactInfo.numberPhone }}</td>
+              <td
+                [ngClass]="{'text-success': member.registration[0]?.statusPayment, 'text-danger': !member.registration[0].statusPayment}">
+                <i *ngIf="member.registration[0]?.statusPayment" class="bi bi-check-circle-fill"></i>
+                <i *ngIf="!member.registration[0]?.statusPayment" class="bi bi-x-circle-fill"></i>
+                {{ member.registration[0].statusPayment ? 'Payé' : 'Non Payé' }}
+              </td>
+              <td [ngClass]="{
+                    'text-warning': member.registration[0].registrationStatus === 'PENDING',
+                    'text-success': member.registration[0].registrationStatus === 'APPROVED',
+                    'text-danger': member.registration[0].registrationStatus === 'REJECTED',
+                    'text-secondary': member.registration[0].registrationStatus === 'EXPIRED'
+                  }" class="text-center">
+                <ng-container [ngSwitch]="member.registration[0].registrationStatus">
+                  <i *ngSwitchCase="'PENDING'" class="bi bi-hourglass-split fs-5" title="En attente"></i>
+                  <i *ngSwitchCase="'APPROVED'" class="bi bi-check-circle-fill fs-5" title="Approuvé"></i>
+                  <i *ngSwitchCase="'REJECTED'" class="bi bi-x-octagon-fill fs-5" title="Rejeté"></i>
+                  <i *ngSwitchCase="'EXPIRED'" class="bi bi-exclamation-circle-fill fs-5" title="Expiré"></i>
+                  <i *ngSwitchDefault class="bi bi-question-circle-fill fs-5" title="Statut Inconnu"></i>
+                </ng-container>
+                {{ member.registration[0].registrationStatus }}
+              </td>
+              <td>
+                <button (click)="displayMemberDetails(member.id)"
+                        class="btn btn-outline-success btn-sm rounded-pill px-3">
+                  <i class="bi bi-eye"></i> Afficher
+                </button>
+              </td>
+            </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Pagination -->
+        <nav *ngIf="appState.memberState.totalPages > 1" class="mt-4">
+          <ul class="pagination justify-content-center shadow-sm">
+            <li class="page-item" [ngClass]="{'disabled': appState.memberState.currentPage === 1}">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage - 1)" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+              </button>
+            </li>
+            <li *ngIf="getPages()[0] !== 1" class="page-item">
+              <button class="page-link" (click)="nextPage(1)">1</button>
+            </li>
+            <li *ngIf="getPages()[0] > 2" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
+            <li *ngFor="let page of getPages()" class="page-item"
+                [ngClass]="{'active': appState.memberState.currentPage === page}">
+              <button class="page-link" (click)="nextPage(page)">{{ page }}</button>
+            </li>
+            <li *ngIf="getPages().slice(-1)[0] < appState.memberState.totalPages - 1" class="page-item disabled">
+              <span class="page-link">...</span>
+            </li>
+            <li *ngIf="getPages().slice(-1)[0] !== appState.memberState.totalPages" class="page-item">
+              <button class="page-link"
+                      (click)="nextPage(appState.memberState.totalPages)">{{ appState.memberState.totalPages }}
+              </button>s
+            </li>
+            <li class="page-item"
+                [ngClass]="{'disabled': appState.memberState.currentPage === appState.memberState.totalPages}">
+              <button class="page-link" (click)="nextPage(appState.memberState.currentPage + 1)" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
+
+      <!-- Message aucun membre trouvé -->
+      <ng-template #noMembers>
+        <div class="text-center my-4">
+          <h4 class="text-danger">Aucun membre trouvé !</h4>
+        </div>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<!-- Modales -->
+<app-filter-popup></app-filter-popup>
+<app-column-printer></app-column-printer>
+<app-group-for-notification></app-group-for-notification>

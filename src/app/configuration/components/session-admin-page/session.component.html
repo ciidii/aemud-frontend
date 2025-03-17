@@ -1,0 +1,98 @@
+<div class="container py-5">
+  <!-- Header et bouton d'ajout -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <h2 class="mb-0">ClubModel</h2>
+    <button *ngIf="!displayForm; else closeButton" (click)="handleDisplayForm()"
+            class="btn btn-outline-success shadow-sm">
+      <i class="bi bi-plus-circle me-1"></i> Ouvrir Une Session
+    </button>
+    <ng-template #closeButton>
+      <button (click)="handleDisplayForm()" class="btn btn-outline-danger shadow-sm">
+        <i class="bi bi-x-circle me-1"></i> Annuler
+      </button>
+    </ng-template>
+  </div>
+
+  <div *ngIf="displayForm" class="card shadow mb-4">
+    <div class="card-header text-center">
+      <h5 class="mb-0">Ajouter / Modifier une CommissionModel</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="sessionForm" (ngSubmit)="onSubmit()">
+        <!-- Nom de la CommissionModel -->
+        <div class="mb-3">
+          <label for="session" class="form-label">Nom de la CommissionModel</label>
+          <input type="text" id="session" class="form-control" formControlName="session">
+          <div *ngIf="sessionForm.get('session')?.invalid && sessionForm.get('session')?.touched" class="text-danger">
+            <small *ngIf="sessionForm.get('session')?.errors?.['required']">Le nom est requis.</small>
+            <small *ngIf="sessionForm.get('session')?.errors?.['minlength']">
+              Le nom doit avoir au moins 3 caractères.
+            </small>
+          </div>
+        </div>
+
+        <!-- Boutons radio pour indiquer si c'est l'année courante -->
+        <div class="mb-3">
+          <label class="form-label d-block">Est-ce l'année en cours ?</label>
+          <div class="form-check form-check-inline">
+            <input [disabled]="displayForm" class="form-check-input" type="radio" id="currentYearYes" [value]="true"
+                   formControlName="currentYear">
+            <label class="form-check-label" for="currentYearYes">Oui</label>
+          </div>
+          <div class="form-check form-check-inline">
+            <input class="form-check-input" type="radio" id="currentYearNo" [value]="false"
+                   formControlName="currentYear">
+            <label class="form-check-label" for="currentYearNo">Non</label>
+          </div>
+        </div>
+
+
+        <!-- Bouton de soumission -->
+        <div class="d-flex justify-content-end">
+          <button type="submit" class="btn btn-outline-success px-4" [disabled]="sessionForm.invalid || !sessionForm.dirty">
+            Enregistrer
+          </button>
+        </div>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Table de gestion des commissions -->
+  <div class="card shadow-sm">
+    <div class="card-header bg-light">
+      <h5 class="mb-0">Liste des Commissions</h5>
+    </div>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover mb-0">
+        <thead class="table-primary">
+        <tr>
+          <th>Nom</th>
+          <th class="text-center">Statut</th>
+          <th class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr *ngFor="let session of sessions">
+          <td>{{ session.session }}</td>
+          <td class="text-center">
+            <i class="bi" [ngClass]="session.currentYear ? 'bi-watch text-primary' : 'bi-hourglass-bottom text-secondary'"
+               title="{{ session.currentYear ? 'Année en cours' : 'Année dépassée' }}">
+            </i>
+          </td>
+          <td class="text-end">
+            <button (click)="updateSession(session.id)" class="btn btn-warning btn-sm me-2">
+              <i class="bi bi-pencil"></i> Modifier
+            </button>
+            <button (click)="deleteSession(session.id)" class="btn btn-danger btn-sm">
+              <i class="bi bi-trash"></i> Supprimer
+            </button>
+          </td>
+        </tr>
+        </tbody>
+      </table>
+
+
+    </div>
+  </div>
+</div>

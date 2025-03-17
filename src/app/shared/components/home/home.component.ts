@@ -4,7 +4,7 @@ import {RouterLink} from "@angular/router";
 import {NgForOf} from "@angular/common";
 
 @Component({
-  selector: 'app-home',
+  selector: 'app-shell',
   templateUrl: './home.component.html',
   styleUrls: ['./home.component.css'],
   imports: [

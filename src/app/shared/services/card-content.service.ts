@@ -18,7 +18,7 @@ export class CardContentService {
       title: "Contisation",
       description: "Gestions des cotisations des membres",
       linkTitle: "Gérer cotisations",
-      retourLinh: "/contribution/contribute",
+      retourLinh: "/contribution/add-contribution",
       disabled:""
     },
     {
@@ -26,7 +26,7 @@ export class CardContentService {
       title: "Configurations",
       description: "Configurations du système",
       linkTitle: "Configurations",
-      retourLinh: "/configurations/config/home",
+      retourLinh: "/configurations/config/shell",
       disabled: ""
     },
     {
@@ -34,16 +34,16 @@ export class CardContentService {
       title: "Messagerie",
       description: "Envoyer un message aux membres,...",
       linkTitle: "massagerie",
-      retourLinh: "#",
-      disabled: "disabled"
+      retourLinh: "/notification/sms",
+      disabled: ""
     },
     {
       imageUrl: "bi bi-people-fill",
       title: "Jumellage",
       description: "Gérer le jumellage",
       linkTitle: "Génér jumellage",
-      retourLinh: "#",
-      disabled: "disabled"
+      retourLinh: "/shared/multi-select",
+      disabled: ""
 
     },
   ]
