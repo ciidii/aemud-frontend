@@ -1,1 +1,111 @@
-<p>aside-bare works!</p>
+<aside class="sidebar">
+  <div class="sidebar-header">
+    <h3>Navigation</h3>
+  </div>
+  <nav class="sidebar-nav">
+    <ul>
+      <!-- Catégorie "Membres" -->
+      <li class="nav-category">
+        <a (click)="toggleCategory('membres')">
+          <i class="bi bi-people"></i> Membres
+          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('membres')"></i>
+          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('membres')"></i>
+        </a>
+        <ul *ngIf="isCategoryOpen('membres')" class="sub-menu">
+          <li>
+            <a routerLink="{{navigationService.MEMBER_ADD_FORM}}" routerLinkActive="active">
+              <i class="bi bi-person-plus"></i> Ajouter un membre
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.MEMBER_LIST}}" routerLinkActive="active">
+              <i class="bi bi-list-ul"></i> Liste des membres
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.MEMBER_REGISTRATION}}" routerLinkActive="active">
+              <i class="bi bi-person-check"></i> Réinscription
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <!-- Catégorie "Configurations" -->
+      <li class="nav-category">
+        <a (click)="toggleCategory('Gestion des Entités')">
+          <i class="bi bi-gear"></i> Gestion des Entités
+          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('Gestion des Entités')"></i>
+          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('Gestion des Entités')"></i>
+        </a>
+        <ul *ngIf="isCategoryOpen('Gestion des Entités')" class="sub-menu">
+          <li>
+            <a routerLink="{{navigationService.CONFIGURATIONS_BOURSE_ADMIN}}" routerLinkActive="active">
+              <i class="bi bi-sliders"></i> Bourses
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.CONFIGURATIONS_COMMISSION_ADMIN}}" routerLinkActive="active">
+              <i class="bi bi-sliders"></i> Commissions
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.CONFIGURATIONS_CLUB_ADMIN}}" routerLinkActive="active">
+              <i class="bi bi-sliders"></i> Clubs
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.CONFIGURATIONS_SESSION_ADMIN}}" routerLinkActive="active">
+              <i class="bi bi-sliders"></i> Sessions
+            </a>
+          </li>
+          <!-- Ajoutez d'autres sous-catégories ici -->
+        </ul>
+      </li>
+
+      <!-- Catégorie "Contributions" -->
+      <li class="nav-category">
+        <a (click)="toggleCategory('contributions')">
+          <i class="bi bi-cash"></i> Contributions
+          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('contributions')"></i>
+          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('contributions')"></i>
+        </a>
+        <ul *ngIf="isCategoryOpen('contributions')" class="sub-menu">
+          <li>
+            <a routerLink="{{navigationService.CONTRIBUTION_ADD}}" routerLinkActive="active">
+              <i class="bi bi-list-check"></i> Contributions
+            </a>
+          </li>
+        </ul>
+      </li>
+
+      <li class="nav-category">
+        <a (click)="toggleCategory('notifications')">
+          <i class="bi bi-bell"></i> Notifications
+          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('notifications')"></i>
+          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('notifications')"></i>
+        </a>
+        <ul *ngIf="isCategoryOpen('notifications')" class="sub-menu">
+          <li>
+            <a routerLink="{{navigationService.NOTIFICATIONS_SMS}}" routerLinkActive="active">
+              <i class="bi bi-bell-fill"></i> sms
+            </a>
+          </li>
+        </ul>
+      </li>
+      <li class="nav-category">
+        <a (click)="toggleCategory('parametres')">
+          <i class="bi bi-tools"></i> Paramètres
+          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('parametres')"></i>
+          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('parametres')"></i>
+        </a>
+        <ul *ngIf="isCategoryOpen('parametres')" class="sub-menu">
+          <li>
+            <a routerLink="/shared/home/parametres" routerLinkActive="active">
+              <i class="bi bi-gear-wide-connected"></i> Gérer les paramètres
+            </a>
+          </li>
+        </ul>
+      </li>
+    </ul>
+  </nav>
+</aside>

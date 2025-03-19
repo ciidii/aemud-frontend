@@ -1,17 +1,1 @@
-<div class="container-fluid p-0">
-  <div class="row no-gutters">
-    <div class="col-md-2 sidebar sticky-sidebar">
-      <ul class="nav flex-column">
-        <li *ngFor="let nav of asideNavContent" class="nav-item">
-          <a class="nav-link {{nav.disabled}}" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
-             routerLink="{{nav.link}}">
-            <i class="fas fa-home"></i>{{nav.title}}
-          </a>
-        </li>
-      </ul>
-    </div>
-    <div class="col-md-10 content-area">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</div>
+<app-layout></app-layout>

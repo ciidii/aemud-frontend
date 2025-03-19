@@ -1,0 +1,134 @@
+/* Styles pour la sidebar */
+.sidebar {
+  width: 250px;
+  height: 100vh;
+  background-color: #2c3e50;
+  color: white;
+  position: fixed;
+  top: 0;
+  left: 0;
+  overflow-y: auto;
+  transition: transform 0.3s ease-in-out;
+}
+
+.sidebar-header {
+  padding: 20px;
+  text-align: center;
+  background-color: #34495e;
+}
+
+.sidebar-header h3 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.sidebar-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar-nav li {
+  margin: 0;
+}
+
+.sidebar-nav a {
+  display: block;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.sidebar-nav a:hover {
+  background-color: #34495e;
+}
+
+.sidebar-nav a.active {
+  background-color: #1abc9c;
+}
+
+.sidebar-nav i {
+  margin-right: 10px;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .sidebar {
+    transform: translateX(-100%);
+  }
+
+  .sidebar.open {
+    transform: translateX(0);
+  }
+}
+
+/* Styles pour les sous-menus */
+.sub-menu {
+  margin-left: 20px; /* Indentation */
+  border-left: 2px solid #1abc9c; /* Ligne verticale */
+  padding-left: 10px; /* Espace entre la ligne et le texte */
+}
+
+/* Styles pour les liens des sous-menus */
+.sub-menu li a {
+  padding-left: 30px; /* Décalage supplémentaire pour l'indentation */
+  position: relative;
+}
+
+/* Icône de la ligne verticale */
+.sub-menu li a::before {
+  content: '';
+  position: absolute;
+  left: 10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 10px;
+  height: 2px;
+  background-color: #1abc9c; /* Couleur de la ligne horizontale */
+}
+
+/* Styles pour les catégories */
+.nav-category > a {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 20px;
+  color: white;
+  text-decoration: none;
+  background-color: #34495e;
+  transition: background-color 0.3s ease;
+}
+
+.nav-category > a:hover {
+  background-color: #1abc9c;
+}
+
+/* Styles pour les sous-menus */
+.nav-category ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  background-color: #2c3e50;
+}
+
+.nav-category ul li a {
+  display: block;
+  padding: 10px 20px 10px 40px; /* Décalage pour l'indentation */
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s ease;
+}
+
+.nav-category ul li a:hover {
+  background-color: #34495e;
+}
+
+.nav-category ul li a.active {
+  background-color: #1abc9c;
+}
+
+/* Icônes des catégories */
+.nav-category i {
+  margin-right: 10px;
+}

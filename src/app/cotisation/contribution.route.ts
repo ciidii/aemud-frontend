@@ -10,8 +10,8 @@ const routes: Routes = [
         loadComponent: () => import("./components/add-contribution/add-contribution.component").then(bs => bs.AddContributionComponent),
         title: "AEMUD -Cotisation"
       },{
-        path: '',
-        redirectTo: "add-contribution",
+        path: '**',
+        redirectTo: "/shared/404",
         pathMatch:"full"
       }
     ]

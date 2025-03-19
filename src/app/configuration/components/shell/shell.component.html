@@ -1,15 +1,5 @@
 <div class="container-fluid p-0">
-  <div class="row no-gutters">
-    <div class="col-md-2 sidebar sticky-sidebar">
-      <ul class="nav flex-column">
-        <li *ngFor="let link of links" class="nav-item">
-          <a class="nav-link" routerLinkActive="{{link.routerLinkActive}}" [routerLinkActiveOptions]="{ exact: false }"
-             routerLink="{{link.routeLink }}">
-            <i class="fas fa-home"></i> {{link.title}}
-          </a>
-        </li>
-      </ul>
-    </div>
+  <div class="row no-gutters bg-white">
     <div class="col-md-10 content-area">
       <router-outlet></router-outlet>
     </div>

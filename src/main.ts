@@ -4,48 +4,18 @@ import * as Sentry from "@sentry/angular";
 import {environment} from "./environments/environment.development";
 import {AppComponent} from './app/app.component';
 import {provideAnimations} from '@angular/platform-browser/animations';
-import {LoginComponent} from './app/shared/components/login/login.component';
 import {ToastrModule} from 'ngx-toastr';
 import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {bootstrapApplication, BrowserModule, Title} from '@angular/platform-browser';
-import {provideRouter, Router, Routes} from '@angular/router';
+import {provideRouter, Router} from '@angular/router';
 import {APP_INITIALIZER, ErrorHandler, importProvidersFrom, LOCALE_ID} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
+import {routes} from "./app/app-routing.module";
 
 registerLocaleData(localeFr);
-
-const routes: Routes = [
-  {
-    path: "shared", loadChildren: () => import("./app/shared/shared-routing.module").then(m => m.SharedRoutingModule),
-    title: "Accueil",
-  },
-  {
-    path: "members", loadChildren: () => import("./app/member/member.route").then(m => m.MemberRoute),
-    title: "Members",
-  },
-  {
-    path: "configurations",
-    loadChildren: () => import("./app/configuration/config.routes").then(m => m.ConfigRoutes),
-    title: "Configuration",
-  }, {
-    path: "contribution",
-    loadChildren: () => import("./app/cotisation/contribution.route").then(m => m.ContributionRoute),
-    title: "cotisation",
-  }, {
-    path: "notification",
-    loadChildren: () => import("./app/notification/notification.route").then(m => m.NotificationRoute),
-    title: "Notification",
-  },
-  {
-    path: "**", component: LoginComponent,
-    title: "Not Found"
-  }
-];
-
-
 Sentry.init({
   dsn: environment.features[0].sentryDsn,
   integrations: [

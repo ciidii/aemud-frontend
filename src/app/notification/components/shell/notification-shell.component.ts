@@ -2,6 +2,7 @@ import {Component, OnInit} from '@angular/core';
 import {HeaderComponent} from "../../../core/header/header.component";
 import {NgForOf} from "@angular/common";
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
+import {LayoutComponent} from "../../../shared/components/layout/layout.component";
 
 @Component({
   selector: 'app-shell',
@@ -11,7 +12,8 @@ import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
     NgForOf,
     RouterLink,
     RouterLinkActive,
-    RouterOutlet
+    RouterOutlet,
+    LayoutComponent
   ],
   templateUrl: './notification-shell.component.html',
   styleUrl: './notification-shell.component.css'

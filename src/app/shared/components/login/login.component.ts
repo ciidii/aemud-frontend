@@ -3,11 +3,11 @@ import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} fr
 import {Router} from "@angular/router";
 
 @Component({
-    selector: 'app-login',
-    templateUrl: './login.component.html',
-    styleUrls: ['./login.component.css'],
-    standalone: true,
-    imports: [FormsModule, ReactiveFormsModule]
+  selector: 'app-login',
+  templateUrl: './login.component.html',
+  styleUrls: ['./login.component.css'],
+  standalone: true,
+  imports: [FormsModule, ReactiveFormsModule]
 })
 export class LoginComponent implements OnInit {
   formGroup!: FormGroup;
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   handleLogin() {
     if (this.formGroup.value.username == "aemud" && this.formGroup.value.password == "passer") {
       console.log(this.formGroup.value.username);
-      this.router.navigateByUrl("shared/shell")
+      this.router.navigateByUrl("l/home")
     } else {
       this.router.navigateByUrl("/")
     }

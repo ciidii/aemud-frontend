@@ -10,7 +10,7 @@ export class CardContentService {
       title: "Membres",
       description: "Inscription, Réinscription de membre, ...",
       linkTitle: "Gérer membre",
-      retourLinh: "/members/member/register-form",
+      retourLinh: "/members/register-form",
       disabled:""
     },
     {

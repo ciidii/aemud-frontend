@@ -53,7 +53,7 @@ export class ListMemberComponent implements OnInit {
   }
 
   displayMemberDetails(id: number) {
-    this.router.navigateByUrl(`/members/member/member-details/${id}`)
+    this.router.navigateByUrl(`members/member-details/${id}`)
   }
 
   nextPage(page: number) {

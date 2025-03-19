@@ -4,7 +4,7 @@ import {NotificationShellComponent} from "./components/shell/notification-shell.
 
 const routes: Routes = [
   {
-    path: "", component: NotificationShellComponent, children: [
+    path: "l", component: NotificationShellComponent, children: [
       {
         path: "sms",
         loadComponent: () => import("./components/sms/sms.component").then(bs => bs.SmsComponent),

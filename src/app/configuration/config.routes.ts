@@ -9,20 +9,24 @@ import {SessionComponent} from "./components/session-admin-page/session.componen
 
 const routes: Routes = [
   {
-    path: "config", component: LayoutComponent, children: [
+    path: "l", component: LayoutComponent, children: [
       {
-        path: "", component: ShellComponent, children: [
-          {path: "shell", component: BourseAdminPageComponent, title: "Bourse - administration"},
-          {
-            path: "commission-admin",
-            component: CommisssionAdminComponent,
-            title: "Commissions - administration"
-          },
-          {path: "club-admin", component: ClubsAdminPageComponent, title: "ClubModel - administration"},
-          {path: "session-admin-page-admin", component: SessionComponent, title: "Sessions -  Administration"}
-        ],
-        title: "Paramétrage de l'application"
-      }
+        path: "bourse-admin",
+        component: BourseAdminPageComponent,
+        title: "Bourse - administration"},
+      {
+        path: "commission-admin",
+        component: CommisssionAdminComponent,
+        title: "Commissions - administration"
+      },
+      {
+        path: "club-admin",
+        component: ClubsAdminPageComponent,
+        title: "Club - administration"},
+      {
+        path: "session-admin",
+        component: SessionComponent,
+        title: "Sessions -  Administration"}
     ]
   }
 ];

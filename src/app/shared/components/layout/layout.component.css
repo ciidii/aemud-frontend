@@ -1,0 +1,14 @@
+
+
+.main-content {
+  display: flex;
+  flex: 1; /* Prend tout l'espace disponible */
+}
+
+/* Styles pour le contenu principal */
+.content {
+  flex: 1; /* Prend tout l'espace restant */
+  padding: 20px; /* Espacement intérieur */
+  overflow-y: auto; /* Permet le défilement si le contenu est trop long */
+  margin-left: 250px;
+}
