@@ -1,0 +1,156 @@
+/* Styles communs pour les deux pages */
+
+/* Modal */
+.modal-content {
+  border-radius: 12px;
+  border: none;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.modal-header {
+  background-color: $light; // Utilisation de la couleur claire
+border-bottom: 1px solid darken($light, 10%); // Bordure légèrement plus sombre
+padding: 16px;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+}
+
+.modal-title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: $dark; // Utilisation de la couleur sombre
+}
+
+.modal-body {
+  padding: 16px;
+}
+
+.modal-footer {
+  border-top: 1px solid darken($light, 10%); // Bordure légèrement plus sombre
+padding: 16px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+
+/* Boutons */
+.btn {
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: $primary; // Utilisation de la couleur principale
+border-color: $primary;
+
+  &:hover {
+    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+  border-color: darken($primary, 10%);
+  }
+}
+
+.btn-secondary {
+  background-color: $secondary; // Utilisation de la couleur secondaire
+border-color: $secondary;
+
+  &:hover {
+    background-color: darken($secondary, 10%); // Assombrir la couleur secondaire au survol
+  border-color: darken($secondary, 10%);
+  }
+}
+
+.btn-outline-primary {
+  border-color: $primary; // Utilisation de la couleur principale
+color: $primary;
+
+  &:hover {
+    background-color: $primary; // Fond de la couleur principale au survol
+  color: white; // Texte en blanc au survol
+  }
+}
+
+.btn-outline-secondary {
+  border-color: $secondary; // Utilisation de la couleur secondaire
+color: $secondary;
+
+  &:hover {
+    background-color: $secondary; // Fond de la couleur secondaire au survol
+  color: white; // Texte en blanc au survol
+  }
+}
+
+/* Champs de formulaire */
+.form-control {
+  border-radius: 8px;
+  border: 1px solid darken($light, 10%); // Bordure légèrement plus sombre
+padding: 10px;
+  font-size: 14px;
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:focus {
+    border-color: $primary; // Bordure de la couleur principale au focus
+  box-shadow: 0 0 0 3px rgba($primary, 0.1); // Ombre portée au focus
+  }
+}
+
+textarea.form-control {
+  resize: none;
+}
+
+/* Labels */
+.form-label {
+  font-weight: 500;
+  color: $dark; // Utilisation de la couleur sombre
+margin-bottom: 8px;
+}
+
+/* Cartes (pour les templates de messages) */
+.card {
+  cursor: pointer;
+  border: 2px solid transparent;
+  border-radius: 8px;
+  padding: 16px;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: scale(1.02);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+}
+
+.border-primary {
+  border-color: $primary !important; // Bordure de la couleur principale
+}
+
+/* Arrière-plan flouté */
+.modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.5);
+}
+
+/* Styles pour les colonnes */
+.row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px; /* Espace entre les colonnes */
+}
+
+.col-md-6 {
+  flex: 1;
+  min-width: 300px; /* Largeur minimale pour éviter un écrasement sur les petits écrans */
+}
+
+/* Amélioration de la zone de texte */
+textarea.form-control {
+  min-height: 150px; /* Hauteur minimale pour le texte */
+}
+
+/* Responsivité */
+@media (max-width: 768px) {
+  .row {
+    flex-direction: column;
+  }
+}

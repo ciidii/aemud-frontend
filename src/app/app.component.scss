@@ -1,0 +1,35 @@
+/* Styles pour les boutons de navigation */
+.navigation-buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+
+  .btn {
+    display: flex;
+    align-items: center;
+    gap: 8px; /* Espace entre l'icône et le texte */
+    padding: 10px 20px;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.2s ease-in-out;
+
+    &.btn-outline-primary {
+      border-color: $primary; // Utilisation de la couleur principale
+    color: $primary;
+
+      &:hover {
+        background-color: $primary;
+        color: white;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $primary; // Utilisation de la couleur principale
+    color: white;
+
+      &:hover {
+        background-color: darken($primary, 10%);
+      }
+    }
+  }
+}
