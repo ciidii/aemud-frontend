@@ -7,7 +7,7 @@ import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {FilterPopupComponent} from "../popup-filter/filter-popup.component";
 import {ColumnPrinterComponent} from "../popup-column-printer/column-printer.component";
 import {YearOfSessionService} from "../../../core/services/year-of-session.service";
-import {GroupForNotificationComponent} from "../popup-group-for-notification/group-for-notification.component";
+import {GroupForNotificationComponent} from "../../../shared/popup-group-for-notification/group-for-notification.component";
 
 @Component({
   selector: 'app-member',

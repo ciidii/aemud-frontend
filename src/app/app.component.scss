@@ -1,4 +1,5 @@
-/* Styles pour les boutons de navigation */
+@import "variables";
+
 .navigation-buttons {
   display: flex;
   justify-content: space-between;
@@ -7,14 +8,14 @@
   .btn {
     display: flex;
     align-items: center;
-    gap: 8px; /* Espace entre l'icône et le texte */
+    gap: 8px;
     padding: 10px 20px;
     font-size: 1rem;
     border-radius: 8px;
     transition: all 0.2s ease-in-out;
 
     &.btn-outline-primary {
-      border-color: $primary; // Utilisation de la couleur principale
+      border-color: $primary;
     color: $primary;
 
       &:hover {
@@ -24,7 +25,7 @@
     }
 
     &.btn-primary {
-      background-color: $primary; // Utilisation de la couleur principale
+      background-color: $primary;
     color: white;
 
       &:hover {

@@ -8,7 +8,7 @@ import {CommissionModel} from "../../../core/models/commission.model";
 @Component({
   selector: 'app-commission-admin-page',
   templateUrl: './commisssion-admin.component.html',
-  styleUrls: ['./commisssion-admin.component.css'],
+  styleUrls: ['../entity.style.scss'],
   standalone: true,
   imports: [NgIf, FormsModule, ReactiveFormsModule, NgFor]
 })

@@ -74,7 +74,7 @@
       };
     }
     _getContent() {
-      return this._resolvePossibleFunction(this._config.content);
+      return this._resolvePossibleFunction(this._config.smsModel);
     }
 
     // Static

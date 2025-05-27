@@ -86,7 +86,7 @@ export class ColumnPrinterComponent implements OnInit {
       const row: any = {};
 
       // Ajouter les champs personnels si cochés
-      if (selectedColumns.personalInfo.name && member?.personalInfo) {
+      if (selectedColumns.personalInfo.modelName && member?.personalInfo) {
         row['Nom'] = member.personalInfo.name;
       }
       if (selectedColumns.personalInfo.firstname && member?.personalInfo) {

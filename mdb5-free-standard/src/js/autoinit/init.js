@@ -89,11 +89,11 @@ export class InitMDB {
       );
 
       if (requireAutoInit) {
-        const component = components[_defaultInitSelectors[element].name];
+        const component = components[_defaultInitSelectors[element].modelName];
         if (!component && !InitializedComponents.get(element) && checkOtherImports) {
           // eslint-disable-next-line no-console
           console.warn(
-            `Please import ${_defaultInitSelectors[element].name} from "MDB" package and add it to a object parameter inside "initMDB" function`
+            `Please import ${_defaultInitSelectors[element].modelName} from "MDB" package and add it to a object parameter inside "initMDB" function`
           );
         }
         return component;

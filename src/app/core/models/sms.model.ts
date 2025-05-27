@@ -1,5 +1,4 @@
-export interface MessageModel {
-  id: string;
-  message: string ,
+export interface SmsModel {
+  message: string | undefined,
   recipientNumbers: string[] | undefined
 }

@@ -9,7 +9,7 @@ import {CurrencyPipe, NgFor, NgIf} from '@angular/common';
 @Component({
   selector: 'app-bourse-admin-page',
   templateUrl: './bourse-admin-page.component.html',
-  styleUrls: ['./bourse-admin-page.component.css'],
+  styleUrls: ['../entity.style.scss'],
   standalone: true,
   imports: [NgFor, NgIf, FormsModule, ReactiveFormsModule, CurrencyPipe]
 })

@@ -45,16 +45,17 @@ export class MemberDetailsComponent implements OnInit {
   maxDate!: String
 
 
-  constructor(private router: ActivatedRoute,
-              private memberService: MemberService,
-              private titleService: Title,
-              private toasterService: ToastrService,
-              private routeService: Router,
-              private fb: FormBuilder,
-              private commissionService: CommissionService,
-              private clubService: ClubService,
-              private bourseService: BourseService,
-              private toaster: ToastrService
+  constructor(
+    private router: ActivatedRoute,
+    private memberService: MemberService,
+    private titleService: Title,
+    private toasterService: ToastrService,
+    private routeService: Router,
+    private fb: FormBuilder,
+    private commissionService: CommissionService,
+    private clubService: ClubService,
+    private bourseService: BourseService,
+    private toaster: ToastrService
   ) {
   }
 
@@ -214,7 +215,7 @@ export class MemberDetailsComponent implements OnInit {
         addressToCampus: [member.addressInfo?.addressToCampus || '', [Validators.required, Validators.minLength(3)]],
       }),
       contactInfo: this.fb.group({
-        numberPhone: [member.contactInfo?.numberPhone || '', [Validators.required, Validators.pattern(/^\+221\d{9}$/)]],
+        numberPhone: [member.contactInfo?.numberPhone || '', [Validators.required, Validators.pattern(/^\d{9}$/)]],
         email: [member.contactInfo?.email || '', [Validators.required, Validators.email]],
         personToCalls: this.fb.array([]),
       }),
@@ -244,11 +245,11 @@ export class MemberDetailsComponent implements OnInit {
       firstname: [person?.firstname || '', Validators.required],
       requiredNumberPhone: [
         person?.requiredNumberPhone || '',
-        [Validators.required, Validators.pattern(/^\+221\d{9}$/)],
+        [Validators.required, Validators.pattern(/^\d{9}$/)],
       ],
       optionalNumberPhone: [
         person?.optionalNumberPhone || '',
-        Validators.pattern(/^\+221\d{9}$/),
+        Validators.pattern(/^\d{9}$/),
       ],
       relationship: [person?.relationship || '', Validators.required],
     });
@@ -286,8 +287,28 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   onContactInfoSaved() {
-    this.member.contactInfo = this.memberForm.get("contactInfo")?.value
-    this.updateMember(this.member)
+    // Get the contact info from the form
+    const contactInfo = this.memberForm.get("contactInfo")?.value;
+
+    // Add +221 prefix to phone numbers
+    if (contactInfo) {
+      // Add prefix to main phone number
+      contactInfo.numberPhone = '+221' + contactInfo.numberPhone;
+
+      // Add prefix to person to call phone numbers
+      if (contactInfo.personToCalls && contactInfo.personToCalls.length > 0) {
+        contactInfo.personToCalls = contactInfo.personToCalls.map((person: any) => ({
+          ...person,
+          requiredNumberPhone: '+221' + person.requiredNumberPhone,
+          optionalNumberPhone: person.optionalNumberPhone ? '+221' + person.optionalNumberPhone : ''
+        }));
+      }
+    }
+
+    // Update the member object with the modified contact info
+    this.member.contactInfo = contactInfo;
+    this.updateMember(this.member);
+    this.toggleEditingContactInfo();
   }
 
 

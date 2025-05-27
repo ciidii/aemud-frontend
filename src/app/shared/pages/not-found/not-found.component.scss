@@ -1,10 +1,11 @@
+@import "variables"; // Import des variables de couleur
 /* Styles pour le conteneur principal */
 .not-found-container {
   display: flex;
   justify-content: center;
   align-items: center;
   height: 100vh;
-  background-color: #f8f9fa;
+  background-color: $light; // Utilisation de la couleur claire pour le fond
   font-family: 'Arial', sans-serif;
 }
 
@@ -13,7 +14,7 @@
   text-align: center;
   max-width: 600px;
   padding: 20px;
-  background-color: white;
+  background-color: white; // Fond blanc pour le contenu
   border-radius: 10px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
@@ -22,20 +23,20 @@
 .not-found-content h1 {
   font-size: 6rem;
   margin: 0;
-  color: #dc3545;
+  color: $danger; // Utilisation de la couleur de danger pour le titre
 }
 
 /* Styles pour le message */
 .not-found-message {
   font-size: 1.5rem;
   margin: 10px 0;
-  color: #333;
+  color: $dark; // Utilisation de la couleur sombre pour le texte
 }
 
 /* Styles pour la description */
 .not-found-description {
   font-size: 1rem;
-  color: #666;
+  color: $dark; // Utilisation de la couleur sombre pour le texte
   margin-bottom: 20px;
 }
 
@@ -44,13 +45,13 @@
   display: inline-block;
   padding: 10px 20px;
   font-size: 1rem;
-  color: white;
-  background-color: #007bff;
+  color: white; // Texte en blanc pour contraster avec le fond
+  background-color: $primary; // Utilisation de la couleur principale pour le bouton
   border-radius: 5px;
   text-decoration: none;
   transition: background-color 0.3s ease;
-}
 
-.not-found-button:hover {
-  background-color: #0056b3;
+  &:hover {
+    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+  }
 }

@@ -8,7 +8,7 @@ import {ClubModel} from "../../../core/models/club.model";
 @Component({
   selector: 'app-clubs-admin-page',
   templateUrl: './clubs-admin-page.component.html',
-  styleUrls: ['./clubs-admin-page.component.css'],
+  styleUrls: ['../entity.style.scss'],
   standalone: true,
   imports: [NgFor, NgIf, FormsModule, ReactiveFormsModule]
 })

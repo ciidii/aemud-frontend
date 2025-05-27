@@ -1,111 +1,160 @@
 <aside class="sidebar">
   <div class="sidebar-header">
-    <h3>Navigation</h3>
+    <img class="logo" src="../../../assets/background/logo_aemud_Plan_de_travail_1.png" alt="logo">
   </div>
+
   <nav class="sidebar-nav">
     <ul>
-      <!-- Catégorie "Membres" -->
-      <li class="nav-category">
+      <!-- Catégorie Membres -->
+      <li class="nav-category" [class.open]="categories.membres">
         <a (click)="toggleCategory('membres')">
-          <i class="bi bi-people"></i> Membres
-          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('membres')"></i>
-          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('membres')"></i>
+          <i class="bi bi-people-fill"></i> Membres
+          <i class="bi" [class.bi-chevron-down]="!categories.membres" [class.bi-chevron-up]="categories.membres"></i>
         </a>
-        <ul *ngIf="isCategoryOpen('membres')" class="sub-menu">
+        <ul class="sub-menu">
           <li>
             <a routerLink="{{navigationService.MEMBER_ADD_FORM}}" routerLinkActive="active">
-              <i class="bi bi-person-plus"></i> Ajouter un membre
+              <i class="bi bi-person-plus-fill"></i> Ajouter un membre
             </a>
           </li>
           <li>
             <a routerLink="{{navigationService.MEMBER_LIST}}" routerLinkActive="active">
-              <i class="bi bi-list-ul"></i> Liste des membres
+              <i class="bi bi-card-list"></i> Liste des membres
             </a>
           </li>
           <li>
             <a routerLink="{{navigationService.MEMBER_REGISTRATION}}" routerLinkActive="active">
-              <i class="bi bi-person-check"></i> Réinscription
+              <i class="bi bi-person-check-fill"></i> Réinscription
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService.MEMBER_DASHBOARD}}" routerLinkActive="active">
+              <i class="bi bi-bar-chart-fill"></i> Statistiques
             </a>
           </li>
         </ul>
       </li>
 
-      <!-- Catégorie "Configurations" -->
-      <li class="nav-category">
-        <a (click)="toggleCategory('Gestion des Entités')">
-          <i class="bi bi-gear"></i> Gestion des Entités
-          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('Gestion des Entités')"></i>
-          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('Gestion des Entités')"></i>
+      <!-- Catégorie Gestion des Entités -->
+      <li class="nav-category" [class.open]="categories.gestionEntites">
+        <a (click)="toggleCategory('gestionEntites')">
+          <i class="bi bi-building-gear"></i> Gestion des Entités
+          <i class="bi" [class.bi-chevron-down]="!categories.gestionEntites" [class.bi-chevron-up]="categories.gestionEntites"></i>
         </a>
-        <ul *ngIf="isCategoryOpen('Gestion des Entités')" class="sub-menu">
+        <ul class="sub-menu">
           <li>
-            <a routerLink="{{navigationService.CONFIGURATIONS_BOURSE_ADMIN}}" routerLinkActive="active">
-              <i class="bi bi-sliders"></i> Bourses
+            <a  routerLink="{{navigationService.CONFIGURATIONS_BOURSE_ADMIN}}" routerLinkActive="active">
+              <i class="bi bi-wallet-fill"></i> Bourses
             </a>
           </li>
           <li>
             <a routerLink="{{navigationService.CONFIGURATIONS_COMMISSION_ADMIN}}" routerLinkActive="active">
-              <i class="bi bi-sliders"></i> Commissions
+              <i class="bi bi-people-fill"></i> Commissions
             </a>
           </li>
           <li>
             <a routerLink="{{navigationService.CONFIGURATIONS_CLUB_ADMIN}}" routerLinkActive="active">
-              <i class="bi bi-sliders"></i> Clubs
+              <i class="bi bi-joystick"></i> Clubs
             </a>
           </li>
           <li>
             <a routerLink="{{navigationService.CONFIGURATIONS_SESSION_ADMIN}}" routerLinkActive="active">
-              <i class="bi bi-sliders"></i> Sessions
+              <i class="bi bi-calendar-week-fill"></i> Sessions
             </a>
           </li>
-          <!-- Ajoutez d'autres sous-catégories ici -->
+          <li>
+            <a routerLink="{{navigationService}}" routerLinkActive="active">
+              <i class="bi bi-calendar-event-fill"></i> Événements
+            </a>
+          </li>
         </ul>
       </li>
 
-      <!-- Catégorie "Contributions" -->
-      <li class="nav-category">
+      <!-- Catégorie Contributions -->
+      <li class="nav-category" [class.open]="categories.contributions">
         <a (click)="toggleCategory('contributions')">
-          <i class="bi bi-cash"></i> Contributions
-          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('contributions')"></i>
-          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('contributions')"></i>
+          <i class="bi bi-cash-stack"></i> Contributions
+          <i class="bi" [class.bi-chevron-down]="!categories.contributions" [class.bi-chevron-up]="categories.contributions"></i>
         </a>
-        <ul *ngIf="isCategoryOpen('contributions')" class="sub-menu">
+        <ul class="sub-menu">
           <li>
             <a routerLink="{{navigationService.CONTRIBUTION_ADD}}" routerLinkActive="active">
-              <i class="bi bi-list-check"></i> Contributions
+              <i class="bi bi-plus-circle-fill"></i> Nouvelle contribution
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService}}" routerLinkActive="active">
+              <i class="bi bi-list-check"></i> Liste des contributions
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService}}" routerLinkActive="active">
+              <i class="bi bi-file-earmark-bar-graph-fill"></i> Rapports
             </a>
           </li>
         </ul>
       </li>
 
-      <li class="nav-category">
+      <!-- Catégorie Notifications -->
+      <li class="nav-category" [class.open]="categories.notifications">
         <a (click)="toggleCategory('notifications')">
-          <i class="bi bi-bell"></i> Notifications
-          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('notifications')"></i>
-          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('notifications')"></i>
+          <i class="bi bi-bell-fill"></i> Notifications
+          <i class="bi" [class.bi-chevron-down]="!categories.notifications" [class.bi-chevron-up]="categories.notifications"></i>
         </a>
-        <ul *ngIf="isCategoryOpen('notifications')" class="sub-menu">
+        <ul class="sub-menu">
           <li>
             <a routerLink="{{navigationService.NOTIFICATIONS_SMS}}" routerLinkActive="active">
-              <i class="bi bi-bell-fill"></i> sms
+              <i class="bi bi-chat-left-text-fill"></i> SMS
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService}}" routerLinkActive="active">
+              <i class="bi bi-envelope-fill"></i> Emails
+            </a>
+          </li>
+          <li>
+            <a routerLink="{{navigationService}}" routerLinkActive="active">
+              <i class="bi bi-app-indicator"></i> Notifications App
             </a>
           </li>
         </ul>
       </li>
-      <li class="nav-category">
+
+      <!-- Catégorie Paramètres -->
+      <li class="nav-category" [class.open]="categories.parametres">
         <a (click)="toggleCategory('parametres')">
-          <i class="bi bi-tools"></i> Paramètres
-          <i class="bi bi-chevron-down" *ngIf="!isCategoryOpen('parametres')"></i>
-          <i class="bi bi-chevron-up" *ngIf="isCategoryOpen('parametres')"></i>
+          <i class="bi bi-gear-fill"></i> Paramètres
+          <i class="bi" [class.bi-chevron-down]="!categories.parametres" [class.bi-chevron-up]="categories.parametres"></i>
         </a>
-        <ul *ngIf="isCategoryOpen('parametres')" class="sub-menu">
+        <ul class="sub-menu">
           <li>
-            <a routerLink="/shared/home/parametres" routerLinkActive="active">
-              <i class="bi bi-gear-wide-connected"></i> Gérer les paramètres
+            <a routerLink="/admin/parametres/generaux" routerLinkActive="active">
+              <i class="bi bi-sliders"></i> Paramètres généraux
+            </a>
+          </li>
+          <li>
+            <a routerLink="/admin/parametres/utilisateurs" routerLinkActive="active">
+              <i class="bi bi-person-badge-fill"></i> Gestion des utilisateurs
+            </a>
+          </li>
+          <li>
+            <a routerLink="/admin/parametres/roles" routerLinkActive="active">
+              <i class="bi bi-shield-lock-fill"></i> Rôles et permissions
+            </a>
+          </li>
+          <li>
+            <a routerLink="/admin/parametres/backup" routerLinkActive="active">
+              <i class="bi bi-cloud-arrow-down-fill"></i> Sauvegarde
             </a>
           </li>
         </ul>
       </li>
     </ul>
   </nav>
+
+  <div class="sidebar-footer">
+    <button class="btn-logout" (click)="logout()">
+      <i class="bi bi-box-arrow-right"></i> Déconnexion
+    </button>
+  </div>
 </aside>

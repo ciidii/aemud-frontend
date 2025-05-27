@@ -11,7 +11,7 @@ export class CardContentService {
       description: "Inscription, Réinscription de membre, ...",
       linkTitle: "Gérer membre",
       retourLinh: "/members/register-form",
-      disabled:""
+      disabled: ""
     },
     {
       imageUrl: "bi bi-person-fill-add",
@@ -19,7 +19,7 @@ export class CardContentService {
       description: "Gestions des cotisations des membres",
       linkTitle: "Gérer cotisations",
       retourLinh: "/contribution/add-contribution",
-      disabled:""
+      disabled: ""
     },
     {
       imageUrl: "bi bi-gear-fill",
@@ -34,7 +34,7 @@ export class CardContentService {
       title: "Messagerie",
       description: "Envoyer un message aux membres,...",
       linkTitle: "massagerie",
-      retourLinh: "/notification/sms",
+      retourLinh: "/notifications/l/sms",
       disabled: ""
     },
     {

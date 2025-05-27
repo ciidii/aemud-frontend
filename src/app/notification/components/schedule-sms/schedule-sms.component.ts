@@ -13,7 +13,7 @@ interface SMS {
   templateUrl: './schedule-sms.component.html',
   standalone: true,
   imports: [FormsModule, NgIf],
-  styleUrls: ['./schedule-sms.component.css']
+  styleUrls: ['./schedule-sms.component.scss']
 })
 export class ScheduleSmsComponent {
   sms: SMS = { recipient: '', message: '', scheduleDate: new Date() };

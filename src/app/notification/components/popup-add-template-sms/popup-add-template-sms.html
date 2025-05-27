@@ -1,38 +1,37 @@
 <div [style]="{'display': openPopup() ? 'block' : 'none'}" class="modal fade show" tabindex="-1" role="dialog">
   <div class="modal-dialog modal-dialog-centered modal-md" role="document">
     <div class="modal-content shadow-lg rounded">
-      <!-- Modal Header -->
+
       <div class="modal-header text-center">
-        <h5 class="modal-title">Envoyer un message au groupe</h5>
-        <button (click)="closeModal()" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h5 class="modal-title">{{modalTitle}}</h5>
+        <button (click)="closeModal()" type="button" class="btn-close btn-close-white" aria-label="Close"></button>
       </div>
 
-      <!-- Modal Body -->
       <div class="modal-body">
         <form [formGroup]="formGroup">
           <div class="mb-4">
-            <label for="groupName" class="form-label fw-bold">Nom du groupe</label>
-            <input id="groupName" type="text" formControlName="groupName" class="form-control form-control-lg shadow-sm"
-                   placeholder="Entrez le nom du groupe">
+            <label for="templateName" class="form-label fw-bold">{{nameLabel}}</label>
+            <input id="templateName" type="text" formControlName="templateName"
+                   class="form-control form-control-lg shadow-sm"
+                   placeholder="{{namePlaceholder}}">
           </div>
+
           <div class="mb-4">
-            <label for="groupMessage" class="form-label fw-bold">Ajouter un message template</label>
-            <textarea id="groupMessage" formControlName="groupMessage" rows="4"
+            <label for="templateContent" class="form-label fw-bold">{{messageLabel}}</label>
+            <textarea id="templateContent" formControlName="templateContent" rows="4"
                       class="form-control shadow-sm"
-                      placeholder="Entrez votre message ici"></textarea>
+                      placeholder="{{messagePlaceholder}}"></textarea>
           </div>
         </form>
       </div>
 
-      <!-- Modal Footer -->
       <div class="modal-footer d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary px-4" (click)="closeModal()" data-bs-dismiss="modal">
-          Annuler
-        </button>
-        <button type="button" class="btn btn-success px-4" (click)="savaGroup()">
-          <i class="bi bi-save me-2"></i> Enregistrer
+        <button type="button" class="btn btn-outline-secondary px-4" (click)="closeModal()">Annuler</button>
+        <button type="button" class="btn btn-success px-4" (click)="saveTemplate()">
+          <i class="bi bi-save me-2"></i> {{actionButtonText}}
         </button>
       </div>
+
     </div>
   </div>
 </div>

@@ -14,9 +14,9 @@ const callbackInitState = new Map();
 const alertCallback = (component, initSelector) => {
   const Alert = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     enableDismissTrigger(Alert);
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   // MDB init
@@ -27,9 +27,9 @@ const alertCallback = (component, initSelector) => {
 
 const buttonCallback = (component, initSelector) => {
   const Button = component;
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     // BS init
     EventHandler.on(document, EVENT_CLICK_DATA_API, initSelector, (event) => {
       event.preventDefault();
@@ -39,7 +39,7 @@ const buttonCallback = (component, initSelector) => {
 
       data.toggle();
     });
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   // MDB init
@@ -49,15 +49,15 @@ const buttonCallback = (component, initSelector) => {
 };
 
 const carouselCallback = (component, initSelector) => {
-  if (callbackInitState.has(component.name)) {
+  if (callbackInitState.has(component.modelName)) {
     return;
   }
 
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
   const SELECTOR_DATA_SLIDE = '[data-mdb-slide], [data-mdb-slide-to]';
   const CLASS_NAME_CAROUSEL = 'carousel';
   const Carousel = component;
-  const EVENT_LOAD_DATA_API = `load.bs.${component.name}.data-api`;
+  const EVENT_LOAD_DATA_API = `load.bs.${component.modelName}.data-api`;
   const SELECTOR_DATA_RIDE = initSelector;
 
   EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_SLIDE, function (event) {
@@ -96,15 +96,15 @@ const carouselCallback = (component, initSelector) => {
     });
   });
 
-  callbackInitState.set(component.name, true);
+  callbackInitState.set(component.modelName, true);
 };
 
 const collapseCallback = (component, initSelector) => {
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
   const SELECTOR_DATA_TOGGLE = initSelector;
   const Collapse = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.on(document, EVENT_CLICK_DATA_API, SELECTOR_DATA_TOGGLE, function (event) {
       // preventDefault only for <a> elements (which change the URL) not inside the collapsible element
       if (
@@ -122,7 +122,7 @@ const collapseCallback = (component, initSelector) => {
       });
     });
 
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   SelectorEngine.find(SELECTOR_DATA_TOGGLE).forEach((el) => {
@@ -136,14 +136,14 @@ const collapseCallback = (component, initSelector) => {
 };
 
 const dropdownCallback = (component, initSelector) => {
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
-  const EVENT_KEYDOWN_DATA_API = `keydown.bs.${component.name}.data-api`;
-  const EVENT_KEYUP_DATA_API = `keyup.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
+  const EVENT_KEYDOWN_DATA_API = `keydown.bs.${component.modelName}.data-api`;
+  const EVENT_KEYUP_DATA_API = `keyup.bs.${component.modelName}.data-api`;
   const SELECTOR_MENU = '.dropdown-menu';
   const SELECTOR_DATA_TOGGLE = `[data-mdb-${component.NAME}-initialized]`;
   const Dropdown = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.on(
       document,
       EVENT_KEYDOWN_DATA_API,
@@ -164,7 +164,7 @@ const dropdownCallback = (component, initSelector) => {
     });
   }
 
-  callbackInitState.set(component.name, true);
+  callbackInitState.set(component.modelName, true);
 
   SelectorEngine.find(initSelector).forEach((el) => {
     Dropdown.getOrCreateInstance(el);
@@ -177,7 +177,7 @@ const inputCallback = (component, initSelector) => {
   const SELECTOR_OUTLINE_TEXTAREA = `${SELECTOR_DATA_INIT} textarea`;
   const Input = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.on(document, 'focus', SELECTOR_OUTLINE_INPUT, Input.activate(new Input()));
     EventHandler.on(document, 'input', SELECTOR_OUTLINE_INPUT, Input.activate(new Input()));
     EventHandler.on(document, 'blur', SELECTOR_OUTLINE_INPUT, Input.deactivate(new Input()));
@@ -276,7 +276,7 @@ const inputCallback = (component, initSelector) => {
       instance.forceActive();
     });
 
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   // auto-init
@@ -284,13 +284,13 @@ const inputCallback = (component, initSelector) => {
 };
 
 const modalCallback = (component, initSelector) => {
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
   const OPEN_SELECTOR = '.modal.show';
   const Modal = component;
-  const EVENT_SHOW = `show.bs.${component.name}`;
-  const EVENT_HIDDEN = `hidden.bs.${component.name}`;
+  const EVENT_SHOW = `show.bs.${component.modelName}`;
+  const EVENT_HIDDEN = `hidden.bs.${component.modelName}`;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.on(document, EVENT_CLICK_DATA_API, initSelector, function (event) {
       const target = getElementFromSelector(this);
 
@@ -325,7 +325,7 @@ const modalCallback = (component, initSelector) => {
     });
 
     enableDismissTrigger(Modal);
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   SelectorEngine.find(initSelector).forEach((el) => {
@@ -346,16 +346,16 @@ const popoverCallback = (component, initSelector) => {
 };
 
 const offcanvasCallback = (component, initSelector) => {
-  if (callbackInitState.has(component.name)) {
+  if (callbackInitState.has(component.modelName)) {
     return;
   }
 
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
   const OPEN_SELECTOR = '.offcanvas.show';
   const Offcanvas = component;
-  const EVENT_HIDDEN = `hidden.bs.${component.name}`;
-  const EVENT_LOAD_DATA_API = `load.bs.${component.name}.data-api`;
-  const EVENT_RESIZE = `resize.bs.${component.name}`;
+  const EVENT_HIDDEN = `hidden.bs.${component.modelName}`;
+  const EVENT_LOAD_DATA_API = `load.bs.${component.modelName}.data-api`;
+  const EVENT_RESIZE = `resize.bs.${component.modelName}`;
 
   EventHandler.on(document, EVENT_CLICK_DATA_API, initSelector, function (event) {
     const target = getElementFromSelector(this);
@@ -400,15 +400,15 @@ const offcanvasCallback = (component, initSelector) => {
   });
 
   enableDismissTrigger(Offcanvas);
-  callbackInitState.set(component.name, true);
+  callbackInitState.set(component.modelName, true);
 };
 
 const scrollspyCallback = (component, initSelector) => {
-  if (callbackInitState.has(component.name)) {
+  if (callbackInitState.has(component.modelName)) {
     return;
   }
 
-  const EVENT_LOAD_DATA_API = `load.bs.${component.name}.data-api`;
+  const EVENT_LOAD_DATA_API = `load.bs.${component.modelName}.data-api`;
   const ScrollSpy = component;
 
   EventHandler.on(window, EVENT_LOAD_DATA_API, () => {
@@ -417,17 +417,17 @@ const scrollspyCallback = (component, initSelector) => {
     });
   });
 
-  callbackInitState.set(component.name, true);
+  callbackInitState.set(component.modelName, true);
 };
 
 const tabCallback = (component, initSelector) => {
-  const EVENT_LOAD_DATA_API = `load.bs.${component.name}.data-api`;
-  const EVENT_CLICK_DATA_API = `click.bs.${component.name}.data-api`;
+  const EVENT_LOAD_DATA_API = `load.bs.${component.modelName}.data-api`;
+  const EVENT_CLICK_DATA_API = `click.bs.${component.modelName}.data-api`;
   const CLASS_NAME_ACTIVE = 'active';
   const SELECTOR_DATA_TOGGLE_ACTIVE = `.${CLASS_NAME_ACTIVE}[data-mdb-tab-init], .${CLASS_NAME_ACTIVE}[data-mdb-pill-init], .${CLASS_NAME_ACTIVE}[data-mdb-toggle="list"]`;
   const Tab = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.on(document, EVENT_CLICK_DATA_API, initSelector, function (event) {
       if (['A', 'AREA'].includes(this.tagName)) {
         event.preventDefault();
@@ -446,16 +446,16 @@ const tabCallback = (component, initSelector) => {
       });
     });
 
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 };
 
 const toastCallback = (component, initSelector) => {
   const Toast = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     enableDismissTrigger(Toast);
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 
   // MDB init
@@ -467,9 +467,9 @@ const toastCallback = (component, initSelector) => {
 const rippleCallback = (component, initSelector) => {
   const Ripple = component;
 
-  if (!callbackInitState.has(component.name)) {
+  if (!callbackInitState.has(component.modelName)) {
     EventHandler.one(document, 'mousedown', initSelector, Ripple.autoInitial(new Ripple()));
-    callbackInitState.set(component.name, true);
+    callbackInitState.set(component.modelName, true);
   }
 };
 

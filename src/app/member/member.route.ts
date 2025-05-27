@@ -19,7 +19,7 @@ const routes: Routes = [
       {
         path: 'register-form',
         loadComponent: () =>
-          import('./components/form-bootstrap-stepper/bootstrap-stepper-form.component').then(
+          import('./components/member-add/bootstrap-stepper-form.component').then(
             (m) => m.BootstrapStepperFormComponent
           ),
         title: 'AEMUD - Inscription',

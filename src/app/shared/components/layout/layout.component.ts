@@ -1,15 +1,13 @@
 import {Component} from '@angular/core';
 import {RouterOutlet} from '@angular/router';
-import {HeaderComponent} from '../../../core/header/header.component';
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 
 @Component({
   selector: 'app-layout',
   templateUrl: './layout.component.html',
-  styleUrls: ['./layout.component.css'],
+  styleUrls: ['./layout.component.scss'],
   standalone: true,
-  imports: [HeaderComponent, RouterOutlet, AsideBareComponent]
+  imports: [RouterOutlet, AsideBareComponent]
 })
 export class LayoutComponent {
-
 }

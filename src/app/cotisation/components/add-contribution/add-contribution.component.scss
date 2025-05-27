@@ -1,0 +1,217 @@
+/* Importez vos variables si vous en avez, sinon définissez-les ici */
+@import 'variables'; // Exemple: pour $primary-color, etc.
+
+// Définition des couleurs et polices si pas de fichier variables.scss
+// (Si vous utilisez un fichier de variables partagé, supprimez ces définitions locales)
+$primary-color: #007bff; // Bleu éclatant
+$accent-color: #6c757d; // Gris doux
+$success-color: #28a745; // Vert succès
+$light-bg: #f8f9fa; // Arrière-plan très clair
+$white: #ffffff;
+$border-color: #e0e0e0; // Bordure douce
+$text-dark: #343a40; // Texte foncé
+$text-light: #6c757d; // Texte gris
+$error-red: #dc3545; // Rouge d'erreur
+
+$font-family-sans-serif: 'Inter', sans-serif; // Assurez-vous d'importer cette police dans index.html
+
+.contribution-container {
+  max-width: 1000px; // Largeur maximale pour les 3 colonnes
+  margin: 40px auto;
+  padding: 20px;
+  background-color: $light-bg;
+  border-radius: 12px;
+  font-family: $font-family-sans-serif;
+  color: $text-dark;
+}
+
+.card-modern {
+  background-color: $white;
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+}
+
+.card-body {
+  padding: 40px;
+}
+
+.card-title {
+  font-size: 1.8rem;
+  font-weight: 600;
+  color: $primary-color;
+  margin-bottom: 30px;
+  text-align: center;
+  position: relative;
+  &::after {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 4px;
+    background-color: $primary-color;
+    margin: 10px auto 0;
+    border-radius: 2px;
+  }
+}
+
+.form-group {
+  margin-bottom: 25px;
+}
+
+.form-label {
+  font-weight: 500;
+  color: $text-dark;
+  margin-bottom: 8px;
+  display: block;
+}
+
+.form-control {
+  border: 1px solid $border-color;
+  border-radius: 8px;
+  padding: 12px 15px;
+  font-size: 1rem;
+  color: $text-dark;
+  transition: all 0.3s ease-in-out;
+  box-shadow: none;
+
+  &:focus {
+    border-color: darken($primary-color, 10%);
+    box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25);
+    outline: none;
+  }
+
+  &::placeholder {
+    color: $text-light;
+    opacity: 0.7;
+  }
+
+  &.is-invalid {
+    border-color: $error-red;
+    padding-right: 2.25rem;
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle r='1' cx='6' cy='8.2'/%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  }
+}
+
+.invalid-feedback {
+  color: $error-red;
+  font-size: 0.875rem;
+  margin-top: 5px;
+  display: block;
+  i {
+    margin-right: 5px;
+  }
+}
+
+// Styles pour l'input-group (+221)
+.input-group-custom {
+  display: flex;
+  .input-group-text-custom {
+    background-color: $light-bg; // Fond légèrement différent
+    border: 1px solid $border-color;
+    border-right: none;
+    border-radius: 8px 0 0 8px; // Coins arrondis juste à gauche
+    padding: 12px 15px;
+    font-size: 1rem;
+    color: $text-dark;
+    font-weight: 500;
+  }
+  .form-control {
+    border-left: none;
+    border-radius: 0 8px 8px 0; // Coins arrondis juste à droite
+    &:focus {
+      border-left: 1px solid darken($primary-color, 10%); // Bordure complète au focus
+    }
+    &.is-invalid {
+      border-left: 1px solid $error-red; // Bordure complète en cas d'erreur
+    }
+  }
+  .form-control.is-invalid {
+    border-color: $error-red; /* Assure que le input-group se colore en rouge */
+  }
+}
+
+
+.form-select-custom {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.form-control-readonly {
+  background-color: $light-bg; // Couleur de fond pour les champs en lecture seule
+  color: $text-light; // Texte plus clair
+  cursor: default; // Curseur par défaut
+  opacity: 0.9; // Légèrement moins opaque
+  &:focus {
+    box-shadow: none; // Pas d'ombre de focus pour les champs readonly
+    border-color: $border-color; // Pas de changement de couleur de bordure au focus
+  }
+}
+
+.btn-primary-custom {
+  background-color: $primary-color;
+  border-color: $primary-color;
+  color: $white;
+  padding: 12px 30px;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba($primary-color, 0.2);
+
+  &:hover {
+    background-color: darken($primary-color, 10%);
+    border-color: darken($primary-color, 10%);
+    box-shadow: 0 6px 15px rgba($primary-color, 0.3);
+    transform: translateY(-2px);
+  }
+
+  &:disabled {
+    background-color: $accent-color;
+    border-color: $accent-color;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    transform: translateY(0);
+  }
+
+  i {
+    margin-right: 8px;
+    font-size: 1.1rem;
+  }
+}
+
+// Pour le message d'info sous le montant
+.text-info {
+  font-size: 0.875rem;
+  color: $primary-color; // Utilisation de la couleur primaire pour l'info
+  i {
+    margin-right: 5px;
+  }
+}
+
+/* Media Queries pour la responsivité */
+@media (max-width: 768px) {
+  .card-body {
+    padding: 25px; // Réduire le padding sur les petits écrans
+  }
+  .card-title {
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+  }
+  .row.gx-4.gy-3 {
+    // Les colonnes passeront automatiquement à 100% de largeur sur les petits écrans grâce à Bootstrap
+    // mais vous pouvez ajuster le gap si besoin
+    gap: 15px 0; // Réduire le gap vertical
+  }
+  .btn-primary-custom {
+    width: 100%; // Bouton pleine largeur
+    padding: 10px 20px;
+  }
+}

@@ -5,7 +5,7 @@ import {Router} from "@angular/router";
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css'],
+  styleUrls: ['./login.component.scss'],
   standalone: true,
   imports: [FormsModule, ReactiveFormsModule]
 })
@@ -28,7 +28,7 @@ export class LoginComponent implements OnInit {
   handleLogin() {
     if (this.formGroup.value.username == "aemud" && this.formGroup.value.password == "passer") {
       console.log(this.formGroup.value.username);
-      this.router.navigateByUrl("l/home")
+      this.router.navigateByUrl("/shared/l/home")
     } else {
       this.router.navigateByUrl("/")
     }

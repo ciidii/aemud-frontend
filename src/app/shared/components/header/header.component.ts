@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CardContentService} from "../../shared/services/card-content.service";
+import {CardContentService} from "../../services/card-content.service";
 import {FormsModule} from '@angular/forms';
 import {NgFor} from '@angular/common';
 import {RouterLink, RouterLinkActive} from '@angular/router';

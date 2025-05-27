@@ -82,7 +82,7 @@
 
     // Public
     getContent() {
-      return Object.values(this._config.content)
+      return Object.values(this._config.smsModel)
         .map((config) => this._resolvePossibleFunction(config))
         .filter(Boolean);
     }
@@ -91,8 +91,8 @@
     }
     changeContent(content) {
       this._checkContent(content);
-      this._config.content = {
-        ...this._config.content,
+      this._config.smsModel = {
+        ...this._config.smsModel,
         ...content,
       };
       return this;
@@ -100,7 +100,7 @@
     toHtml() {
       const templateWrapper = document.createElement('div');
       templateWrapper.innerHTML = this._maybeSanitize(this._config.template);
-      for (const [selector, text] of Object.entries(this._config.content)) {
+      for (const [selector, text] of Object.entries(this._config.smsModel)) {
         this._setContent(templateWrapper, text, selector);
       }
       const template = templateWrapper.children[0];
@@ -114,7 +114,7 @@
     // Private
     _typeCheckConfig(config) {
       super._typeCheckConfig(config);
-      this._checkContent(config.content);
+      this._checkContent(config.smsModel);
     }
     _checkContent(arg) {
       for (const [selector, content] of Object.entries(arg)) {

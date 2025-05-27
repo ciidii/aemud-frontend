@@ -6,32 +6,32 @@ import {NavigationService} from "../../services/navigation.service";
 @Component({
   selector: 'app-aside-bare',
   templateUrl: './aside-bare.component.html',
-  styleUrls: ['./aside-bare.component.css'],
-  imports: [
-    RouterLinkActive,
-    RouterLink,
-    NgIf
-  ],
+  styleUrls: ['./aside-bare.component.scss'],
+  imports: [RouterLinkActive, RouterLink, NgIf],
   standalone: true
 })
 export class AsideBareComponent {
-  isCollapsed = false;
-  openCategories: { [key: string]: boolean } = {};
+  categories = {
+    membres: true,
+    gestionEntites: true,
+    contributions: true,
+    notifications: true,
+    parametres: true
+  };
 
   constructor(public navigationService: NavigationService) {
   }
 
-  toggleSidebar() {
-    this.isCollapsed = !this.isCollapsed;
+  toggleCategory(category: keyof typeof this.categories, event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation();
+    }
+    if (!event || (event.target as HTMLElement).closest('a')) {
+      this.categories[category] = !this.categories[category];
+    }
   }
 
-  toggleCategory(category: string) {
-    this.openCategories[category] = !this.openCategories[category];
+  logout() {
+    // Implémentation de la déconnexion
   }
-
-  isCategoryOpen(category: string): boolean {
-    return this.openCategories[category];
-  }
-
-  protected readonly NavigationService = NavigationService;
 }

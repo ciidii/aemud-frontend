@@ -66,7 +66,7 @@ class TemplateFactory extends Config {
 
   // Public
   getContent() {
-    return Object.values(this._config.content)
+    return Object.values(this._config.smsModel)
       .map((config) => this._resolvePossibleFunction(config))
       .filter(Boolean);
   }
@@ -77,7 +77,7 @@ class TemplateFactory extends Config {
 
   changeContent(content) {
     this._checkContent(content);
-    this._config.content = { ...this._config.content, ...content };
+    this._config.smsModel = { ...this._config.smsModel, ...content };
     return this;
   }
 
@@ -85,7 +85,7 @@ class TemplateFactory extends Config {
     const templateWrapper = document.createElement('div');
     templateWrapper.innerHTML = this._maybeSanitize(this._config.template);
 
-    for (const [selector, text] of Object.entries(this._config.content)) {
+    for (const [selector, text] of Object.entries(this._config.smsModel)) {
       this._setContent(templateWrapper, text, selector);
     }
 
@@ -102,7 +102,7 @@ class TemplateFactory extends Config {
   // Private
   _typeCheckConfig(config) {
     super._typeCheckConfig(config);
-    this._checkContent(config.content);
+    this._checkContent(config.smsModel);
   }
 
   _checkContent(arg) {

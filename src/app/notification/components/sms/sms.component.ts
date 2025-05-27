@@ -24,7 +24,7 @@ interface SMS {
     SendSmsComponent,
     ScheduleSmsComponent
   ],
-  styleUrls: ['./sms.component.css']
+  styleUrls: ['./sms.component.scss']
 })
 export class SmsComponent {
   smsList: SMS[] = [
@@ -101,11 +101,9 @@ export class SmsComponent {
   ];
 
   // Simulation du solde des SMS
-  smsBalance: number = 150; // Exemple de solde
-
-  // Pagination
-  currentPage: number = 1; // Page actuelle
-  itemsPerPage: number = 5; // Nombre d'éléments par page
+  smsBalance: number = 150;
+  currentPage: number = 1;
+  itemsPerPage: number = 5;
 
   @ViewChild(SendSmsComponent) sendSmsModal?: SendSmsComponent;
   @ViewChild(ScheduleSmsComponent) scheduleSmsModal?: ScheduleSmsComponent;

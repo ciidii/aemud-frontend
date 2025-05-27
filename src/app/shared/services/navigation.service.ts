@@ -13,6 +13,7 @@ export class NavigationService {
   public readonly MEMBER_DETAILS = `${this.MEMBERS}/member-details`;
   public readonly MEMBER_REGISTRATION = `${this.MEMBERS}/member-registration`;
   public readonly MEMBER_ADD_FORM = `${this.MEMBERS}/register-form`;
+  public readonly MEMBER_DASHBOARD = `${this.MEMBERS}/list-contribution`;
 
   // Chemins pour les configurations
   public readonly CONFIGURATIONS = '/configurations/l/';

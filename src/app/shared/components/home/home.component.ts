@@ -6,7 +6,7 @@ import {NgForOf} from "@angular/common";
 @Component({
   selector: 'app-shell',
   templateUrl: './home.component.html',
-  styleUrls: ['./home.component.css'],
+  styleUrls: ['./home.component.scss'],
   imports: [
     RouterLink,
     NgForOf

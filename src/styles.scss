@@ -1,80 +1,33 @@
-/* You can add global styles to this file, and also import other style files */
-@import "assets/scss/_variables.scss";
+// src/styles.scss
+
+@import 'variables';
 @import "bootstrap-icons/font/bootstrap-icons.css";
 @import 'ngx-toastr/toastr';
-@import 'bootstrap/scss/bootstrap.scss';
 
-.html,body{
-  width: 100%;
-  margin: auto;
-  overflow-x: hidden;
-  height: 100vh;
-  background-image: url("/assets/background/fond.png");
-  background-repeat: no-repeat;
-  background-size: cover;
-  background-position: center;
-  background-attachment: fixed;
-}
-.btn-outline-secondary {
-  border: 0.125rem solid #278F8F;
-  background-color: rgba(208, 156, 10, 1);
-  color: white;
-  height: 2rem;
-  padding: 0.25rem 1rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+// Styles globaux
+body {
+  background-color: $background-color;
+  color: $text-color;
 }
 
-.btn-secondary {
-  background-color: #278F8F;
-  border: #278F8F;
-  height: 2rem;
-  padding: 0.25rem 1rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.btn-outline-success {
-  border: 0.125rem solid rgba(208, 156, 10, 1);
-  background-color: #278F8F;
-  color: white;
-  height: 2rem;
-  padding: 0.25rem 1rem;
-  font-size: 1rem;
-  border-radius: 0.5rem;
-
-  display: flex;
-  align-items: center;
-  justify-content: center;
+a {
+  color: $primary;
 
   &:hover {
-    background-color: rgba(208, 156, 10, 1);
+    color: $hover-color;
   }
 }
 
-/* Responsivité */
-@media (max-width: 768px) {
-  .btn-outline-secondary, .btn-secondary, .btn-outline-success {
-    height: 1.75rem;
-    padding: 0.2rem 0.8rem;
-    font-size: 0.875rem;
+// Thème sombre
+.dark-theme {
+  background-color: $dark-background-color;
+  color: $dark-text-color;
+
+  a {
+    color: lighten($primary, 10%);
+
+    &:hover {
+      color: $dark-hover-color;
+    }
   }
 }
-
-@media (max-width: 576px) {
-  .btn-outline-secondary, .btn-secondary, .btn-outline-success {
-    height: 1.5rem;
-    padding: 0.15rem 0.6rem;
-    font-size: 0.75rem;
-  }
-}
-
-

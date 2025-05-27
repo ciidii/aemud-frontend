@@ -12,7 +12,6 @@
     </ng-template>
   </div>
 
-
   <div class="container mt-4">
     <div *ngIf="displayForm" class="card shadow-sm mb-4">
       <div class="card-header">
@@ -23,7 +22,6 @@
           <div class="mb-3">
             <label for="lebelle" class="form-label">Libellé de la Bourse</label>
             <input type="text" id="lebelle" class="form-control" formControlName="lebelle">
-            <!-- Correction : Accéder aux erreurs avec ['propriété'] -->
             <div *ngIf="bourseForm.get('lebelle')?.invalid && bourseForm.get('lebelle')?.touched" class="text-danger">
               <small *ngIf="bourseForm.get('lebelle')?.errors?.['required']">Le libellé est requis.</small>
               <small *ngIf="bourseForm.get('lebelle')?.errors?.['minlength']">Le libellé doit avoir au moins 3

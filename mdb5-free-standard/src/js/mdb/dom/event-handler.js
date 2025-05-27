@@ -234,7 +234,7 @@ const EventHandler = {
 
   extend(element, events, componentName) {
     events.forEach((event) => {
-      EventHandler.on(element, `${event.name}.bs.${componentName}`, (e) => {
+      EventHandler.on(element, `${event.modelName}.bs.${componentName}`, (e) => {
         const eventParameters = {};
         if (event.parametersToCopy) {
           event.parametersToCopy.forEach((param) => {
@@ -244,7 +244,7 @@ const EventHandler = {
 
         const mdbEvent = EventHandler.trigger(
           element,
-          `${event.name}.mdb.${componentName}`,
+          `${event.modelName}.mdb.${componentName}`,
           eventParameters
         );
 

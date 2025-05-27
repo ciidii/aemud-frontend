@@ -1,10 +1,10 @@
 import {Component, OnInit, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {AppStateService} from "../../../core/services/app-state.service";
-import {MessageModel} from "../../../core/models/message.model";
-import {NotificationService} from "../../../notification/core/notification.service";
+import {AppStateService} from "../../core/services/app-state.service";
+import {SmsModel} from "../../core/models/sms.model";
+import {NotificationService} from "../../notification/core/notification.service";
 import {ToastrService} from "ngx-toastr";
-import {MemberModel} from "../../../core/models/member.model-copy";
+import {MemberModel} from "../../core/models/member.model-copy";
 
 @Component({
   selector: 'app-group-for-notification',
@@ -13,13 +13,13 @@ import {MemberModel} from "../../../core/models/member.model-copy";
     ReactiveFormsModule
   ],
   templateUrl: './group-for-notification.component.html',
-  styleUrl: './group-for-notification.component.css'
+  styleUrl: './group-for-notification.component.scss'
 })
 export class GroupForNotificationComponent implements OnInit {
   openPopup = signal(false);
   formGroup!: FormGroup;
   tabMemberNum!: string[];
-  message: MessageModel = {
+  message: SmsModel = {
     message: '',
     recipientNumbers: []
   };

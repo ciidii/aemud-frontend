@@ -2,7 +2,7 @@ import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../environments/environment.development";
 import {AppStateService} from "../../core/services/app-state.service";
-import {MessageModel} from "../../core/models/message.model";
+import {SmsModel} from "../../core/models/sms.model";
 
 @Injectable({
   providedIn: 'root'
@@ -13,7 +13,7 @@ export class NotificationService {
   constructor(private httpClient: HttpClient, private appState: AppStateService) {
   }
 
-  sendNotification(message: MessageModel) {
+  sendNotification(message: SmsModel) {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }

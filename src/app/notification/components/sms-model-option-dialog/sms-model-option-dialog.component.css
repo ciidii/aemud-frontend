@@ -1,0 +1,31 @@
+.context-menu {
+  position: fixed; /* Essential for positioning relative to the viewport */
+  background-color: white;
+  border: 1px solid #e0e0e0; /* Softer border */
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); /* More prominent shadow for depth */
+  z-index: 2000; /* High z-index to ensure it's always on top of other elements, including main modal */
+  min-width: 150px;
+  padding: 8px 0; /* Padding around items */
+  font-family: Arial, sans-serif; /* Use a common font */
+  box-sizing: border-box; /* Include padding/border in element's total width/height */
+
+  /* Ensure visibility explicitly */
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.context-menu-item {
+  padding: 10px 15px; /* Comfortable padding for click area */
+  cursor: pointer;
+  font-size: 14px;
+  color: #333; /* Darker text for readability */
+  white-space: nowrap; /* Prevent text wrapping */
+  transition: background-color 0.2s ease, color 0.2s ease; /* Smooth transition on hover */
+}
+
+.context-menu-item:hover {
+  background-color: #f0f0f0; /* Light hover background */
+  color: #000; /* Slightly darker text on hover */
+}

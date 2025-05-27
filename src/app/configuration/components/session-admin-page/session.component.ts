@@ -16,7 +16,7 @@ import {SessionModel} from "../../../core/models/session.model";
     NgClass
   ],
   templateUrl: './session.component.html',
-  styleUrl: './session.component.css'
+  styleUrls: ['../entity.style.scss'],
 })
 export class SessionComponent implements OnInit {
   sessions!: SessionModel[]

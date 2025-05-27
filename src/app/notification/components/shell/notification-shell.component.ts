@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {HeaderComponent} from "../../../core/header/header.component";
+import {HeaderComponent} from "../../../shared/components/header/header.component";
 import {NgForOf} from "@angular/common";
 import {RouterLink, RouterLinkActive, RouterOutlet} from "@angular/router";
 import {LayoutComponent} from "../../../shared/components/layout/layout.component";

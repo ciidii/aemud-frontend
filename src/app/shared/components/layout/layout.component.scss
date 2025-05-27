@@ -1,14 +1,49 @@
-
+@import "variables";
+.app-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh; /* Prend toute la hauteur de la vue */
+  background-color: $light; // Utilisation de la couleur claire pour le fond
+}
 
 .main-content {
   display: flex;
-  flex: 1; /* Prend tout l'espace disponible */
+  flex: 1;
 }
 
-/* Styles pour le contenu principal */
 .content {
   flex: 1; /* Prend tout l'espace restant */
   padding: 20px; /* Espacement intérieur */
   overflow-y: auto; /* Permet le défilement si le contenu est trop long */
-  margin-left: 250px;
+  margin-left: 250px; /* Marge pour la sidebar */
+  background-color: white; /* Fond blanc pour le contenu */
+  color: $dark; /* Utilisation de la couleur sombre pour le texte */
+}
+
+/* Styles pour la sidebar */
+app-aside-bare {
+  width: 250px; /* Largeur de la sidebar */
+  height: 100vh; /* Hauteur totale de la vue */
+  background-color: $primary; /* Utilisation de la couleur principale pour la sidebar */
+  color: white; /* Texte en blanc pour contraster avec le fond */
+  position: fixed; /* Fixer la sidebar */
+  top: 0;
+  left: 0;
+  overflow-y: auto; /* Permet le défilement si le contenu est trop long */
+  transition: transform 0.3s ease-in-out; /* Animation pour la sidebar */
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .content {
+    margin-left: 0; /* Supprimer la marge pour la sidebar sur les petits écrans */
+  }
+
+  app-aside-bare {
+    transform: translateX(-100%); /* Cacher la sidebar par défaut */
+  }
+
+  app-aside-bare.open {
+    transform: translateX(0); /* Afficher la sidebar lorsqu'elle est ouverte */
+  }
 }

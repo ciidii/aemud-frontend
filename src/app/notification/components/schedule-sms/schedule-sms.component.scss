@@ -1,14 +1,15 @@
-/* Styles pour la modale */
+@import "variables";
+
 .modal-content {
   background-color: white; // Fond blanc pour la modale
-border-radius: 0.5rem;
+  border-radius: 0.5rem;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .modal-header {
   background-color: $primary; // Utilisation de la couleur principale
-color: white; // Texte en blanc pour contraster avec le fond
-padding: 1rem;
+  color: white; // Texte en blanc pour contraster avec le fond
+  padding: 1rem;
   border-top-left-radius: 0.5rem;
   border-top-right-radius: 0.5rem;
 }
@@ -43,18 +44,18 @@ padding: 1rem;
 /* Styles pour les champs de formulaire */
 .form-label {
   color: $primary; // Utilisation de la couleur principale pour les labels
-font-weight: bold;
+  font-weight: bold;
 }
 
 .form-control {
   border: 1px solid $primary; // Bordure de la couleur principale
-border-radius: 0.25rem;
+  border-radius: 0.25rem;
   padding: 0.5rem;
   transition: border-color 0.3s ease, box-shadow 0.3s ease;
 
   &:focus {
     border-color: $secondary; // Bordure de la couleur secondaire au focus
-  box-shadow: 0 0 0 0.2rem rgba($secondary, 0.25); // Ombre portée au focus
+    box-shadow: 0 0 0 0.2rem rgba($secondary, 0.25); // Ombre portée au focus
   }
 }
 
@@ -69,20 +70,20 @@ textarea.form-control {
 
   &.btn-secondary {
     background-color: $light; // Utilisation de la couleur claire
-  color: $dark; // Texte de la couleur sombre
+    color: $dark; // Texte de la couleur sombre
 
-  &:hover {
-    background-color: darken($light, 10%); // Assombrir la couleur claire au survol
-  }
+    &:hover {
+      background-color: darken($light, 10%); // Assombrir la couleur claire au survol
+    }
   }
 
   &.btn-primary {
     background-color: $primary; // Utilisation de la couleur principale
-  color: white; // Texte en blanc
+    color: white; // Texte en blanc
 
-  &:hover {
-    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
-  }
+    &:hover {
+      background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+    }
   }
 }
 

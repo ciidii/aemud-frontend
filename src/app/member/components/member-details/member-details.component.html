@@ -501,14 +501,14 @@
                 </div>
                 <div class="d-flex justify-content-end mt-3">
                   <button class="btn btn-outline-success me-2">Enregistrer</button>
-                  <button class="btn btn-outline-secondary" (click)="toggleEditMembershipInfo()">Annuler</button>
+                  <button class="btn btn-outline-secondary" (click)="toggleEditingAcademicInfo()">Annuler</button>
                 </div>
               </div>
             </div>
           </form>
         </ng-template>
 
-      </div>
+    </div>
     </div>
     <div class="accordion-item">
       <h2 class="accordion-header">
@@ -543,14 +543,17 @@
                     <div class="col-md-6">
                       <div class="mb-3">
                         <label for="numberPhone" class="form-label">Numéro de Téléphone</label>
-                        <input
-                          type="text"
-                          id="numberPhone"
-                          formControlName="numberPhone"
-                          class="form-control"
-                          [ngClass]="{ 'is-invalid': contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched }"
-                          placeholder="+221XXXXXXXXX"
-                        />
+                        <div class="input-group">
+                          <span class="input-group-text">+221</span>
+                          <input
+                            type="text"
+                            id="numberPhone"
+                            formControlName="numberPhone"
+                            class="form-control"
+                            [ngClass]="{ 'is-invalid': contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched }"
+                            placeholder="XXXXXXXXX"
+                          />
+                        </div>
                         <div *ngIf="contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched"
                              class="invalid-feedback">
                           Numéro de téléphone invalide. Format requis : +221XXXXXXXXX.
@@ -625,14 +628,17 @@
                         <div class="row mt-3">
                           <div class="col-md-6">
                             <label for="requiredNumberPhone{{ i }}" class="form-label">Téléphone Principal</label>
-                            <input
-                              type="text"
-                              id="requiredNumberPhone{{ i }}"
-                              formControlName="requiredNumberPhone"
-                              class="form-control"
-                              [ngClass]="{ 'is-invalid': person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched }"
-                              placeholder="+221XXXXXXXXX"
-                            />
+                            <div class="input-group">
+                              <span class="input-group-text">+221</span>
+                              <input
+                                type="text"
+                                id="requiredNumberPhone{{ i }}"
+                                formControlName="requiredNumberPhone"
+                                class="form-control"
+                                [ngClass]="{ 'is-invalid': person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched }"
+                                placeholder="XXXXXXXXX"
+                              />
+                            </div>
                             <div
                               *ngIf="person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched"
                               class="invalid-feedback">
@@ -642,13 +648,16 @@
 
                           <div class="col-md-6">
                             <label for="optionalNumberPhone{{ i }}" class="form-label">Téléphone Secondaire</label>
-                            <input
-                              type="text"
-                              id="optionalNumberPhone{{ i }}"
-                              formControlName="optionalNumberPhone"
-                              class="form-control"
-                              placeholder="+221XXXXXXXXX"
-                            />
+                            <div class="input-group">
+                              <span class="input-group-text">+221</span>
+                              <input
+                                type="text"
+                                id="optionalNumberPhone{{ i }}"
+                                formControlName="optionalNumberPhone"
+                                class="form-control"
+                                placeholder="XXXXXXXXX"
+                              />
+                            </div>
                           </div>
                         </div>
 
@@ -688,7 +697,7 @@
                   </div>
                   <div class="d-flex justify-content-end mt-3">
                     <button class="btn btn-outline-success me-2">Enregistrer</button>
-                    <button class="btn btn-outline-secondary" (click)="toggleEditMembershipInfo()">Annuler</button>
+                    <button class="btn btn-outline-secondary" (click)="toggleEditingContactInfo()">Annuler</button>
                   </div>
                 </div>
               </div>

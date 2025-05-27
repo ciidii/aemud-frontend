@@ -1,4 +1,6 @@
 /* Styles généraux */
+@import "variables"; // Import des variables de couleur
+
 .container {
   max-width: 1200px;
 }
@@ -6,7 +8,7 @@
 /* Titre */
 h2 {
   font-size: 1.75rem;
-  color: #2c3e50;
+  color: $dark; // Utilisation de la couleur sombre
 }
 
 /* Boutons d'action */
@@ -15,26 +17,46 @@ h2 {
   padding: 10px 20px;
   border-radius: 8px;
   transition: all 0.2s ease-in-out;
-}
 
-.btn-primary {
-  background-color: #007bff;
-  border-color: #007bff;
-}
+  &.btn-primary {
+    background-color: $primary; // Couleur principale
+    border-color: $primary;
 
-.btn-primary:hover {
-  background-color: #0056b3;
-  border-color: #0056b3;
-}
+    &:hover {
+      background-color: darken($primary, 10%);
+      border-color: darken($primary, 10%);
+    }
+  }
 
-.btn-success {
-  background-color: #28a745;
-  border-color: #28a745;
-}
+  &.btn-success {
+    background-color: $success; // Couleur de succès
+    border-color: $success;
 
-.btn-success:hover {
-  background-color: #218838;
-  border-color: #218838;
+    &:hover {
+      background-color: darken($success, 10%);
+      border-color: darken($success, 10%);
+    }
+  }
+
+  &.btn-outline-danger {
+    border-color: $danger; // Couleur de danger
+    color: $danger;
+
+    &:hover {
+      background-color: $danger;
+      color: white;
+    }
+  }
+
+  &.btn-outline-primary {
+    border-color: $primary; // Couleur principale
+    color: $primary;
+
+    &:hover {
+      background-color: $primary;
+      color: white;
+    }
+  }
 }
 
 /* Tableau */
@@ -43,127 +65,75 @@ h2 {
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-}
 
-.card-header {
-  background-color: #f8f9fa;
-  font-size: 1.1rem;
-  padding: 16px;
-  border-bottom: 1px solid #e9ecef;
+  .card-header {
+    background-color: $light; // Couleur claire
+    font-size: 1.1rem;
+    border-bottom: 1px solid darken($light, 10%);
+  }
 }
 
 .table {
   margin-bottom: 0;
-}
 
-.table thead th {
-  font-weight: 600;
-  background-color: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
-}
+  thead th {
+    font-weight: 600;
+    background-color: $light; // Couleur claire
+    border-bottom: 1px solid darken($light, 10%);
+  }
 
-.table tbody tr {
-  transition: background-color 0.2s ease-in-out;
-}
+  tbody tr {
+    transition: background-color 0.2s ease-in-out;
 
-.table tbody tr:hover {
-  background-color: #f8f9fa;
+    &:hover {
+      background-color: rgba($primary, 0.05); // Effet de survol subtil
+    }
+  }
 }
 
 /* Badges */
 .badge {
   font-size: 0.9rem;
   padding: 6px 12px;
-}
 
-.bg-success {
-  background-color: #28a745 !important;
-}
-
-.bg-warning {
-  background-color: #ffc107 !important;
-}
-
-.bg-danger {
-  background-color: #dc3545 !important;
-}
-
-/* Bouton Annuler */
-.btn-outline-danger {
-  border-color: #dc3545;
-  color: #dc3545;
-}
-
-.btn-outline-danger:hover {
-  background-color: #dc3545;
-  color: white;
-}
-
-/* Icônes */
-.bi {
-  font-size: 1rem;
-  vertical-align: middle;
+  &.bg-success { background-color: $success !important; }
+  &.bg-warning { background-color: $warning !important; }
+  &.bg-danger { background-color: $danger !important; }
 }
 
 /* Styles pour l'affichage du solde */
 .card-title {
   font-size: 1.25rem;
   font-weight: 600;
-}
-
-.card-text {
-  font-size: 0.9rem;
+  color: $dark; // Couleur sombre
 }
 
 .display-4 {
   font-size: 2.5rem;
-  color: #007bff;
+  color: $primary; // Couleur principale
 }
 
-/* Styles pour le bouton de recharge */
-.btn-outline-primary {
-  border-color: #007bff;
-  color: #007bff;
-  transition: all 0.2s ease-in-out;
-}
-
-.btn-outline-primary:hover {
-  background-color: #007bff;
-  color: white;
-}
-
-.bi-arrow-repeat {
-  font-size: 1rem;
-}
-
-/* Styles pour la pagination */
+/* Pagination */
 .pagination {
-  margin: 0;
+  .page-item {
+    &.active .page-link {
+      background-color: $primary; // Couleur principale
+      border-color: $primary;
+    }
+
+    .page-link {
+      color: $primary; // Couleur principale
+
+      &:hover {
+        color: darken($primary, 10%);
+        background-color: rgba($primary, 0.1); // Fond léger au survol
+      }
+    }
+  }
 }
 
-.page-item {
-  cursor: pointer;
-}
-
-.page-item.disabled .page-link {
-  pointer-events: none;
-  opacity: 0.6;
-}
-
-.page-item.active .page-link {
-  background-color: #007bff;
-  border-color: #007bff;
-  color: white;
-}
-
-.page-link {
-  color: #007bff;
-  border: 1px solid #dee2e6;
-  padding: 8px 12px;
-  transition: all 0.2s ease-in-out;
-}
-
-.page-link:hover {
-  background-color: #f8f9fa;
-  color: #0056b3;
+/* Icônes */
+.bi {
+  font-size: 1rem;
+  vertical-align: middle;
 }
