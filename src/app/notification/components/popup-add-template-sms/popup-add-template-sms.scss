@@ -1,0 +1,13 @@
+/* Votre SCSS actuel est parfait et ne nécessite pas de modifications pour ces changements HTML/TS */
+/* Assurez-vous juste que les styles pour .invalid-feedback existent et sont cohérents */
+
+/* Exemple de style pour .invalid-feedback si vous ne l'aviez pas */
+.invalid-feedback {
+  color: $error-red; /* Assurez-vous que $error-red est défini */
+  font-size: 0.875rem;
+  margin-top: 5px;
+  display: block;
+  i {
+    margin-right: 5px;
+  }
+}

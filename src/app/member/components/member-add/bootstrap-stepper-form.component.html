@@ -1,0 +1,616 @@
+<div class="container my-5">
+  <h2 class="mb-4 text-center">Ajouter un Nouveau Membre</h2>
+  <form [formGroup]="memberForm" (ngSubmit)="onSubmit()" novalidate>
+    <!-- Personal Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Informations personnelles</h5>
+      </div>
+      <div class="card-body" formGroupName="personalInfo">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="name" class="form-label">Nom</label>
+              <input
+                type="text"
+                id="name"
+                formControlName="name"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched }"
+                placeholder="Entrez votre nom"
+              />
+              <div
+                *ngIf="personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched"
+                class="invalid-feedback">
+                Le nom est requis et doit comporter au moins 2 caractères.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="firstname" class="form-label">Prénom</label>
+              <input
+                type="text"
+                id="firstname"
+                formControlName="firstname"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched }"
+                placeholder="Entrez votre prénom"
+              />
+              <div
+                *ngIf="personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched"
+                class="invalid-feedback">
+                Le prénom est requis et doit comporter au moins 2 caractères.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="nationality" class="form-label">Nationalité</label>
+              <input
+                type="text"
+                id="nationality"
+                formControlName="nationality"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched }"
+                placeholder="Entrez votre nationalité"
+              />
+              <div
+                *ngIf="personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched"
+                class="invalid-feedback">
+                La nationalité est requise.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="birthday" class="form-label">Date de naissance</label>
+              <input
+                type="date"
+                id="birthday"
+                formControlName="birthday"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched }"
+                [max]="maxDate"
+              />
+              <div
+                *ngIf="personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched"
+                class="invalid-feedback">
+                La date de naissance est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="maritalStatus" class="form-label">Situation Matrimoniale</label>
+              <select id="maritalStatus" formControlName="maritalStatus" class="form-control"
+                      [ngClass]="{ 'is-invalid': personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched }">
+                <option value="" disabled selected>Sélectionnez</option>
+                <option value="MARRIED">Célibataire</option>
+                <option value="SINGLE">Marié</option>
+              </select>
+              <div
+                *ngIf="personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched"
+                class="invalid-feedback">
+                L'état civil est requis.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Membership Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Informations d'Adhésion</h5>
+      </div>
+      <div class="card-body" formGroupName="membershipInfo">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="yearOfBac" class="form-label">Année de bac</label>
+              <input
+                id="yearOfBac"
+                formControlName="yearOfBac"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('yearOfBac')?.invalid && membershipInfo.get('yearOfBac')?.touched }"
+                placeholder="Entrez l'année d'obtention du bac"
+              />
+              <div
+                *ngIf="membershipInfo.get('yearOfBac')?.invalid && membershipInfo.get('yearOfBac')?.touched"
+                class="invalid-feedback">
+                L'année d'obtention du bac est requise.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="bacSeries" class="form-label">BAC: Série</label>
+              <select
+                id="bacSeries"
+                formControlName="bacSeries"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('bacSeries')?.invalid && membershipInfo.get('bacSeries')?.touched }"
+              >
+                <option value="" disabled selected>-- Sélectionnez votre série --</option>
+                <option value="S1">Série S1</option>
+                <option value="S2">Série S2</option>
+                <option value="S3">Série S3</option>
+                <option value="L1">Série L'1</option>
+                <option value="L2">Série L2</option>
+                <option value="Technique">Technique</option>
+                <option value="G">Série G</option>
+              </select>
+              <div
+                *ngIf="membershipInfo.get('bacSeries')?.invalid && membershipInfo.get('bacSeries')?.touched"
+                class="invalid-feedback">
+                Veuillez sélectionner une série valide pour votre BAC.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="bacMention" class="form-label">BAC: Mention</label>
+              <select
+                id="bacMention"
+                formControlName="bacMention"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('bacMention')?.invalid && membershipInfo.get('bacMention')?.touched }"
+              >
+                <option value="" disabled selected>-- Sélectionnez votre mention --</option>
+                <option value="Très Bien">Très Bien</option>
+                <option value="Bien">Bien</option>
+                <option value="Assez Bien">Assez Bien</option>
+                <option value="Passable">Passable</option>
+                <option value="Sans Mention">Sans Mention</option>
+              </select>
+              <div
+                *ngIf="membershipInfo.get('bacMention')?.invalid && membershipInfo.get('bacMention')?.touched"
+                class="invalid-feedback">
+                Veuillez sélectionner une mention valide pour votre BAC.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="legacyInstitution" class="form-label">Etablissement d'origine</label>
+              <input
+                id="legacyInstitution"
+                formControlName="legacyInstitution"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('legacyInstitution')?.invalid && membershipInfo.get('legacyInstitution')?.touched }"
+                placeholder="Entrez l'établissement d'origine"
+              />
+              <div
+                *ngIf="membershipInfo.get('legacyInstitution')?.invalid && membershipInfo.get('legacyInstitution')?.touched"
+                class="invalid-feedback">
+                L'Etablissement d'origine est obligatoire
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="aemudCourses" class="form-label">Cours AEMUD</label>
+              <input
+                type="text"
+                id="aemudCourses"
+                formControlName="aemudCourses"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('aemudCourses')?.invalid && membershipInfo.get('aemudCourses')?.touched }"
+                placeholder="Entrez les cours AEMUD"
+              />
+              <div
+                *ngIf="membershipInfo.get('aemudCourses')?.invalid && membershipInfo.get('aemudCourses')?.touched"
+                class="invalid-feedback">
+                Les cours AEMUD sont requis.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="otherCourses" class="form-label">Autres cours</label>
+              <input
+                type="text"
+                id="otherCourses"
+                formControlName="otherCourses"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('otherCourses')?.invalid && membershipInfo.get('otherCourses')?.touched }"
+                placeholder="Entrez d'autres cours"
+              />
+              <div
+                *ngIf="membershipInfo.get('otherCourses')?.invalid && membershipInfo.get('otherCourses')?.touched"
+                class="invalid-feedback">
+                Les autres cours sont requis.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="participatedActivity" class="form-label">Activité Participée</label>
+              <input
+                type="text"
+                id="participatedActivity"
+                formControlName="participatedActivity"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('participatedActivity')?.invalid && membershipInfo.get('participatedActivity')?.touched }"
+                placeholder="Entrez l'activité participée"
+              />
+              <div
+                *ngIf="membershipInfo.get('participatedActivity')?.invalid && membershipInfo.get('participatedActivity')?.touched"
+                class="invalid-feedback">
+                L'activité est requise.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="politicOrganisation" class="form-label">Organisation Politique</label>
+              <input
+                type="text"
+                id="politicOrganisation"
+                formControlName="politicOrganisation"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': membershipInfo.get('politicOrganisation')?.invalid && membershipInfo.get('politicOrganisation')?.touched }"
+                placeholder="Entrez l'organisation politique"
+              />
+              <div
+                *ngIf="membershipInfo.get('politicOrganisation')?.invalid && membershipInfo.get('politicOrganisation')?.touched"
+                class="invalid-feedback">
+                L'organisation politique est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="commission" class="form-label">Commission</label>
+              <select id="commission" formControlName="commission" class="form-control">
+                <option value="" disabled selected>Sélectionnez une commission</option>
+                <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="clubs" class="form-label">Club</label>
+              <select id="clubs" formControlName="clubs" class="form-control">
+                <option value="" disabled selected>Sélectionnez un club</option>
+                <option *ngFor="let club of clubs" value="{{club.id}}">{{ club.name }}</option>
+              </select>
+            </div>
+          </div>
+          <div class="col-md-4">
+            <div class="mb-3">
+              <label for="bourse" class="form-label">Bourse</label>
+              <select id="bourse" formControlName="bourse" class="form-control">
+                <option value="" disabled selected>Sélectionnez une bourse</option>
+                <option *ngFor="let bourse of bourses" value="{{bourse.bourseId}}">{{ bourse.lebelle }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Academic Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Informations Académiques</h5>
+      </div>
+      <div class="card-body" formGroupName="academicInfo">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="studiesLevel" class="form-label">Niveau d'étude</label>
+              <input
+                type="text"
+                id="studiesLevel"
+                formControlName="studiesLevel"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': academicInfo.get('studiesLevel')?.invalid && academicInfo.get('studiesLevel')?.touched }"
+                placeholder="Entrez le niveau d'étude"
+              />
+              <div
+                *ngIf="academicInfo.get('studiesLevel')?.invalid && academicInfo.get('studiesLevel')?.touched"
+                class="invalid-feedback">
+                Le niveau d'étude est requis.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="institutionName" class="form-label">Université</label>
+              <input
+                type="text"
+                id="institutionName"
+                formControlName="institutionName"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': academicInfo.get('institutionName')?.invalid && academicInfo.get('institutionName')?.touched }"
+                placeholder="Nom de l'université"
+              />
+              <div
+                *ngIf="academicInfo.get('institutionName')?.invalid && academicInfo.get('institutionName')?.touched"
+                class="invalid-feedback">
+                Le nom de l'université est requis et doit comporter au moins 3 caractères.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="studiesDomain" class="form-label">Domaine d'études</label>
+              <input
+                type="text"
+                id="studiesDomain"
+                formControlName="studiesDomain"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': academicInfo.get('studiesDomain')?.invalid && academicInfo.get('studiesDomain')?.touched }"
+                placeholder="Entrez le domaine d'études"
+              />
+              <div
+                *ngIf="academicInfo.get('studiesDomain')?.invalid && academicInfo.get('studiesDomain')?.touched"
+                class="invalid-feedback">
+                Le domaine d'études est requis et doit comporter au moins 3 caractères.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Address Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Informations d'Adresse</h5>
+      </div>
+      <div class="card-body" formGroupName="addressInfo">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="addressInDakar" class="form-label">Adresse à Dakar</label>
+              <input
+                type="text"
+                id="addressInDakar"
+                formControlName="addressInDakar"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': memberForm.get('addressInfo.addressInDakar')?.invalid && memberForm.get('addressInfo.addressInDakar')?.touched }"
+                placeholder="Entrez votre adresse à Dakar"
+              />
+              <div
+                *ngIf="memberForm.get('addressInfo.addressInDakar')?.invalid && memberForm.get('addressInfo.addressInDakar')?.touched"
+                class="invalid-feedback">
+                L'adresse à Dakar est requise.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="holidayAddress" class="form-label">Adresse de vacances</label>
+              <input
+                type="text"
+                id="holidayAddress"
+                formControlName="holidayAddress"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': memberForm.get('addressInfo.holidayAddress')?.invalid && memberForm.get('addressInfo.holidayAddress')?.touched }"
+                placeholder="Entrez votre adresse de vacances"
+              />
+              <div
+                *ngIf="memberForm.get('addressInfo.holidayAddress')?.invalid && memberForm.get('addressInfo.holidayAddress')?.touched"
+                class="invalid-feedback">
+                L'adresse de vacances est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-12">
+            <div class="mb-3">
+              <label for="addressToCampus" class="form-label">Adresse au campus</label>
+              <input
+                type="text"
+                id="addressToCampus"
+                formControlName="addressToCampus"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': memberForm.get('addressInfo.addressToCampus')?.invalid && memberForm.get('addressInfo.addressToCampus')?.touched }"
+                placeholder="Entrez votre adresse au campus"
+              />
+              <div
+                *ngIf="memberForm.get('addressInfo.addressToCampus')?.invalid && memberForm.get('addressInfo.addressToCampus')?.touched"
+                class="invalid-feedback">
+                L'adresse au campus est requise.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Info Section -->
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="mb-0">Informations de Contact</h5>
+      </div>
+      <div class="card-body" formGroupName="contactInfo">
+        <div class="row">
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="numberPhone" class="form-label">Numéro de Téléphone</label>
+              <div class="input-group">
+                <span class="input-group-text">+221</span>
+                <input
+                  type="text"
+                  id="numberPhone"
+                  formControlName="numberPhone"
+                  class="form-control"
+                  [ngClass]="{ 'is-invalid': contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched }"
+                  placeholder="XXXXXXXXX"
+                />
+              </div>
+              <div *ngIf="contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched"
+                   class="invalid-feedback">
+                Numéro de téléphone invalide. Format requis : +221XXXXXXXXX.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <div class="mb-3">
+              <label for="email" class="form-label">Adresse Email</label>
+              <input
+                type="email"
+                id="email"
+                formControlName="email"
+                class="form-control"
+                [ngClass]="{ 'is-invalid': contactInfo.get('email')?.invalid && contactInfo.get('email')?.touched }"
+                placeholder="Entrez l'adresse email"
+              />
+              <div *ngIf="contactInfo.get('email')?.invalid && contactInfo.get('email')?.touched"
+                   class="invalid-feedback">
+                Adresse email invalide.
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Person To Call Section -->
+        <div class="mt-4">
+          <h6 class="mb-3">Personnes à Contacter</h6>
+          <div formArrayName="personToCalls">
+            <div *ngFor="let person of personToCalls.controls; let i = index;" [formGroupName]="i"
+                 class="card mb-3 p-3">
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="lastname{{ i }}" class="form-label">Nom</label>
+                    <input
+                      type="text"
+                      id="lastname{{ i }}"
+                      formControlName="lastname"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': person.get('lastname')?.invalid && person.get('lastname')?.touched }"
+                      placeholder="Entrez le nom"
+                    />
+                    <div *ngIf="person.get('lastname')?.invalid && person.get('lastname')?.touched"
+                         class="invalid-feedback">
+                      Nom requis.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="firstname{{ i }}" class="form-label">Prénom</label>
+                    <input
+                      type="text"
+                      id="firstname{{ i }}"
+                      formControlName="firstname"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': person.get('firstname')?.invalid && person.get('firstname')?.touched }"
+                      placeholder="Entrez le prénom"
+                    />
+                    <div *ngIf="person.get('firstname')?.invalid && person.get('firstname')?.touched"
+                         class="invalid-feedback">
+                      Prénom requis.
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="requiredNumberPhone{{ i }}" class="form-label">Téléphone Principal</label>
+                    <div class="input-group">
+                      <span class="input-group-text">+221</span>
+                      <input
+                        type="text"
+                        id="requiredNumberPhone{{ i }}"
+                        formControlName="requiredNumberPhone"
+                        class="form-control"
+                        [ngClass]="{ 'is-invalid': person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched }"
+                        placeholder="XXXXXXXXX"
+                      />
+                    </div>
+                    <div
+                      *ngIf="person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched"
+                      class="invalid-feedback">
+                      Téléphone principal invalide. Format requis : +221XXXXXXXXX.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="optionalNumberPhone{{ i }}" class="form-label">Téléphone Secondaire</label>
+                    <div class="input-group">
+                      <span class="input-group-text">+221</span>
+                      <input
+                        type="text"
+                        id="optionalNumberPhone{{ i }}"
+                        formControlName="optionalNumberPhone"
+                        class="form-control"
+                        placeholder="XXXXXXXXX"
+                      />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="relationship{{ i }}" class="form-label">Relation</label>
+                    <input
+                      type="text"
+                      id="relationship{{ i }}"
+                      formControlName="relationship"
+                      class="form-control"
+                      [ngClass]="{ 'is-invalid': person.get('relationship')?.invalid && person.get('relationship')?.touched }"
+                      placeholder="Entrez la relation"
+                    />
+                    <div *ngIf="person.get('relationship')?.invalid && person.get('relationship')?.touched"
+                         class="invalid-feedback">
+                      La relation est requise.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6 d-flex align-items-end">
+                  <button type="button" class="btn btn-danger mb-3" (click)="removePersonToCall(i)"
+                          [disabled]="personToCalls.length <= 1">
+                    Supprimer
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <button type="button" class="btn btn-outline-primary" (click)="addPersonToCall()"
+                  [disabled]="personToCalls.length >= 2">
+            <i class="bi bi-plus-circle"></i> Ajouter une personne à contacter
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Submit Button -->
+    <div class="d-grid gap-2 mt-4">
+      <button type="submit" class="btn btn-primary btn-lg" [disabled]="memberForm.invalid">
+        Enregistrer le membre
+      </button>
+    </div>
+  </form>
+</div>

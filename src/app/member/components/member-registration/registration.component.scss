@@ -1,0 +1,201 @@
+/* Importez vos variables si vous en avez */
+@import 'variables'; // Exemple: pour $primary, $secondary, $text-color, etc.
+
+// Définition des couleurs et polices si pas de fichier variables.scss
+$primary-color: #007bff; // Bleu éclatant
+$accent-color: #6c757d; // Gris doux
+$success-color: #28a745; // Vert succès
+$light-bg: #f8f9fa; // Arrière-plan très clair
+$white: #ffffff;
+$border-color: #e0e0e0; // Bordure douce
+$text-dark: #343a40; // Texte foncé
+$text-light: #6c757d; // Texte gris
+$error-red: #dc3545; // Rouge d'erreur
+
+$font-family-sans-serif: 'Inter', sans-serif; // Ou une autre police moderne comme 'Roboto', 'Open Sans'
+
+/* Ajoutez Google Fonts à votre index.html ou à un fichier CSS global */
+/* <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"> */
+/* <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" rel="stylesheet"> */
+
+
+.reinscription-container {
+  max-width: 900px; // Largeur maximale pour éviter que le formulaire ne s'étire trop
+margin: 40px auto; // Centrer le conteneur sur la page
+padding: 20px;
+  background-color: $light-bg; // Arrière-plan doux pour le conteneur principal
+border-radius: 12px;
+  font-family: $font-family-sans-serif;
+  color: $text-dark;
+}
+
+.card-modern {
+  background-color: $white;
+  border: none; // Pas de bordure par défaut de Bootstrap
+border-radius: 12px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08); // Ombre plus élégante et prononcée
+overflow: hidden; // S'assure que les coins arrondis sont respectés
+}
+
+.card-body {
+  padding: 40px; // Plus de padding pour un "air" autour des éléments
+}
+
+.card-title {
+  font-size: 1.8rem; // Plus grand pour un titre
+font-weight: 600; // Gras pour l'importance
+color: $primary-color; // Couleur d'accent pour le titre
+margin-bottom: 30px; // Espace sous le titre
+text-align: center; // Centrer le titre
+position: relative; // Pour le pseudo-élément
+&::after { // Petit underscore décoratif sous le titre
+content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background-color: $primary-color;
+  margin: 10px auto 0;
+  border-radius: 2px;
+}
+}
+
+.form-group {
+  margin-bottom: 25px; // Espacement uniforme pour les groupes de formulaire
+}
+
+.form-label {
+  font-weight: 500; // Légèrement plus gras que le texte normal
+color: $text-dark;
+  margin-bottom: 8px; // Espace sous le label
+display: block; // Assure que le label prend toute la largeur
+}
+
+.form-control {
+  border: 1px solid $border-color;
+  border-radius: 8px; // Coins arrondis
+padding: 12px 15px; // Plus de padding
+font-size: 1rem;
+  color: $text-dark;
+  transition: all 0.3s ease-in-out;
+  box-shadow: none; // Supprime l'ombre par défaut de Bootstrap
+
+&:focus {
+  border-color: darken($primary-color, 10%); // Bordure plus foncée au focus
+box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25); // Ombre de focus subtile
+outline: none;
+}
+
+  &::placeholder {
+    color: $text-light;
+    opacity: 0.7;
+  }
+
+  &.is-invalid {
+    border-color: $error-red;
+    padding-right: 2.25rem; // Espace pour l'icône d'erreur
+  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 12 12' width='12' height='12' fill='none' stroke='%23dc3545'%3e%3ccircle cx='6' cy='6' r='4.5'/%3e%3cpath stroke-linejoin='round' d='M5.8 3.6h.4L6 6.5z'/%3e%3ccircle r='1' cx='6' cy='8.2'/%3e%3c/svg%3e"); // Icône d'erreur SVG
+  background-repeat: no-repeat;
+    background-position: right calc(0.375em + 0.1875rem) center;
+    background-size: calc(0.75em + 0.375rem) calc(0.75em + 0.375rem);
+  }
+}
+
+.invalid-feedback {
+  color: $error-red;
+  font-size: 0.875rem;
+  margin-top: 5px; // Espace au-dessus du message
+display: block; // Assure que le message d'erreur est sur sa propre ligne
+i {
+  margin-right: 5px; // Espace entre l'icône et le texte
+}
+}
+
+.form-select-custom {
+// Styles spécifiques pour le select si nécessaire, héritera déjà de form-control
+appearance: none; // Supprime l'apparence par défaut du select
+background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+}
+
+.form-section-divider {
+  border: 0;
+  height: 1px;
+  background-color: $border-color;
+  margin: 35px 0; // Espace avant et après la ligne de séparation
+}
+
+.form-check-custom {
+  .form-check-input {
+    width: 1.25em; // Taille standard Bootstrap
+  height: 1.25em;
+    margin-top: 0.25em; // Alignement vertical
+
+  &:checked {
+    background-color: $primary-color;
+    border-color: $primary-color;
+    box-shadow: none; // Supprime l'ombre par défaut
+  }
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($primary-color, 0.25); // Ombre de focus subtile
+    }
+  }
+  .form-check-label {
+    font-weight: 400; // Normal pour le label
+  color: $text-dark;
+  }
+}
+
+.form-switch-custom {
+  .form-check-input {
+    width: 2.5em; // Largeur du switch
+  height: 1.25em;
+    margin-top: 0.25em;
+    background-color: $border-color; // Couleur de fond du switch quand désactivé
+  border-color: $border-color;
+    transition: background-position 0.15s ease-in-out; // Animation du switch
+
+  &:checked {
+    background-color: $success-color; // Couleur de fond du switch quand activé
+  border-color: $success-color;
+  }
+    &:focus {
+      box-shadow: 0 0 0 0.2rem rgba($success-color, 0.25); // Ombre de focus pour le switch
+    }
+  }
+}
+
+
+.btn-primary-custom {
+  background-color: $primary-color;
+  border-color: $primary-color;
+  color: $white;
+  padding: 12px 30px; // Plus de padding pour le bouton
+border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba($primary-color, 0.2); // Ombre discrète
+
+&:hover {
+  background-color: darken($primary-color, 10%);
+  border-color: darken($primary-color, 10%);
+  box-shadow: 0 6px 15px rgba($primary-color, 0.3); // Ombre légèrement plus prononcée au survol
+transform: translateY(-2px); // Petit effet de soulèvement
+}
+
+  &:disabled {
+    background-color: $accent-color;
+    border-color: $accent-color;
+    cursor: not-allowed;
+    opacity: 0.7;
+    box-shadow: none;
+    transform: translateY(0);
+  }
+
+  i {
+    margin-right: 8px; // Espace entre l'icône et le texte
+  font-size: 1.1rem;
+  }
+}
