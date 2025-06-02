@@ -2,19 +2,21 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import {MemberService} from "../../core/member.service";
 import {AppStateService} from "../../../core/services/app-state.service";
 import {Router} from "@angular/router";
-import {NgClass, NgFor, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from '@angular/common';
+import {JsonPipe, NgClass, NgFor, NgIf} from '@angular/common';
 import {FormsModule, ReactiveFormsModule} from '@angular/forms';
-import {FilterPopupComponent} from "../popup-filter/filter-popup.component";
+import {FilterPopupComponent} from "../filter-popup/filter-popup.component";
 import {ColumnPrinterComponent} from "../popup-column-printer/column-printer.component";
 import {YearOfSessionService} from "../../../core/services/year-of-session.service";
-import {GroupForNotificationComponent} from "../../../shared/popup-group-for-notification/group-for-notification.component";
+import {
+  GroupForNotificationComponent
+} from "../../../shared/popup-group-for-notification/group-for-notification.component";
 
 @Component({
   selector: 'app-member',
   templateUrl: './list-member.component.html',
   styleUrls: ['./list-member.component.css'],
   standalone: true,
-  imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent, NgSwitch, NgSwitchCase, NgSwitchDefault, GroupForNotificationComponent]
+  imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent, GroupForNotificationComponent, JsonPipe]
 })
 export class ListMemberComponent implements OnInit {
   private readonly MAX_PAGES_DISPLAYED = 3;
@@ -62,10 +64,14 @@ export class ListMemberComponent implements OnInit {
   }
 
   searchMemberByCriteria() {
-    this.memberService.searchMember(this.appState.memberState.keyword, this.appState.memberState.criteria, this.appState.memberState.filters).subscribe({
+    this.memberService.searchMember(
+      this.appState.memberState.keyword,
+      this.appState.memberState.criteria,
+      this.appState.memberState.filters
+    ).subscribe({
         next: data => {
           this.appState.memberState.members = data.items;
-          this.appState.memberState.currentPage = data.page
+          this.appState.memberState.currentPage = data.page;
           this.appState.memberState.totalPages = data.pages;
         },
         error: err => {
@@ -75,7 +81,7 @@ export class ListMemberComponent implements OnInit {
     );
   }
 
-  open() {
+  openFilterPopup() {
     this.modal?.openModal();
   }
 
@@ -115,9 +121,5 @@ export class ListMemberComponent implements OnInit {
     }
 
     return Array.from({length: endPage - startPage + 1}, (_, i) => startPage + i);
-  }
-
-  saveFilteredMembersAndSendMessage() {
-
   }
 }

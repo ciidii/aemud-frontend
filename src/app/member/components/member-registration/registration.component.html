@@ -4,27 +4,29 @@
       <div class="card-body">
         <h3 class="card-title">Informations de Réinscription</h3>
 
-        <div class="row gx-4 gy-3"> <div class="col-md-6">
-          <div class="form-group">
-            <label for="memberPhoneNumber" class="form-label">Membre</label>
-            <input id="memberPhoneNumber" placeholder="Saisir le numéro de téléphone" formControlName="memberPhoneNumber"
-                   class="form-control"
-                   [ngClass]="{ 'is-invalid': reinscriptionForm.get('memberPhoneNumber')?.invalid && reinscriptionForm.get('memberPhoneNumber')?.touched }">
-            <div
-              *ngIf="reinscriptionForm.get('memberPhoneNumber')?.invalid && reinscriptionForm.get('memberPhoneNumber')?.touched"
-              class="invalid-feedback">
-              <i class="bi bi-exclamation-circle-fill"></i> Veuillez saisir le numéro de téléphone du membre.
+        <div class="row gx-4 gy-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label for="memberPhoneNumber" class="form-label">Numéro de Téléphone du Membre</label>
+              <input id="memberPhoneNumber" placeholder="Saisir le numéro de téléphone pour trouver le membre"
+                     formControlName="memberPhoneNumber"
+                     class="form-control"
+                     [ngClass]="{ 'is-invalid': reinscriptionForm.get('memberPhoneNumber')?.invalid && reinscriptionForm.get('memberPhoneNumber')?.touched }">
+              <div
+                *ngIf="reinscriptionForm.get('memberPhoneNumber')?.invalid && reinscriptionForm.get('memberPhoneNumber')?.touched"
+                class="invalid-feedback">
+                <i class="bi bi-exclamation-circle-fill"></i> Veuillez saisir le numéro de téléphone du membre.
+              </div>
             </div>
           </div>
-        </div>
 
           <div class="col-md-6">
             <div class="form-group">
-              <label for="session" class="form-label">Session</label>
+              <label for="session" class="form-label">Session de Réinscription</label>
               <select id="session" formControlName="session" class="form-control form-select-custom"
                       [ngClass]="{ 'is-invalid': reinscriptionForm.get('session')?.invalid && reinscriptionForm.get('session')?.touched }">
                 <option value="">Sélectionner une session</option>
-                <option *ngFor="let session of availableSessions" [value]="session.id">{{ session.name }}</option>
+                <option *ngFor="let session of availableSessions" [value]="session.id">{{ session.session }}</option>
               </select>
               <div *ngIf="reinscriptionForm.get('session')?.invalid && reinscriptionForm.get('session')?.touched"
                    class="invalid-feedback">
@@ -34,40 +36,26 @@
           </div>
         </div>
 
-        <hr class="form-section-divider"> <div class="row gx-4 gy-3">
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="form-label">Type de Réinscription</label>
-            <div class="d-flex flex-row gap-4"> <div class="form-check form-check-custom">
-              <input class="form-check-input" type="radio" id="initial" value="INITIAL"
-                     formControlName="registrationType">
-              <label class="form-check-label" for="initial">Initiale</label>
-            </div>
-              <div class="form-check form-check-custom">
-                <input class="form-check-input" type="radio" id="renewal" value="REINSCRIPTION"
-                       formControlName="registrationType">
-                <label class="form-check-label" for="renewal">Renouvellement</label>
+        <hr class="form-section-divider">
+
+        <div class="row gx-4 gy-3">
+          <div class="col-md-6">
+            <div class="form-group">
+              <label class="form-label">Statut du Paiement</label>
+              <div class="form-check form-switch form-switch-custom">
+                <input class="form-check-input" type="checkbox" id="statusPayment" formControlName="statusPayment" role="switch">
+                <label class="form-check-label" for="statusPayment">Payé</label>
               </div>
             </div>
           </div>
         </div>
-
-        <div class="col-md-6">
-          <div class="form-group">
-            <label class="form-label">Statut du Paiement</label>
-            <div class="form-check form-switch form-switch-custom">
-              <input class="form-check-input" type="checkbox" id="statusPayment" formControlName="statusPayment" role="switch">
-              <label class="form-check-label" for="statusPayment">Payé</label>
-            </div>
-          </div>
-        </div>
-      </div>
       </div>
     </div>
 
-    <div class="d-flex justify-content-end mt-5"> <button class="btn btn-primary-custom" (click)="onSubmit()" [disabled]="reinscriptionForm.invalid">
-      <i class="bi bi-floppy2"></i> Enregistrer
-    </button>
+    <div class="d-flex justify-content-end mt-5">
+      <button class="btn btn-primary-custom" (click)="onSubmit()" [disabled]="reinscriptionForm.invalid">
+        <i class="bi bi-floppy2"></i> Enregistrer
+      </button>
     </div>
   </form>
 </div>

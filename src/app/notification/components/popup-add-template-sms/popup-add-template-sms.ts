@@ -3,8 +3,8 @@ import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/
 import {ToastrService} from "ngx-toastr";
 import {CommonModule} from '@angular/common';
 import {SmsTamplateStateService} from "../../../core/services/sms-tamplate-state.service";
-import {MessageTemplate} from "../../../core/models/message.template";
-import {TemplateService} from "../../core/template.service";
+import {MessageTemplateModel} from "../../../core/models/message-template.model";
+import {MessageTemplateService} from "../../core/message-template.service";
 
 // Interface pour les données du formulaire que le modal émettra
 
@@ -44,7 +44,7 @@ export class PopupAddTemplateSms implements OnInit {
     private formBuilder: FormBuilder,
     private toaster: ToastrService,
     protected smsTemplateState: SmsTamplateStateService,
-    private templateService: TemplateService,
+    private templateService: MessageTemplateService,
   ) {
   }
 
@@ -74,9 +74,9 @@ export class PopupAddTemplateSms implements OnInit {
     }
 
     this.formGroup.reset({
-      id: this.smsTemplateState.selectedTemplate?.id,
-      templateName: this.smsTemplateState.selectedTemplate?.modelName,
-      templateContent: this.smsTemplateState.selectedTemplate?.smsModel
+      id: this.smsTemplateState.selectedMessageTemplate?.id,
+      templateName: this.smsTemplateState.selectedMessageTemplate?.modelName,
+      templateContent: this.smsTemplateState.selectedMessageTemplate?.smsModel
     });
     this.openPopup.set(true);
   }
@@ -101,7 +101,7 @@ export class PopupAddTemplateSms implements OnInit {
       return;
     }
 
-    const formOutput: MessageTemplate = {
+    const formOutput: MessageTemplateModel = {
       id: this.formGroup.get("id")?.value,
       modelName: this.formGroup.get("templateName")?.value,
       smsModel: this.formGroup.get("templateContent")?.value

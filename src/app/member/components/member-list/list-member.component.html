@@ -26,7 +26,7 @@
                 class="btn btn-outline-success shadow-sm me-2">
           <i class="bi bi-printer"></i> Exporter
         </button>
-        <button (click)="open()"
+        <button (click)="openFilterPopup()"
                 class="btn btn-outline-success shadow-sm me-2">
           <i class="bi bi-sliders"></i> Filtrer
         </button>
@@ -64,13 +64,18 @@
               <td>{{ member.personalInfo.name }}</td>
               <td>{{ member.contactInfo.email }}</td>
               <td>{{ member.contactInfo.numberPhone }}</td>
-              <td
+              <td>
+                <!--
                 [ngClass]="{'text-success': member.registration[0]?.statusPayment, 'text-danger': !member.registration[0].statusPayment}">
                 <i *ngIf="member.registration[0]?.statusPayment" class="bi bi-check-circle-fill"></i>
                 <i *ngIf="!member.registration[0]?.statusPayment" class="bi bi-x-circle-fill"></i>
                 {{ member.registration[0].statusPayment ? 'Payé' : 'Non Payé' }}
+                -->
               </td>
-              <td [ngClass]="{
+
+              <td>
+                <!--
+                [ngClass]="{
                     'text-warning': member.registration[0].registrationStatus === 'PENDING',
                     'text-success': member.registration[0].registrationStatus === 'APPROVED',
                     'text-danger': member.registration[0].registrationStatus === 'REJECTED',
@@ -84,6 +89,7 @@
                   <i *ngSwitchDefault class="bi bi-question-circle-fill fs-5" title="Statut Inconnu"></i>
                 </ng-container>
                 {{ member.registration[0].registrationStatus }}
+                -->
               </td>
               <td>
                 <button (click)="displayMemberDetails(member.id)"
@@ -120,7 +126,8 @@
             <li *ngIf="getPages().slice(-1)[0] !== appState.memberState.totalPages" class="page-item">
               <button class="page-link"
                       (click)="nextPage(appState.memberState.totalPages)">{{ appState.memberState.totalPages }}
-              </button>s
+              </button>
+              s
             </li>
             <li class="page-item"
                 [ngClass]="{'disabled': appState.memberState.currentPage === appState.memberState.totalPages}">

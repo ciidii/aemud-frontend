@@ -31,7 +31,62 @@ export class MemberDetailsComponent implements OnInit {
   memberForm!: FormGroup;
   commissions!: Array<CommissionModel>;
   clubs!: Array<ClubModel>;
-  member!: MemberModel;
+  member: MemberModel = {
+    id: "",
+    personalInfo: {
+      name: "",
+      firstname: "",
+      nationality: "",
+      gender: "",
+      birthday: [0, 0, 0], // jour, mois, année
+      maritalStatus: ""
+    },
+    membershipInfo: {
+      legacyInstitution: "",
+      bacSeries: "",
+      bacMention: "",
+      yearOfBac: "",
+      aemudCourses: "",
+      otherCourses: "",
+      participatedActivity: "",
+      politicOrganisation: ""
+    },
+    academicInfo: {
+      institutionName: "",
+      studiesDomain: "",
+      studiesLevel: ""
+    },
+    addressInfo: {
+      addressInDakar: "",
+      holidayAddress: "",
+      addressToCampus: ""
+    },
+    contactInfo: {
+      numberPhone: "",
+      email: "",
+      personToCalls: [{
+        lastname: "",
+        firstname: "",
+        requiredNumberPhone: "",
+        optionalNumberPhone: "",
+        relationship: ""
+      }]
+    },
+    bourse: {
+      bourseId: "",
+      lebelle: "",
+      montant: 0
+    },
+    clubs: [{
+      id: "",
+      name: ""
+    }],
+    commissions: [{
+      id: "",
+      name: ""
+    }],
+    registration: []
+  };
   bourses!: Array<BourseModel>
   isEditingMembershipInfo: boolean = false;
   isEditingAcademicInfo: boolean = false;

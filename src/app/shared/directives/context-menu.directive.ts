@@ -13,6 +13,7 @@ export class ContextMenuTriggerDirective {
 
   @HostListener('contextmenu', ['$event'])
   onContextMenu(event: MouseEvent): void {
+    console.log("La directive marche");
     event.preventDefault(); // Prevent default browser context menu
     this.contextMenuTrigger.emit({event, data: this.data});
   }

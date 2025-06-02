@@ -1,4 +1,4 @@
-export interface MessageTemplate {
+export interface MessageTemplateModel {
   id: string;
   modelName: string;
   smsModel: string;

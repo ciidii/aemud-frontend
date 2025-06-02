@@ -46,6 +46,7 @@
     "@angular/localize": "^17.3.12",
     "@types/jasmine": "~4.3.0",
     "@types/jquery": "^3.5.29",
+    "@types/node": "^22.15.29",
     "angular-eslint": "19.0.2",
     "eslint": "^9.16.0",
     "jasmine-core": "~4.6.0",

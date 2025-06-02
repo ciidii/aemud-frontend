@@ -1,5 +1,5 @@
 export interface SessionModel {
-  id: number;
+  id: string;
   session: number;
   currentYear: boolean;
 }

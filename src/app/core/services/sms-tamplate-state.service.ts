@@ -1,29 +1,50 @@
 import {Injectable} from '@angular/core';
-import {MessageTemplate} from "../models/message.template";
+import {MessageTemplateModel} from "../models/message-template.model";
+import {RecipientsTemplateModel} from "../models/recipients-template.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SmsTamplateStateService {
-  private _messageTemplatesList: MessageTemplate[] = [];
-  private _selectedTemplate: MessageTemplate | null = null;
+  private _messageTemplatesList: MessageTemplateModel[] = [];
+  private _recipientsTemplateList: RecipientsTemplateModel []= [];
+  private _selectedMessageTemplate: MessageTemplateModel | null = null;
+  private _recipientsTemplatesList: MessageTemplateModel |null  = null;
 
   constructor() {
   }
 
-  get messageTemplatesList(): MessageTemplate[] {
+  get messageTemplatesList(): MessageTemplateModel[] {
     return this._messageTemplatesList;
   }
 
-  set messageTemplatesList(value: MessageTemplate[]) {
+  set messageTemplatesList(value: MessageTemplateModel[]) {
     this._messageTemplatesList = value;
   }
 
-  get selectedTemplate(): MessageTemplate | null {
-    return this._selectedTemplate;
+  get selectedMessageTemplate(): MessageTemplateModel | null {
+    return this._selectedMessageTemplate;
   }
 
-  set selectedTemplate(value: MessageTemplate | null) {
-    this._selectedTemplate = value;
+  set selectedMessageTemplate(value: MessageTemplateModel | null) {
+    this._selectedMessageTemplate = value;
+  }
+
+
+  get recipientsTemplatesList(): MessageTemplateModel | null {
+    return this._recipientsTemplatesList;
+  }
+
+  set recipientsTemplatesList(value: MessageTemplateModel | null) {
+    this._recipientsTemplatesList = value;
+  }
+
+
+  get recipientsTemplateList(): RecipientsTemplateModel[] {
+    return this._recipientsTemplateList;
+  }
+
+  set recipientsTemplateList(value: RecipientsTemplateModel[]) {
+    this._recipientsTemplateList = value;
   }
 }

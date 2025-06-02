@@ -1,15 +1,16 @@
-import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {MessageTemplate} from "../../core/models/message.template";
+import {MessageTemplateModel} from "../../core/models/message-template.model";
 import {environment} from "../../../environments/environment";
 import {ResponseEntityApi} from "../../core/models/response-entity-api";
+import {Injectable} from "@angular/core";
+import {RecipientsTemplateModel} from "../../core/models/recipients-template.model";
 
 @Injectable({
   providedIn: 'root'
 })
-export class TemplateService {
+export class RecipientTemplateService {
   private apiUrl = environment.API_URL
 
   constructor(private http: HttpClient) {
@@ -31,11 +32,8 @@ export class TemplateService {
     return throwError(() => new Error(errorMessage));
   }
 
-  /**
-   * Récupère tous les templates de message.
-   */
-  getTemplates(): Observable<ResponseEntityApi<MessageTemplate[]>> {
-    return this.http.get<ResponseEntityApi<MessageTemplate[]>>(`${this.apiUrl}/smsmodel/all`).pipe(
+  getTemplates(): Observable<ResponseEntityApi<RecipientsTemplateModel[]>> {
+    return this.http.get<ResponseEntityApi<RecipientsTemplateModel[]>>(`${this.apiUrl}/sender-template-sms`).pipe(
       tap(templates => console.log('Templates récupérés:', templates)),
       catchError(this.handleError)
     );
@@ -44,9 +42,9 @@ export class TemplateService {
   /**
    * Ajoute un nouveau template de message.
    */
-  addTemplate(template: MessageTemplate): Observable<ResponseEntityApi<MessageTemplate>> {
+  addTemplate(template: MessageTemplateModel): Observable<ResponseEntityApi<MessageTemplateModel>> {
     console.log(template);
-    return this.http.post<ResponseEntityApi<MessageTemplate>>(`${this.apiUrl}/smsmodel`, template).pipe(
+    return this.http.post<ResponseEntityApi<MessageTemplateModel>>(`${this.apiUrl}/smsmodel`, template).pipe(
       tap(newTemplate => console.log('Template ajouté:', newTemplate)),
       catchError(this.handleError)
     );
@@ -55,9 +53,9 @@ export class TemplateService {
   /**
    * Met à jour un template de message existant.
    */
-  updateTemplate(template: MessageTemplate): Observable<ResponseEntityApi<MessageTemplate>> {
+  updateTemplate(template: MessageTemplateModel): Observable<ResponseEntityApi<MessageTemplateModel>> {
     let params = new HttpParams().set("id", template.id)
-    return this.http.put<ResponseEntityApi<MessageTemplate>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
+    return this.http.put<ResponseEntityApi<MessageTemplateModel>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
       tap(updatedTemplate => console.log('Template mis à jour:', updatedTemplate)),
       catchError(this.handleError)
     );
@@ -66,9 +64,9 @@ export class TemplateService {
   /**
    * Supprime un template de message.
    */
-  deleteTemplate(id: string): Observable<ResponseEntityApi<MessageTemplate>> {
+  deleteTemplate(id: string): Observable<ResponseEntityApi<MessageTemplateModel>> {
     let params = new HttpParams().set("id", id)
-    return this.http.delete<ResponseEntityApi<MessageTemplate>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
+    return this.http.delete<ResponseEntityApi<MessageTemplateModel>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
       tap(() => console.log(`Template ${id} supprimé`)),
       catchError(this.handleError)
     );

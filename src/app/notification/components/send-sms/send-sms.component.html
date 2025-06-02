@@ -18,12 +18,18 @@
                   *ngFor="let list of filteredRecipientLists.slice(0, showMoreRecipients() ? filteredRecipientLists.length : 3)"
                   class="btn"
                   [ngClass]="{'btn-primary': selectedList === list, 'btn-outline-secondary': selectedList !== list}"
-                  (click)="selectList(list)">
-                  {{ list }}
+                  (click)="selectList(list)"
+                  appContextMenuTrigger [appContextMenuTriggerData]="list"
+                  (contextMenuTrigger)="onTemplateContextMenu($event)"
+                >
+                  {{ list.templateName }}
                 </button>
-                <button *ngIf="filteredRecipientLists.length > 3" class="btn btn-outline-primary"
+                <button *ngIf="filteredRecipientLists.length > 7" class="btn btn-outline-primary"
                         (click)="toggleShowMoreRecipients()">
                   {{ showMoreRecipients() ? 'Voir moins' : 'Voir plus' }}
+                </button>
+                <button class="btn btn-outline-success" (click)="addSenderTemplate()">
+                  Ajouter un modèle
                 </button>
               </div>
             </div>
@@ -34,9 +40,9 @@
                      name="templateSearch" [(ngModel)]="templateSearchTerm">
               <div class="d-flex flex-wrap gap-3">
                 <div
-                  *ngFor="let template of filteredMessageTemplates.slice(0, showMoreTemplates() ? filteredMessageTemplates.length : 3)"
+                  *ngFor="let template of filteredMessageTemplates.slice(0, showMoreTemplates() ? filteredMessageTemplates.length : 7)"
                   class="card"
-                  [ngClass]="{'border-primary': smsTemplateState?.selectedTemplate === template, 'border-light': smsTemplateState.selectedTemplate !== template}"
+                  [ngClass]="{'border-primary': smsTemplateState.selectedMessageTemplate === template, 'border-light': smsTemplateState.selectedMessageTemplate !== template}"
                   (click)="selectTemplateAndFillMessage(template)"
                   appContextMenuTrigger [appContextMenuTriggerData]="template"
                   (contextMenuTrigger)="onTemplateContextMenu($event)"><p class="m-0">{{ template.modelName }}</p>
@@ -55,7 +61,7 @@
           <div class="col-md-6">
             <div class="mb-3">
               <label for="recipient" class="form-label">Destinataire spécifique (optionnel)</label>
-              <input type="text" class="form-control" id="recipient" name="recipient"
+              <input [(ngModel)]="recipientsTemplateName" type="text" class="form-control" id="recipient" name="recipient"
                      placeholder="Entrez un numéro">
             </div>
 
@@ -73,7 +79,6 @@
         </div>
       </form>
     </div>
-    <p>pppp{{sms| json}}</p>
 
   </div>
 </div>
@@ -88,6 +93,6 @@
 
 </app-sms-model-option-dialog>
 <app-popup-add-template-sms
-  (onCloseAddModel)="selectTemplateAndFillMessage(smsTemplateState.selectedTemplate)"
+  (onCloseAddModel)="selectTemplateAndFillMessage(smsTemplateState.selectedMessageTemplate)"
   (onReloadModels)="loadMessageTemplates()"
 />

@@ -82,7 +82,7 @@ export class SessionComponent implements OnInit {
   }
 
 
-  updateSession(sessionID: number) {
+  updateSession(sessionID: string) {
     this.sessionService.getPaticulerYear(sessionID).subscribe({
       next: resp => {
         if (resp.status == "OK") {
@@ -99,7 +99,7 @@ export class SessionComponent implements OnInit {
     })
   }
 
-  deleteSession(id: number) {
+  deleteSession(id: string) {
     this.sessionService.deleletSession(id).subscribe({
       next: resp => {
         if (resp.status == "OK") {

@@ -1,15 +1,18 @@
 import {Component, HostListener, OnInit, signal, ViewChild} from '@angular/core';
 import {FormsModule} from "@angular/forms";
-import {JsonPipe, NgClass, NgForOf, NgIf} from "@angular/common";
+import {NgClass, NgForOf, NgIf} from "@angular/common";
 import {SmsModelOptionDialogComponent} from "../sms-model-option-dialog/sms-model-option-dialog.component";
 import {ContextMenuTriggerDirective} from "../../../shared/directives/context-menu.directive";
 import {PopupAddTemplateSms} from "../popup-add-template-sms/popup-add-template-sms";
 import {finalize, Observable, Subject, takeUntil} from "rxjs";
-import {TemplateService} from "../../core/template.service";
-import {MessageTemplate} from "../../../core/models/message.template";
+import {MessageTemplateService} from "../../core/message-template.service";
+import {MessageTemplateModel} from "../../../core/models/message-template.model";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {SmsTamplateStateService} from "../../../core/services/sms-tamplate-state.service";
 import {SmsModel} from "../../../core/models/sms.model";
+import {ToastrService} from "ngx-toastr";
+import {RecipientsTemplateModel} from "../../../core/models/recipients-template.model";
+import {RecipientTemplateService} from "../../core/recipient-template.service";
 
 @Component({
   selector: 'app-send-sms',
@@ -22,15 +25,16 @@ import {SmsModel} from "../../../core/models/sms.model";
     NgIf,
     SmsModelOptionDialogComponent,
     ContextMenuTriggerDirective,
-    PopupAddTemplateSms,
-    JsonPipe
+    PopupAddTemplateSms
   ],
   styleUrls: ['./send-sms.component.scss']
 })
 export class SendSmsComponent implements OnInit {
 
-  constructor(private templateService: TemplateService,
+  constructor(private templateService: MessageTemplateService,
               protected smsTemplateState: SmsTamplateStateService,
+              private toaster: ToastrService,
+              private recipientService: RecipientTemplateService
   ) {
   }
 
@@ -40,25 +44,17 @@ export class SendSmsComponent implements OnInit {
   // Context menu position and data
   contextMenuX = signal(0);
   contextMenuY = signal(0);
-  selectedTemplateForPopup = signal<MessageTemplate | null>(null);
+  selectedTemplateForPopup = signal<MessageTemplateModel | null>(null);
 
-  sms: SmsModel = {message:"",recipientNumbers:[]}
+  sms: SmsModel = {message: "", recipientNumbers: []}
+  recipientsTemplateName: string = "";
 
-
-  recipientLists: string[] = [
-    "Tous les membres",
-    "Membres n'ayant pas cotisé",
-    "Rappel de cotisation",
-    "Membres en retard de réinscription",
-    "Nouvelle liste 1",
-    "Nouvelle liste 2",
-    "Nouvelle liste 3"
-  ];
-  selectedList: string | null = null;
+  selectedList: RecipientsTemplateModel | null = null;
   showMoreRecipients = signal(false);
   recipientSearchTerm = signal('');
 
-  messageTemplates$!: Observable<ResponseEntityApi<MessageTemplate[]>>
+  messageTemplates$!: Observable<ResponseEntityApi<MessageTemplateModel[]>>
+  recipientTemplates$!: Observable<ResponseEntityApi<RecipientsTemplateModel[]>>
   isLoadingTemplates = signal(true);
   private destroy$ = new Subject<void>();
 
@@ -66,11 +62,13 @@ export class SendSmsComponent implements OnInit {
   showMoreTemplates = signal(false);
   templateSearchTerm = signal('');
 
+
   ngOnInit(): void {
     this.loadMessageTemplates();
+    this.loadRecipientTemplates();
   }
 
-  get filteredMessageTemplates(): MessageTemplate[] {
+  get filteredMessageTemplates(): MessageTemplateModel[] {
     return this.smsTemplateState.messageTemplatesList.filter(template =>
       template.modelName.toLowerCase().includes(this.templateSearchTerm().toLowerCase())
     );
@@ -105,7 +103,7 @@ export class SendSmsComponent implements OnInit {
     // If context menu is open, and the right-click is NOT on a card
     if (this.optionDialogRef?.isVisible()) {
       const target = event.target as HTMLElement;
-      if (!target.closest('.card[appContextMenuTrigger]')) { // Check if it's NOT a right-click on a context menu trigger card
+      if (!target.closest('.card[appContextMenuTrigger]') && !target.closest('button[appContextMenuTrigger]')) { // Check if it's NOT a right-click on a context menu trigger card
         this.closeContextMenu();
       }
     }
@@ -122,26 +120,14 @@ export class SendSmsComponent implements OnInit {
     this.popupAddTemplateSms?.closeModal()
   }
 
-  /*
-  sendSms() {
-    if (!this.sms.smsModel) {
-      alert("Veuillez saisir un message.");
-      return;
-    }
-    console.log("SMS to send:", this.sms);
-    alert("SMS envoyé avec succès !");
-    this.close();
-  }
-
-   */
-
-  selectList(list: string) {
+  selectList(list: RecipientsTemplateModel) {
     this.selectedList = this.selectedList === list ? null : list;
+    this.recipientsTemplateName = list.templateName
     this.closeContextMenu();
   }
 
-  selectTemplateAndFillMessage(template: MessageTemplate | null): void {
-    this.smsTemplateState.selectedTemplate = this.smsTemplateState.selectedTemplate === template ? null : template;
+  selectTemplateAndFillMessage(template: MessageTemplateModel | null): void {
+    this.smsTemplateState.selectedMessageTemplate = this.smsTemplateState.selectedMessageTemplate === template ? null : template;
     //this.sms.smsModel = this.smsTemplateState.selectedTemplate ? template?.id : '';
     this.sms.message = template!.smsModel;
 
@@ -158,9 +144,9 @@ export class SendSmsComponent implements OnInit {
     this.closeContextMenu();
   }
 
-  get filteredRecipientLists(): string[] {
-    return this.recipientLists.filter(list =>
-      list.toLowerCase().includes(this.recipientSearchTerm().toLowerCase())
+  get filteredRecipientLists(): RecipientsTemplateModel[] {
+    return this.smsTemplateState.recipientsTemplateList.filter(recipes =>
+      recipes.templateName.toLowerCase().includes(this.recipientSearchTerm().toLowerCase())
     );
   }
 
@@ -176,12 +162,16 @@ export class SendSmsComponent implements OnInit {
       this.popupAddTemplateSms.requireContent = true;
       this.popupAddTemplateSms.minLengthContent = 10;
 
-      this.popupAddTemplateSms.openModal('', ''); // Ouvrir le modal vide
+      this.popupAddTemplateSms.openModal('Param 1', 'Param 2'); // Ouvrir le modal vide
     }
   }
 
+  addSenderTemplate() {
+
+  }
+
   // Method called by the ContextMenuTriggerDirective
-  onTemplateContextMenu(eventData: { event: MouseEvent, data: MessageTemplate }): void {
+  onTemplateContextMenu(eventData: { event: MouseEvent, data: MessageTemplateModel | RecipientsTemplateModel }): void {
     const {event, data: template} = eventData;
 
     // If the same context menu is already open for this template, close it
@@ -192,13 +182,24 @@ export class SendSmsComponent implements OnInit {
 
     this.closeContextMenu(); // Close any currently open context menu
 
-    this.selectedTemplateForPopup.set(template);
+
     this.contextMenuX.set(event.clientX);
     this.contextMenuY.set(event.clientY);
-    this.smsTemplateState.selectedTemplate = template;
+    if (template && (template as MessageTemplateModel).modelName && (template as MessageTemplateModel).smsModel) {
+      this.toaster.info("Message Template")
+
+      // @ts-ignore
+      this.selectedTemplateForPopup.set(template);
+
+      // @ts-ignore
+      this.smsTemplateState.selectedMessageTemplate = template;
+    } else if (template as RecipientsTemplateModel) {
+      // @ts-ignore
+      this.smsTemplateState.recipientsTemplatesList = template
+    }
     // Open the context menu component via its ViewChild reference
     if (this.optionDialogRef) {
-      this.optionDialogRef.open();
+      this.optionDialogRef.open(template);
     }
   }
 
@@ -221,6 +222,26 @@ export class SendSmsComponent implements OnInit {
       next: response => {
         if (response.status == "OK") {
           this.smsTemplateState.messageTemplatesList = response.data
+        }
+      },
+      error: () => {
+      },
+      complete: () => {
+      },
+    });
+  }
+
+  loadRecipientTemplates(): void {
+    this.isLoadingTemplates.set(true); // Active l'indicateur de chargement
+    this.recipientTemplates$ = this.recipientService.getTemplates().pipe(
+      finalize(() => this.isLoadingTemplates.set(false)),
+      takeUntil(this.destroy$)
+    );
+
+    this.recipientTemplates$?.subscribe({
+      next: response => {
+        if (response.status == "OK") {
+          this.smsTemplateState.recipientsTemplateList = response.data
         }
       },
       error: () => {
