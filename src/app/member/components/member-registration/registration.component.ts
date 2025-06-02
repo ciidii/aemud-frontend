@@ -13,8 +13,7 @@ import {MemberModel} from "../../../core/models/member.model"; // Assuming a Mem
   imports: [
     ReactiveFormsModule,
     NgClass,
-    NgIf,
-    NgFor // Added NgFor for the table iteration
+    NgIf
   ],
   templateUrl: './registration.component.html',
   styleUrl: './registration.component.scss'
@@ -22,9 +21,9 @@ import {MemberModel} from "../../../core/models/member.model"; // Assuming a Mem
 export class RegistrationComponent implements OnInit {
 
   reinscriptionForm!: FormGroup;
-  currentSession!: SessionModel; // Renamed for clarity
-  availableSessions: SessionModel[] = []; // Initialize as array of SessionModel
-  members: MemberModel[] = []; // To hold the list of members
+  currentSession!: SessionModel;
+  availableSessions: SessionModel[] = [];
+  members: MemberModel[] = [];
 
   constructor(
     private fb: FormBuilder,

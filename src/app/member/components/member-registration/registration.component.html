@@ -22,7 +22,6 @@
               <label for="session" class="form-label">Session</label>
               <select id="session" formControlName="session" class="form-control"
                       [ngClass]="{ 'is-invalid': reinscriptionForm.get('session')?.invalid && reinscriptionForm.get('session')?.touched }">
-                <option [value]="session.id">{{ session.session }}</option>
               </select>
               <div *ngIf="reinscriptionForm.get('session')?.invalid && reinscriptionForm.get('session')?.touched"
                    class="invalid-feedback">
@@ -31,24 +30,7 @@
             </div>
           </div>
         </div>
-
         <div class="row">
-          <div class="col-md-6">
-            <div class="mb-3">
-              <label class="form-label">Type de Réinscription</label>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="initial" value="INITIAL"
-                       formControlName="registrationType">
-                <label class="form-check-label" for="initial">Initiale</label>
-              </div>
-              <div class="form-check">
-                <input class="form-check-input" type="radio" id="renewal" value="REINSCRIPTION"
-                       formControlName="registrationType">
-                <label class="form-check-label" for="renewal">Renouvellement</label>
-              </div>
-            </div>
-          </div>
-
           <div class="col-md-6">
             <div class="mb-3">
               <label class="form-label">Statut du Paiement</label>
