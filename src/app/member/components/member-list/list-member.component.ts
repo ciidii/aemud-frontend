@@ -26,7 +26,8 @@ export class ListMemberComponent implements OnInit {
   @ViewChild(GroupForNotificationComponent) groupForNotificationModal?: GroupForNotificationComponent
   public searchCriteria = [
     {criteria: "firstname", displayedValue: "Prénom"},
-    {criteria: "name", displayedValue: "Nom"}
+    {criteria: "name", displayedValue: "Nom"},
+    {criteria: "phone", displayedValue: "Numéro de téléphone"},
   ]
 
   constructor(

@@ -36,9 +36,6 @@ export class MemberService {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
-    // Assuming your backend expects a direct registration object, not tied to 'number-phone' endpoint for general registration
-    // If 'number-phone' endpoint is specifically for registration by phone, keep it.
-    // Otherwise, a more generic `/registration` endpoint might be better for this form.
     return this.httpClient.post<any>(environment.API_URL + `/registration`, registrationRequest, options);
   }
 
