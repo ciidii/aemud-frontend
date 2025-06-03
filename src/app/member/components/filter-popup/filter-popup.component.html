@@ -1,44 +1,116 @@
-<div [style]="{'display':openPopup()?'block':'none'}" data-bs-backdrop="true" class="modal">
-  <div class="modal-dialog modal-sm" role="document">
-    <div class="modal-content">
-      <!-- Modal Header -->
-      <div class="modal-header">
-        <h5 class="modal-title">Filtrer</h5>
-        <button (click)="closeModal()" type="button" class="btn-close" data-bs-dismiss="modal"
-                aria-label="Close"></button>
+<div [style]="{'display':openPopup()?'block':'none'}" class="modal fade show" tabindex="-1" role="dialog" aria-modal="true" aria-hidden="true" style="display: block;">
+  <div class="modal-dialog modal-md modal-dialog-centered" role="document">
+    <div class="modal-content filter-modal-content">
+      <div class="modal-header filter-modal-header">
+        <h5 class="modal-title filter-modal-title">
+          <i class="bi bi-funnel-fill me-2"></i> Filtrer les Membres
+        </h5>
+        <button (click)="closeModal()" type="button" class="btn-close" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
+
+      <div class="modal-body filter-modal-body">
         <form [formGroup]="formGroup">
-          <div class="mb-3">
-            <label for="commissionFilter" class="form-label">Commission</label>
-            <select id="commissionFilter" formControlName="commission" class="form-select">
-              <option value="">Toutes</option>
-              <option *ngFor="let commission of commissions" [value]="commission.id">{{ commission.name }}</option>
-            </select>
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="commissionFilter" class="form-label">Commission</label>
+                <select id="commissionFilter" formControlName="commission" class="form-select form-select-custom">
+                  <option value="">Toutes les commissions</option>
+                  <option *ngFor="let commission of commissions" [value]="commission.id">{{ commission.name }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="clubFilter" class="form-label">Club</label>
+                <select id="clubFilter" formControlName="club" class="form-select form-select-custom">
+                  <option value="">Tous les clubs</option>
+                  <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="clubFilter" class="form-label">Club</label>
-            <select id="clubFilter" formControlName="club" class="form-select">
-              <option value="">Tous</option>
-              <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
-            </select>
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="yearFilter" class="form-label">Année de session</label>
+                <select id="yearFilter" formControlName="year" class="form-select form-select-custom">
+                  <option value="">Toutes les années</option>
+                  <option *ngFor="let year of years" [value]="year.id">{{ year.session }}</option>
+                </select>
+              </div>
+            </div>
+            <div class="col-md-6">
+              <div class="form-group">
+                <label for="cotisationMonth" class="form-label">Mois de cotisation</label>
+                <select id="cotisationMonth" formControlName="cotisationMonth" class="form-select form-select-custom">
+                  <option value="">Tous les mois</option>
+                  <option *ngFor="let month of months" [value]="month.value">{{ month.name }}</option>
+                </select>
+              </div>
+            </div>
           </div>
-          <div class="mb-3">
-            <label for="yearFilter" class="form-label">Année</label>
-            <select id="yearFilter" formControlName="year" class="form-select">
-              <option value="">Toutes</option>
-              <option *ngFor="let year of years" [defaultSelected]="year.currentYear"
-                      [value]="year.id">{{ year.session }}
-              </option>
-            </select>
+
+          <div class="mb-4" *ngIf="formGroup.get('cotisationMonth')?.value">
+            <label class="form-label d-block mb-2">Statut de cotisation pour le mois</label>
+            <div class="d-flex flex-wrap gap-3 animate__animated animate__fadeIn">
+              <div class="form-check form-check-inline filter-radio-button">
+                <input class="form-check-input" type="radio" name="cotisationStatus" id="cotisationAll" value=""
+                       formControlName="cotisationStatus">
+                <label class="form-check-label" for="cotisationAll">Tous les statuts</label>
+              </div>
+              <div class="form-check form-check-inline filter-radio-button">
+                <input class="form-check-input" type="radio" name="cotisationStatus" id="cotisationPaid" value="PAID"
+                       formControlName="cotisationStatus">
+                <label class="form-check-label" for="cotisationPaid">Cotisé</label>
+              </div>
+              <div class="form-check form-check-inline filter-radio-button">
+                <input class="form-check-input" type="radio" name="cotisationStatus" id="cotisationUnpaid" value="UNPAID"
+                       formControlName="cotisationStatus">
+                <label class="form-check-label" for="cotisationUnpaid">Non cotisé</label>
+              </div>
+            </div>
           </div>
+
+
+          <div class="mb-4">
+            <label class="form-label d-block mb-2">Filtrer par Inscription</label>
+            <div class="d-flex flex-wrap gap-3">
+              <div class="form-check form-check-inline filter-radio-button">
+                <input class="form-check-input" type="radio" name="registrationFilterType" id="allRegistrations" value=""
+                       formControlName="registrationFilterType" (change)="onRegistrationFilterChange()">
+                <label class="form-check-label" for="allRegistrations">Toutes les inscriptions</label>
+              </div>
+              <div class="form-check form-check-inline filter-radio-button">
+                <input class="form-check-input" type="radio" name="registrationFilterType" id="specificRegistration" value="specific"
+                       formControlName="registrationFilterType" (change)="onRegistrationFilterChange()">
+                <label class="form-check-label" for="specificRegistration">Type d'inscription spécifique</label>
+              </div>
+            </div>
+          </div>
+
+          <div *ngIf="formGroup.get('registrationFilterType')?.value === 'specific'" class="mb-4">
+            <div class="form-group animate__animated animate__fadeIn">
+              <label for="specificRegistrationType" class="form-label">Type d'inscription</label>
+              <select id="specificRegistrationType" formControlName="specificRegistrationType" class="form-select form-select-custom">
+                <option value="">Sélectionner un type</option>
+                <option value="INITIAL">Nouvelle inscription</option>
+                <option value="REINSCRIPTION">Ancienne inscription (Renouvellement)</option>
+              </select>
+            </div>
+          </div>
+
         </form>
       </div>
-      <!-- Modal Footer -->
-      <div class="modal-footer">
-        <button type="button" class="btn btn-outline-secondary" (click)="closeModal()" data-bs-dismiss="modal">Annuler
+
+      <div class="modal-footer filter-modal-footer">
+        <button type="button" class="btn btn-outline-secondary btn-cancel" (click)="closeModal()">
+          Annuler
         </button>
-        <button type="button" class="btn btn-outline-success" (click)="applyFilters()">Appliquer</button>
+        <button type="button" class="btn btn-primary-custom" (click)="applyFilters()">
+          <i class="bi bi-check-circle-fill me-2"></i> Appliquer les filtres
+        </button>
       </div>
     </div>
   </div>

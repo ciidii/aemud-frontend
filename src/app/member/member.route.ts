@@ -19,8 +19,8 @@ const routes: Routes = [
       {
         path: 'register-form',
         loadComponent: () =>
-          import('./components/member-add/bootstrap-stepper-form.component').then(
-            (m) => m.BootstrapStepperFormComponent
+          import('./components/member-add/member-add.component').then(
+            (m) => m.MemberAddComponent
           ),
         title: 'AEMUD - Inscription',
       },
@@ -37,13 +37,6 @@ const routes: Routes = [
         loadComponent: () =>
           import('./components/member-details/member-details.component').then(
             (m) => m.MemberDetailsComponent
-          ),
-      },
-      {
-        path: 'member-registration',
-        loadComponent: () =>
-          import('./components/member-registration/registration.component').then(
-            (m) => m.RegistrationComponent
           ),
       },
       {

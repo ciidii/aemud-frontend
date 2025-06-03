@@ -14,8 +14,8 @@ import {BourseService} from "../../../core/services/bourse.service";
 
 @Component({
   selector: 'app-add-member',
-  templateUrl: './bootstrap-stepper-form.component.html',
-  styleUrls: ['./bootstrap-stepper-form.component.css'],
+  templateUrl: './member-add.component.html',
+  styleUrls: ['./member-add.component.css'],
   imports: [
     RouterModule,
     FormsModule,
@@ -26,7 +26,7 @@ import {BourseService} from "../../../core/services/bourse.service";
   ],
   standalone: true
 })
-export class BootstrapStepperFormComponent implements OnInit {
+export class MemberAddComponent implements OnInit {
   memberForm!: FormGroup;
   commissions!: Array<CommissionModel>;
   clubs!: Array<ClubModel>;
@@ -222,8 +222,10 @@ export class BootstrapStepperFormComponent implements OnInit {
       // Call the service to add the member
       this.memberService.addMember(memberData).subscribe({
         next: (response) => {
-          this.toaster.success("Membre ajouté avec succès");
-          this.router.navigate(['/members/list-members']);
+          if (response.result=="Succeeded") {
+            this.toaster.success("Membre ajouté avec succès");
+            this.router.navigateByUrl(`/members/member-details/${response.data.id}`);
+          }
         },
         error: (err) => {
           this.toaster.error("Une erreur s'est produite lors de l'ajout du membre");

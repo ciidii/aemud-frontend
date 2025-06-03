@@ -29,7 +29,7 @@ export class MemberService {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
-    return this.httpClient.post<any>(environment.API_URL + `/members`, member, options);
+    return this.httpClient.post<ResponseEntityApi<MemberModel>>(environment.API_URL + `/members`, member, options);
   }
 
   register(registrationRequest: any) { // Renamed parameter for clarity (was registrationRequestWithNumberPhone)
