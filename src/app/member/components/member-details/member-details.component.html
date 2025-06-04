@@ -97,7 +97,8 @@
             <p class="mb-1"><strong>Nationalité :</strong> {{ member.personalInfo.nationality }}</p>
           </div>
           <div class="col-md-6">
-            <p class="mb-1"><strong>Date de naissance :</strong> {{ member.personalInfo.birthday[2] }}/{{ member.personalInfo.birthday[1] }}/{{ member.personalInfo.birthday[0] }}</p>
+            <p class="mb-1"><strong>Date de naissance :</strong> {{ member.personalInfo.birthday[2] }}
+              /{{ member.personalInfo.birthday[1] }}/{{ member.personalInfo.birthday[0] }}</p>
             <p class="mb-1"><strong>Situation Matrimoniale :</strong> {{ member.personalInfo.maritalStatus }}</p>
           </div>
         </div>
@@ -125,7 +126,7 @@
                   <label for="name" class="form-label">Nom</label>
                   <input type="text" id="name" formControlName="name" class="form-control"
                          [ngClass]="{ 'is-invalid': personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched }"
-                         placeholder="Entrez votre nom" />
+                         placeholder="Entrez votre nom"/>
                   <div *ngIf="personalInfo.get('name')?.invalid && personalInfo.get('name')?.touched"
                        class="invalid-feedback">
                     Le nom est requis et doit comporter au moins 2 caractères.
@@ -135,7 +136,7 @@
                   <label for="firstname" class="form-label">Prénom</label>
                   <input type="text" id="firstname" formControlName="firstname" class="form-control"
                          [ngClass]="{ 'is-invalid': personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched }"
-                         placeholder="Entrez votre prénom" />
+                         placeholder="Entrez votre prénom"/>
                   <div *ngIf="personalInfo.get('firstname')?.invalid && personalInfo.get('firstname')?.touched"
                        class="invalid-feedback">
                     Le prénom est requis et doit comporter au moins 2 caractères.
@@ -147,7 +148,7 @@
                   <label for="nationality" class="form-label">Nationalité</label>
                   <input type="text" id="nationality" formControlName="nationality" class="form-control"
                          [ngClass]="{ 'is-invalid': personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched }"
-                         placeholder="Entrez votre nationalité" />
+                         placeholder="Entrez votre nationalité"/>
                   <div *ngIf="personalInfo.get('nationality')?.invalid && personalInfo.get('nationality')?.touched"
                        class="invalid-feedback">
                     La nationalité est requise.
@@ -157,7 +158,7 @@
                   <label for="birthday" class="form-label">Date de naissance</label>
                   <input type="date" id="birthday" formControlName="birthday" class="form-control"
                          [ngClass]="{ 'is-invalid': personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched }"
-                         [max]="maxDate" />
+                         [max]="maxDate"/>
                   <div *ngIf="personalInfo.get('birthday')?.invalid && personalInfo.get('birthday')?.touched"
                        class="invalid-feedback">
                     La date de naissance est requise.
@@ -204,7 +205,8 @@
             <p class="mb-1"><strong>Cours AEMUD suivis :</strong> {{ member.membershipInfo.aemudCourses }}</p>
             <p class="mb-1"><strong>Autres cours :</strong> {{ member.membershipInfo.otherCourses }}</p>
             <p class="mb-1"><strong>Activités AEMUD :</strong> {{ member.membershipInfo.participatedActivity }}</p>
-            <p class="mb-1"><strong>Organisation politique :</strong> {{ member.membershipInfo.politicOrganisation }}</p>
+            <p class="mb-1"><strong>Organisation politique :</strong> {{ member.membershipInfo.politicOrganisation }}
+            </p>
             <p class="mb-1"><strong>Bourse :</strong> {{ member.bourse.lebelle || 'N/A' }}</p>
             <p class="mb-1"><strong>Commission :</strong> {{ member.commissions?.[0]?.name || 'N/A' }}</p>
             <p class="mb-1"><strong>Club :</strong> {{ member.clubs?.[0]?.name || 'N/A' }}</p>
@@ -226,7 +228,7 @@
                   <label for="yearOfBac" class="form-label">Année de bac</label>
                   <input id="yearOfBac" formControlName="yearOfBac" class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('yearOfBac')?.invalid && membershipInfo.get('yearOfBac')?.touched }"
-                         placeholder="Entrez l'année d'obtention du bac" />
+                         placeholder="Entrez l'année d'obtention du bac"/>
                   <div *ngIf="membershipInfo.get('yearOfBac')?.invalid && membershipInfo.get('yearOfBac')?.touched"
                        class="invalid-feedback">
                     L'année d'obtention du bac est requise.
@@ -273,9 +275,10 @@
                   <label for="legacyInstitution" class="form-label">Etablissement d'origine</label>
                   <input id="legacyInstitution" formControlName="legacyInstitution" class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('legacyInstitution')?.invalid && membershipInfo.get('legacyInstitution')?.touched }"
-                         placeholder="Entrez l'établissement d'origine" />
-                  <div *ngIf="membershipInfo.get('legacyInstitution')?.invalid && membershipInfo.get('legacyInstitution')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Entrez l'établissement d'origine"/>
+                  <div
+                    *ngIf="membershipInfo.get('legacyInstitution')?.invalid && membershipInfo.get('legacyInstitution')?.touched"
+                    class="invalid-feedback">
                     L'Etablissement d'origine est obligatoire
                   </div>
                 </div>
@@ -286,9 +289,10 @@
                   <label for="aemudCourses" class="form-label">Cours AEMUD</label>
                   <input type="text" id="aemudCourses" formControlName="aemudCourses" class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('aemudCourses')?.invalid && membershipInfo.get('aemudCourses')?.touched }"
-                         placeholder="Entrez les cours AEMUD" />
-                  <div *ngIf="membershipInfo.get('aemudCourses')?.invalid && membershipInfo.get('aemudCourses')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Entrez les cours AEMUD"/>
+                  <div
+                    *ngIf="membershipInfo.get('aemudCourses')?.invalid && membershipInfo.get('aemudCourses')?.touched"
+                    class="invalid-feedback">
                     Les cours AEMUD sont requis.
                   </div>
                 </div>
@@ -296,9 +300,10 @@
                   <label for="otherCourses" class="form-label">Autres cours suivis</label>
                   <input type="text" id="otherCourses" formControlName="otherCourses" class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('otherCourses')?.invalid && membershipInfo.get('otherCourses')?.touched }"
-                         placeholder="Entrez d'autres cours" />
-                  <div *ngIf="membershipInfo.get('otherCourses')?.invalid && membershipInfo.get('otherCourses')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Entrez d'autres cours"/>
+                  <div
+                    *ngIf="membershipInfo.get('otherCourses')?.invalid && membershipInfo.get('otherCourses')?.touched"
+                    class="invalid-feedback">
                     Les autres cours sont requis.
                   </div>
                 </div>
@@ -307,11 +312,13 @@
               <div class="row">
                 <div class="col-md-6 mb-3">
                   <label for="participatedActivity" class="form-label">Activité Participée</label>
-                  <input type="text" id="participatedActivity" formControlName="participatedActivity" class="form-control"
+                  <input type="text" id="participatedActivity" formControlName="participatedActivity"
+                         class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('participatedActivity')?.invalid && membershipInfo.get('participatedActivity')?.touched }"
-                         placeholder="Entrez l'activité participée" />
-                  <div *ngIf="membershipInfo.get('participatedActivity')?.invalid && membershipInfo.get('participatedActivity')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Entrez l'activité participée"/>
+                  <div
+                    *ngIf="membershipInfo.get('participatedActivity')?.invalid && membershipInfo.get('participatedActivity')?.touched"
+                    class="invalid-feedback">
                     L'activité est requise.
                   </div>
                 </div>
@@ -319,9 +326,10 @@
                   <label for="politicOrganisation" class="form-label">Organisation Politique</label>
                   <input type="text" id="politicOrganisation" formControlName="politicOrganisation" class="form-control"
                          [ngClass]="{ 'is-invalid': membershipInfo.get('politicOrganisation')?.invalid && membershipInfo.get('politicOrganisation')?.touched }"
-                         placeholder="Entrez l'organisation politique" />
-                  <div *ngIf="membershipInfo.get('politicOrganisation')?.invalid && membershipInfo.get('politicOrganisation')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Entrez l'organisation politique"/>
+                  <div
+                    *ngIf="membershipInfo.get('politicOrganisation')?.invalid && membershipInfo.get('politicOrganisation')?.touched"
+                    class="invalid-feedback">
                     L'organisation politique est requise.
                   </div>
                 </div>
@@ -333,7 +341,8 @@
                   <select id="commission" formControlName="commission" class="form-control"
                           [ngClass]="{ 'is-invalid': membershipInfo.get('commission')?.invalid && membershipInfo.get('commission')?.touched }">
                     <option value="" disabled selected>Sélectionnez une commission</option>
-                    <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}</option>
+                    <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}
+                    </option>
                   </select>
                   <div *ngIf="membershipInfo.get('commission')?.invalid && membershipInfo.get('commission')?.touched"
                        class="invalid-feedback">
@@ -411,9 +420,10 @@
                   <label for="institutionName" class="form-label">Université</label>
                   <input type="text" id="institutionName" formControlName="institutionName" class="form-control"
                          [ngClass]="{ 'is-invalid': academicInfo.get('institutionName')?.invalid && academicInfo.get('institutionName')?.touched }"
-                         placeholder="Nom de l'université" />
-                  <div *ngIf="academicInfo.get('institutionName')?.invalid && academicInfo.get('institutionName')?.touched"
-                       class="invalid-feedback">
+                         placeholder="Nom de l'université"/>
+                  <div
+                    *ngIf="academicInfo.get('institutionName')?.invalid && academicInfo.get('institutionName')?.touched"
+                    class="invalid-feedback">
                     Le nom de l'université est requis et doit comporter au moins 3 caractères.
                   </div>
                 </div>
@@ -421,7 +431,7 @@
                   <label for="studiesDomain" class="form-label">Domaine d'études</label>
                   <input type="text" id="studiesDomain" formControlName="studiesDomain" class="form-control"
                          [ngClass]="{ 'is-invalid': academicInfo.get('studiesDomain')?.invalid && academicInfo.get('studiesDomain')?.touched }"
-                         placeholder="Entrez le domaine d'études" />
+                         placeholder="Entrez le domaine d'études"/>
                   <div *ngIf="academicInfo.get('studiesDomain')?.invalid && academicInfo.get('studiesDomain')?.touched"
                        class="invalid-feedback">
                     Le domaine d'études est requis et doit comporter au moins 3 caractères.
@@ -432,7 +442,7 @@
                 <label for="studiesLevel" class="form-label">Niveau d'étude</label>
                 <input type="text" id="studiesLevel" formControlName="studiesLevel" class="form-control"
                        [ngClass]="{ 'is-invalid': academicInfo.get('studiesLevel')?.invalid && academicInfo.get('studiesLevel')?.touched }"
-                       placeholder="Entrez le niveau d'étude" />
+                       placeholder="Entrez le niveau d'étude"/>
                 <div *ngIf="academicInfo.get('studiesLevel')?.invalid && academicInfo.get('studiesLevel')?.touched"
                      class="invalid-feedback">
                   Le niveau d'étude est requis.
@@ -461,8 +471,10 @@
           <p class="mb-1"><strong>Téléphone :</strong> {{ member.contactInfo.numberPhone }}</p>
         </div>
         <h5 class="text-primary">Personnes à Contacter en Urgence</h5>
-        <div *ngIf="member.contactInfo.personToCalls && member.contactInfo.personToCalls.length > 0; else noEmergencyContacts">
-          <div *ngFor="let p of member.contactInfo.personToCalls; let i = index" class="card card-body mb-3 bg-light border-primary">
+        <div
+          *ngIf="member.contactInfo.personToCalls && member.contactInfo.personToCalls.length > 0; else noEmergencyContacts">
+          <div *ngFor="let p of member.contactInfo.personToCalls; let i = index"
+               class="card card-body mb-3 bg-light border-primary">
             <h6 class="mb-2 text-primary">Contact d'Urgence #{{ i + 1 }}</h6>
             <p class="mb-1"><strong>Relation :</strong> {{ p.relationship }}</p>
             <p class="mb-1"><strong>Nom complet :</strong> {{ p.firstname }} {{ p.lastname }}</p>
@@ -493,7 +505,7 @@
                     <span class="input-group-text">+221</span>
                     <input type="text" id="numberPhone" formControlName="numberPhone" class="form-control"
                            [ngClass]="{ 'is-invalid': contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched }"
-                           placeholder="XXXXXXXXX" />
+                           placeholder="XXXXXXXXX"/>
                   </div>
                   <div *ngIf="contactInfo.get('numberPhone')?.invalid && contactInfo.get('numberPhone')?.touched"
                        class="invalid-feedback">
@@ -504,7 +516,7 @@
                   <label for="email" class="form-label">Adresse Email</label>
                   <input type="email" id="email" formControlName="email" class="form-control"
                          [ngClass]="{ 'is-invalid': contactInfo.get('email')?.invalid && contactInfo.get('email')?.touched }"
-                         placeholder="Entrez l'adresse email" />
+                         placeholder="Entrez l'adresse email"/>
                   <div *ngIf="contactInfo.get('email')?.invalid && contactInfo.get('email')?.touched"
                        class="invalid-feedback">
                     Adresse email invalide.
@@ -521,14 +533,15 @@
             <div class="card-body">
               <div *ngIf="personToCalls.controls.length > 0; else addFirstContact">
                 <div formArrayName="personToCalls">
-                  <div *ngFor="let person of personToCalls.controls; let i = index;" [formGroupName]="i" class="mb-4 p-3 border rounded border-secondary bg-light">
+                  <div *ngFor="let person of personToCalls.controls; let i = index;" [formGroupName]="i"
+                       class="mb-4 p-3 border rounded border-secondary bg-light">
                     <h6 class="text-secondary">Contact #{{ i + 1 }}</h6>
                     <div class="row">
                       <div class="col-md-6 mb-3">
                         <label for="lastname{{ i }}" class="form-label">Nom</label>
                         <input type="text" id="lastname{{ i }}" formControlName="lastname" class="form-control"
                                [ngClass]="{ 'is-invalid': person.get('lastname')?.invalid && person.get('lastname')?.touched }"
-                               placeholder="Entrez le nom" />
+                               placeholder="Entrez le nom"/>
                         <div *ngIf="person.get('lastname')?.invalid && person.get('lastname')?.touched"
                              class="invalid-feedback">
                           Nom requis.
@@ -538,7 +551,7 @@
                         <label for="firstname{{ i }}" class="form-label">Prénom</label>
                         <input type="text" id="firstname{{ i }}" formControlName="firstname" class="form-control"
                                [ngClass]="{ 'is-invalid': person.get('firstname')?.invalid && person.get('firstname')?.touched }"
-                               placeholder="Entrez le prénom" />
+                               placeholder="Entrez le prénom"/>
                         <div *ngIf="person.get('firstname')?.invalid && person.get('firstname')?.touched"
                              class="invalid-feedback">
                           Prénom requis.
@@ -550,12 +563,14 @@
                         <label for="requiredNumberPhone{{ i }}" class="form-label">Téléphone Principal</label>
                         <div class="input-group">
                           <span class="input-group-text">+221</span>
-                          <input type="text" id="requiredNumberPhone{{ i }}" formControlName="requiredNumberPhone" class="form-control"
+                          <input type="text" id="requiredNumberPhone{{ i }}" formControlName="requiredNumberPhone"
+                                 class="form-control"
                                  [ngClass]="{ 'is-invalid': person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched }"
-                                 placeholder="XXXXXXXXX" />
+                                 placeholder="XXXXXXXXX"/>
                         </div>
-                        <div *ngIf="person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched"
-                             class="invalid-feedback">
+                        <div
+                          *ngIf="person.get('requiredNumberPhone')?.invalid && person.get('requiredNumberPhone')?.touched"
+                          class="invalid-feedback">
                           Téléphone principal invalide. Format requis : 9 chiffres.
                         </div>
                       </div>
@@ -563,22 +578,24 @@
                         <label for="optionalNumberPhone{{ i }}" class="form-label">Téléphone Secondaire</label>
                         <div class="input-group">
                           <span class="input-group-text">+221</span>
-                          <input type="text" id="optionalNumberPhone{{ i }}" formControlName="optionalNumberPhone" class="form-control"
-                                 placeholder="XXXXXXXXX" />
+                          <input type="text" id="optionalNumberPhone{{ i }}" formControlName="optionalNumberPhone"
+                                 class="form-control"
+                                 placeholder="XXXXXXXXX"/>
                         </div>
                       </div>
                     </div>
                     <div class="mb-3">
                       <label for="relationship{{ i }}" class="form-label">Relation</label>
                       <input type="text" id="relationship{{ i }}" formControlName="relationship" class="form-control"
-                             placeholder="Entrez la relation" />
+                             placeholder="Entrez la relation"/>
                     </div>
                     <div class="d-flex justify-content-end">
-                      <button type="button" class="btn btn-danger btn-sm" (click)="removePersonToCall(i)" [disabled]="personToCalls.length === 1">
+                      <button type="button" class="btn btn-danger btn-sm" (click)="removePersonToCall(i)"
+                              [disabled]="personToCalls.length === 1">
                         Supprimer ce contact
                       </button>
                     </div>
-                    <hr *ngIf="i < personToCalls.controls.length - 1" class="my-3" />
+                    <hr *ngIf="i < personToCalls.controls.length - 1" class="my-3"/>
                   </div>
                 </div>
               </div>
@@ -587,7 +604,8 @@
                   Veuillez ajouter un contact d'urgence.
                 </div>
               </ng-template>
-              <button [disabled]="personToCalls.length >= 2" type="button" class="btn btn-outline-primary mt-3" (click)="addPersonToCall()">
+              <button [disabled]="personToCalls.length >= 2" type="button" class="btn btn-outline-primary mt-3"
+                      (click)="addPersonToCall()">
                 <i class="bi bi-plus-circle"></i> Ajouter un contact d'urgence
               </button>
             </div>
@@ -616,7 +634,8 @@
             <div class="row">
               <div class="col-md-6">
                 <p class="mb-1"><strong>Type d'inscription :</strong> {{ reg.registrationType }}</p>
-                <p class="mb-1"><strong>Statut de l'inscription :</strong> <span class="badge bg-info">{{ reg.registrationStatus }}</span></p>
+                <p class="mb-1"><strong>Statut de l'inscription :</strong> <span
+                  class="badge bg-info">{{ reg.registrationStatus }}</span></p>
               </div>
               <div class="col-md-6">
                 <p class="mb-1">
@@ -641,7 +660,8 @@
       </ng-template>
 
       <hr class="my-4">
-      <h4 class="mb-3 text-primary">Nouvelle Réinscription pour {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h4>
+      <h4 class="mb-3 text-primary">Nouvelle Réinscription
+        pour {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h4>
       <button class="btn btn-outline-success mb-3" *ngIf="!showReenrollmentForm" (click)="toggleReenrollmentForm()">
         <i class="bi bi-person-plus-fill"></i> Lancer une réinscription
       </button>
@@ -649,7 +669,7 @@
       <div *ngIf="showReenrollmentForm" class="card p-4 shadow-sm">
         <form [formGroup]="reinscriptionForm" novalidate (ngSubmit)="onReEnrollSubmit()">
           <div class="row gx-4 gy-3">
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label for="reinscriptionSession" class="form-label">Session de Réinscription</label>
                 <select id="reinscriptionSession" formControlName="session" class="form-control form-select-custom"
@@ -664,14 +684,24 @@
               </div>
             </div>
 
-            <div class="col-md-6">
+            <div class="col-md-4">
               <div class="form-group">
                 <label class="form-label">Statut du Paiement</label>
                 <div class="form-check form-switch form-switch-custom d-inline-block ms-3">
-                  <input class="form-check-input" type="checkbox" id="reinscriptionStatusPayment" formControlName="statusPayment" role="switch">
+                  <input class="form-check-input" type="checkbox" id="reinscriptionStatusPayment"
+                         formControlName="statusPayment" role="switch">
                   <label class="form-check-label" for="reinscriptionStatusPayment">Payé</label>
                 </div>
               </div>
+            </div>
+            <div class="col-md-4">
+              <label for="registrationType" class="form-label">Type D'Inscription</label>
+              <select id="registrationType" formControlName="registrationType" class="form-control"
+                      [ngClass]="{ 'is-invalid': personalInfo.get('registrationType')?.invalid && personalInfo.get('registrationType')?.touched }">
+                <option value="" disabled selected>Sélectionnez</option>
+                <option value="INITIAL">Initiale</option>
+                <option value="REINSCRIPTION">Reinscription</option>
+              </select>
             </div>
           </div>
 

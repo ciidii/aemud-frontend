@@ -191,8 +191,7 @@ export class FilterPopupComponent implements OnInit {
     // If it's 'PAID' or 'UNPAID', send that value.
 
     this.appState.memberState.filters = filters;
-    this.appState.memberState.currentPage = 0; // Reset to first page on new filters
-
+    this.appState.memberState.currentPage = 1; // Reset to first page on new filters
     this.memberService.searchMember(
       this.appState.memberState.keyword,
       this.appState.memberState.criteria,
