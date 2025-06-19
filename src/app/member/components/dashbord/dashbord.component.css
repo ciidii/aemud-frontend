@@ -1,29 +1,238 @@
-.hover-effect {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+/* --- Styles Généraux du Modal --- */
+.custom-filter-modal {
+  z-index: 1050;
+  background-color: rgba(0, 0, 0, 0.5);
 }
 
-.hover-effect:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-}
-
-.card {
+.custom-modal-content {
   border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+  border: none;
   overflow: hidden;
 }
 
-.input-group-text {
-  border-radius: 8px 0 0 8px;
+/* --- Entête du Modal --- */
+.custom-modal-header {
+  background-color: var(--bs-primary);
+  color: white;
+  border-bottom: none;
+  padding: 1.8rem 2.5rem; /* Augmentation du padding */
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.form-select {
-  border-radius: 0 8px 8px 0;
+.custom-modal-title {
+  font-size: 1.6rem; /* Légèrement plus grande */
+  font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
-.text-success {
-  color: #198754 !important;
+.custom-modal-title i {
+  font-size: 2rem; /* Taille de l'icône augmentée */
+  margin-right: 1rem; /* Espacement icône-titre augmenté */
 }
 
-.text-danger {
-  color: #dc3545 !important;
+.custom-btn-close {
+  color: white;
+  opacity: 0.8;
+  font-size: 1.3rem; /* Légèrement plus grande */
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-btn-close:hover {
+  opacity: 1;
+}
+
+/* --- Corps du Modal --- */
+.custom-modal-body {
+  padding: 2.5rem; /* Augmentation du padding général du corps */
+  background-color: #f8f9fa;
+}
+
+.filter-section {
+  background-color: #ffffff;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  padding: 2rem; /* Augmentation du padding interne des sections */
+  margin-bottom: 2rem; /* Espacement entre les sections augmenté */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07); /* Ombre un peu plus prononcée pour la distinction */
+}
+
+.filter-section:last-child {
+  margin-bottom: 0; /* Pas de marge après la dernière section */
+}
+
+.filter-section-title {
+  font-size: 1.25rem; /* Légèrement plus grande */
+  font-weight: 600;
+  color: var(--bs-dark);
+  margin-bottom: 1.8rem; /* Espacement sous le titre de section augmenté */
+  border-bottom: 1px solid #f0f0f0;
+  padding-bottom: 1rem; /* Padding sous la ligne de séparation */
+  display: flex;
+  align-items: center;
+}
+
+.filter-section-title i {
+  color: var(--bs-primary);
+  margin-right: 0.8rem; /* Espacement icône-titre augmenté */
+}
+
+/* --- Éléments de Formulaire Personnalisés --- */
+.custom-form-group {
+  margin-bottom: 1.5rem; /* Espacement entre les groupes de formulaire augmenté */
+}
+
+.form-label {
+  font-weight: 500;
+  color: #343a40;
+  margin-bottom: 0.75rem; /* Espacement entre label et input augmenté */
+}
+
+.custom-form-select,
+.custom-form-control {
+  border-radius: 8px;
+  border: 1px solid #ced4da;
+  padding: 0.85rem 1.2rem; /* Padding pour une meilleure ergonomie */
+  transition: border-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.custom-form-select:focus,
+.custom-form-control:focus {
+  border-color: var(--bs-primary);
+  box-shadow: 0 0 0 0.25rem rgba(var(--bs-primary-rgb), 0.25);
+}
+
+/* --- Boutons Radio Personnalisés --- */
+.custom-radio-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.2rem; /* Espacement entre les radios augmenté */
+  margin-top: 1rem; /* Ajouter un peu d'espace au-dessus du groupe de radios */
+}
+
+.custom-radio-button {
+  background-color: #f1f5f9;
+  border: 1px solid #d1d9e6;
+  border-radius: 8px;
+  padding: 0.9rem 1.4rem; /* Padding des boutons radio augmenté */
+  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  color: #555;
+}
+
+.custom-radio-button:hover {
+  background-color: #e2e8f0;
+  border-color: #c0c7d2;
+}
+
+.custom-radio-button input[type="radio"] {
+  display: none;
+}
+
+.custom-radio-button label {
+  cursor: pointer;
+  margin-bottom: 0;
+  position: relative;
+  padding-left: 2rem; /* Espace pour le cercle personnalisé augmenté */
+  display: flex;
+  align-items: center;
+}
+
+.custom-radio-button label::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 1.1rem; /* Taille du cercle augmentée */
+  height: 1.1rem; /* Taille du cercle augmentée */
+  border: 2px solid #aaa;
+  border-radius: 50%;
+  background-color: #fff;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-radio-button label::after {
+  content: '';
+  position: absolute;
+  left: 4px; /* Centre le point */
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0.7rem; /* Taille du point augmentée */
+  height: 0.7rem; /* Taille du point augmentée */
+  background-color: var(--bs-primary);
+  border-radius: 50%;
+  opacity: 0;
+  transition: opacity 0.2s ease-in-out;
+}
+
+.custom-radio-button input[type="radio"]:checked + label::before {
+  border-color: var(--bs-primary);
+  background-color: var(--bs-primary);
+}
+
+.custom-radio-button input[type="radio"]:checked + label::after {
+  opacity: 1;
+}
+
+/* --- Pied de Page du Modal --- */
+.custom-modal-footer {
+  border-top: 1px solid #e9ecef;
+  padding: 1.8rem 2.5rem; /* Augmentation du padding */
+  background-color: #f8f9fa;
+  border-bottom-left-radius: 12px;
+  border-bottom-right-radius: 12px;
+  display: flex;
+  justify-content: flex-end;
+  gap: 1.2rem; /* Espacement entre les boutons augmenté */
+}
+
+.custom-btn-cancel {
+  min-width: 110px; /* Taille minimale légèrement augmentée */
+  padding: 0.85rem 1.6rem; /* Padding augmenté */
+  border-radius: 8px;
+  font-weight: 500;
+  transition: all 0.2s ease-in-out;
+  color: #6c757d;
+  border-color: #6c757d;
+}
+
+.custom-btn-cancel:hover {
+  background-color: #e9ecef;
+  color: #495057;
+  border-color: #495057;
+}
+
+.custom-btn-apply {
+  background-color: var(--bs-primary);
+  border-color: var(--bs-primary);
+  color: white;
+  min-width: 160px; /* Taille minimale légèrement augmentée */
+  padding: 0.85rem 1.6rem; /* Padding augmenté */
+  border-radius: 8px;
+  font-weight: 600;
+  transition: all 0.2s ease-in-out;
+}
+
+.custom-btn-apply:hover {
+  background-color: var(--bs-primary-dark);
+  border-color: var(--bs-primary-dark);
+  transform: translateY(-2px);
+}
+
+.custom-btn-apply i {
+  margin-right: 0.6rem; /* Espacement icône-texte légèrement augmenté */
+}
+
+/* --- Animations (si animate.css est importé) --- */
+.animate__animated {
+  animation-duration: 0.6s; /* Allonger légèrement la durée pour plus de douceur */
 }

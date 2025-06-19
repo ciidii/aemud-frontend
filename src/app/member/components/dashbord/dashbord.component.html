@@ -8,8 +8,14 @@
         <label for="yearSelect" class="input-group-text bg-primary text-white">
           <i class="bi bi-calendar"></i>
         </label>
-        <select [(ngModel)]="sessionId" (ngModelChange)="reloadStat()" class="form-select shadow-sm" id="yearSelect">
-          <option *ngFor="let year of years" [value]="year.id">{{ year.session }}</option>
+        <select [(ngModel)]="sessionId" (ngModelChange)="reloadStat(sessionId)" class="form-select shadow-sm"
+                id="yearSelect">
+          <ng-container *ngIf="years$ | async as sessions; else loading">
+            <option *ngFor="let year of sessions.data" [value]="year.id">{{ year.session }}</option>
+          </ng-container>
+          <ng-template #loading>
+            <option disabled>Chargement des sessions..</option>
+          </ng-template>
         </select>
       </div>
     </div>
@@ -22,7 +28,7 @@
         <div class="card-body text-center p-4">
           <i class="bi bi-people-fill fs-1 text-primary mb-3"></i>
           <h5 class="card-title fw-bold mb-2">Membres Inscrits</h5>
-          <p class="card-text fs-3 fw-bold text-dark">{{ stats.registeredMembers || 0 }}</p>
+          <p class="card-text fs-3 fw-bold text-dark">{{ stats().registeredMembers }}</p>
           <small class="text-muted">Total des membres inscrits</small>
         </div>
       </div>
@@ -34,7 +40,7 @@
         <div class="card-body text-center p-4">
           <i class="bi bi-cash-stack fs-1 text-success mb-3"></i>
           <h5 class="card-title fw-bold mb-2">Paiements Complétés</h5>
-          <p class="card-text fs-3 fw-bold text-dark">{{ stats.completedPayments || 0 }}</p>
+          <p class="card-text fs-3 fw-bold text-dark">{{ stats().completedPayments }}</p>
           <small class="text-muted">Paiements réussis</small>
         </div>
       </div>
@@ -46,7 +52,7 @@
         <div class="card-body text-center p-4">
           <i class="bi bi-exclamation-triangle-fill fs-1 text-danger mb-3"></i>
           <h5 class="card-title fw-bold mb-2">Inscriptions en Attente</h5>
-          <p class="card-text fs-3 fw-bold text-dark">{{ stats.pendingRegistrations || 0 }}</p>
+          <p class="card-text fs-3 fw-bold text-dark">{{ stats().pendingRegistrations }}</p>
           <small class="text-muted">En attente de validation</small>
         </div>
       </div>
@@ -58,7 +64,7 @@
         <div class="card-body text-center p-4">
           <i class="bi bi-person-plus-fill fs-1 text-info mb-3"></i>
           <h5 class="card-title fw-bold mb-2">Nouveaux Adhérents</h5>
-          <p class="card-text fs-3 fw-bold text-dark">{{ stats.newRegistrations || 0 }}</p>
+          <p class="card-text fs-3 fw-bold text-dark">{{ stats().newRegistrations }}</p>
           <small class="text-muted">Nouveaux membres inscrits</small>
         </div>
       </div>
@@ -70,7 +76,7 @@
         <div class="card-body text-center p-4">
           <i class="bi bi-arrow-repeat fs-1 text-warning mb-3"></i>
           <h5 class="card-title fw-bold mb-2">Réinscriptions</h5>
-          <p class="card-text fs-3 fw-bold text-dark">{{ stats.renewalRegistrations || 0 }}</p>
+          <p class="card-text fs-3 fw-bold text-dark">{{ stats().renewalRegistrations }}</p>
           <small class="text-muted">Réinscriptions réussies</small>
         </div>
       </div>

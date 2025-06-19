@@ -29,7 +29,6 @@ export class YearOfSessionService {
 
   public getPaticulerYear(sessionId: string): Observable<ResponseEntityApi<SessionModel>> {
     let params = new HttpParams().set("sessionid", sessionId);
-
     return this.http.get<ResponseEntityApi<SessionModel>>(environment.API_URL + '/session', {params});
   }
 

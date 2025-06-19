@@ -1,136 +1,82 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit, signal} from '@angular/core';
 import {YearOfSessionService} from "../../../core/services/year-of-session.service";
 import {MemberService} from "../../core/member.service";
 import {FormsModule} from "@angular/forms";
-import {NgForOf} from "@angular/common";
+import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
+import {forkJoin, of, switchMap} from "rxjs";
+import {catchError} from "rxjs/operators";
 
 @Component({
   selector: 'app-list-contribution',
   standalone: true,
   imports: [
     NgForOf,
-    FormsModule
+    FormsModule,
+    NgIf,
+    AsyncPipe
   ],
   templateUrl: './dashbord.component.html',
   styleUrl: './dashbord.component.css'
 })
 export class DashbordComponent implements OnInit {
-  stats = {
+  stats = signal({
     registeredMembers: 0,
     completedPayments: 0,
     pendingRegistrations: 0,
     newRegistrations: 0,
-    renewalRegistrations:0,
-  };
+    renewalRegistrations: 0
+  });
 
-  years: any[] = [];
-  sessionId!: string;
+  sessionId: string = "";
+  private sessionService = inject(YearOfSessionService);
+  private memberService = inject(MemberService);
 
-  constructor(
-    private sessionService: YearOfSessionService,
-    private memberService: MemberService
-  ) {
-  }
+  currentYear$ = this.sessionService.getCurrentYear();
+  years$ = this.sessionService.getYears();
 
   ngOnInit(): void {
-    this.loadSessions();
+    this.currentYear$.subscribe({
+      next: currentYear => {
+        this.loadStat(currentYear.data.id);
+      }, error: error => {
+      }
+    })
   }
 
-  loadSessions() {
-    this.sessionService.getYears().subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.years = resp.data;
-          const currentYear = this.years.find(year => year.currentYear);
-          if (currentYear) {
-            this.sessionId = currentYear.id;
-            this.reloadStat();
-          }
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des années.");
+  reloadStat(sessionId: string) {
+    this.loadStat(sessionId);
+  }
+
+
+  loadStat(sessionid: string) {
+    this.sessionService.getPaticulerYear(sessionid).pipe(
+      switchMap(current =>
+        forkJoin({
+          registeredMembers: this.memberService.getRegistrationBySession(current.data.id),
+          completedPayments: this.memberService.getPayedOrNoPayedSessionCountPeerSession(current.data.id, true),
+          pendingRegistrations: this.memberService.getPayedOrNoPayedSessionCountPeerSession(current.data.id, false),
+          newRegistrations: this.memberService.getNewOrRenewalAdherentForASession(current.data.id, 'INITIAL'),
+          renewalRegistrations: this.memberService.getNewOrRenewalAdherentForASession(current.data.id, 'REINSCRIPTION')
+        }).pipe(
+          catchError(error => {
+            console.error('Erreur lors du chargement des statistiques:', error);
+            return of(null); // on évite le crash du stream
+          })
+        )
+      )
+    ).subscribe(results => {
+      if (results) {
+        this.stats.set({
+          registeredMembers: results.registeredMembers?.data ?? 0,
+          completedPayments: results.completedPayments?.data ?? 0,
+          pendingRegistrations: results.pendingRegistrations?.data ?? 0,
+          newRegistrations: results.newRegistrations?.data ?? 0,
+          renewalRegistrations: results.renewalRegistrations?.data ?? 0,
+        });
+        console.log('[Statistiques mises à jour]', this.stats());
       }
     });
+
   }
-
-  reloadStat() {
-    if (this.sessionId) {
-      this.getCurrentSessionStat();
-      this.getCompletedPayments();
-      this.getPendingRegistrations();
-      this.getNewRegistrations();
-      this.getRenewalRegistrations();
-    }
-  }
-
-
-
-  getCurrentSessionStat() {
-    this.memberService.getRegistrationBySession(this.sessionId).subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.stats.registeredMembers = resp.data;
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des inscriptions.");
-      }
-    });
-  }
-
-  getCompletedPayments() {
-    this.memberService.getPayedOrNoPayedSessionCountPeerSession(this.sessionId, true).subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.stats.completedPayments = resp.data;
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des paiements.");
-      }
-    });
-  }
-
-  getPendingRegistrations() {
-    this.memberService.getPayedOrNoPayedSessionCountPeerSession(this.sessionId, false).subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.stats.pendingRegistrations = resp.data;
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des inscriptions en attente.");
-      }
-    });
-  }
-
-  getNewRegistrations() {
-    this.memberService.getNewOrRenewalAdherentForASession(this.sessionId, "INITIAL").subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.stats.newRegistrations = resp.data;
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des inscriptions en attente.");
-      }
-    });
-  }
-
-  getRenewalRegistrations() {
-    this.memberService.getNewOrRenewalAdherentForASession(this.sessionId, "REINSCRIPTION").subscribe({
-      next: resp => {
-        if (resp.status === "OK") {
-          this.stats.renewalRegistrations = resp.data; // Correction ici
-        }
-      },
-      error: () => {
-        console.error("Erreur lors de la récupération des réinscriptions.");
-      }
-    });
-  }
-
-
 
 }

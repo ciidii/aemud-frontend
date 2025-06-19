@@ -284,16 +284,30 @@
               <label for="commission" class="form-label">Commission</label>
               <select id="commission" formControlName="commission" class="form-control">
                 <option value="" disabled selected>Sélectionnez une commission</option>
-                <option *ngFor="let commission of commissions" value="{{commission.id}}">{{ commission.name }}</option>
+                <ng-container *ngIf="commissions$ | async as commissions; else loading">
+                  <option *ngFor="let commission of commissions.data" [value]="commission.id">
+                    {{ commission.name }}
+                  </option>
+                </ng-container>
+                <ng-template #loading>
+                  <option disabled>Chargement des commissions...</option>
+                </ng-template>
+
               </select>
             </div>
           </div>
+
           <div class="col-md-4">
             <div class="mb-3">
               <label for="clubs" class="form-label">Club</label>
               <select id="clubs" formControlName="clubs" class="form-control">
                 <option value="" disabled selected>Sélectionnez un club</option>
-                <option *ngFor="let club of clubs" value="{{club.id}}">{{ club.name }}</option>
+                <ng-container *ngIf="clubs$ | async as clubs; else loading">
+                  <option *ngFor="let club of clubs.data" value="{{club.id}}">{{ club.name }}</option>
+                </ng-container>
+                <ng-template #loading>
+                  <option disabled>Chargement des clus...</option>
+                </ng-template>
               </select>
             </div>
           </div>
@@ -302,7 +316,14 @@
               <label for="bourse" class="form-label">Bourse</label>
               <select id="bourse" formControlName="bourse" class="form-control">
                 <option value="" disabled selected>Sélectionnez une bourse</option>
-                <option *ngFor="let bourse of bourses" value="{{bourse.bourseId}}">{{ bourse.lebelle }}</option>
+                <ng-container *ngIf="bourses$ | async as bourses; else loadingBourses">
+                  <option *ngFor="let bourse of bourses.data" [value]="bourse.bourseId">
+                    {{ bourse.lebelle }}
+                  </option>
+                </ng-container>
+                <ng-template #loadingBourses>
+                  <option disabled>Chargement des bourses...</option>
+                </ng-template>
               </select>
             </div>
           </div>

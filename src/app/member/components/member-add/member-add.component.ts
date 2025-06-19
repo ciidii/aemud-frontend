@@ -1,10 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router, RouterModule} from "@angular/router";
-import {NgClass, NgForOf, NgIf} from "@angular/common";
-import {CommissionModel} from "../../../core/models/commission.model";
-import {ClubModel} from "../../../core/models/club.model";
-import {BourseModel} from "../../../core/models/bourse.model";
+import {AsyncPipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {MemberService} from "../../core/member.service";
 import {ToastrService} from "ngx-toastr";
 import {CommissionService} from "../../../core/services/commission.service";
@@ -22,15 +19,16 @@ import {BourseService} from "../../../core/services/bourse.service";
     NgForOf,
     NgIf,
     ReactiveFormsModule,
-    NgClass
+    NgClass,
+    AsyncPipe
   ],
   standalone: true
 })
 export class MemberAddComponent implements OnInit {
   memberForm!: FormGroup;
-  commissions!: Array<CommissionModel>;
-  clubs!: Array<ClubModel>;
-  bourses!: Array<BourseModel>;
+  commissions$ = this.commissionService.getCommissions();
+  clubs$ = this.clubService.getClubs();
+  bourses$ = this.bourseService.getAllBourse();
   membershipInfoGroup!: FormGroup;
   academicInfoGroup!: FormGroup;
   contactGroup!: FormGroup;
@@ -55,46 +53,6 @@ export class MemberAddComponent implements OnInit {
     this.maxDate = tenYearsAgo.toISOString().split('T')[0];
 
     this.initMemberForm();
-    this.loadAdditionalData();
-  }
-
-  loadAdditionalData() {
-    this.commissionService.getCommissions().subscribe({
-      next: data => {
-        if (data.status === "OK" && data.result === "Succeeded") {
-          this.commissions = data.data;
-        } else {
-          this.toaster.error("Une erreur inattendue s'est produite côté serveur.");
-        }
-      },
-      error: err => {
-        this.toaster.error("Une erreur s'est produite lors de la récupération des commissions.");
-      }
-    });
-
-    this.clubService.getClubs().subscribe({
-      next: data => {
-        if (data.status === "OK" && data.result === "Succeeded") {
-          this.clubs = data.data;
-        } else {
-          this.toaster.error("Une erreur s'est produite lors de la récupération des clubs.");
-        }
-      },
-      error: err => {
-        this.toaster.error("Une erreur s'est produite côté serveur.");
-      }
-    });
-
-    this.bourseService.getAllBourse().subscribe({
-      next: data => {
-        if (data.status === "OK" && data.result === "Succeeded") {
-          this.bourses = data.data;
-        }
-      },
-      error: err => {
-        this.toaster.error("Une erreur s'est produite côté serveur.");
-      }
-    });
   }
 
 
@@ -222,7 +180,7 @@ export class MemberAddComponent implements OnInit {
       // Call the service to add the member
       this.memberService.addMember(memberData).subscribe({
         next: (response) => {
-          if (response.result=="Succeeded") {
+          if (response.result == "Succeeded") {
             this.toaster.success("Membre ajouté avec succès");
             this.router.navigateByUrl(`/members/member-details/${response.data.id}`);
           }

@@ -2,11 +2,12 @@ import {AppStateService} from "../../core/services/app-state.service";
 import {ResponseEntityApi} from "../../core/models/response-entity-api";
 import {environment} from "../../../environments/environment.development";
 import {MemberModel} from "../../core/models/member.model";
-import { Injectable } from "@angular/core";
+import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponsePageableApi} from "../../core/models/response-pageable-api";
 import {RegistrationModel} from "../../core/models/RegistrationModel";
+import {Exception} from "sass";
 
 @Injectable({
   providedIn: 'root'
@@ -39,10 +40,14 @@ export class MemberService {
     return this.httpClient.post<any>(environment.API_URL + `/registration`, registrationRequest, options);
   }
 
-  getRegistrationBySession(sessionId: string) {
-    let params = new HttpParams()
-      .set("session", sessionId)
-    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/registration-peer-session`, {params});
+  getRegistrationBySession(sessionId: string | undefined) {
+    if (sessionId !== undefined) {
+      let params = new HttpParams()
+        .set("session", sessionId)
+      return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/registration-peer-session`, {params});
+    }
+    throw new Error("No registration registration found.");
+
   }
 
   getPayedOrNoPayedSessionCountPeerSession(sessionId: string, statusPayment: boolean) {
