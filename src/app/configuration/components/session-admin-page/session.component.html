@@ -7,7 +7,7 @@
       <i class="bi bi-plus-circle me-1"></i> Ouvrir Une Session
     </button>
     <ng-template #closeButton>
-      <button (click)="handleDisplayForm()" class="btn btn-outline-danger shadow-sm">
+      <button (click)="handleDisplayForm()" class="btn btn-secondary shadow-sm">
         <i class="bi bi-x-circle me-1"></i> Annuler
       </button>
     </ng-template>
@@ -81,7 +81,7 @@
             </i>
           </td>
           <td class="text-end">
-            <button (click)="updateSession(session.id)" class="btn btn-warning btn-sm me-2">
+            <button (click)="updateSession(session.id)" class="btn btn-secondary btn-sm me-2">
               <i class="bi bi-pencil"></i> Modifier
             </button>
             <button (click)="deleteSession(session.id)" class="btn btn-danger btn-sm">

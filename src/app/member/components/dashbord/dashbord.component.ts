@@ -3,7 +3,7 @@ import {YearOfSessionService} from "../../../core/services/year-of-session.servi
 import {MemberService} from "../../core/member.service";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgIf} from "@angular/common";
-import {forkJoin, of, switchMap} from "rxjs";
+import {forkJoin, mergeMap, of, switchMap} from "rxjs";
 import {catchError} from "rxjs/operators";
 
 @Component({
@@ -37,6 +37,7 @@ export class DashbordComponent implements OnInit {
   ngOnInit(): void {
     this.currentYear$.subscribe({
       next: currentYear => {
+        this.sessionId = currentYear.data.id;
         this.loadStat(currentYear.data.id);
       }, error: error => {
       }

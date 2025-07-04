@@ -4,7 +4,7 @@
     <div class="modal-content shadow">
       <!-- Modal Header -->
       <div class="modal-header bg-white text-black text-center">
-        <h5 class="modal-title fw-bold">Options de Colonnes</h5>
+        <h5 class="modal-title card-header fw-bold">Options de Colonnes</h5>
         <button (click)="closePopupColumnPrinter()" type="button" class="btn-close btn-close-black"
                 aria-label="Close"></button>
       </div>
@@ -14,7 +14,7 @@
         <form [formGroup]="memberForm" (ngSubmit)="onSubmit()">
           <!-- Section: Informations personnelles -->
           <div class="mb-4">
-            <h5 class="border-bottom pb-2 mb-3 align-content-center">Informations personnelles</h5>
+            <h5 class="border-bottom pb-2 mb-3 align-content-center card-header">Informations personnelles</h5>
             <div formGroupName="personalInfo" class="row gy-2">
               <div class="col-md-6">
                 <div class="form-check">
@@ -51,7 +51,7 @@
 
           <!-- Section: Informations académiques -->
           <div class="mb-4">
-            <h5 class="border-bottom pb-2 mb-3">Informations académiques</h5>
+            <h5 class="border-bottom pb-2 mb-3 card-header">Informations académiques</h5>
             <div formGroupName="academicInfo" class="row gy-2">
               <div class="col-md-6">
                 <div class="form-check">
@@ -82,7 +82,7 @@
 
           <!-- Section: Adresse -->
           <div class="mb-4">
-            <h5 class="border-bottom pb-2 mb-3">Adresse</h5>
+            <h5 class="border-bottom pb-2 mb-3 card-header">Adresse</h5>
             <div formGroupName="addressInfo" class="row gy-2">
               <div class="col-md-6">
                 <div class="form-check">

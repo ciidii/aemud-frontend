@@ -7,7 +7,7 @@ const routes: Routes = [
     path: "", component: ShellComponent, children: [
       {
         path: "add-contribution",
-        loadComponent: () => import("./components/add-contribution/add-contribution.component").then(bs => bs.AddContributionComponent),
+        loadComponent: () => import("./components/contribution-home/contribution-home.component").then(bs => bs.ContributionHomeComponent),
         title: "AEMUD -Cotisation"
       },{
         path: '**',

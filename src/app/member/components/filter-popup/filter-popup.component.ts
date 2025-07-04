@@ -128,13 +128,12 @@ export class FilterPopupComponent implements OnInit {
       return;
     }
 
-
-    const filters = {...this.formGroup.value}; // Create a copy of form values
+    const filters = {...this.formGroup.value};
 
     if (filters.registrationFilterType === 'specific') {
-      filters.registrationType = filters.specificRegistrationType; // Use the specific type
+      filters.registrationType = filters.specificRegistrationType;
     } else {
-      filters.registrationType = ''; // No specific type filter
+      filters.registrationType = '';
     }
     delete filters.registrationFilterType;
     delete filters.specificRegistrationType;
@@ -142,7 +141,6 @@ export class FilterPopupComponent implements OnInit {
     if (!filters.cotisationMonth) {
       delete filters.cotisationStatus;
     }
-
     this.appState.memberState.filters = filters;
     this.appState.memberState.currentPage = 1;
     this.memberService.searchMember(
@@ -158,7 +156,7 @@ export class FilterPopupComponent implements OnInit {
         this.toaster.success("Filtres appliqués avec succès.");
       },
       error: err => {
-        this.toaster.error("Une erreur s'est produite lors de l'application des filtres.");
+        this.toaster.error("Une erreur s'est produite ...");
         console.error(err);
       }
     });

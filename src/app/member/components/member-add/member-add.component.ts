@@ -12,7 +12,7 @@ import {BourseService} from "../../../core/services/bourse.service";
 @Component({
   selector: 'app-add-member',
   templateUrl: './member-add.component.html',
-  styleUrls: ['./member-add.component.css'],
+  styleUrls: ['./member-add.component.scss'],
   imports: [
     RouterModule,
     FormsModule,
@@ -89,11 +89,11 @@ export class MemberAddComponent implements OnInit {
         yearOfBac: ['', [Validators.required, Validators.minLength(3)]],
         bacSeries: ['', [Validators.required, Validators.minLength(2)]],
         bacMention: ['', [Validators.required, Validators.minLength(3)]],
-        legacyInstitution: ['', [Validators.required, Validators.minLength(3)]],
-        aemudCourses: ['', [Validators.required]],
-        otherCourses: ['', [Validators.required, Validators.minLength(5)]],
-        participatedActivity: ['', [Validators.required]],
-        politicOrganisation: ['', [Validators.required]],
+        legacyInstitution: ['', [ Validators.minLength(3)]],
+        aemudCourses: ['',],
+        otherCourses: [''],
+        participatedActivity: [''],
+        politicOrganisation: [''],
         bourse: [''],
         commission: [''],
         clubs: [''],
@@ -104,9 +104,9 @@ export class MemberAddComponent implements OnInit {
         studiesDomain: ['', [Validators.required, Validators.minLength(3)]],
       }),
       addressInfo: this.fb.group({
-        addressInDakar: ['', [Validators.required, Validators.minLength(3)]],
-        holidayAddress: ['', [Validators.required, Validators.minLength(3)]],
-        addressToCampus: ['', [Validators.required, Validators.minLength(3)]],
+        addressInDakar: ['', [ Validators.minLength(3)]],
+        holidayAddress: ['', [ Validators.minLength(3)]],
+        addressToCampus: ['', [ Validators.minLength(3)]],
       }),
       contactInfo: this.fb.group({
         numberPhone: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
@@ -138,7 +138,7 @@ export class MemberAddComponent implements OnInit {
         '',
         Validators.pattern(/^\d{9}$/),
       ],
-      relationship: ['', Validators.required],
+      relationship: [''],
     });
 
     this.personToCalls.push(personFormGroup);

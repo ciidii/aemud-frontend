@@ -1,4 +1,4 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, inject, OnInit} from '@angular/core';
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberService} from "../../core/member.service";
 import {Title} from "@angular/platform-browser";
@@ -18,7 +18,7 @@ import {YearOfSessionService} from "../../../core/services/year-of-session.servi
 @Component({
   selector: 'app-member-details',
   templateUrl: './member-details.component.html',
-  styleUrls: ['./member-details.component.css'],
+  styleUrls: ['./member-details.component.scss'],
   standalone: true,
   imports: [
     NgForOf,
@@ -37,65 +37,10 @@ export class MemberDetailsComponent implements OnInit {
   commissions!: Array<CommissionModel>;
   clubs!: Array<ClubModel>;
   bourses!: Array<BourseModel>;
-  availableSessions: SessionModel[] = []; // To load available sessions for re-enrollment dropdown
-  currentSession!: SessionModel; // To pre-select current session in re-enrollment form
+  availableSessions: SessionModel[] = [];
+  currentSession!: SessionModel;
 
-  member: MemberModel = {
-    id: "",
-    personalInfo: {
-      name: "",
-      firstname: "",
-      nationality: "",
-      gender: "",
-      birthday: [0, 0, 0], // jour, mois, année
-      maritalStatus: ""
-    },
-    membershipInfo: {
-      legacyInstitution: "",
-      bacSeries: "",
-      bacMention: "",
-      yearOfBac: "",
-      aemudCourses: "",
-      otherCourses: "",
-      participatedActivity: "",
-      politicOrganisation: ""
-    },
-    academicInfo: {
-      institutionName: "",
-      studiesDomain: "",
-      studiesLevel: ""
-    },
-    addressInfo: {
-      addressInDakar: "",
-      holidayAddress: "",
-      addressToCampus: ""
-    },
-    contactInfo: {
-      numberPhone: "",
-      email: "",
-      personToCalls: [{
-        lastname: "",
-        firstname: "",
-        requiredNumberPhone: "",
-        optionalNumberPhone: "",
-        relationship: ""
-      }]
-    },
-    bourse: { // Make sure this matches your API response structure for bourse
-      bourseId: "",
-      lebelle: "",
-      montant: 0
-    },
-    clubs: [{
-      id: "",
-      name: ""
-    }],
-    commissions: [{
-      id: "",
-      name: ""
-    }],
-    registration: [] // Initialize as an empty array
-  };
+  member: MemberModel = MemberService.empty();
 
   isEditingMembershipInfo: boolean = false;
   isEditingAcademicInfo: boolean = false;
@@ -108,21 +53,17 @@ export class MemberDetailsComponent implements OnInit {
   personToCallsArray!: FormArray;
   maxDate!: String
 
-
-  constructor(
-    private router: ActivatedRoute,
-    private memberService: MemberService,
-    private titleService: Title,
-    private toasterService: ToastrService,
-    private routeService: Router,
-    private fb: FormBuilder,
-    private commissionService: CommissionService,
-    private clubService: ClubService,
-    private bourseService: BourseService,
-    private toaster: ToastrService,
-    private sessionService: YearOfSessionService // Inject YearOfSessionService
-  ) {
-  }
+  private router = inject(ActivatedRoute);
+  private memberService = inject(MemberService);
+  private titleService = inject(Title);
+  private toasterService = inject(ToastrService); // première instance
+  private routeService = inject(Router);
+  private fb = inject(FormBuilder);
+  private commissionService = inject(CommissionService);
+  private clubService = inject(ClubService);
+  private bourseService = inject(BourseService);
+  private toaster = inject(ToastrService); // doublon
+  private sessionService = inject(YearOfSessionService);
 
   ngOnInit(): void {
     const today = new Date();
@@ -248,17 +189,42 @@ export class MemberDetailsComponent implements OnInit {
   }
 
   // --- Main Member Form Getters ---
-  get membershipInfo(): FormGroup { return this.membershipInfoGroup; }
-  get academicInfo(): FormGroup { return this.academicInfoGroup; }
-  get contactInfo(): FormGroup { return this.contactGroup; }
-  get personalInfo(): FormGroup { return this.personalInfoGroup; }
-  get personToCalls(): FormArray { return this.personToCallsArray; }
+  get membershipInfo(): FormGroup {
+    return this.membershipInfoGroup;
+  }
+
+  get academicInfo(): FormGroup {
+    return this.academicInfoGroup;
+  }
+
+  get contactInfo(): FormGroup {
+    return this.contactGroup;
+  }
+
+  get personalInfo(): FormGroup {
+    return this.personalInfoGroup;
+  }
+
+  get personToCalls(): FormArray {
+    return this.personToCallsArray;
+  }
 
   // --- Toggle Edit Modes ---
-  toggleEditMembershipInfo(): void { this.isEditingMembershipInfo = !this.isEditingMembershipInfo; }
-  toggleEditingAcademicInfo(): void { this.isEditingAcademicInfo = !this.isEditingAcademicInfo; }
-  toggleEditingContactInfo(): void { this.isEditingContactInfo = !this.isEditingContactInfo; }
-  togglePersonalInfoInfo(): void { this.isPersonalInfoEditing = !this.isPersonalInfoEditing; }
+  toggleEditMembershipInfo(): void {
+    this.isEditingMembershipInfo = !this.isEditingMembershipInfo;
+  }
+
+  toggleEditingAcademicInfo(): void {
+    this.isEditingAcademicInfo = !this.isEditingAcademicInfo;
+  }
+
+  toggleEditingContactInfo(): void {
+    this.isEditingContactInfo = !this.isEditingContactInfo;
+  }
+
+  togglePersonalInfoInfo(): void {
+    this.isPersonalInfoEditing = !this.isPersonalInfoEditing;
+  }
 
 
   // --- Main Member Form Initialization ---
@@ -353,7 +319,7 @@ export class MemberDetailsComponent implements OnInit {
         const [year, month, day] = birthdayString.split('-').map(Number);
         this.member.personalInfo.birthday = [year, month, day];
       }
-      this.member.personalInfo = { ...this.member.personalInfo, ...this.personalInfo.value };
+      this.member.personalInfo = {...this.member.personalInfo, ...this.personalInfo.value};
       this.updateMember(this.member);
       this.togglePersonalInfoInfo();
     } else {
@@ -364,7 +330,7 @@ export class MemberDetailsComponent implements OnInit {
 
   onMembershipInfoSave() {
     if (this.membershipInfo.valid && this.membershipInfo.dirty) {
-      this.member.membershipInfo = { ...this.member.membershipInfo, ...this.membershipInfo.value };
+      this.member.membershipInfo = {...this.member.membershipInfo, ...this.membershipInfo.value};
       if (this.membershipInfo.get('bourse')?.value) {
         const selectedBourse = this.bourses.find(b => b.bourseId === this.membershipInfo.get('bourse')?.value);
         if (selectedBourse) {
@@ -397,7 +363,7 @@ export class MemberDetailsComponent implements OnInit {
 
   onAcademyInfoSaved() {
     if (this.academicInfo.valid && this.academicInfo.dirty) {
-      this.member.academicInfo = { ...this.member.academicInfo, ...this.academicInfo.value };
+      this.member.academicInfo = {...this.member.academicInfo, ...this.academicInfo.value};
       this.updateMember(this.member);
       this.toggleEditingAcademicInfo();
     } else {
@@ -421,7 +387,7 @@ export class MemberDetailsComponent implements OnInit {
         }));
       }
 
-      this.member.contactInfo = { ...this.member.contactInfo, ...contactInfoValue };
+      this.member.contactInfo = {...this.member.contactInfo, ...contactInfoValue};
       this.updateMember(this.member);
       this.toggleEditingContactInfo();
     } else {

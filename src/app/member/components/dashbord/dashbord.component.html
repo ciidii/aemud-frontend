@@ -11,7 +11,9 @@
         <select [(ngModel)]="sessionId" (ngModelChange)="reloadStat(sessionId)" class="form-select shadow-sm"
                 id="yearSelect">
           <ng-container *ngIf="years$ | async as sessions; else loading">
-            <option *ngFor="let year of sessions.data" [value]="year.id">{{ year.session }}</option>
+            <option *ngFor="let year of sessions.data"
+                    [value]="year.id">{{ year.session }}
+            </option>
           </ng-container>
           <ng-template #loading>
             <option disabled>Chargement des sessions..</option>
@@ -33,7 +35,6 @@
         </div>
       </div>
     </div>
-
     <!-- Paiements Complétés -->
     <div class="col-md-4">
       <div class="card shadow-sm border-0 hover-effect">
@@ -45,7 +46,6 @@
         </div>
       </div>
     </div>
-
     <!-- Inscriptions en Attente -->
     <div class="col-md-4">
       <div class="card shadow-sm border-0 hover-effect">

@@ -137,4 +137,59 @@ export class MemberService {
     return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(`${environment.API_URL}/members/all`); // Assuming /members/all or similar
   }
 
+  static empty(): MemberModel {
+    return {
+      id: '',
+      personalInfo: {
+        name: '',
+        firstname: '',
+        nationality: '',
+        gender: '',
+        birthday: [0, 0, 0],
+        maritalStatus: ''
+      },
+      membershipInfo: {
+        legacyInstitution: '',
+        bacSeries: '',
+        bacMention: '',
+        yearOfBac: '',
+        aemudCourses: '',
+        otherCourses: '',
+        participatedActivity: '',
+        politicOrganisation: ''
+      },
+      academicInfo: {
+        institutionName: '',
+        studiesDomain: '',
+        studiesLevel: ''
+      },
+      addressInfo: {
+        addressInDakar: '',
+        holidayAddress: '',
+        addressToCampus: ''
+      },
+      contactInfo: {
+        numberPhone: '',
+        email: '',
+        personToCalls: [{
+          lastname: '',
+          firstname: '',
+          requiredNumberPhone: '',
+          optionalNumberPhone: '',
+          relationship: ''
+        }]
+      },
+      bourse: {
+        bourseId: '',
+        lebelle: '',
+        montant: 0
+      },
+      clubs: [{id: '', name: ''}],
+      commissions: [{id: '', name: ''}],
+      registration: []
+    };
+
+  }
+
+
 }

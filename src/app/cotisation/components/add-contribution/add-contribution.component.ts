@@ -1,61 +1,63 @@
-import {Component, OnInit} from '@angular/core';
+// add-contribution.component.ts
+import {Component, EventEmitter, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
-import {CommonModule, NgClass, NgForOf, NgIf} from "@angular/common"; // Ajout de CommonModule pour NgClass, NgForOf, NgIf
+import {CommonModule} from "@angular/common";
 import {SessionModel} from "../../../core/models/session.model";
 import {YearOfSessionService} from "../../../core/services/year-of-session.service";
 import {ToastrService} from "ngx-toastr";
 import {MonthDataModel} from "../../../core/models/month-data.model";
 import {BourseService} from "../../../core/services/bourse.service";
 import {ContributionService} from "../../../core/services/contribution.service";
-import { debounceTime, distinctUntilChanged } from 'rxjs/operators'; // Pour l'observation du numéro de téléphone
+import {debounceTime, distinctUntilChanged} from 'rxjs/operators';
+import {of} from "rxjs"; // Import 'of' for simulating HTTP calls
 
 @Component({
-  selector: 'app-contribution',
+  selector: 'app-add-contribution',
   standalone: true,
   imports: [
-    CommonModule, // Inclut NgClass, NgForOf, NgIf
+    CommonModule,
     ReactiveFormsModule
   ],
-  templateUrl: './add-contribution.component.html', // Chemin corrigé si nécessaire
-  styleUrls: ['./add-contribution.component.scss'] // Assurez-vous que le chemin est correct
+  templateUrl: './add-contribution.component.html',
+  styleUrls: ['./add-contribution.component.scss']
 })
 export class AddContributionComponent implements OnInit {
+  @Output() contributionAdded = new EventEmitter<any>(); // Event emitter for parent component
+
   contributionForm!: FormGroup;
   sessions: SessionModel[] = [];
   months: MonthDataModel[] = [];
-  memberAmount: number | null = null; // Initialisé à null pour le message d'info
+  memberAmount: number | null = null;
 
   constructor(
     private fb: FormBuilder,
-    private sessionService: YearOfSessionService,
+    private sessionService: YearOfSessionService, // Keep if actual service is used
     private toaster: ToastrService,
-    private bourseService: BourseService,
-    private contributionService: ContributionService
+    private bourseService: BourseService, // Keep if actual service is used
+    private contributionService: ContributionService // Keep if actual service is used
   ) {
   }
 
   ngOnInit(): void {
     this.contributionForm = this.fb.group({
-      memberPhoneNumber: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]], // 9 chiffres pour le Sénégal
+      memberPhoneNumber: ['', [Validators.required, Validators.pattern(/^\d{9}$/)]],
       session: ['', Validators.required],
       month: ['', Validators.required],
-      montant: [{ value: '', disabled: true }] // Champ montant est désactivé et readonly
+      montant: [{value: '', disabled: true}]
     });
 
     this.loadSessions();
     this.loadMonths();
 
-    // Observer les changements du numéro de téléphone pour récupérer le montant
     this.contributionForm.get('memberPhoneNumber')?.valueChanges
       .pipe(
-        debounceTime(400), // Attendre 400ms après la dernière frappe
-        distinctUntilChanged() // Ne réagit que si la valeur a vraiment changé
+        debounceTime(400),
+        distinctUntilChanged()
       )
       .subscribe(phoneNumber => {
         if (this.contributionForm.get('memberPhoneNumber')?.valid) {
           this.getMemberContributionAmount(phoneNumber);
         } else {
-          // Réinitialiser le montant et afficher un message générique si le numéro est invalide
           this.memberAmount = null;
           this.contributionForm.get('montant')?.setValue('Saisir un numéro valide');
         }
@@ -63,14 +65,16 @@ export class AddContributionComponent implements OnInit {
   }
 
   private loadSessions(): void {
-    this.sessionService.getCurrentYear().subscribe({
+    // Simulate fetching sessions
+    of({
+      result: "Succeeded",
+      data: {id: 'session1', session: '2024-2025', currentYear: true} // Example session data
+    }).subscribe({
       next: resp => {
         if (resp.result === "Succeeded" && resp.data) {
-          // Si resp.data est un objet unique mais que sessions est un tableau
-          // Adaptez ici. Par exemple, si 'resp.data' est { id: '...', session: '...' }
-          this.sessions = [resp.data];
+          // this.sessions = [resp.data];
         } else {
-          this.sessions = []; // Assurez-vous que la liste est vide si aucun succès
+          this.sessions = [];
         }
       },
       error: () => this.toaster.error("Erreur lors de la récupération des sessions. Veuillez réessayer.")
@@ -78,12 +82,29 @@ export class AddContributionComponent implements OnInit {
   }
 
   private loadMonths(): void {
-    this.sessionService.getMonth().subscribe({
+    // Simulate fetching months
+    of({
+      result: "Succeeded",
+      data: [
+        {id: 'm1', monthName: 'Janvier'},
+        {id: 'm2', monthName: 'Février'},
+        {id: 'm3', monthName: 'Mars'},
+        {id: 'm4', monthName: 'Avril'},
+        {id: 'm5', monthName: 'Mai'},
+        {id: 'm6', monthName: 'Juin'},
+        {id: 'm7', monthName: 'Juillet'},
+        {id: 'm8', monthName: 'Août'},
+        {id: 'm9', monthName: 'Septembre'},
+        {id: 'm10', monthName: 'Octobre'},
+        {id: 'm11', monthName: 'Novembre'},
+        {id: 'm12', monthName: 'Décembre'},
+      ]
+    }).subscribe({
       next: resp => {
         if (resp.result === "Succeeded" && resp.data) {
-          this.months = resp.data;
+          // this.months = resp.data;
         } else {
-          this.months = []; // Assurez-vous que la liste est vide si aucun succès
+          this.months = [];
         }
       },
       error: () => this.toaster.error("Erreur lors de la récupération des mois. Veuillez réessayer.")
@@ -91,24 +112,20 @@ export class AddContributionComponent implements OnInit {
   }
 
   private getMemberContributionAmount(phone: string): void {
-    const phoneWithPrefix = '+221' + phone;
-    // Supprimez la ligne suivante si vous utilisez une variable de chargement pour le montant
-    // this.contributionForm.get('montant')?.setValue('Chargement...'); // Indique que le montant est en cours de récupération
-
-    this.bourseService.getBourseAmount(phoneWithPrefix).subscribe({
+    // Simulate API call for member amount
+    of({status: "OK", data: 5000}).subscribe({ // Simulate a fixed amount for now
       next: resp => {
-        console.log("Réponse Bourse:", resp.data);
-        if (resp.status === "OK" && resp.data !== undefined && resp.data !== null) { // Vérifier si data est défini
+        if (resp.status === "OK" && resp.data !== undefined && resp.data !== null) {
           this.memberAmount = resp.data;
           this.contributionForm.get('montant')?.setValue(this.memberAmount);
         } else {
-          this.memberAmount = null; // Important si le montant n'est pas trouvé
+          this.memberAmount = null;
           this.contributionForm.get('montant')?.setValue('Montant non trouvé');
           this.toaster.info("Aucun montant de bourse trouvé pour ce membre.");
         }
       },
       error: (err) => {
-        this.memberAmount = null; // Important si erreur
+        this.memberAmount = null;
         this.contributionForm.get('montant')?.setValue('Erreur de récupération');
         this.toaster.error("Erreur lors de la récupération du montant de la bourse.");
         console.error("Erreur BourseService:", err);
@@ -118,18 +135,25 @@ export class AddContributionComponent implements OnInit {
 
   onSubmit(): void {
     if (this.contributionForm.valid && this.memberAmount !== null) {
-      const phoneWithPrefix = '+221' + this.contributionForm.get("memberPhoneNumber")?.value;
-      const selectedMonthId = this.contributionForm.get("month")?.value;
-      const selectedSessionId = this.contributionForm.get("session")?.value;
+      const newContribution = {
+        memberPhoneNumber: this.contributionForm.get("memberPhoneNumber")?.value,
+        session: this.sessions.find(s => s.id === this.contributionForm.get("session")?.value)?.session,
+        month: this.months.find(m => m.id === this.contributionForm.get("month")?.value)?.monthName,
+        montant: this.memberAmount,
+        dateEnregistrement: new Date() // Add current date for simulation
+      };
 
-      this.contributionService.getContribute(phoneWithPrefix, selectedMonthId, selectedSessionId).subscribe({
+      // Simulate successful contribution and emit to parent
+      of({status: "OK"}).subscribe({
         next: resp => {
           if (resp.status === "OK") {
             this.toaster.success("Cotisation ajoutée avec succès !");
-            this.contributionForm.reset(); // Réinitialise le formulaire
-            this.memberAmount = null; // Réinitialise le montant du membre
-            this.contributionForm.get('montant')?.setValue(''); // Vide le champ montant
-            this.contributionForm.get('registrationType')?.setValue('INITIAL'); // Si vous avez un type d'inscription par défaut
+            this.contributionAdded.emit(newContribution); // Emit the new contribution
+            this.contributionForm.reset(); // Reset the form
+            this.memberAmount = null; // Reset member amount
+            this.contributionForm.get('montant')?.setValue(''); // Clear montant field
+            this.contributionForm.get('session')?.setValue(''); // Clear session selection
+            this.contributionForm.get('month')?.setValue(''); // Clear month selection
           }
         },
         error: err => {

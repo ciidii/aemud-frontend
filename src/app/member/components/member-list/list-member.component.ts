@@ -14,7 +14,7 @@ import {
 @Component({
   selector: 'app-member',
   templateUrl: './list-member.component.html',
-  styleUrls: ['./list-member.component.css'],
+  styleUrls: ['./list-member.component.scss'],
   standalone: true,
   imports: [FormsModule, NgIf, NgFor, NgClass, FilterPopupComponent, ReactiveFormsModule, ColumnPrinterComponent, GroupForNotificationComponent, JsonPipe]
 })

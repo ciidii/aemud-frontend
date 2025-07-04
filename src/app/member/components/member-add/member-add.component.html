@@ -4,13 +4,13 @@
     <!-- Personal Info Section -->
     <div class="card mb-4">
       <div class="card-header">
-        <h5 class="mb-0">Informations personnelles</h5>
+        <h5 class="mb-0 card-header">Informations personnelles</h5>
       </div>
       <div class="card-body" formGroupName="personalInfo">
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="name" class="form-label">Nom</label>
+              <label for="name" class="form-label">Nom<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="name"
@@ -28,7 +28,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="firstname" class="form-label">Prénom</label>
+              <label for="firstname" class="form-label">Prénom<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="firstname"
@@ -49,7 +49,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="nationality" class="form-label">Nationalité</label>
+              <label for="nationality" class="form-label">Nationalité<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="nationality"
@@ -67,7 +67,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="birthday" class="form-label">Date de naissance</label>
+              <label for="birthday" class="form-label">Date de naissance<span class="required-asterisk">*</span></label>
               <input
                 type="date"
                 id="birthday"
@@ -88,7 +88,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="maritalStatus" class="form-label">Situation Matrimoniale</label>
+              <label for="maritalStatus" class="form-label">Situation Matrimoniale<span class="required-asterisk">*</span></label>
               <select id="maritalStatus" formControlName="maritalStatus" class="form-control"
                       [ngClass]="{ 'is-invalid': personalInfo.get('maritalStatus')?.invalid && personalInfo.get('maritalStatus')?.touched }">
                 <option value="" disabled selected>Sélectionnez</option>
@@ -109,13 +109,13 @@
     <!-- Membership Info Section -->
     <div class="card mb-4">
       <div class="card-header">
-        <h5 class="mb-0">Informations d'Adhésion</h5>
+        <h5 class="mb-0 card-header">Informations d'Adhésion</h5>
       </div>
       <div class="card-body" formGroupName="membershipInfo">
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="yearOfBac" class="form-label">Année de bac</label>
+              <label for="yearOfBac" class="form-label">Année de bac<span class="required-asterisk">*</span></label>
               <input
                 id="yearOfBac"
                 formControlName="yearOfBac"
@@ -132,7 +132,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="bacSeries" class="form-label">BAC: Série</label>
+              <label for="bacSeries" class="form-label">BAC: Série<span class="required-asterisk">*</span></label>
               <select
                 id="bacSeries"
                 formControlName="bacSeries"
@@ -160,7 +160,7 @@
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="bacMention" class="form-label">BAC: Mention</label>
+              <label for="bacMention" class="form-label">BAC: Mention<span class="required-asterisk">*</span></label>
               <select
                 id="bacMention"
                 formControlName="bacMention"
@@ -281,7 +281,7 @@
         <div class="row">
           <div class="col-md-4">
             <div class="mb-3">
-              <label for="commission" class="form-label">Commission</label>
+              <label for="commission" class="form-label">Commission<span class="required-asterisk">*</span></label>
               <select id="commission" formControlName="commission" class="form-control">
                 <option value="" disabled selected>Sélectionnez une commission</option>
                 <ng-container *ngIf="commissions$ | async as commissions; else loading">
@@ -299,7 +299,7 @@
 
           <div class="col-md-4">
             <div class="mb-3">
-              <label for="clubs" class="form-label">Club</label>
+              <label for="clubs" class="form-label">Club<span class="required-asterisk">*</span></label>
               <select id="clubs" formControlName="clubs" class="form-control">
                 <option value="" disabled selected>Sélectionnez un club</option>
                 <ng-container *ngIf="clubs$ | async as clubs; else loading">
@@ -313,7 +313,7 @@
           </div>
           <div class="col-md-4">
             <div class="mb-3">
-              <label for="bourse" class="form-label">Bourse</label>
+              <label for="bourse" class="form-label">Bourse<span class="required-asterisk">*</span></label>
               <select id="bourse" formControlName="bourse" class="form-control">
                 <option value="" disabled selected>Sélectionnez une bourse</option>
                 <ng-container *ngIf="bourses$ | async as bourses; else loadingBourses">
@@ -334,13 +334,13 @@
     <!-- Academic Info Section -->
     <div class="card mb-4">
       <div class="card-header">
-        <h5 class="mb-0">Informations Académiques</h5>
+        <h5 class="mb-0 card-header">Informations Académiques</h5>
       </div>
       <div class="card-body" formGroupName="academicInfo">
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="studiesLevel" class="form-label">Niveau d'étude</label>
+              <label for="studiesLevel" class="form-label">Niveau d'étude<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="studiesLevel"
@@ -358,7 +358,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="institutionName" class="form-label">Université</label>
+              <label for="institutionName" class="form-label">Université<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="institutionName"
@@ -379,7 +379,7 @@
         <div class="row">
           <div class="col-md-12">
             <div class="mb-3">
-              <label for="studiesDomain" class="form-label">Domaine d'études</label>
+              <label for="studiesDomain" class="form-label">Domaine d'études<span class="required-asterisk">*</span></label>
               <input
                 type="text"
                 id="studiesDomain"
@@ -402,7 +402,7 @@
     <!-- Address Info Section -->
     <div class="card mb-4">
       <div class="card-header">
-        <h5 class="mb-0">Informations d'Adresse</h5>
+        <h5 class="mb-0 card-header">Informations d'Adresse</h5>
       </div>
       <div class="card-body" formGroupName="addressInfo">
         <div class="row">
@@ -469,13 +469,13 @@
     <!-- Contact Info Section -->
     <div class="card mb-4">
       <div class="card-header">
-        <h5 class="mb-0">Informations de Contact</h5>
+        <h5 class="mb-0 card-header">Informations de Contact</h5>
       </div>
       <div class="card-body" formGroupName="contactInfo">
         <div class="row">
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="numberPhone" class="form-label">Numéro de Téléphone</label>
+              <label for="numberPhone" class="form-label">Numéro de Téléphone<span class="required-asterisk">*</span></label>
               <div class="input-group">
                 <span class="input-group-text">+221</span>
                 <input
@@ -495,7 +495,7 @@
           </div>
           <div class="col-md-6">
             <div class="mb-3">
-              <label for="email" class="form-label">Adresse Email</label>
+              <label for="email" class="form-label">Adresse Email<span class="required-asterisk">*</span></label>
               <input
                 type="email"
                 id="email"
@@ -514,14 +514,14 @@
 
         <!-- Person To Call Section -->
         <div class="mt-4">
-          <h6 class="mb-3">Personnes à Contacter</h6>
+          <h6 class="mb-3">Personnes à Contacter<span class="required-asterisk">*</span></h6>
           <div formArrayName="personToCalls">
             <div *ngFor="let person of personToCalls.controls; let i = index;" [formGroupName]="i"
                  class="card mb-3 p-3">
               <div class="row">
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="lastname{{ i }}" class="form-label">Nom</label>
+                    <label for="lastname{{ i }}" class="form-label">Nom<span class="required-asterisk">*</span></label>
                     <input
                       type="text"
                       id="lastname{{ i }}"
@@ -538,7 +538,7 @@
                 </div>
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="firstname{{ i }}" class="form-label">Prénom</label>
+                    <label for="firstname{{ i }}" class="form-label">Prénom<span class="required-asterisk">*</span></label>
                     <input
                       type="text"
                       id="firstname{{ i }}"
@@ -557,7 +557,7 @@
               <div class="row">
                 <div class="col-md-6">
                   <div class="mb-3">
-                    <label for="requiredNumberPhone{{ i }}" class="form-label">Téléphone Principal</label>
+                    <label for="requiredNumberPhone{{ i }}" class="form-label">Téléphone Principal<span class="required-asterisk">*</span></label>
                     <div class="input-group">
                       <span class="input-group-text">+221</span>
                       <input

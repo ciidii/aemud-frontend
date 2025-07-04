@@ -1,0 +1,91 @@
+@import "variables";
+/* General Form Enhancements */
+.container.my-5 {
+  max-width: 900px; /* Limit max-width for better readability on large screens */
+  padding: 2rem; /* Add some padding around the container */
+}
+
+/* Card Styling for Grouping Sections */
+.card {
+  border-radius: 0.75rem; /* Slightly rounded corners */
+  box-shadow: 0 0.2rem 0.5rem rgba(0, 0, 0, 0.1); /* More visible subtle shadow */
+  border: 1px solid rgba(0, 0, 0, 0.1); /* Define a border more clearly */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out; /* Smooth transition on hover */
+}
+
+.card:hover {
+  transform: translateY(-3px); /* Slight lift effect on hover */
+  box-shadow: 0 0.3rem 0.7rem rgba(0, 0, 0, 0.15); /* Slightly stronger shadow on hover */
+}
+
+
+.card-header {
+  background-color: #e9ecef; /* A slightly darker light grey for header */
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-top-left-radius: 0.7rem; /* Match card radius */
+  border-top-right-radius: 0.7rem; /* Match card radius */
+  padding: 1.25rem 1.5rem; /* Adjust padding */
+  font-weight: bold;
+  color: #343a40; /* Darker text for headers */
+}
+
+
+/* Form Control Focus State */
+.form-control:focus {
+  border-color: #66b0ff; /* A brighter blue for focus */
+  box-shadow: 0 0 0 0.25rem rgba(102, 176, 255, 0.35); /* More prominent shadow for focus */
+}
+
+/* Invalid Feedback Styling */
+.invalid-feedback {
+  font-size: 0.875em; /* Standard Bootstrap size */
+  color: #dc3545; /* Bootstrap's default red */
+  margin-top: 0.25rem; /* Small margin above error message */
+}
+
+/* Button Styling */
+.btn-primary {
+  background-color: $primary; /* Standard Bootstrap primary blue */
+  border-color: #0d6efd;
+  color: $light
+}
+
+.btn-primary:hover {
+  background-color: #0a58ca; /* Darker blue on hover */
+  border-color: #0a58ca;
+}
+
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  border-radius: 0.5rem;
+}
+
+/* Ensure submit button is full width */
+.d-grid .btn {
+  width: 100%;
+}
+
+/* Style for the required asterisk */
+.required-asterisk {
+  color: #dc3545; /* Bootstrap's danger red color */
+  font-weight: bold;
+  margin-left: 4px; /* Small space between label text and asterisk */
+}
+
+/* Adjustments for dynamic personToCalls section */
+div[formArrayName="personToCalls"] .card {
+  background-color: #fdfdfd; /* Slightly different background for nested cards */
+  border: 1px dashed #c0c0c0; /* Softer dashed border for a sub-section */
+  box-shadow: none; /* Remove shadow for nested cards to keep them lighter */
+}
+
+div[formArrayName="personToCalls"] .card-header {
+  background-color: #f1f1f1; /* Lighter header for nested cards */
+  color: #6c757d; /* Muted text color for nested headers */
+}
+
+/* Specific styling for the remove button in dynamic section */
+div[formArrayName="personToCalls"] .btn-danger {
+  margin-bottom: 0 !important; /* Remove margin-bottom from button inside dynamic card */
+}

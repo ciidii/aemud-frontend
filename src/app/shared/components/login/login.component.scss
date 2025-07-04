@@ -6,9 +6,8 @@ html, body {
   overflow: hidden;
 }
 
-/* Styles pour les divs */
 .div-1 {
-  background-color: rgba($secondary, 0.8); // Utilisation de la couleur secondaire avec opacité
+  background-color: rgba($secondary, 0.8);
 }
 
 .sidebar-header{
@@ -16,45 +15,38 @@ html, body {
 }
 
 .div-2 {
-  background-color: rgba($secondary, 0); // Utilisation de la couleur secondaire avec opacité nulle
+  background-color: rgba($secondary, 0);
 }
 
-/* Styles pour le logo */
 .logo {
   width: 40%;
 }
 
-/* Styles pour le texte de la mosquée UCAD */
 .mosque-ucad {
   font-family: police-lieu, sans-serif;
-  background-color: $primary; // Utilisation de la couleur principale
+  background-color: $primary;
   text-align: justify;
   color: white;
   vertical-align: center;
 }
 
-/* Styles pour le conteneur fluide */
 .container-fluid {
   display: grid;
 }
 
-/* Styles pour le texte centré */
 .text-center {
   vertical-align: center;
 }
 
-/* Styles pour les titres */
 .h2 {
   color: white;
   font-family: police-titre, serif;
 }
 
-/* Styles pour la première ligne */
 .row-1 {
   font-family: police-autre, sans-serif;
 }
 
-/* Styles pour le conteneur fluide 2 */
 .container-fluid2 {
   align-content: center;
   justify-content: center;

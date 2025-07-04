@@ -1,1 +1,50 @@
-<p>dashbord works!</p>
+<div class="container mt-4">
+  <div class="card shadow-sm">
+    <div class="card-header bg-light fw-bold">Historique des Cotisations</div>
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+          <tr>
+            <th scope="col" class="ps-4">Date d'enregistrement</th>
+            <th scope="col">Membre (Téléphone)</th>
+            <th scope="col">Session</th>
+            <th scope="col">Mois</th>
+            <th scope="col" class="text-end pe-4">Montant</th>
+          </tr>
+          </thead>
+          <tbody>
+          <tr *ngFor="let contribution of paginatedContributions" class="align-middle">
+            <td class="ps-4">{{ contribution.dateEnregistrement | date:'short' }}</td>
+            <td>{{ contribution.memberPhoneNumber }}</td>
+            <td>{{ contribution.session }}</td>
+            <td>{{ contribution.month }}</td>
+            <td class="text-end pe-4">{{ contribution.montant | currency:'XOF':'symbol':'1.0-0' }}</td>
+          </tr>
+          <tr *ngIf="paginatedContributions.length === 0">
+            <td colspan="5" class="text-center text-muted py-4">Aucune cotisation enregistrée pour le moment.</td>
+          </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <nav aria-label="Pagination des cotisations" class="d-flex justify-content-center mt-4" *ngIf="contributions.length > itemsPerPage">
+    <ul class="pagination">
+      <li class="page-item" [ngClass]="{'disabled': currentPage === 1}">
+        <a class="page-link" (click)="changePage(currentPage - 1)" aria-label="Précédent">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      <li *ngFor="let page of totalPagesArray()" class="page-item" [ngClass]="{'active': page === currentPage}">
+        <a class="page-link" (click)="changePage(page)">{{ page }}</a>
+      </li>
+      <li class="page-item" [ngClass]="{'disabled': currentPage === totalPages}">
+        <a class="page-link" (click)="changePage(currentPage + 1)" aria-label="Suivant">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+</div>

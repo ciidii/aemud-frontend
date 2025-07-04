@@ -180,7 +180,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mt-3">
-            <button [disabled]="!personalInfo.dirty" type="submit" class="btn btn-success me-2">Enregistrer</button>
+            <button [disabled]="!personalInfo.dirty" type="submit" class="btn btn-outline-primary me-2">Enregistrer</button>
             <button type="button" class="btn btn-secondary" (click)="togglePersonalInfoInfo()">Annuler</button>
           </div>
         </form>
@@ -377,7 +377,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mt-3">
-            <button [disabled]="!membershipInfo.dirty" type="submit" class="btn btn-success me-2">Enregistrer</button>
+            <button [disabled]="!membershipInfo.dirty" type="submit" class="btn btn-outline-primary me-2">Enregistrer</button>
             <button type="button" class="btn btn-secondary" (click)="toggleEditMembershipInfo()">Annuler</button>
           </div>
         </form>
@@ -451,7 +451,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mt-3">
-            <button [disabled]="!academicInfo.dirty" type="submit" class="btn btn-success me-2">Enregistrer</button>
+            <button [disabled]="!academicInfo.dirty" type="submit" class="btn btn-outline-primary me-2">Enregistrer</button>
             <button type="button" class="btn btn-secondary" (click)="toggleEditingAcademicInfo()">Annuler</button>
           </div>
         </form>
@@ -611,7 +611,7 @@
             </div>
           </div>
           <div class="d-flex justify-content-end mt-3">
-            <button [disabled]="!contactInfo.dirty" type="submit" class="btn btn-success me-2">Enregistrer</button>
+            <button [disabled]="!contactInfo.dirty" type="submit" class="btn btn-outline-primary me-2">Enregistrer</button>
             <button type="button" class="btn btn-secondary" (click)="toggleEditingContactInfo()">Annuler</button>
           </div>
         </form>
@@ -662,7 +662,7 @@
       <hr class="my-4">
       <h4 class="mb-3 text-primary">Nouvelle Réinscription
         pour {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h4>
-      <button class="btn btn-outline-success mb-3" *ngIf="!showReenrollmentForm" (click)="toggleReenrollmentForm()">
+      <button class="btn btn-outline-primary mb-3" *ngIf="!showReenrollmentForm" (click)="toggleReenrollmentForm()">
         <i class="bi bi-person-plus-fill"></i> Lancer une réinscription
       </button>
 
@@ -706,7 +706,7 @@
           </div>
 
           <div class="d-flex justify-content-end mt-4">
-            <button class="btn btn-success me-2" type="submit" [disabled]="reinscriptionForm.invalid">
+            <button class="btn btn-outline-primary me-2" type="submit" [disabled]="reinscriptionForm.invalid">
               <i class="bi bi-floppy2"></i> Enregistrer la réinscription
             </button>
             <button class="btn btn-secondary" type="button" (click)="cancelReenrollment()">

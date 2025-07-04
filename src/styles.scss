@@ -1,35 +1,177 @@
-// src/styles.scss
+/* Importez vos variables personnalisées en premier */
+@import 'assets/scss/variables'; // Ajustez le chemin si votre fichier _variables.scss est ailleurs, ex: 'styles/variables'
 
-@import 'variables';
-@import "bootstrap-icons/font/bootstrap-icons.css";
-@import 'ngx-toastr/toastr';
+/* Importez les fonctions et variables de Bootstrap AVANT le reste de Bootstrap */
+/* Cela permet à Bootstrap d'utiliser vos variables personnalisées */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark"; // Incluez si vous prévoyez d'utiliser le mode sombre de Bootstrap
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
 
-// Styles globaux
+/* Importez les composants Bootstrap dont vous avez besoin */
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/close"; // Pour les toasts, etc.
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/utilities"; // Très important pour les classes utilitaires
+@import "bootstrap-icons/font/bootstrap-icons.css"; // Assurez-vous que les icônes sont bien importées
+
+/* ------------------------------------------------------------- */
+/* Styles Généraux de l'Application (utilisant vos variables)   */
+/* ------------------------------------------------------------- */
+
+// Styles du corps (pour le thème clair par défaut)
 body {
   background-color: $background-color;
   color: $text-color;
+  font-family: 'Open Sans', sans-serif; // Exemple de police de corps
 }
 
-a {
+h1, h2, h3, h4, h5, h6 {
+  color: $dark; // Titres en couleur sombre
+  font-family: 'Montserrat', sans-serif; // Exemple de police pour les titres
+  font-weight: bold;
+}
+.btn-secondary{
+  color:$light;
+  &:hover{
+    color:$light;
+  }
+}
+
+h5,h4{
+  color: $light;
+}
+.btn-outline-warning {
+  color:$light
+}
+
+/* Améliorations de Formulaire Globales */
+.container.my-5 {
+  max-width: 900px;
+  padding: 2rem;
+  background-color: #FFFFFF; // Assurez un fond blanc pour le formulaire lui-même
+  border-radius: 1rem;
+  box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05); // Une ombre plus douce pour le conteneur principal du formulaire
+}
+
+/* Styles pour les Cartes (regroupements de sections) */
+.card {
+  border-radius: 0.75rem;
+  box-shadow: 0 0.2rem 0.5rem rgba($dark, 0.075); /* Utilisation de $dark pour l'ombre */
+  border: 1px solid $border-color; /* Utilisation de $border-color */
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+}
+
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 0.3rem 0.7rem rgba($dark, 0.12); /* Ombre légèrement plus forte au survol */
+}
+
+.card-header {
+  background-color: lighten($light, 2%); /* Un gris très légèrement plus clair que $light */
+  border-bottom: 1px solid $border-color;
+  border-top-left-radius: 0.7rem;
+  border-top-right-radius: 0.7rem;
+  padding: 1.25rem 1.5rem;
+  font-weight: bold;
+  color: $primary; /* Le titre de la carte utilise votre couleur primaire */
+  font-size: 1.15rem;
+}
+
+/* État de Focus des Contrôles de Formulaire */
+.form-control:focus {
+  border-color: lighten($primary, 15%); /* Une teinte plus claire de votre $primary */
+  box-shadow: 0 0 0 0.25rem rgba($primary, 0.3); /* Utilisation de $primary pour l'ombre de focus */
+}
+
+/* Styles des Messages d'Erreur */
+.invalid-feedback {
+  font-size: 0.875em;
+  color: $danger; /* Utilisation de votre variable $danger */
+  margin-top: 0.25rem;
+}
+
+/* Boutons */
+.btn-primary {
+  background-color: $primary; /* Utilisez votre $primary */
+  border-color: $primary; /* La bordure correspond au fond */
+  transition: background-color 0.2s ease, border-color 0.2s ease, transform 0.1s ease;
+  color:$light;
+  &:hover {
+    background-color: $hover-color; /* Utilise votre $hover-color */
+    border-color: $hover-color;
+    transform: translateY(-1px); /* Léger effet de pression */
+  }
+}
+
+.btn-outline-primary {
   color: $primary;
+  border-color: $primary;
 
   &:hover {
-    color: $hover-color;
+    background-color: $primary;
+    color: #fff;
   }
 }
 
-// Thème sombre
-.dark-theme {
-  background-color: $dark-background-color;
-  color: $dark-text-color;
+.btn-danger {
+  background-color: $danger;
+  border-color: $danger;
 
-  a {
-    color: lighten($primary, 10%);
-
-    &:hover {
-      color: $dark-hover-color;
-    }
+  &:hover {
+    background-color: darken($danger, 10%);
+    border-color: darken($danger, 10%);
   }
 }
 
+.btn-lg {
+  padding: 0.75rem 1.5rem;
+  font-size: 1.25rem;
+  border-radius: 0.5rem;
+}
 
+/* Bouton de soumission en pleine largeur */
+.d-grid .btn {
+  width: 100%;
+}
+
+/* Style de l'astérisque obligatoire */
+.required-asterisk {
+  color: $danger; /* L'astérisque utilise la couleur $danger */
+  font-weight: bold;
+  margin-left: 4px;
+}
+
+/* Ajustements pour la section dynamique "Personnes à Contacter" */
+div[formArrayName="personToCalls"] .card {
+  background-color: mix($background-color, #ffffff, 80%); /* Un fond légèrement plus clair que le fond général */
+  border: 1px dashed lighten($border-color, 5%); /* Bordure plus douce */
+  box-shadow: none;
+}
+
+div[formArrayName="personToCalls"] .card-header {
+  background-color: darken($background-color, 3%); /* Un en-tête légèrement plus foncé que le fond de la carte imbriquée */
+  color: $text-color; /* Texte de l'en-tête en couleur de texte normale */
+  font-weight: normal; /* Moins gras que les titres principaux de carte */
+}
+
+/* Style spécifique pour le bouton de suppression dans les sections dynamiques */
+div[formArrayName="personToCalls"] .btn-danger {
+  margin-bottom: 0 !important;
+}

@@ -1,0 +1,82 @@
+@import "variables";
+body {
+  // Le style du body est généralement défini dans styles.scss pour être global,
+  // mais si ce composant a besoin d'une surcharge spécifique, elle irait ici.
+  // Cependant, il est préférable d'éviter de styliser le body dans un fichier de composant.
+}
+
+.reach-bar {
+  // Utilisation de votre couleur secondaire pour la reach-bar
+  background-color: $secondary;
+  // Vous pourriez ajouter une petite ombre ici pour la profondeur
+  box-shadow: 0 2px 4px rgba($dark, 0.1);
+}
+
+.container {
+  max-width: 1200px;
+  // Ajout d'un padding global si ce n'est pas déjà dans styles.scss
+  padding: 0 15px; // Padding latéral pour la réactivité
+}
+
+.card {
+  border: none;
+  // Réutilisation des styles de carte définis globalement
+  // Si les styles de .card dans styles.scss sont suffisants, vous n'avez pas besoin de les répéter ici.
+  // Cependant, si ce composant a besoin d'une légère variation, ce serait l'endroit.
+  // Pour l'instant, je vais réappliquer les ombres et bords pour être sûr.
+  border-radius: 0.75rem;
+  box-shadow: 0 0.2rem 0.5rem rgba($dark, 0.075);
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 0.3rem 0.7rem rgba($dark, 0.12);
+  }
+}
+
+.card-body {
+  padding: 2rem;
+  // Assurer une couleur de fond claire pour le contenu de la carte
+  background-color: white;
+  border-radius: 0.75rem; // Assurer que les coins restent arrondis
+}
+
+.table {
+  margin-top: 1rem;
+  // Ajout de styles pour une table plus esthétique si nécessaire
+  // Par exemple, des bordures de table plus subtiles
+  border-color: lighten($border-color, 5%);
+}
+
+// Styles de pagination
+.pagination .page-item .page-link {
+  background-color: lighten($light, 2%); // Un gris très légèrement plus clair que $light
+  border-color: $border-color; // Utilisation de votre couleur de bordure
+  color: $text-color; // Utilisation de votre couleur de texte foncée
+  transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease;
+  border-radius: 0.25rem; // Légèrement arrondi
+  margin: 0 0.2rem; // Petit espace entre les éléments de pagination
+
+  &:hover {
+    text-decoration: none; // Enlève le soulignement au survol
+    background-color: lighten($primary, 35%); // Teinte claire de votre primaire au survol
+    color: $primary; // Couleur primaire pour le texte au survol
+    border-color: lighten($primary, 35%);
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 0.25rem rgba($primary, 0.25); // Ombre de focus avec la couleur primaire
+  }
+}
+
+.pagination .page-item.active .page-link {
+  background-color: $primary; // La page active utilise votre couleur primaire
+  border-color: $primary; // Bordure correspondante
+  color: white; // Texte blanc sur primaire
+
+  &:hover {
+    background-color: darken($primary, 5%); // Un peu plus foncé au survol pour l'active
+    border-color: darken($primary, 5%);
+    color: white;
+  }
+}

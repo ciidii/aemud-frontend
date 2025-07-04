@@ -1,73 +1,71 @@
 <div class="contribution-container">
   <form [formGroup]="contributionForm" novalidate>
-    <div class="card-modern">
-      <div class="card-body">
-        <h3 class="card-title">Enregistrement des Cotisations</h3>
-
-        <div class="row gx-4 gy-3">
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="memberPhoneNumber" class="form-label">Membre</label>
-              <div class="input-group-custom"> <span class="input-group-text-custom">+221</span>
-                <input id="memberPhoneNumber" placeholder="Saisir les 9 chiffres"
-                       formControlName="memberPhoneNumber"
-                       class="form-control"
-                       [ngClass]="{ 'is-invalid': contributionForm.get('memberPhoneNumber')?.invalid && contributionForm.get('memberPhoneNumber')?.touched }">
-              </div>
-              <div *ngIf="contributionForm.get('memberPhoneNumber')?.invalid && contributionForm.get('memberPhoneNumber')?.touched"
-                   class="invalid-feedback">
-                <i class="bi bi-exclamation-circle-fill"></i> Veuillez saisir un numéro de téléphone valide (9 chiffres).
-              </div>
-            </div>
+    <div class="row gx-4 gy-3">
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="memberPhoneNumber" class="form-label">Membre</label>
+          <div class="input-group-custom"><span class="input-group-text-custom">+221</span>
+            <input id="memberPhoneNumber" placeholder="Saisir les 9 chiffres"
+                   formControlName="memberPhoneNumber"
+                   class="form-control"
+                   [ngClass]="{ 'is-invalid': contributionForm.get('memberPhoneNumber')?.invalid && contributionForm.get('memberPhoneNumber')?.touched }">
           </div>
-
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="session" class="form-label">Session</label>
-              <select id="session" formControlName="session" class="form-control form-select-custom"
-                      [ngClass]="{ 'is-invalid': contributionForm.get('session')?.invalid && contributionForm.get('session')?.touched }">
-                <option value="">Sélectionner une session</option>
-                <option *ngFor="let s of sessions" [value]="s.id">{{ s.session }}</option>
-              </select>
-              <div *ngIf="contributionForm.get('session')?.invalid && contributionForm.get('session')?.touched"
-                   class="invalid-feedback">
-                <i class="bi bi-exclamation-circle-fill"></i> Veuillez sélectionner une session.
-              </div>
-            </div>
+          <div
+            *ngIf="contributionForm.get('memberPhoneNumber')?.invalid && contributionForm.get('memberPhoneNumber')?.touched"
+            class="invalid-feedback">
+            <i class="bi bi-exclamation-circle-fill"></i> Veuillez saisir un numéro de téléphone valide (9
+            chiffres).
           </div>
+        </div>
+      </div>
 
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="month" class="form-label">Mois</label>
-              <select id="month" formControlName="month" class="form-control form-select-custom"
-                      [ngClass]="{ 'is-invalid': contributionForm.get('month')?.invalid && contributionForm.get('month')?.touched }">
-                <option value="">Sélectionner un mois</option>
-                <option *ngFor="let m of months" [value]="m.id">{{ m.monthName }}</option>
-              </select>
-              <div *ngIf="contributionForm.get('month')?.invalid && contributionForm.get('month')?.touched"
-                   class="invalid-feedback">
-                <i class="bi bi-exclamation-circle-fill"></i> Veuillez sélectionner un mois.
-              </div>
-            </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="session" class="form-label">Session</label>
+          <select id="session" formControlName="session" class="form-control form-select-custom"
+                  [ngClass]="{ 'is-invalid': contributionForm.get('session')?.invalid && contributionForm.get('session')?.touched }">
+            <option value="">Sélectionner une session</option>
+            <option *ngFor="let s of sessions" [value]="s.id">{{ s.session }}</option>
+          </select>
+          <div *ngIf="contributionForm.get('session')?.invalid && contributionForm.get('session')?.touched"
+               class="invalid-feedback">
+            <i class="bi bi-exclamation-circle-fill"></i> Veuillez sélectionner une session.
           </div>
+        </div>
+      </div>
 
-          <div class="col-md-4">
-            <div class="form-group">
-              <label for="montant" class="form-label">Montant de la bourse</label>
-              <input id="montant" formControlName="montant" class="form-control form-control-readonly" [readonly]="true"
-                     placeholder="Montant Bourse...">
-              <div *ngIf="memberAmount === null && contributionForm.get('memberPhoneNumber')?.valid && contributionForm.get('memberPhoneNumber')?.dirty"
-                   class="text-info mt-1">
-                <i class="bi bi-info-circle-fill"></i> Saisir un numéro pour obtenir le montant.
-              </div>
-            </div>
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="month" class="form-label">Mois</label>
+          <select id="month" formControlName="month" class="form-control form-select-custom"
+                  [ngClass]="{ 'is-invalid': contributionForm.get('month')?.invalid && contributionForm.get('month')?.touched }">
+            <option value="">Sélectionner un mois</option>
+            <option *ngFor="let m of months" [value]="m.id">{{ m.monthName }}</option>
+          </select>
+          <div *ngIf="contributionForm.get('month')?.invalid && contributionForm.get('month')?.touched"
+               class="invalid-feedback">
+            <i class="bi bi-exclamation-circle-fill"></i> Veuillez sélectionner un mois.
+          </div>
+        </div>
+      </div>
+
+      <div class="col-md-4">
+        <div class="form-group">
+          <label for="montant" class="form-label">Montant de la bourse</label>
+          <input id="montant" formControlName="montant" class="form-control form-control-readonly" [readonly]="true"
+                 placeholder="Montant Bourse...">
+          <div
+            *ngIf="memberAmount === null && contributionForm.get('memberPhoneNumber')?.valid && contributionForm.get('memberPhoneNumber')?.dirty"
+            class="text-info mt-1">
+            <i class="bi bi-info-circle-fill"></i> Saisir un numéro pour obtenir le montant.
           </div>
         </div>
       </div>
     </div>
 
     <div class="d-flex justify-content-end mt-5">
-      <button type="button" class="btn btn-primary-custom" (click)="onSubmit()" [disabled]="contributionForm.invalid || memberAmount === null">
+      <button type="button" class="btn btn-primary-custom" (click)="onSubmit()"
+              [disabled]="contributionForm.invalid || memberAmount === null">
         <i class="bi bi-floppy2"></i> Enregistrer
       </button>
     </div>
