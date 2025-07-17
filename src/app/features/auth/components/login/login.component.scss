@@ -1,0 +1,99 @@
+/* Styles globaux */
+@import "../../../../../assets/scss/variables";
+html, body {
+  padding: 0;
+  margin: 0;
+  overflow: hidden;
+}
+
+.div-1 {
+  background-color: $primary;
+}
+
+.sidebar-header{
+  background-color: rgba($secondary, 0.8);
+}
+
+.div-2 {
+  background-color: rgba($secondary, 0);
+}
+
+.logo {
+  width: 40%;
+}
+
+.mosque-ucad {
+  font-family: police-lieu, sans-serif;
+  background-color: $primary;
+  text-align: justify;
+  color: white;
+  vertical-align: center;
+}
+
+.container-fluid {
+  display: grid;
+}
+
+.text-center {
+  vertical-align: center;
+}
+
+.h2 {
+  color: white;
+  font-family: police-titre, serif;
+}
+
+.row-1 {
+  font-family: police-autre, sans-serif;
+}
+
+.container-fluid2 {
+  align-content: center;
+  justify-content: center;
+}
+
+/* Styles pour le bouton de connexion */
+.btn-connexion {
+  background-color: $primary; // Utilisation de la couleur principale
+  color: white; // Texte en blanc pour contraster avec le fond
+
+  &:hover {
+    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+  }
+}
+
+/* Styles pour les labels */
+label {
+  color: $primary; // Utilisation de la couleur principale
+}
+
+/* Styles pour la carte */
+.card {
+  border: 1px solid rgba(0, 0, 0, 0.125); // Bordure légère
+  border-radius: 0.5rem; // Coins arrondis
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombre portée
+
+  .card-header {
+    background-color: $primary; // Utilisation de la couleur principale
+    color: white; // Texte en blanc pour contraster avec le fond
+    font-weight: bold;
+    padding: 1rem;
+    text-align: center;
+  }
+
+  .card-body {
+    padding: 1.5rem;
+  }
+}
+
+/* Styles pour les champs de formulaire */
+.form-control {
+  border: 1px solid $primary; // Bordure de la couleur principale
+  border-radius: 0.25rem; // Coins arrondis
+  padding: 0.5rem;
+
+  &:focus {
+    border-color: $primary; // Bordure de la couleur secondaire au focus
+    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25); // Ombre portée au focus
+  }
+}

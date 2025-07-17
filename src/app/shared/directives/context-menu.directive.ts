@@ -6,10 +6,10 @@ import {Directive, EventEmitter, HostListener, Input, Output} from '@angular/cor
 })
 export class ContextMenuTriggerDirective {
   // Emits the mouse event and the data associated with the clicked item
-  @Output() contextMenuTrigger = new EventEmitter<{ event: MouseEvent, data: any }>();
+  @Output() contextMenuTrigger = new EventEmitter<{ event: MouseEvent, data: unknown }>();
 
   // Input to receive the data associated with the item this directive is on
-  @Input('appContextMenuTriggerData') data: any;
+  @Input('appContextMenuTriggerData') data: unknown;
 
   @HostListener('contextmenu', ['$event'])
   onContextMenu(event: MouseEvent): void {

@@ -1,4 +1,6 @@
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
   name: 'stage',
   production: false ,
   apiKey: 'http://apiaemudcontainer:8081',
@@ -11,6 +13,7 @@ export const environment = {
       name: 'loggingSystem',
       isActive: true,
       type: 'Sentry',
+      sentryDsn: ''
     },
     {
       isActive: false,

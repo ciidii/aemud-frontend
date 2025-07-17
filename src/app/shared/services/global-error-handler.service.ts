@@ -7,7 +7,7 @@ export class GlobalErrorHandlerService implements ErrorHandler {
   constructor() {
   }
 
-  handleError(error: any): void {
+  handleError(error: unknown): void {
     Sentry.captureException(error.originalException | error)
   }
 }

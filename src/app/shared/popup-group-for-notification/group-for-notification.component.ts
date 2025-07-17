@@ -2,7 +2,7 @@ import {Component, OnInit, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AppStateService} from "../../core/services/app-state.service";
 import {SmsModel} from "../../core/models/sms.model";
-import {NotificationService} from "../../notification/core/notification.service";
+import {NotificationService} from "../../notification/services/notification.service";
 import {ToastrService} from "ngx-toastr";
 import {MemberModel} from "../../core/models/member.model-copy";
 
@@ -67,13 +67,15 @@ export class GroupForNotificationComponent implements OnInit {
   }
 
   getMemberNumbers() {
-    const filteredNumbers = this.appState.memberState.members
+    /*
+    const filteredNumbers = this.appState.getSnapshot().members
       .filter((member: MemberModel) => member.contactInfo?.numberPhone)
       .map((member: MemberModel) =>
         member.contactInfo.numberPhone.replace(/\+/g, '')  // Suppression du signe plus
       );
 
     this.tabMemberNum = filteredNumbers;
-  }
 
+     */
+  }
 }

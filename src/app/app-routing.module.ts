@@ -1,34 +1,45 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
+import { AuthGuard } from "./core/guards/auth.guard";
 
 export const routes: Routes = [
   {
     path: 'shared',
-    loadChildren: () => import('./shared/shared-routing.module').then(m => m.SharedRoutingModule),
+    loadChildren: () => import('./shared/shared.routes').then(m => m.SHARED_ROUTES),
+    canActivate: [AuthGuard],
     title: 'Accueil',
   },
   {
     path: 'members',
-    loadChildren: () => import('./member/member.route').then(m => m.MemberRoutingModule),
+    loadChildren: () => import('./features/member/member.routes').then(m => m.MEMBER_ROUTES),
+    canActivate: [AuthGuard],
     title: 'Membres',
   },
   {
-    path: 'configurations',
-    loadChildren: () => import('./configuration/config.routes').then(m => m.ConfigRoutes),
-    title: 'Configurations',
+    path: 'engagements',
+    loadChildren: () => import('./features/configuration/config.routes').then(m => m.ENGAGEMENT_ROUTES),
+    canActivate: [AuthGuard],
+    title: 'engagements',
   },
   {
     path: 'contributions',
-    loadChildren: () => import('./cotisation/contribution.route').then(m => m.ContributionRoute),
+    loadChildren: () => import('./features/contribution/contribution.route').then(m => m.CONTRIBUTION_ROUTES),
+    canActivate: [AuthGuard],
     title: 'Contributions'
   },
   {
     path: 'notifications',
-    loadChildren: () => import('./notification/notification.route').then(m => m.NotificationRoute),
+    loadChildren: () => import('./features/notification/notification.route').then(m => m.NOTIFICATIONS_ROUTES),
+    canActivate: [AuthGuard],
     title: 'Notifications',
   },
   {
+    path: 'auth',
+    loadChildren: () => import('./features/auth/AUTH_ROUTES').then(m => m.APP_ROUTES),
+    title: 'Authentication',
+  },
+  {
     path: '',
-    redirectTo: 'shared/login',
+    redirectTo: 'auth/login',
     pathMatch: 'full',
   },
   {

@@ -5,7 +5,6 @@ import {environment} from "./environments/environment.development";
 import {AppComponent} from './app/app.component';
 import {provideAnimations} from '@angular/platform-browser/animations';
 import {ToastrModule} from 'ngx-toastr';
-import {provideHttpClient, withInterceptorsFromDi} from '@angular/common/http';
 import {ReactiveFormsModule} from '@angular/forms';
 import {NgbModule} from '@ng-bootstrap/ng-bootstrap';
 import {bootstrapApplication, BrowserModule, Title} from '@angular/platform-browser';
@@ -13,6 +12,9 @@ import {provideRouter, Router} from '@angular/router';
 import {APP_INITIALIZER, ErrorHandler, importProvidersFrom, LOCALE_ID} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
+import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
+import { AuthInterceptor } from "./app/core/interceptors/auth.interceptor";
+import { HttpErrorInterceptor } from "./app/core/interceptors/error.interceptor";
 import {routes} from "./app/app-routing.module";
 
 registerLocaleData(localeFr);
@@ -54,6 +56,8 @@ bootstrapApplication(AppComponent, {
       provide: Title
     },
     provideHttpClient(withInterceptorsFromDi()),
+    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
+    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
     provideRouter(routes),
     provideAnimations(),
     {provide: LOCALE_ID, useValue: 'fr'}

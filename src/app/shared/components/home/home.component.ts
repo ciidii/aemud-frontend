@@ -3,6 +3,15 @@ import {CardContentService} from "../../services/card-content.service";
 import {RouterLink} from "@angular/router";
 import {NgForOf} from "@angular/common";
 
+interface CardContentItem {
+  imageUrl: string;
+  title: string;
+  description: string;
+  linkTitle: string;
+  retourLinh: string;
+  disabled: string;
+}
+
 @Component({
   selector: 'app-shell',
   templateUrl: './home.component.html',
@@ -14,7 +23,7 @@ import {NgForOf} from "@angular/common";
   standalone: true
 })
 export class HomeComponent implements OnInit {
-  cardContents !: any
+  cardContents !: CardContentItem[]
 
   constructor(private cardContentService: CardContentService) {
   }

@@ -1,6 +1,8 @@
-export const environment = {
+import { Environment } from './environment.interface';
+
+export const environment: Environment = {
   name: 'developments',
-  production: true,
+  production: false,
   apiKey: 'http://localhost:8081',
   identity_API_URL: 'https://dev.identity.com',
   storage_API_URL: 'https://dev.storage.com',

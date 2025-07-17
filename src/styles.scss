@@ -40,6 +40,7 @@ body {
   background-color: $background-color;
   color: $text-color;
   font-family: 'Open Sans', sans-serif; // Exemple de police de corps
+  overflow: hidden;
 }
 
 h1, h2, h3, h4, h5, h6 {
