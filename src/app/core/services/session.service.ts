@@ -1,5 +1,6 @@
-import { Injectable } from '@angular/core';
-import { BehaviorSubject } from 'rxjs';
+import {inject, Injectable} from '@angular/core';
+import {BehaviorSubject} from 'rxjs';
+import {Router} from "@angular/router";
 
 @Injectable({
   providedIn: 'root'
@@ -9,8 +10,10 @@ export class SessionService {
 
   private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
+  private router = inject(Router);
 
-  constructor() { }
+  constructor() {
+  }
 
   /**
    * Checks if a session token exists.
@@ -34,7 +37,9 @@ export class SessionService {
    */
   clearSession(): void {
     localStorage.removeItem(this.TOKEN_KEY);
+    localStorage.removeItem("user");
     this.isLoggedInSubject.next(false);
+    this.router.navigateByUrl("auth/login");
   }
 
   /**

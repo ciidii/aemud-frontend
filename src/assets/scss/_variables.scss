@@ -25,3 +25,60 @@ $dark-background-color: #121212; // Arrière-plan général en thème sombre
 $dark-text-color: #ffffff;       // Couleur de texte en thème sombre
 $dark-border-color: #333;        // Couleur des bordures en thème sombre
 $dark-hover-color: lighten($primary, 10%); // Couleur de survol en thème sombre
+
+
+// parameter relation au spacing
+
+// ===========================
+// 🎨 Design Tokens (SCSS)
+// Base : html { font-size: 62.5% } => 1rem = 10px
+// ===========================
+
+// Typography
+$font-family-base: 'Inter', 'Roboto', sans-serif;
+
+$font-size-body: 1.6rem;   // 16px
+$font-size-small: 1.4rem;  // 14px
+$font-size-h6: 1.6rem;
+$font-size-h5: 2rem;
+$font-size-h4: 2.4rem;
+$font-size-h3: 3rem;
+$font-size-h2: 3.6rem;
+$font-size-h1: 4.8rem;
+
+// Spacing scale (based on 4px = 0.4rem)
+$space-1: 0.4rem;   // 4px
+$space-2: 0.8rem;   // 8px
+$space-3: 1.2rem;   // 12px
+$space-4: 1.6rem;   // 16px
+$space-6: 2.4rem;   // 24px
+$space-8: 3.2rem;   // 32px
+$space-12: 4.8rem;  // 48px
+$space-16: 6.4rem;  // 64px
+
+// Colors
+$color-text: #1A1A1A;
+$color-text-secondary: #4D4D4D;
+$color-border: #E5E7EB;
+
+// Border Radius
+$radius-sm: 0.8rem;
+$radius-md: 1.6rem;
+
+// Shadows
+$shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.05);
+$shadow-md: 0 4px 6px rgba(0, 0, 0, 0.1);
+$shadow-lg: 0 10px 15px rgba(0, 0, 0, 0.15);
+
+// Sidebar
+$sidebar-expanded: 24rem;   // 240px
+$sidebar-collapsed: 7.2rem; // 72px
+$sidebar-mobile: 80vw;
+
+// Icon sizes
+$icon-xs: 1.6rem;  // 16px
+$icon-sm: 2rem;    // 20px
+$icon-md: 2.4rem;  // 24px
+$icon-lg: 3.2rem;  // 32px
+$icon-xl: 4.8rem;  // 48px
+

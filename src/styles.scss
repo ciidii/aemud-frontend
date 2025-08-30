@@ -39,8 +39,14 @@
 body {
   background-color: $background-color;
   color: $text-color;
-  font-family: 'Open Sans', sans-serif; // Exemple de police de corps
-  overflow: hidden;
+
+  font-family: "Inter", "Roboto", sans-serif; /* police moderne, lisible */
+  font-size: 1.6rem;  /* 16px par défaut */
+  line-height: 1.5;
+  --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+  --shadow-md: 0 4px 6px rgba(0,0,0,0.1);
+  --shadow-lg: 0 10px 15px rgba(0,0,0,0.15);
+
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -48,6 +54,28 @@ h1, h2, h3, h4, h5, h6 {
   font-family: 'Montserrat', sans-serif; // Exemple de police pour les titres
   font-weight: bold;
 }
+
+h1 { font-size: 4.8rem; font-weight: 700; }
+h2 { font-size: 3.6rem; font-weight: 600; }
+h3 { font-size: 3rem; font-weight: 600; }
+h4 { font-size: 2.4rem; font-weight: 500; }
+h5 { font-size: 2rem; font-weight: 500; }
+h6 { font-size: 1.6rem; font-weight: 500; }
+p  { font-size: 1.6rem; }
+small { font-size: 1.4rem; }
+
+:root {
+  --space-1: 0.4rem;
+  --space-2: 0.8rem;
+  --space-3: 1.2rem;
+  --space-4: 1.6rem;
+  --space-6: 2.4rem;
+  --space-8: 3.2rem;
+  --space-12: 4.8rem;
+  --space-16: 6.4rem;
+}
+
+
 .btn-secondary{
   color:$light;
   &:hover{
@@ -72,6 +100,10 @@ h5,h4{
 }
 
 /* Styles pour les Cartes (regroupements de sections) */
+html {
+  font-size: 62.5%;
+  color: white;
+}
 .card {
   border-radius: 0.75rem;
   box-shadow: 0 0.2rem 0.5rem rgba($dark, 0.075); /* Utilisation de $dark pour l'ombre */
@@ -176,3 +208,7 @@ div[formArrayName="personToCalls"] .card-header {
 div[formArrayName="personToCalls"] .btn-danger {
   margin-bottom: 0 !important;
 }
+
+/* Nouvelle paremétre relation à spacing*/
+
+

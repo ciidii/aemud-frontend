@@ -1,6 +1,14 @@
-export interface User {
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
+  SUPER_ADMIN = 'SUPER_ADMIN',
+}
+
+export interface UserModel {
   id: number;
   username: string;
-  name: string;
-  // Add any other relevant user properties here
+  locked: boolean;
+  forcePasswordChange: boolean;
+  memberId: string;
+  roles: Role[];
 }

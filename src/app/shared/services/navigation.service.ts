@@ -4,7 +4,7 @@ import {Router} from "@angular/router";
 @Injectable({providedIn: 'root'})
 export class NavigationService {
   // Chemins de base
-  public readonly HOME = 'home';
+  public readonly HOME = 'home-layout';
   public readonly LOGIN = 'login';
 
   // Chemins pour les membres
@@ -21,6 +21,7 @@ export class NavigationService {
   public readonly CONFIGURATIONS_COMMISSION_ADMIN = `${this.CONFIGURATIONS}commission-admin`;
   public readonly CONFIGURATIONS_CLUB_ADMIN = `${this.CONFIGURATIONS}club-admin`;
   public readonly CONFIGURATIONS_SESSION_ADMIN = `${this.CONFIGURATIONS}session-admin`;
+  public readonly CONFIGURATIONS_EVENT_ADMIN = `${this.CONFIGURATIONS}event-admin`;
 
   // Chemins pour les contributions
   public readonly CONTRIBUTIONS = '/contributions';

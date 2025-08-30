@@ -1,49 +1,36 @@
 @import "variables";
 .app-container {
-  display: flex;
-  flex-direction: column;
-  height: 100vh; /* Prend toute la hauteur de la vue */
-  background-color: $light; // Utilisation de la couleur claire pour le fond
+  display: grid;
+  grid-template-columns: 24rem 1fr; // sidebar ouverte = 250px
+  height: 100vh;
+  transition: grid-template-columns 0.3s ease-in-out;
+  &.sidebar--collapsed {
+    grid-template-columns: 5rem 1fr;
+  }
+}
+
+app-aside-bare {
+  color: $text-color;
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+  .nav-text,
+  .user-details,
+  .logout-btn span {
+    transition: opacity 0.2s ease-in-out;
+  }
+
+  .sidebar--collapsed & {
+    .nav-text,
+    .user-details,
+    .logout-btn span {
+      opacity: 0;
+      pointer-events: none;
+    }
+  }
 }
 
 .main-content {
-  display: flex;
-  flex: 1;
-}
-
-.content {
-  flex: 1; /* Prend tout l'espace restant */
-  padding: 20px; /* Espacement intérieur */
-  overflow-y: auto; /* Permet le défilement si le contenu est trop long */
-  margin-left: 250px; /* Marge pour la sidebar */
-  background-color: white; /* Fond blanc pour le contenu */
-  color: $dark; /* Utilisation de la couleur sombre pour le texte */
-}
-
-/* Styles pour la sidebar */
-app-aside-bare {
-  width: 250px; /* Largeur de la sidebar */
-  height: 100vh; /* Hauteur totale de la vue */
-  background-color: $primary; /* Utilisation de la couleur principale pour la sidebar */
-  color: white; /* Texte en blanc pour contraster avec le fond */
-  position: fixed; /* Fixer la sidebar */
-  top: 0;
-  left: 0;
-  overflow-y: auto; /* Permet le défilement si le contenu est trop long */
-  transition: transform 0.3s ease-in-out; /* Animation pour la sidebar */
-}
-
-/* Responsive design */
-@media (max-width: 768px) {
-  .content {
-    margin-left: 0; /* Supprimer la marge pour la sidebar sur les petits écrans */
-  }
-
-  app-aside-bare {
-    transform: translateX(-100%); /* Cacher la sidebar par défaut */
-  }
-
-  app-aside-bare.open {
-    transform: translateX(0); /* Afficher la sidebar lorsqu'elle est ouverte */
-  }
+  padding: 1rem;
+  background: #1e1e2d;
+  overflow-y: auto;
 }

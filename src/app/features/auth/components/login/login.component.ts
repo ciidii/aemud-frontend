@@ -1,27 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import {Router, RouterLink} from "@angular/router";
-import { AuthService } from "../../services/auth.service";
-import { finalize } from "rxjs";
-import {NgIf} from "@angular/common";
+import {Component, inject, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {RouterLink} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {BehaviorSubject, finalize} from "rxjs";
 
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf, RouterLink]
+  imports: [FormsModule, ReactiveFormsModule, NgIf, RouterLink, AsyncPipe]
 })
 export class LoginComponent implements OnInit {
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
   formGroup!: FormGroup;
-  isLoading = false;
   errorMessage: string | null = null;
-
-  constructor(
-    private formBuilder: FormBuilder,
-    private router: Router,
-    private authService: AuthService
-  ) {}
+  private _loading = new BehaviorSubject<boolean>(false);
+  loading$ = this._loading.asObservable();
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
@@ -31,21 +28,17 @@ export class LoginComponent implements OnInit {
   }
 
   handleLogin(): void {
+
     if (this.formGroup.invalid) {
       return;
     }
-    this.isLoading = true;
     this.errorMessage = null;
-
+    this._loading.next(true);
     this.authService.login(this.formGroup.value)
-      .pipe(
-        finalize(() => this.isLoading = false)
-      )
+      .pipe(finalize(() => this._loading.next(false)))
       .subscribe({
-        next:resp => {
-        },
         error: (err) => {
-          this.errorMessage = err.message;
+          this.errorMessage = err.error.error.message
         }
       });
   }

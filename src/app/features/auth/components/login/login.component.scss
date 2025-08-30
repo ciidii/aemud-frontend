@@ -3,7 +3,8 @@
 html, body {
   padding: 0;
   margin: 0;
-  overflow: hidden;
+  scroll-behavior: smooth;
+  scrollbar-width: none;
 }
 
 .div-1 {
@@ -54,27 +55,26 @@ html, body {
 
 /* Styles pour le bouton de connexion */
 .btn-connexion {
-  background-color: $primary; // Utilisation de la couleur principale
-  color: white; // Texte en blanc pour contraster avec le fond
+  background-color: $primary;
+  color: white;
 
   &:hover {
-    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+    background-color: darken($primary, 10%);
   }
 }
 
 /* Styles pour les labels */
 label {
-  color: $primary; // Utilisation de la couleur principale
+  color: $primary;
 }
 
-/* Styles pour la carte */
 .card {
   border: 1px solid rgba(0, 0, 0, 0.125); // Bordure légère
   border-radius: 0.5rem; // Coins arrondis
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombre portée
 
   .card-header {
-    background-color: $primary; // Utilisation de la couleur principale
+    background-color: $primary;
     color: white; // Texte en blanc pour contraster avec le fond
     font-weight: bold;
     padding: 1rem;

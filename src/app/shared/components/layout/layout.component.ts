@@ -1,5 +1,8 @@
-import {Component} from '@angular/core';
-import {RouterOutlet} from '@angular/router';
+import {Component, inject, OnInit} from '@angular/core';
+import {RouterOutlet} from "@angular/router";
+import {SidebarService} from "../../../core/services/sidebar.service";
+import {Observable} from "rxjs";
+import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 
 @Component({
@@ -7,7 +10,19 @@ import {AsideBareComponent} from "../aside-bare/aside-bare.component";
   templateUrl: './layout.component.html',
   styleUrls: ['./layout.component.scss'],
   standalone: true,
-  imports: [RouterOutlet, AsideBareComponent]
+  imports: [
+    RouterOutlet,
+    AsyncPipe,
+    AsideBareComponent
+  ]
 })
 export class LayoutComponent {
+
+  private sidebarService = inject(SidebarService);
+  isSidebarOpen$: Observable<boolean>;
+
+  constructor() {
+    this.isSidebarOpen$ = this.sidebarService.isOpen$;
+  }
+
 }

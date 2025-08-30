@@ -1,37 +1,28 @@
-import {Component} from '@angular/core';
+import {Component, HostBinding, inject, OnDestroy} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
-import {NgIf} from "@angular/common";
-import {NavigationService} from "../../services/navigation.service";
+
+import {AuthService} from "../../services/auth.service";
+
+import {AsyncPipe, NgIf} from "@angular/common";
+import {SidebarService} from "../../../core/services/sidebar.service";
 
 @Component({
   selector: 'app-aside-bare',
   templateUrl: './aside-bare.component.html',
   styleUrls: ['./aside-bare.component.scss'],
-  imports: [RouterLinkActive, RouterLink, NgIf],
+  imports: [RouterLinkActive, RouterLink, NgIf, AsyncPipe,],
   standalone: true
 })
-export class AsideBareComponent {
-  categories = {
-    membres: true,
-    gestionEntites: true,
-    contributions: true,
-    notifications: true,
-    parametres: true
-  };
+export class AsideBareComponent{
+  private authService = inject(AuthService);
+  protected sideBareService = inject(SidebarService);
+  private _isCollapsed = true;
 
-  constructor(public navigationService: NavigationService) {
+   toggleCollapse() {
+    this.sideBareService.toggleCollapse();
   }
 
-  toggleCategory(category: keyof typeof this.categories, event?: MouseEvent) {
-    if (event) {
-      event.stopPropagation();
-    }
-    if (!event || (event.target as HTMLElement).closest('a')) {
-      this.categories[category] = !this.categories[category];
-    }
-  }
-
-  logout() {
-    // Implémentation de la déconnexion
+  logout(): void {
+    this.authService.logout();
   }
 }

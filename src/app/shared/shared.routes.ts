@@ -1,6 +1,5 @@
 import { Routes } from '@angular/router';
 import { LayoutComponent } from './components/layout/layout.component';
-import { HomeComponent } from './components/home/home.component';
 import { NotFoundComponent } from "./pages/not-found/not-found.component";
 
 export const SHARED_ROUTES: Routes = [
@@ -9,8 +8,8 @@ export const SHARED_ROUTES: Routes = [
     component: LayoutComponent,
     children: [
       {
-        path: 'home',
-        component: HomeComponent,
+        path: 'home-layout',
+        component: LayoutComponent,
         title: "Page d'accueil",
       },
       {

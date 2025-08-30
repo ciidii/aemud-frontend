@@ -1,5 +1,3 @@
-/// <reference types="@angular/localize" />
-
 import * as Sentry from "@sentry/angular";
 import {environment} from "./environments/environment.development";
 import {AppComponent} from './app/app.component';
@@ -12,10 +10,9 @@ import {provideRouter, Router} from '@angular/router';
 import {APP_INITIALIZER, ErrorHandler, importProvidersFrom, LOCALE_ID} from '@angular/core';
 import {registerLocaleData} from "@angular/common";
 import localeFr from '@angular/common/locales/fr';
-import { HTTP_INTERCEPTORS, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http';
-import { AuthInterceptor } from "./app/core/interceptors/auth.interceptor";
-import { HttpErrorInterceptor } from "./app/core/interceptors/error.interceptor";
-import {routes} from "./app/app-routing.module";
+import {provideHttpClient, withInterceptors} from '@angular/common/http';
+import {routes} from "./app/app-routing";
+import {authInterceptor} from "./app/core/interceptors/auth.interceptor";
 
 registerLocaleData(localeFr);
 Sentry.init({
@@ -30,7 +27,7 @@ Sentry.init({
   tracePropagationTargets: ["localhost", "http://localhost:4300"],
   // Session Replay
   replaysSessionSampleRate: 0.1, // This sets the sample rate at 10%. You may want to change it to 100% while in development and then sample at a lower rate in production.
-  replaysOnErrorSampleRate: 1.0, // If you're not already sampling the entire session-admin-page, change the sample rate to 100% when sampling sessions where errors occur.
+  replaysOnErrorSampleRate: 1.0,
 });
 
 bootstrapApplication(AppComponent, {
@@ -55,9 +52,7 @@ bootstrapApplication(AppComponent, {
     {
       provide: Title
     },
-    provideHttpClient(withInterceptorsFromDi()),
-    { provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true },
-    { provide: HTTP_INTERCEPTORS, useClass: HttpErrorInterceptor, multi: true },
+    provideHttpClient(withInterceptors([authInterceptor])),
     provideRouter(routes),
     provideAnimations(),
     {provide: LOCALE_ID, useValue: 'fr'}

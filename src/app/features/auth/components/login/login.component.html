@@ -3,7 +3,8 @@
     <div class="container-fluid p-3 vh-100">
       <div class="row p-0">
         <div class="col p-0  d-flex justify-content-center align-items-center">
-          <img class="logo img-fluid text-center" src="../../../assets/background/logo_aemud_Plan_de_travail_1.png" alt="logo">
+          <img class="logo img-fluid text-center" src="../../../assets/background/logo_aemud_Plan_de_travail_1.png"
+               alt="logo">
         </div>
       </div>
       <div class="row d-flex justify-content-center align-items-center">
@@ -40,15 +41,16 @@
                 <input type="password" class="form-control" formControlName="password">
               </div>
               <div class="mt-2 text-end">
-                <a  [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
+                <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
               </div>
               <div *ngIf="errorMessage" class="alert alert-danger mt-3">
                 {{ errorMessage }}
               </div>
               <div>
-                <button [disabled]="formGroup.invalid || isLoading" type="submit"
+                <button [disabled]="formGroup.invalid || (loading$ | async)" type="submit"
                         class="btn-connexion mt-3 form-control btn btn-primary">
-                  <span *ngIf="isLoading" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                  <span *ngIf="loading$ | async" class="spinner-border spinner-border-sm" role="status"
+                        aria-hidden="true"></span>
                   Connexion
                 </button>
               </div>
