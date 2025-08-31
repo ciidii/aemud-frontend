@@ -82,4 +82,61 @@
       border-color: $primary;
     }
   }
+
+  // Kebab menu styles
+  .kebab-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  .kebab-icon {
+    background: transparent;
+    border: none;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $light;
+    }
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+  }
+
+  .kebab-dropdown {
+    display: none; // Hidden by default
+    position: absolute;
+    right: 100%; // Position to the left of the icon
+    top: 0;
+    background-color: white;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    box-shadow: $shadow-md;
+    min-width: 180px;
+    list-style: none;
+    padding: $space-2 0;
+    margin: 0;
+    z-index: 100;
+  }
+
+  .kebab-menu:hover .kebab-dropdown {
+    display: block; // Show on hover for demo
+  }
+
+  .kebab-dropdown li a {
+    display: block;
+    padding: $space-2 $space-4;
+    font-size: $font-size-small;
+    color: $color-text;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $light;
+    }
+  }
 }
