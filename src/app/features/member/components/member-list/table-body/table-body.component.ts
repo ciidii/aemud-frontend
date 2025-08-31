@@ -21,4 +21,9 @@ export class TableBodyComponent {
   getSortIcon(id: string) {
     return "";
   }
+
+  navigateToMember(memberId: any) {
+    // In a real implementation, this would use the Angular Router to navigate.
+    console.log('Navigating to member with id:', memberId);
+  }
 }
