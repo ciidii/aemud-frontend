@@ -15,6 +15,9 @@ import {MemberModel} from "../../../../../core/models/member.model";
 })
 export class TableFiltersComponent {
 
+  filtersActive = true; // Just for visual demo
+  activeFilterCount = 3; // Just for visual demo
+
   currentTypeFilter: MemberModel | '' = '';
   searchTerm: string = '';
   currentStatusFilter: string = '';

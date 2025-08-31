@@ -89,6 +89,13 @@
     background: darken(white, 5%);
     box-shadow: $shadow-md;
   }
+
+  &.active {
+    background-color: lighten($primary, 35%);
+    color: darken($primary, 10%);
+    border-color: lighten($primary, 20%);
+    font-weight: 600;
+  }
 }
 
 .action-btn {

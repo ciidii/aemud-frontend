@@ -11,8 +11,8 @@
   </div>
 
   <!-- Bouton filtres -->
-  <button class="filter-btn">
-    <i class="bi bi-funnel"></i> Filters
+  <button class="filter-btn" [class.active]="filtersActive">
+    <i class="bi bi-funnel"></i> Filters <span *ngIf="filtersActive">({{activeFilterCount}})</span>
   </button>
 
   
