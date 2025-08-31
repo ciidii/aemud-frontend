@@ -1,0 +1,22 @@
+@import "variables";
+
+.container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  gap: 1rem;
+}
+
+app-table-header {
+  flex: 0 0 auto;
+}
+
+app-table-body {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  display: block;
+}
+
+app-table-footer {
+  flex: 0 0 auto;
+}

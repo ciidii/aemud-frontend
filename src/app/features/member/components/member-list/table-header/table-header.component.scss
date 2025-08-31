@@ -1,0 +1,90 @@
+@import "_variables.scss";
+
+:host {
+  display: block;
+  width: 100%;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 0;
+  margin-bottom: 20px;
+  height: 100%;
+
+}
+
+.left-section {
+  .page-title {
+    font-size: 24px;
+    font-weight: 700;
+
+  }
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: 15px;
+
+    .action-button {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 5px 10px;
+      border-radius: $radius-sm;
+      font-size: $font-size-small;
+      cursor: pointer;
+      transition: background-color 0.2s ease, color 0.2s ease;
+
+      background-color: darken($primary, 5%);
+      color: white;
+
+      .material-icons {
+        font-size: $icon-md;
+      }
+
+      &:hover {
+        background: lighten($primary, 5%);
+        color: lighten($text-color, 20%);
+      }
+
+      &.primary {
+
+        &:hover {
+          background: lighten($primary, 5%);
+          color: lighten($text-color, 20%);
+        }
+      }
+    }
+
+    .notification-icon {
+      position: relative;
+      cursor: pointer;
+      padding: 8px;
+      border-radius: 50%; // Pour un effet circulaire
+      transition: background-color 0.2s ease;
+
+      .material-icons {
+        font-size: 24px;
+        color: $text-color;
+      }
+
+      .badge {
+        position: absolute;
+        top: 0px;
+        right: 0px;
+        background-color: red;
+        color: white;
+        font-size: 10px;
+        padding: 2px 6px;
+        border-radius: 50%;
+        min-width: 10px; // Pour assurer une forme ronde même sans chiffre
+        text-align: center;
+        border: 2px solid $border-color;
+      }
+    }
+
+}
+

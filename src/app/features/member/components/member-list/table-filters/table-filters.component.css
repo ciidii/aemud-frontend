@@ -1,0 +1,104 @@
+.container {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  padding: 12px 20px;
+  background-color: #f9f9f9;
+  border-bottom: 1px solid #ddd;
+}
+
+/* === Répartition espace === */
+.filters {
+  flex: 2; /* 2/3 */
+  display: flex;
+  align-items: center;
+}
+
+.filter-btn {
+  flex: 0.5; /* 1/6 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.filter-btn:hover {
+  background: #f0f0f0;
+}
+
+.action-btn {
+  flex: 0.5; /* 1/6 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #007bff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 10px 16px;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.action-btn:hover {
+  background: #0056b3;
+}
+
+/* === Barre de recherche façon YouTube === */
+.search-input-group {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 24px;
+  overflow: hidden;
+  max-width: 600px;
+}
+
+.search-input-group input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 14px;
+  padding: 8px 12px;
+}
+
+.search-icon-btn {
+  background: #f8f8f8;
+  border: none;
+  border-left: 1px solid #ddd;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s ease;
+}
+
+.search-icon-btn:hover {
+  background: #e0e0e0;
+}
+
+.search-icon-btn i {
+  font-size: 18px;
+  color: #606060;
+}
+
+.clear-search-icon {
+  margin-right: 8px;
+  cursor: pointer;
+  color: #999;
+  transition: color 0.2s ease;
+}
+
+.clear-search-icon:hover {
+  color: #333;
+}
+/*Designe de la table*/
+

@@ -1,0 +1,21 @@
+.container {
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: 5rem 1fr 5rem;
+  gap: 1rem;
+  height: 100%;
+  padding:0;
+}
+
+app-table-header {
+}
+
+app-table-body {
+  grid-row: 2;
+  display: block;
+  height: 100%;
+  background-color: red;
+}
+
+app-table-footer {
+}

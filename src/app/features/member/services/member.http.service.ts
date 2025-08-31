@@ -11,7 +11,7 @@ import {RegistrationModel} from "../../../core/models/RegistrationModel";
 @Injectable({
   providedIn: 'root'
 })
-export class MemberService {
+export class MemberHttpService {
   url: string = environment.API_URL;
 
   constructor(private httpClient: HttpClient) {
@@ -187,7 +187,6 @@ export class MemberService {
       commissions: [{id: '', name: ''}],
       registration: []
     };
-
   }
 
 

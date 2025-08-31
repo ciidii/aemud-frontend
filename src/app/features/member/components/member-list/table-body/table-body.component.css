@@ -1,0 +1,12 @@
+.table {
+  background-color: blue;
+  height: 100%;
+}
+thead {
+  background-color: lightgray;
+  position: sticky;
+  top: 0;
+  left: 0;
+  padding: 0;
+  margin: 0;
+}

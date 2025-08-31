@@ -1,0 +1,97 @@
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: #ffffff;
+  border-top: 1px solid #ddd;
+  box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.05);
+  position: sticky; /* reste collé en bas si tu veux */
+  bottom: 0;
+  z-index: 10;
+}
+
+/* === Infos sélection === */
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 500;
+  color: #444;
+}
+
+.selection-info i {
+  color: #0d6efd; /* bleu bootstrap */
+  font-size: 18px;
+}
+
+/* === Pagination === */
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 14px;
+  color: #666;
+}
+
+.pagination-btn {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.pagination-btn:hover {
+  background: #e9ecef;
+  border-color: #ccc;
+}
+
+.pagination-btn i {
+  font-size: 16px;
+}
+
+/* === Actions === */
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-action-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #444;
+  cursor: pointer;
+  transition: background 0.2s ease, border-color 0.2s ease;
+}
+
+.footer-action-btn i {
+  font-size: 16px;
+}
+
+.footer-action-btn:hover {
+  background: #e9ecef;
+  border-color: #ccc;
+}
+
+/* === Bouton principal (Delete) === */
+.footer-action-btn.primary {
+  background: #dc3545;
+  color: white;
+  border: none;
+}
+
+.footer-action-btn.primary:hover {
+  background: #bb2d3b;
+}

@@ -1,0 +1,104 @@
+@import "variables";
+
+.container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  background-color: $light;
+  border-bottom: 1px solid $border-color;
+}
+
+.filters {
+  flex: 1;
+  display: flex;
+  align-items: center;
+}
+
+.search-input-group {
+  display: flex;
+  align-items: center;
+  background: white;
+  border: 1px solid $border-color-light;
+  border-radius: $radius-lg; // a more rounded look
+  overflow: hidden;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: $shadow-sm;
+
+  input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: $font-size-small;
+    padding: 0.75rem 1rem;
+  }
+
+  .search-icon-btn {
+    background: transparent;
+    border: none;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-left: 1px solid $border-color-light;
+    i {
+      font-size: 1.1rem;
+      color: $text-muted;
+    }
+    &:hover {
+      background: rgba(0,0,0,0.05);
+    }
+  }
+
+  .clear-search-icon {
+    margin-right: 0.75rem;
+    cursor: pointer;
+    color: $text-muted;
+    transition: color 0.2s ease;
+    &:hover {
+      color: $text-color;
+    }
+  }
+}
+
+.filter-btn, .action-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.25rem;
+  border-radius: $radius-md;
+  font-size: $font-size-small;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background 0.2s ease, box-shadow 0.2s ease;
+  border: 1px solid $border-color-light;
+  box-shadow: $shadow-sm;
+
+  i {
+    font-size: 1.1rem;
+  }
+}
+
+.filter-btn {
+  background: white;
+  color: $text-color;
+
+  &:hover {
+    background: darken(white, 5%);
+    box-shadow: $shadow-md;
+  }
+}
+
+.action-btn {
+  background: $primary;
+  color: white;
+  border-color: $primary;
+
+  &:hover {
+    background: lighten($primary, 5%);
+    border-color: lighten($primary, 5%);
+    box-shadow: $shadow-md;
+  }
+}
