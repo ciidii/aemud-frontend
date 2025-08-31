@@ -1,24 +1,17 @@
-// src/styles/_variables.scss (ou _custom-variables.scss)
+$primary: #278F8F;
+$secondary: #D09C0A;
 
-// Couleurs principales de l'application
-$primary: #278F8F;   // Sarcelle Profond
-$secondary: #D09C0A; // Jaune-Ocre/Or Ancien
+$success: #388E3C;
+$info: #1E88E5;
+$warning: #F57C00;
+$danger: #D32F2F;
+$light: #EDEDED;
+$dark: #1B1B1B;
 
-// Couleurs d'état (adaptées pour Bootstrap)
-$success: #388E3C; // Vert pour succès
-$info: #1E88E5;    // Bleu pour information
-$warning: #F57C00; // Orange pour avertissement
-$danger: #D32F2F;  // Rouge pour erreur
-
-// Couleurs neutres (adaptées pour Bootstrap)
-$light: #EDEDED;   // Gris très clair (pour arrière-plans légers)
-$dark: #1B1B1B;    // Gris très foncé (pour texte principal, arrière-plans sombres)
-
-// Couleurs supplémentaires pour le thème clair
-$background-color: $light;      // Arrière-plan général du corps
-$text-color: $light;             // Couleur de texte par défaut
-$border-color: #ddd;            // Couleur des bordures générales
-$hover-color: darken($primary, 10%); // Couleur de survol pour les éléments basés sur le primaire
+$background-color: $light;
+$text-color: $light;
+$border-color: #ddd;
+$hover-color: darken($primary, 10%);
 
 // Thème sombre (variables spécifiques)
 $dark-background-color: #121212; // Arrière-plan général en thème sombre

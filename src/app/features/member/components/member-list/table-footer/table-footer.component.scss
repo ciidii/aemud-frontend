@@ -4,10 +4,10 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 0.75rem 1.5rem;
+  padding: $space-3 $space-6;
   background: white;
-  border-top: 1px solid $border-color;
-  box-shadow: $shadow-md; // A shadow pointing upwards
+  border-top: 1px solid $color-border;
+  box-shadow: $shadow-lg; // Using a larger shadow for effect
   position: sticky;
   bottom: 0;
   z-index: 10;
@@ -16,41 +16,41 @@
 .selection-info {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $space-2;
   font-size: $font-size-small;
   font-weight: 500;
-  color: $text-color;
+  color: $color-text-secondary;
 
   i {
     color: $primary;
-    font-size: 1.2rem;
+    font-size: $icon-sm;
   }
 }
 
 .pagination-controls {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: $space-3;
   font-size: $font-size-small;
-  color: $text-color;
+  color: $color-text;
 
   .pagination-btn {
     background: transparent;
-    border: 1px solid $border-color;
-    border-radius: $radius-md;
-    padding: 0.5rem;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    padding: $space-2;
     cursor: pointer;
     display: flex;
     align-items: center;
     transition: background 0.2s ease, border-color 0.2s ease;
 
     &:hover {
-      background: $hover-color;
-      border-color: $border-color;
+      background: $light;
+      border-color: darken($color-border, 10%);
     }
 
     i {
-      font-size: 1.2rem;
+      font-size: $icon-md;
     }
   }
 }
@@ -58,26 +58,26 @@
 .actions {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: $space-3;
 }
 
 .footer-action-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: $space-2;
   background: white;
-  border: 1px solid $border-color;
-  border-radius: $radius-md;
-  padding: 0.6rem 1rem;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  padding: $space-2 $space-3;
   font-size: $font-size-small;
   font-weight: 500;
-  color: $text-color;
+  color: $color-text;
   cursor: pointer;
   transition: all 0.2s ease;
   box-shadow: $shadow-sm;
 
   i {
-    font-size: 1.1rem;
+    font-size: $icon-sm;
   }
 
   &:hover {

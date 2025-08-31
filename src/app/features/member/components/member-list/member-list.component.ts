@@ -13,7 +13,7 @@ import {TableFooterComponent} from "./table-footer/table-footer.component";
     TableFooterComponent
   ],
   templateUrl: './member-list.component.html',
-  styleUrl: './member-list.component.css'
+  styleUrl: './member-list.component.scss'
 })
 export class MemberListComponent {
   private membersService = inject(MemberHttpService);

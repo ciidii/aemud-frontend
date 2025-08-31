@@ -11,7 +11,7 @@ import {MemberModel} from "../../../../../core/models/member.model";
     NgIf
   ],
   templateUrl: './table-filters.component.html',
-  styleUrl: './table-filters.component.css'
+  styleUrl: './table-filters.component.scss'
 })
 export class TableFiltersComponent {
 

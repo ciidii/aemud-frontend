@@ -9,7 +9,7 @@ import {TableFiltersComponent} from "../table-filters/table-filters.component";
     TableFiltersComponent
   ],
   templateUrl: './table-body.component.html',
-  styleUrl: './table-body.component.css'
+  styleUrl: './table-body.component.scss'
 })
 export class TableBodyComponent {
   private memberStateService = inject(MemberStateService)

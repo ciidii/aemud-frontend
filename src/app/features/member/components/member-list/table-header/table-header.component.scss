@@ -1,90 +1,109 @@
-@import "_variables.scss";
+@import "variables";
 
 :host {
   display: block;
   width: 100%;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $color-border;
+  background-color: white;
 }
 
 .header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 15px 0;
-  margin-bottom: 20px;
-  height: 100%;
-
+  width: 100%;
 }
 
 .left-section {
   .page-title {
-    font-size: 24px;
+    font-size: $font-size-h4;
     font-weight: 700;
-
+    color: $color-text;
   }
 }
 
 .right-section {
   display: flex;
   align-items: center;
-  gap: 15px;
+  gap: $space-4;
 
-    .action-button {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 5px 10px;
-      border-radius: $radius-sm;
-      font-size: $font-size-small;
-      cursor: pointer;
-      transition: background-color 0.2s ease, color 0.2s ease;
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    border-radius: $radius-sm;
+    font-size: $font-size-small;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    box-shadow: $shadow-sm;
 
-      background-color: darken($primary, 5%);
+    i {
+      font-size: $icon-sm;
+    }
+
+    &.primary {
+      background-color: $primary;
       color: white;
-
-      .material-icons {
-        font-size: $icon-md;
-      }
+      border-color: $primary;
 
       &:hover {
         background: lighten($primary, 5%);
-        color: lighten($text-color, 20%);
-      }
-
-      &.primary {
-
-        &:hover {
-          background: lighten($primary, 5%);
-          color: lighten($text-color, 20%);
-        }
+        border-color: lighten($primary, 5%);
+        box-shadow: $shadow-md;
       }
     }
 
-    .notification-icon {
-      position: relative;
-      cursor: pointer;
-      padding: 8px;
-      border-radius: 50%; // Pour un effet circulaire
-      transition: background-color 0.2s ease;
+    &:not(.primary) {
+      background-color: white;
+      color: $color-text;
+      border-color: $color-border;
 
-      .material-icons {
-        font-size: 24px;
-        color: $text-color;
-      }
-
-      .badge {
-        position: absolute;
-        top: 0px;
-        right: 0px;
-        background-color: red;
-        color: white;
-        font-size: 10px;
-        padding: 2px 6px;
-        border-radius: 50%;
-        min-width: 10px; // Pour assurer une forme ronde même sans chiffre
-        text-align: center;
-        border: 2px solid $border-color;
+      &:hover {
+        background: darken(white, 5%);
+        box-shadow: $shadow-md;
       }
     }
+  }
 
+  .notification-icon {
+    position: relative;
+    cursor: pointer;
+    padding: $space-2;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+
+    &:hover {
+      background-color: $light;
+    }
+
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: $danger;
+      color: white;
+      font-size: 1rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 2px solid white;
+    }
+  }
 }
+
 

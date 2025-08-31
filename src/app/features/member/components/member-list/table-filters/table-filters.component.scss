@@ -3,10 +3,10 @@
 .container {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding: 1rem 1.5rem;
-  background-color: $light;
-  border-bottom: 1px solid $border-color;
+  gap: $space-4;
+  padding: $space-3 $space-6;
+  background-color: #f9f9f9; // Should this be a variable?
+  border-bottom: 1px solid $color-border;
 }
 
 .filters {
@@ -19,11 +19,11 @@
   display: flex;
   align-items: center;
   background: white;
-  border: 1px solid $border-color-light;
-  border-radius: $radius-lg; // a more rounded look
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
   overflow: hidden;
   width: 100%;
-  max-width: 500px;
+  max-width: 400px;
   box-shadow: $shadow-sm;
 
   input {
@@ -31,21 +31,21 @@
     border: none;
     outline: none;
     font-size: $font-size-small;
-    padding: 0.75rem 1rem;
+    padding: $space-2 $space-3;
   }
 
   .search-icon-btn {
     background: transparent;
     border: none;
-    padding: 0.75rem 1rem;
+    padding: $space-2 $space-3;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid $border-color-light;
+    border-left: 1px solid $color-border;
     i {
-      font-size: 1.1rem;
-      color: $text-muted;
+      font-size: $icon-sm;
+      color: $color-text-secondary;
     }
     &:hover {
       background: rgba(0,0,0,0.05);
@@ -53,12 +53,12 @@
   }
 
   .clear-search-icon {
-    margin-right: 0.75rem;
+    margin-right: $space-2;
     cursor: pointer;
-    color: $text-muted;
+    color: $color-text-secondary;
     transition: color 0.2s ease;
     &:hover {
-      color: $text-color;
+      color: $color-text;
     }
   }
 }
@@ -66,24 +66,24 @@
 .filter-btn, .action-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.25rem;
-  border-radius: $radius-md;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
   font-size: $font-size-small;
   font-weight: 500;
   cursor: pointer;
-  transition: background 0.2s ease, box-shadow 0.2s ease;
-  border: 1px solid $border-color-light;
+  transition: all 0.2s ease;
+  border: 1px solid $color-border;
   box-shadow: $shadow-sm;
 
   i {
-    font-size: 1.1rem;
+    font-size: $icon-sm;
   }
 }
 
 .filter-btn {
   background: white;
-  color: $text-color;
+  color: $color-text;
 
   &:hover {
     background: darken(white, 5%);
