@@ -1,7 +1,15 @@
 <div class="container">
   <app-table-header></app-table-header>
-  <app-table-body></app-table-body>
-  <app-table-footer></app-table-footer>
 
+  <div *ngIf="loading$ | async" class="loading-indicator">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Loading...</span>
+    </div>
+  </div>
+
+  <app-table-body [members]="members$ | async"></app-table-body>
+
+  <app-table-footer></app-table-footer>
 </div>
+
 

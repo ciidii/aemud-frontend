@@ -1,624 +1,79 @@
-<div class="table-container">
-  <app-table-filters></app-table-filters>
-  <table class="table table-hover align-middle table-borderless shadow-sm">
-    <thead class="table-light">
-    <tr>
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Prénom</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Nom</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Email</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Inscription Status</th>
-      <th>Action</th>
+<ng-container *ngIf="hasMembers; else noMembers">
+  <div class="table-container">
+    <app-table-filters></app-table-filters>
+    <table class="table table-hover align-middle table-borderless shadow-sm">
+      <thead class="table-light">
+      <tr>
+        <th>
+          <input
+            type="checkbox"
+            [checked]="isAllSelected$ | async"
+            (change)="toggleSelectAll()">
+        </th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Prénom</th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Nom</th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Email</th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
+        <th><i class="bi bi-arrow-down-up sort-icon"></i> Inscription Status</th>
+        <th>Action</th>
 
-    </tr>
+      </tr>
 
-    </thead>
-    <tbody>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Lucas</td>
-      <td>Martin</td>
-      <td>lucas.martinexample.com</td>
-      <td>+33 6 12 34 56 78</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Marie</td>
-      <td>Dubois</td>
-      <td>marie.duboisexample.com</td>
-      <td>+33 7 89 01 23 45</td>
-      <td><span class="badge bg-danger">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Thomas</td>
-      <td>Lefebvre</td>
-      <td>thomas.lefebvreexample.com</td>
-      <td>+33 6 54 32 10 98</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Camille</td>
-      <td>Petit</td>
-      <td>camille.petitexample.com</td>
-      <td>+33 7 11 22 33 44</td>
-      <td><span class="badge bg-danger">Annulé</span></td>
-      <td><span class="badge bg-secondary">Annulé</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Hugo</td>
-      <td>Bernard</td>
-      <td>hugo.bernardexample.com</td>
-      <td>+33 6 99 88 77 66</td>
-      <td><span class="badge bg-success">Payé</span></td>
-      <td><span class="badge bg-primary">Inscrit</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    <tr (click)="navigateToMember('some-id')">
-      <th>
-        <input
-          type="checkbox">
-      </th>
-      <td>Léa</td>
-      <td>Roux</td>
-      <td>lea.rouxexample.com</td>
-      <td>+33 7 65 43 21 09</td>
-      <td><span class="badge bg-warning">En Attente</span></td>
-      <td><span class="badge bg-warning">En Cours</span></td>
-      <td>
-        <div class="kebab-menu">
-          <button class="kebab-icon" (click)="$event.stopPropagation()">
-            <i class="bi bi-three-dots-vertical"></i>
-          </button>
-          <ul class="kebab-dropdown">
-            <li><a href="#">Voir les détails</a></li>
-            <li><a href="#">Modifier</a></li>
-            <li><a href="#">Désactiver</a></li>
-            <li><a href="#">Supprimer</a></li>
-          </ul>
-        </div>
-      </td>
-    </tr>
-    </tbody>
-  </table>
-</div>
+      </thead>
+      <tbody>
+      <tr *ngFor="let member of members" (click)="navigateToMember(member.id)">
+        <td>
+          <input
+            type="checkbox"
+            [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
+            (change)="toggleMemberSelection(member.id)"
+            (click)="$event.stopPropagation()">
+        </td>
+        <td>{{ member.personalInfo.firstname }}</td>
+        <td>{{ member.personalInfo.name }}</td>
+        <td>{{ member.contactInfo.email }}</td>
+        <td>{{ member.contactInfo.numberPhone }}</td>
+        <td>
+            <span *ngIf="member.registration && member.registration.length > 0"
+                  class="badge"
+                  [ngClass]="{'bg-success': member.registration[0].statusPayment, 'bg-danger': !member.registration[0].statusPayment}">
+              {{ member.registration[0].statusPayment ? 'Payé' : 'En attente' }}
+            </span>
+        </td>
+        <td>
+            <span *ngIf="member.registration && member.registration.length > 0" class="badge bg-primary">
+              {{ member.registration[0].registrationStatus }}
+            </span>
+        </td>
+        <td>
+          <div class="kebab-menu">
+            <button class="kebab-icon" (click)="$event.stopPropagation()">
+              <i class="bi bi-three-dots-vertical"></i>
+            </button>
+            <ul class="kebab-dropdown">
+              <li><a href="#">Voir les détails</a></li>
+              <li><a href="#">Modifier</a></li>
+              <li><a href="#">Désactiver</a></li>
+              <li><a href="#">Supprimer</a></li>
+            </ul>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+</ng-container>
+
+<ng-template #noMembers>
+  <div class="empty-state-container">
+    <i class="bi bi-people empty-state-icon"></i>
+    <h2 class="empty-state-title">Aucun membre trouvé</h2>
+    <p class="empty-state-text">
+      Il semble qu'il n'y ait aucun membre à afficher pour le moment. Vous pouvez commencer par en ajouter un nouveau.
+    </p>
+    <button class="empty-state-button">
+      <i class="bi bi-plus-lg"></i> Ajouter un membre
+    </button>
+  </div>
+</ng-template>

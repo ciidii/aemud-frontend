@@ -65,3 +65,40 @@ Ce document résume les améliorations proposées pour l'interface de la liste d
   - Pendant que les données sont récupérées, afficher un indicateur de chargement.
   - L'idéal est d'utiliser des **"skeleton loaders"** (des formes grisées qui imitent la structure du tableau).
   - *Raison : Informe l'utilisateur que le système travaille et améliore la perception de la vitesse.*
+
+## 5. Améliorations du Layout Global (Header & Barre Latérale)
+
+La structure de base du layout est excellente. Les recommandations suivantes visent à la raffiner pour une expérience plus professionnelle et fluide.
+
+### Fluidité et Micro-interactions
+- [ ] **Animer la transition de la barre latérale** :
+  - Ajouter une `transition` CSS (`transition: grid-template-columns 0.3s ease-in-out;`) pour que l'ouverture et la fermeture de la barre soient douces plutôt que brutales.
+  - *Raison : Améliore grandement la qualité perçue et le confort visuel.*
+
+- [ ] **Animer l'icône du menu "hamburger"** :
+  - Sur mobile, l'icône pourrait se transformer en croix (X) lorsque le menu est ouvert.
+  - *Raison : Fournit un retour visuel clair sur l'état du menu.*
+
+### Guidage de l'Utilisateur
+- [ ] **Indiquer la page active** :
+  - Utiliser `routerLinkActive` pour appliquer un style distinctif (couleur, fond, bordure) au lien de la page actuellement affichée dans la barre latérale.
+  - *Raison : C'est un élément d'orientation fondamental pour que l'utilisateur sache où il se trouve.*
+
+- [ ] **Ajouter des info-bulles (tooltips)** :
+  - Lorsque la barre latérale est repliée, afficher le nom de la page dans une info-bulle au survol de chaque icône.
+  - *Raison : Améliore la clarté pour les nouvelles icônes ou les nouveaux utilisateurs, sans surcharger l'interface.*
+
+### Expérience Mobile
+- [ ] **Superposer le menu latéral** :
+  - Sur mobile, faire en sorte que le menu glisse **par-dessus** le contenu principal (plutôt que de le pousser).
+  - Ajouter un fond semi-transparent (`backdrop`) sur le contenu, qui fermerait le menu si on clique dessus.
+  - *Raison : C'est un modèle plus moderne qui concentre l'attention de l'utilisateur sur la navigation.*
+
+### Accessibilité
+- [ ] **Gérer le focus clavier** :
+  - À l'ouverture du menu mobile, déplacer le focus sur le premier lien. À la fermeture, le retourner sur le bouton du menu.
+  - *Raison : Essentiel pour la navigation au clavier.*
+
+- [ ] **Utiliser les attributs ARIA** :
+  - Ajouter des attributs comme `aria-expanded` sur le bouton du menu pour indiquer son état aux technologies d'assistance.
+  - *Raison : Rend l'application utilisable par un plus grand nombre de personnes, y compris celles avec un handicap.*

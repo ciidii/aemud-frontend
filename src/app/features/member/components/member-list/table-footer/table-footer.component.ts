@@ -1,12 +1,39 @@
-import { Component } from '@angular/core';
+import {Component, inject} from '@angular/core';
+import {AsyncPipe, NgIf} from "@angular/common";
+import {MemberStateService, PaginationInfo} from "../../../services/member.state.service";
+import {Observable} from "rxjs";
+import {take} from "rxjs/operators";
 
 @Component({
   selector: 'app-table-footer',
   standalone: true,
-  imports: [],
+  imports: [
+    NgIf,
+    AsyncPipe
+  ],
   templateUrl: './table-footer.component.html',
-  styleUrl: './table-footer.component.scss'
+  styleUrls: ['./table-footer.component.scss']
 })
 export class TableFooterComponent {
+  private memberStateService = inject(MemberStateService);
 
+  hasSelection$: Observable<boolean> = this.memberStateService.hasSelection$;
+  selectedMembersCount$: Observable<number> = this.memberStateService.selectedMembersCount$;
+  paginationInfo$: Observable<PaginationInfo> = this.memberStateService.paginationInfo$;
+
+  nextPage(): void {
+    this.paginationInfo$.pipe(take(1)).subscribe(info => {
+      if (info.pageIndex < info.totalPages) {
+        this.memberStateService.fetchMembers("", "", null, info.pageIndex + 1, info.pageSize).subscribe();
+      }
+    });
+  }
+
+  previousPage(): void {
+    this.paginationInfo$.pipe(take(1)).subscribe(info => {
+      if (info.pageIndex > 1) {
+        this.memberStateService.fetchMembers("", "", null, info.pageIndex - 1, info.pageSize).subscribe();
+      }
+    });
+  }
 }

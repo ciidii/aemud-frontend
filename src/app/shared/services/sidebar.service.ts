@@ -5,7 +5,7 @@ import {BehaviorSubject} from "rxjs";
   providedIn: 'root'
 })
 export class SidebarService {
-  private _isOpen = new BehaviorSubject<boolean>(true);
+  private _isOpen = new BehaviorSubject<boolean>(false);
   isOpen$ = this._isOpen.asObservable();
 
   toggleCollapse(): void {

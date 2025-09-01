@@ -1,6 +1,6 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
-import {SidebarService} from "../../../core/services/sidebar.service";
+import {SidebarService} from "../../services/sidebar.service";
 import {Observable} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";

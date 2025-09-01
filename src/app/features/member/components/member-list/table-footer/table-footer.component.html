@@ -1,31 +1,34 @@
 <div class="footer-bar">
-  <div class="selection-info">
-    <i class="bi bi-check-circle"></i>
-    <span>Selected: 22</span>
+  <!-- Left Section: Contextual Actions -->
+  <div class="actions-container">
+    <div class="selection-info" *ngIf="hasSelection$ | async">
+      <i class="bi bi-check-circle-fill"></i>
+      <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
+    </div>
+    <div class="actions">
+      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)">
+        <i class="bi bi-send"></i> Envoyer message
+      </button>
+      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)">
+        <i class="bi bi-upload"></i> Exporter
+      </button>
+      <button class="footer-action-btn primary" [disabled]="!(hasSelection$ | async)">
+        <i class="bi bi-trash"></i> Supprimer
+      </button>
+    </div>
   </div>
 
-  <div class="pagination-controls">
-    <button class="pagination-btn">
-      <i class="bi bi-arrow-left"></i>
-    </button>
-    <span>{{ 2 }} / {{ 8 }}</span>
-    <button class="pagination-btn">
-      <i class="bi bi-arrow-right"></i>
-    </button>
-  </div>
-
-  <div class="actions">
-    <button class="footer-action-btn">
-      <i class="bi bi-upload"></i> Export
-    </button>
-    <button class="footer-action-btn">
-      <i class="bi bi-printer"></i> Print
-    </button>
-    <button class="footer-action-btn">
-      <i class="bi bi-files"></i> Duplicate
-    </button>
-    <button class="footer-action-btn primary">
-      <i class="bi bi-trash"></i> Delete
-    </button>
+  <!-- Right Section: Pagination -->
+  <div class="pagination-container" *ngIf="(paginationInfo$ | async) as pagination">
+    <div class="pagination-controls">
+      <button class="pagination-btn" [disabled]="pagination.pageIndex === 1" (click)="previousPage()">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <span>Page {{ pagination.pageIndex }} / {{ pagination.totalPages }}</span>
+      <button class="pagination-btn" [disabled]="pagination.pageIndex === pagination.totalPages" (click)="nextPage()">
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
   </div>
 </div>
+

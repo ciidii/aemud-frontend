@@ -4,13 +4,17 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: $space-3 $space-6;
+  padding: $space-1 $space-6; // Further reduced padding
   background: white;
   border-top: 1px solid $color-border;
-  box-shadow: $shadow-lg; // Using a larger shadow for effect
-  position: sticky;
-  bottom: 0;
-  z-index: 10;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+  width: 100%;
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
 }
 
 .selection-info {
@@ -27,34 +31,6 @@
   }
 }
 
-.pagination-controls {
-  display: flex;
-  align-items: center;
-  gap: $space-3;
-  font-size: $font-size-small;
-  color: $color-text;
-
-  .pagination-btn {
-    background: transparent;
-    border: 1px solid $color-border;
-    border-radius: $radius-sm;
-    padding: $space-2;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    transition: background 0.2s ease, border-color 0.2s ease;
-
-    &:hover {
-      background: $light;
-      border-color: darken($color-border, 10%);
-    }
-
-    i {
-      font-size: $icon-md;
-    }
-  }
-}
-
 .actions {
   display: flex;
   align-items: center;
@@ -68,7 +44,7 @@
   background: white;
   border: 1px solid $color-border;
   border-radius: $radius-sm;
-  padding: $space-2 $space-3;
+  padding: $space-1 $space-3; // Reduced padding
   font-size: $font-size-small;
   font-weight: 500;
   color: $color-text;
@@ -80,7 +56,7 @@
     font-size: $icon-sm;
   }
 
-  &:hover {
+  &:hover:not(:disabled) {
     background: darken(white, 5%);
     box-shadow: $shadow-md;
   }
@@ -90,9 +66,52 @@
     color: white;
     border-color: $danger;
 
-    &:hover {
+    &:hover:not(:disabled) {
       background: lighten($danger, 5%);
       border-color: lighten($danger, 5%);
+    }
+  }
+
+  &:disabled {
+    cursor: not-allowed;
+    opacity: 0.5;
+    background-color: $light;
+  }
+}
+
+.pagination-container {
+  // No special styles needed as it's just a flex child
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  font-size: $font-size-small;
+  color: $color-text;
+
+  .pagination-btn {
+    background: transparent;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    padding: $space-1; // Reduced padding
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: $light;
+      border-color: darken($color-border, 10%);
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    i {
+      font-size: $icon-md;
     }
   }
 }

@@ -1,8 +1,11 @@
-import {Component, inject} from '@angular/core';
-import {MemberHttpService} from "../../services/member.http.service";
+import {Component, inject, OnInit} from '@angular/core';
 import {TableHeaderComponent} from "./table-header/table-header.component";
 import {TableBodyComponent} from "./table-body/table-body.component";
 import {TableFooterComponent} from "./table-footer/table-footer.component";
+import {MemberStateService} from "../../services/member.state.service";
+import {Observable} from "rxjs";
+import {AsyncPipe, NgIf} from "@angular/common";
+import {MemberModel} from "../../../../core/models/member.model";
 
 @Component({
   selector: 'app-member-list',
@@ -10,15 +13,26 @@ import {TableFooterComponent} from "./table-footer/table-footer.component";
   imports: [
     TableHeaderComponent,
     TableBodyComponent,
-    TableFooterComponent
+    TableFooterComponent,
+    AsyncPipe,
+    NgIf
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss'
 })
-export class MemberListComponent {
-  private membersService = inject(MemberHttpService);
+export class MemberListComponent implements OnInit {
+  private memberStateService = inject(MemberStateService);
 
-  getAllMembers() {
-    this.membersService.searchMember("", "", null, 1, 10).subscribe()
+  members$: Observable<MemberModel[]>;
+  loading$: Observable<boolean>;
+
+  constructor() {
+    this.members$ = this.memberStateService.paginatedMembers$;
+    this.loading$ = this.memberStateService.loading$;
+  }
+
+  ngOnInit(): void {
+    this.memberStateService.fetchMembers().subscribe();
   }
 }
+
