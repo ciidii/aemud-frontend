@@ -1,0 +1,133 @@
+@import 'src/assets/scss/variables';
+
+.popover-container {
+  background-color: white;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  border: 1px solid $color-border;
+  width: 380px;
+  max-height: 450px;
+  display: flex;
+  flex-direction: column;
+}
+
+.popover-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3 $space-4;
+  border-bottom: 1px solid $color-border;
+  flex-shrink: 0;
+
+  h6 {
+    margin: 0;
+    font-size: $font-size-body;
+    font-weight: 600;
+  }
+
+  .btn-link {
+    background: none;
+    border: none;
+    color: $primary;
+    font-size: $font-size-small;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.popover-body {
+  overflow-y: auto;
+  flex-grow: 1;
+
+  .notification-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .notification-item {
+    display: flex;
+    gap: $space-3;
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid $color-border;
+    transition: background-color 0.2s ease;
+
+    &:last-child {
+      border-bottom: none;
+    }
+
+    &:hover {
+      background-color: lighten($primary, 45%);
+    }
+
+    &.is-unread {
+      background-color: lighten($primary, 48%);
+      border-left: 3px solid $primary;
+      padding-left: calc(#{$space-4} - 3px);
+    }
+  }
+
+  .notification-icon {
+    font-size: $icon-md;
+    color: $color-text-secondary;
+    flex-shrink: 0;
+    margin-top: $space-1;
+  }
+
+  .notification-content {
+    flex-grow: 1;
+  }
+
+  .notification-text {
+    margin: 0;
+    font-size: $font-size-body;
+    color: $color-text;
+  }
+
+  .notification-time {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+  }
+
+  .empty-state {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: $space-8 $space-4;
+    text-align: center;
+    color: $color-text-secondary;
+
+    i {
+      font-size: $icon-xl;
+      margin-bottom: $space-4;
+    }
+
+    p {
+      margin: 0;
+      font-size: $font-size-body;
+    }
+  }
+}
+
+.popover-footer {
+  padding: $space-3;
+  text-align: center;
+  border-top: 1px solid $color-border;
+  flex-shrink: 0;
+
+  a {
+    color: $primary;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: $font-size-body;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

@@ -1,0 +1,137 @@
+@import '../../../../../../assets/scss/variables';
+
+// --- Base (reusing same modal base as send-message-modal) --- //
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($dark, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1055; // Higher z-index to appear above the other modal
+}
+
+.modal-container {
+  width: 90%;
+  max-width: 600px; // Wider for better template display
+}
+
+.modal-content {
+  background-color: white;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  max-height: 80vh;
+}
+
+// --- Header --- //
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $color-border;
+  flex-shrink: 0;
+
+  .modal-title {
+    font-size: $font-size-h5;
+    font-weight: 600;
+    color: $color-text;
+  }
+
+  .btn-close {
+    background: transparent;
+    border: none;
+    font-size: $icon-sm;
+    color: $color-text-secondary;
+    cursor: pointer;
+    padding: $space-2;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $light;
+    }
+  }
+}
+
+// --- Body --- //
+.modal-body {
+  padding: $space-4 $space-6;
+  overflow-y: auto;
+  flex-grow: 1;
+
+  .search-bar-container {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-3;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    margin-bottom: $space-4;
+
+    i {
+      font-size: $icon-sm;
+      color: $color-text-secondary;
+    }
+
+    .form-control {
+      border: none;
+      outline: none;
+      box-shadow: none;
+      flex-grow: 1;
+      padding: 0;
+    }
+  }
+
+  .template-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-3;
+  }
+
+  .template-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-4;
+    border: 1px solid $color-border;
+    border-radius: $radius-sm;
+    transition: background-color 0.2s, border-color 0.2s;
+
+    &:hover {
+      background-color: lighten($primary, 45%);
+      border-color: lighten($primary, 30%);
+    }
+  }
+
+  .template-details {
+    .template-title {
+      font-size: $font-size-body;
+      font-weight: 600;
+      color: $color-text;
+      margin: 0 0 $space-1 0;
+    }
+
+    .template-preview {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      margin: 0;
+      // Truncate long previews
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 350px;
+    }
+  }
+}
+
+.btn-sm {
+  padding: $space-1 $space-3;
+  font-size: $font-size-small;
+}

@@ -1,0 +1,18 @@
+<div class="modal-backdrop" (click)="onClose()">
+  <div class="modal-panel" (click)="$event.stopPropagation()">
+    <header class="modal-header">
+      <div class="modal-title">
+        <ng-content select="[modal-title]"></ng-content>
+      </div>
+      <button class="modal-close-btn" (click)="onClose()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </header>
+    <main class="modal-body">
+      <ng-content select="[modal-body]"></ng-content>
+    </main>
+    <footer class="modal-footer">
+      <ng-content select="[modal-footer]"></ng-content>
+    </footer>
+  </div>
+</div>

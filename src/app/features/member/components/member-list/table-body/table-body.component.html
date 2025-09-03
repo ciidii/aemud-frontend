@@ -1,27 +1,30 @@
-<ng-container *ngIf="hasMembers; else noMembers">
-  <div class="table-container">
-    <app-table-filters></app-table-filters>
-    <table class="table table-hover align-middle table-borderless shadow-sm">
-      <thead class="table-light">
-      <tr>
-        <th>
-          <input
-            type="checkbox"
-            [checked]="isAllSelected$ | async"
-            (change)="toggleSelectAll()">
-        </th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Prénom</th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Nom</th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Email</th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
-        <th><i class="bi bi-arrow-down-up sort-icon"></i> Inscription Status</th>
-        <th>Action</th>
+<div class="table-container">
+  <table class="table table-hover align-middle table-borderless shadow-sm">
+    <thead class="table-light">
+    <tr>
+      <th>
+        <input
+          type="checkbox"
+          [checked]="isAllSelected$ | async"
+          (change)="toggleSelectAll()">
+      </th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Prénom</th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Nom</th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Email</th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
+      <th><i class="bi bi-arrow-down-up sort-icon"></i> Inscription Status</th>
+      <th>Action</th>
+    </tr>
+    </thead>
+    <tbody>
+    <!-- Loading State -->
+    <ng-container *ngIf="loading">
+      <tr app-skeleton-loader *ngFor="let row of skeletonRows"></tr>
+    </ng-container>
 
-      </tr>
-
-      </thead>
-      <tbody>
+    <!-- Data State -->
+    <ng-container *ngIf="!loading && hasMembers">
       <tr *ngFor="let member of members" (click)="navigateToMember(member.id)">
         <td>
           <input
@@ -60,20 +63,21 @@
           </div>
         </td>
       </tr>
-      </tbody>
-    </table>
-  </div>
-</ng-container>
+    </ng-container>
+    </tbody>
+  </table>
 
-<ng-template #noMembers>
-  <div class="empty-state-container">
-    <i class="bi bi-people empty-state-icon"></i>
-    <h2 class="empty-state-title">Aucun membre trouvé</h2>
-    <p class="empty-state-text">
-      Il semble qu'il n'y ait aucun membre à afficher pour le moment. Vous pouvez commencer par en ajouter un nouveau.
-    </p>
-    <button class="empty-state-button">
-      <i class="bi bi-plus-lg"></i> Ajouter un membre
-    </button>
-  </div>
-</ng-template>
+  <!-- Empty State -->
+  <ng-container *ngIf="!loading && !hasMembers">
+    <div class="empty-state-container">
+      <i class="bi bi-people empty-state-icon"></i>
+      <h2 class="empty-state-title">Aucun membre trouvé</h2>
+      <p class="empty-state-text">
+        Il semble qu'il n'y ait aucun membre à afficher pour le moment. Vous pouvez commencer par en ajouter un nouveau.
+      </p>
+      <button class="empty-state-button">
+        <i class="bi bi-plus-lg"></i> Ajouter un membre
+      </button>
+    </div>
+  </ng-container>
+</div>

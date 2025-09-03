@@ -30,7 +30,7 @@ app-aside-bare {
 }
 
 .main-content {
-  padding: 1rem;
-  background: #1e1e2d;
+  padding: $space-6;
+  background-color: $light;
   overflow-y: auto;
 }

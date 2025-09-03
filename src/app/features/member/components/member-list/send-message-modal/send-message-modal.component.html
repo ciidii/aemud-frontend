@@ -1,0 +1,56 @@
+<div class="modal-overlay">
+  <div class="modal-container" role="document">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">Nouveau Message Groupé</h5>
+        <button (click)="close.emit()" type="button" class="btn-close" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <form [formGroup]="messageForm">
+          <div class="recipient-info">
+            <i class="bi bi-people-fill"></i>
+            <span>Destinataires : 45 membres (valeur test)</span>
+          </div>
+
+          <div class="message-group">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <label for="message" class="form-label mb-0">Message</label>
+              <button type="button" class="btn-template" (click)="toggleTemplateModal()">
+                <i class="bi bi-file-text"></i> Utiliser un template
+              </button>
+            </div>
+            <textarea id="message" formControlName="message" rows="5"
+                      class="form-control"
+                      placeholder="Entrez votre message ici..."></textarea>
+            <div class="char-counter">
+              0/160 (1 SMS)
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="close.emit()">
+          Annuler
+        </button>
+        <button type="button" class="btn btn-primary" (click)="sendMessage()" [disabled]="!messageForm.get('message')?.value">
+          <i class="bi bi-send"></i>
+          Envoyer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Template Selection Modal -->
+<app-template-select-modal
+  *ngIf="isTemplateModalOpen"
+  (close)="toggleTemplateModal()"
+  (templateSelected)="onTemplateSelected($event)">
+</app-template-select-modal>

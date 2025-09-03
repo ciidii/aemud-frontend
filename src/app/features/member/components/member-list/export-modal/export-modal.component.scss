@@ -1,0 +1,139 @@
+@import '../../../../../../assets/scss/variables';
+
+.option-section {
+  margin-bottom: $space-6;
+  &:last-of-type {
+    margin-bottom: 0;
+  }
+}
+
+.section-title {
+  font-size: $font-size-h6;
+  font-weight: 600;
+  margin-bottom: $space-3;
+}
+
+.section-actions {
+  margin-bottom: $space-4;
+  display: flex;
+  gap: $space-4;
+
+  .btn-link {
+    background: none;
+    border: none;
+    color: $primary;
+    cursor: pointer;
+    font-size: $font-size-small;
+    padding: 0;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}
+
+.columns-container {
+  column-count: 3;
+  column-gap: $space-8;
+}
+
+.column-group {
+  margin-bottom: $space-4;
+  break-inside: avoid; // Prevents groups from breaking across columns
+}
+
+.group-title {
+  font-weight: 600;
+  color: $color-text-secondary;
+  margin-bottom: $space-3;
+  font-size: $font-size-body;
+}
+
+.columns-grid {
+  display: grid;
+  gap: $space-3;
+}
+
+.checkbox-wrapper {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  input[type="checkbox"] {
+    width: 1.6rem;
+    height: 1.6rem;
+    cursor: pointer;
+  }
+
+  label {
+    font-size: $font-size-body;
+    cursor: pointer;
+    color: $color-text-secondary;
+  }
+}
+
+.format-chooser {
+  display: flex;
+  gap: $space-3;
+}
+
+.format-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: $space-2;
+  padding: $space-2 $space-4;
+  border: 2px solid $color-border;
+  border-radius: $radius-sm;
+  background-color: white;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  i {
+    font-size: $icon-md; // Reduced icon size
+    color: $color-text-secondary;
+  }
+
+  span {
+    font-weight: 500;
+    font-size: $font-size-small;
+  }
+
+  &:hover {
+    border-color: darken($primary, 10%);
+    background-color: lighten($primary, 40%);
+  }
+
+  &.active {
+    border-color: $primary;
+    background-color: lighten($primary, 35%);
+    color: $primary;
+
+    i {
+      color: $primary;
+    }
+  }
+}
+
+.btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
+  font-size: $font-size-body;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &.btn-primary {
+    background-color: $primary;
+    color: white;
+    &:hover { background-color: darken($primary, 10%); }
+  }
+
+  &.btn-secondary {
+    background-color: $light;
+    color: $color-text;
+    border-color: $color-border;
+    &:hover { background-color: darken($light, 10%); }
+  }
+}

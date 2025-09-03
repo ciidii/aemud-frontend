@@ -1,0 +1,36 @@
+<div class="popover-container">
+  <!-- Header -->
+  <div class="popover-header">
+    <h6>Notifications</h6>
+    <button class="btn-link" (click)="markAllAsRead.emit()">Marquer comme lues</button>
+  </div>
+
+  <!-- Body -->
+  <div class="popover-body">
+    <ng-container *ngIf="notifications.length > 0; else emptyState">
+      <ul class="notification-list">
+        <li class="notification-item" *ngFor="let notification of notifications" [ngClass]="{'is-unread': !notification.read}">
+          <div class="notification-icon">
+            <i class="bi" [ngClass]="notification.icon"></i>
+          </div>
+          <div class="notification-content">
+            <p class="notification-text">{{ notification.text }}</p>
+            <span class="notification-time">{{ notification.time }}</span>
+          </div>
+        </li>
+      </ul>
+    </ng-container>
+
+    <ng-template #emptyState>
+      <div class="empty-state">
+        <i class="bi bi-bell-slash"></i>
+        <p>Vous n'avez aucune nouvelle notification.</p>
+      </div>
+    </ng-template>
+  </div>
+
+  <!-- Footer -->
+  <div class="popover-footer">
+    <a href="#" (click)="viewAll.emit()">Voir toutes les notifications</a>
+  </div>
+</div>

@@ -1,0 +1,48 @@
+@import 'variables';
+
+@keyframes shimmer {
+  0% {
+    background-position: -250px 0;
+  }
+  100% {
+    background-position: 250px 0;
+  }
+}
+
+:host {
+  width: 100%;
+}
+
+.skeleton-cell {
+  height: 20px;
+  border-radius: $radius-sm;
+  background: #f0f2f5;
+  background-image: linear-gradient(to right, #f0f2f5 0%, #e4e6e9 20%, #f0f2f5 40%, #f0f2f5 100%);
+  background-repeat: no-repeat;
+  background-size: 500px 100%;
+  animation: shimmer 1.5s infinite linear;
+  display: block;
+
+  &.skeleton-text {
+    width: 80%;
+    &.long {
+      width: 100%;
+    }
+  }
+
+  &.skeleton-checkbox {
+    width: 20px;
+    height: 20px;
+  }
+
+  &.skeleton-badge {
+    width: 70px;
+    height: 24px;
+  }
+
+  &.skeleton-action {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+  }
+}

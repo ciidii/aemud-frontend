@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {MemberModel} from "../../../../../core/models/member.model";
@@ -14,6 +14,7 @@ import {MemberModel} from "../../../../../core/models/member.model";
   styleUrl: './table-filters.component.scss'
 })
 export class TableFiltersComponent {
+  @Output() openFilterPanel = new EventEmitter<void>();
 
   filtersActive = true; // Just for visual demo
   activeFilterCount = 3; // Just for visual demo

@@ -6,13 +6,13 @@
       <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
     </div>
     <div class="actions">
-      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)">
+      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)" (click)="sendMessageTriggered.emit()">
         <i class="bi bi-send"></i> Envoyer message
       </button>
-      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)">
+      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)" (click)="exportTriggered.emit()">
         <i class="bi bi-upload"></i> Exporter
       </button>
-      <button class="footer-action-btn primary" [disabled]="!(hasSelection$ | async)">
+      <button class="footer-action-btn primary" [disabled]="!(hasSelection$ | async)" (click)="deleteTriggered.emit()">
         <i class="bi bi-trash"></i> Supprimer
       </button>
     </div>

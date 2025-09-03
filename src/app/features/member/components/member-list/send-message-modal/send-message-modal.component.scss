@@ -1,4 +1,4 @@
-@import 'src/assets/scss/variables';
+@import '../../../../../../assets/scss/variables';
 
 // --- Base --- //
 .modal-overlay {
@@ -79,47 +79,44 @@
     }
   }
 
-  .form-label {
-    font-weight: 500;
-    color: $color-text;
-    font-size: $font-size-body;
-  }
+  .message-group {
+    .btn-template {
+      background: transparent;
+      border: none;
+      color: $primary;
+      font-size: $font-size-small;
+      font-weight: 500;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: $space-2;
 
-  .btn-template {
-    background: transparent;
-    border: none;
-    color: $primary;
-    font-size: $font-size-small;
-    font-weight: 500;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-
-    &:hover {
-      text-decoration: underline;
+      &:hover {
+        text-decoration: underline;
+      }
     }
-  }
 
-  .form-control {
-    border-radius: $radius-sm;
-    border: 1px solid $color-border;
-    padding: $space-3;
-    font-size: $font-size-body;
-    width: 100%;
-    transition: border-color 0.2s, box-shadow 0.2s;
+    .form-control {
+      border-radius: $radius-sm;
+      border: 1px solid $color-border;
+      padding: $space-3;
+      font-size: $font-size-body;
+      width: 100%;
+      transition: border-color 0.2s, box-shadow 0.2s;
 
-    &:focus {
-      border-color: $primary;
-      box-shadow: 0 0 0 3px lighten($primary, 40%);
-      outline: none;
+      &:focus {
+        border-color: $primary;
+        box-shadow: 0 0 0 3px lighten($primary, 40%);
+        outline: none;
+      }
     }
-  }
 
-  .char-counter {
-    font-size: $font-size-small;
-    color: $color-text-secondary;
-    margin-top: $space-2;
+    .char-counter {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      margin-top: $space-2;
+      text-align: right;
+    }
   }
 }
 

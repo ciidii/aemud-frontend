@@ -5,7 +5,14 @@ import {TableFooterComponent} from "./table-footer/table-footer.component";
 import {MemberStateService} from "../../services/member.state.service";
 import {Observable} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
+import { ExportModalComponent } from './export-modal/export-modal.component';
 import {MemberModel} from "../../../../core/models/member.model";
+import {SendMessageModalComponent} from "./send-message-modal/send-message-modal.component";
+import {TableFiltersComponent} from "./table-filters/table-filters.component";
+import {FilterPanelComponent} from "./filter-panel/filter-panel.component";
+import {
+  ConfirmDeleteModalComponent
+} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 
 @Component({
   selector: 'app-member-list',
@@ -15,7 +22,12 @@ import {MemberModel} from "../../../../core/models/member.model";
     TableBodyComponent,
     TableFooterComponent,
     AsyncPipe,
-    NgIf
+    NgIf,
+    ExportModalComponent,
+    SendMessageModalComponent,
+    FilterPanelComponent,
+    TableFiltersComponent,
+    ConfirmDeleteModalComponent
   ],
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss'
@@ -25,14 +37,40 @@ export class MemberListComponent implements OnInit {
 
   members$: Observable<MemberModel[]>;
   loading$: Observable<boolean>;
+  selectedMembersCount$: Observable<number>;
+  isExportModalOpen = false;
+  isSendMessageModalOpen = false;
+  isFilterPanelOpen = false;
+  isDeleteModalOpen = false;
 
   constructor() {
     this.members$ = this.memberStateService.paginatedMembers$;
     this.loading$ = this.memberStateService.loading$;
+    this.selectedMembersCount$ = this.memberStateService.selectedMembersCount$;
   }
 
   ngOnInit(): void {
     this.memberStateService.fetchMembers().subscribe();
   }
-}
 
+  toggleExportModal() {
+    this.isExportModalOpen = !this.isExportModalOpen;
+  }
+
+  toggleSendMessageModal() {
+    this.isSendMessageModalOpen = !this.isSendMessageModalOpen;
+  }
+
+  toggleFilterPanel() {
+    this.isFilterPanelOpen = !this.isFilterPanelOpen;
+  }
+
+  toggleDeleteModal() {
+    this.isDeleteModalOpen = !this.isDeleteModalOpen;
+  }
+
+  onDeleteConfirmed() {
+    console.log('Deletion confirmed. Logic to be implemented.');
+    this.toggleDeleteModal(); // Close modal after confirmation
+  }
+}

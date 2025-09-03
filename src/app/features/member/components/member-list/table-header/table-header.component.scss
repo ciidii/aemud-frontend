@@ -69,6 +69,17 @@
     }
   }
 
+  .notification-container {
+    position: relative;
+  }
+
+  app-notification-popover {
+    position: absolute;
+    top: calc(100% + #{$space-2});
+    right: 0;
+    z-index: 1100;
+  }
+
   .notification-icon {
     position: relative;
     cursor: pointer;
@@ -105,5 +116,3 @@
     }
   }
 }
-
-

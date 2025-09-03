@@ -4,6 +4,7 @@ import {MemberStateService} from "../../../services/member.state.service";
 import {TableFiltersComponent} from "../table-filters/table-filters.component";
 import {MemberModel} from "../../../../../core/models/member.model";
 import {map, Observable} from "rxjs";
+import {SkeletonLoaderComponent} from "../../../../../shared/components/skeleton-loader/skeleton-loader.component";
 
 @Component({
   selector: 'app-table-body',
@@ -13,14 +14,17 @@ import {map, Observable} from "rxjs";
     TableFiltersComponent,
     NgFor,
     AsyncPipe,
-    NgClass
+    NgClass,
+    SkeletonLoaderComponent
   ],
   templateUrl: './table-body.component.html',
   styleUrl: './table-body.component.scss'
 })
 export class TableBodyComponent implements OnInit {
-  @Input() members: MemberModel[] | null= [];
+  @Input() members: MemberModel[] | null = [];
+  @Input() loading: boolean | null = false;
 
+  skeletonRows = Array(10); // For repeating the skeleton loader
   memberStateService = inject(MemberStateService);
   selectedMemberIds$!: Observable<string[]>;
   isAllSelected$!: Observable<boolean>;
@@ -37,8 +41,8 @@ export class TableBodyComponent implements OnInit {
     );
   }
 
-  get hasMembers(): boolean | null {
-    return this.members && this.members.length > 0;
+  get hasMembers(): boolean {
+    return this.members !== null && this.members.length > 0;
   }
 
   navigateToMember(memberId: any) {
@@ -46,7 +50,7 @@ export class TableBodyComponent implements OnInit {
   }
 
   toggleSelectAll(): void {
-    // @ts-ignore
+    if (!this.members) return;
     const allMemberIds = this.members.map(m => m.id);
     this.memberStateService.toggleSelectAll(allMemberIds);
   }
@@ -55,3 +59,4 @@ export class TableBodyComponent implements OnInit {
     this.memberStateService.toggleMemberSelection(id);
   }
 }
+
