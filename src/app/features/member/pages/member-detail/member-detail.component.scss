@@ -1,0 +1,307 @@
+@import 'src/assets/scss/variables';
+
+// --- Main Page Layout ---
+.detail-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// --- Fixed Header ---
+.detail-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  background-color: white;
+  border-bottom: 1px solid $color-border;
+  box-shadow: $shadow-sm;
+  z-index: 10;
+}
+
+.header-main-info {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  background-color: $primary;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  i { font-size: $icon-lg; }
+}
+
+.header-text h1 {
+  font-size: $font-size-h4;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: $space-3;
+}
+
+// --- Actions Dropdown ---
+.actions-dropdown {
+  position: relative;
+}
+
+.btn-icon {
+  padding: $space-2;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + #{$space-2});
+  right: 0;
+  background-color: white;
+  border: 1px solid $color-border;
+  border-radius: $radius-sm;
+  box-shadow: $shadow-lg;
+  list-style: none;
+  padding: $space-2 0;
+  margin: 0;
+  min-width: 200px;
+  z-index: 100;
+
+  li a {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-4;
+    font-size: $font-size-small;
+    color: $color-text;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $light;
+    }
+
+    i {
+      font-size: $icon-sm;
+      color: $color-text-secondary;
+    }
+
+    &.text-danger {
+      color: $danger;
+      i {
+        color: $danger;
+      }
+    }
+  }
+}
+
+
+// --- Two-Column Body ---
+.detail-body-grid {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  gap: $space-8;
+  padding: $space-6;
+  background-color: #f9fafb;
+}
+
+.main-content-col, .sidebar-col {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: $space-3;
+}
+
+.main-content-col {
+  flex: 1;
+}
+
+.sidebar-col {
+  flex-basis: 400px;
+  flex-shrink: 0;
+}
+
+// --- Right Sidebar Card ---
+.sidebar-card {
+  background-color: white;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4;
+  border-bottom: 1px solid $color-border;
+
+  h4 {
+    margin: 0;
+    font-size: $font-size-h6;
+    font-weight: 600;
+  }
+}
+
+.sidebar-content {
+  padding: $space-4;
+
+  h5 {
+    font-size: $font-size-body;
+    font-weight: 600;
+    margin-bottom: $space-3;
+  }
+}
+
+.sidebar-divider {
+  margin: $space-6 0;
+  border: 0;
+  border-top: 1px solid $color-border;
+}
+
+// --- Year Selector (Right Column) ---
+.year-selector-group {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-bottom: $space-4;
+
+  label {
+    font-weight: 500;
+    font-size: $font-size-small;
+  }
+
+  .form-select-sm {
+    padding: $space-1 $space-2;
+    font-size: $font-size-small;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border;
+  }
+}
+
+// --- Cotisation (Subscription) Grid ---
+.cotisation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-2;
+}
+
+.month-box {
+  text-align: center;
+  padding: $space-2;
+  border-radius: $radius-sm;
+  font-size: $font-size-small;
+  font-weight: 500;
+  background-color: $light;
+  border: 1px solid $color-border;
+
+  &.paid {
+    background-color: lighten($success, 35%);
+    color: darken($success, 10%);
+    border-color: darken($success, 5%);
+  }
+
+  &.pending {
+    background-color: lighten($warning, 30%);
+    color: darken($warning, 20%);
+    border-color: darken($warning, 5%);
+  }
+}
+
+// --- Permanent Info Cards (Left Column) ---
+.permanent-info-card {
+  background-color: white;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  margin-bottom: $space-6;
+  box-shadow: $shadow-sm;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-4;
+    border-bottom: 1px solid $color-border;
+
+    h5 {
+      margin: 0;
+      font-size: $font-size-h6;
+      font-weight: 600;
+    }
+  }
+
+  .card-body {
+    padding: $space-4;
+  }
+}
+
+.btn-modify-card {
+  background: transparent;
+  border: 1px solid $color-border;
+  color: $color-text;
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  font-size: $font-size-small;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary;
+    color: white;
+    border-color: $primary;
+  }
+}
+
+// --- Generic Info Display Grid ---
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $space-4;
+}
+
+.info-pair {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  .info-key {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .info-value {
+    font-size: $font-size-body;
+    color: $color-text;
+    font-weight: 400;
+  }
+}
+
+// --- Re-used styles from previous steps ---
+.badge { font-size: 1.2rem; padding: 0.4em 0.7em; border-radius: $radius-md; font-weight: 600; }
+.bg-success { background-color: $success; color: white; }
+.bg-warning { background-color: $warning; color: white; }
+.btn { padding: $space-2 $space-4; border-radius: $radius-sm; font-size: $font-size-body; font-weight: 500; border: 1px solid transparent; cursor: pointer; }
+.btn-primary { background-color: $primary; color: white; }
+.btn-danger { background-color: $danger; color: white; border-color: $danger; &:hover { background-color: darken($danger, 10%); } }
+.btn-secondary { background-color: white; color: $color-text; border-color: $color-border; &:hover { background-color: darken(white, 5%); } }
+.btn-re-register { background-color: $primary; color: white; border: none; padding: $space-2 $space-3; font-size: $font-size-small; font-weight: 500; border-radius: $radius-sm; cursor: pointer; display: flex; align-items: center; gap: $space-2; &:hover { background-color: darken($primary, 10%); } }
+.registration-history { display: flex; flex-direction: column; gap: $space-3; }
+.registration-item { display: flex; justify-content: space-between; align-items: center; padding: $space-3; background-color: $light; border-radius: $radius-sm; border: 1px solid $color-border; }
+.registration-year { font-weight: 600; font-size: $font-size-body; }
+.registration-details { display: flex; align-items: center; gap: $space-4; }
+.registration-type { font-size: $font-size-small; color: $color-text-secondary; }

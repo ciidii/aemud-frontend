@@ -5,6 +5,7 @@ import {TableFiltersComponent} from "../table-filters/table-filters.component";
 import {MemberModel} from "../../../../../core/models/member.model";
 import {map, Observable} from "rxjs";
 import {SkeletonLoaderComponent} from "../../../../../shared/components/skeleton-loader/skeleton-loader.component";
+import {Router} from "@angular/router";
 
 @Component({
   selector: 'app-table-body',
@@ -28,6 +29,7 @@ export class TableBodyComponent implements OnInit {
   memberStateService = inject(MemberStateService);
   selectedMemberIds$!: Observable<string[]>;
   isAllSelected$!: Observable<boolean>;
+  private router = inject(Router);
 
   ngOnInit(): void {
     this.selectedMemberIds$ = this.memberStateService.selectedMemberIds$;
@@ -46,7 +48,7 @@ export class TableBodyComponent implements OnInit {
   }
 
   navigateToMember(memberId: any) {
-    console.log('Navigating to member with id:', memberId);
+    this.router.navigate(['/members/details', memberId]);
   }
 
   toggleSelectAll(): void {

@@ -1,0 +1,88 @@
+@import 'src/assets/scss/variables';
+
+.info-section {
+  background-color: white;
+  border: 1px solid $color-border;
+  border-radius: $radius-md;
+  margin-bottom: $space-6;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-4 $space-6;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background-color: lighten($primary, 45%);
+    }
+  }
+
+  .section-title {
+    font-size: $font-size-h5;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+
+    .btn-modify {
+      background: transparent;
+      border: 1px solid $color-border;
+      color: $color-text;
+      padding: $space-2 $space-3;
+      border-radius: $radius-sm;
+      font-size: $font-size-small;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $primary;
+        color: white;
+        border-color: $primary;
+      }
+    }
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+  }
+
+  .section-content {
+    padding: 0 $space-6 $space-6 $space-6;
+    border-top: 1px solid $color-border;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $space-4;
+  }
+
+  .info-pair {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+
+    .info-key {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .info-value {
+      font-size: $font-size-body;
+      color: $color-text;
+      font-weight: 400;
+    }
+  }
+}
