@@ -1,4 +1,4 @@
-@import "../../../../../assets/scss/variables";
+@import 'variables';
 
 .container-fluid {
   background-color: #f8f9fa; // Un gris très clair pour le fond
@@ -11,8 +11,8 @@
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombre portée
 
   .card-header {
-    background-color: $primary; // Utilisation de la couleur principale
-    color: white; // Texte en blanc pour contraster avec le fond
+    background-color: $primary-500; // Utilisation de la couleur principale
+    color: $white; // Texte en blanc pour contraster avec le fond
     font-weight: bold;
     padding: 1rem;
     text-align: center;
@@ -25,27 +25,27 @@
 
 /* Styles pour les champs de formulaire */
 .form-control {
-  border: 1px solid $primary; // Bordure de la couleur principale
+  border: 1px solid $primary-500; // Bordure de la couleur principale
   border-radius: 0.25rem; // Coins arrondis
   padding: 0.5rem;
 
   &:focus {
-    border-color: $primary; // Bordure de la couleur secondaire au focus
-    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25); // Ombre portée au focus
+    border-color: $primary-500; // Bordure de la couleur secondaire au focus
+    box-shadow: 0 0 0 0.2rem rgba($primary-500, 0.25); // Ombre portée au focus
   }
 }
 
 /* Styles pour les labels */
 label {
-  color: $primary; // Utilisation de la couleur principale
+  color: $primary-500; // Utilisation de la couleur principale
 }
 
 /* Styles pour le bouton de connexion */
 .btn-connexion {
-  background-color: $primary; // Utilisation de la couleur principale
-  color: white; // Texte en blanc pour contraster avec le fond
+  background-color: $primary-500; // Utilisation de la couleur principale
+  color: $white; // Texte en blanc pour contraster avec le fond
 
   &:hover {
-    background-color: darken($primary, 10%); // Assombrir la couleur principale au survol
+    background-color: $primary-600; // Assombrir la couleur principale au survol
   }
 }

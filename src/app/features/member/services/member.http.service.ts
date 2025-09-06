@@ -1,7 +1,7 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {delay, Observable} from "rxjs";
-import { environment } from "src/environments/environment.development";
+import {environment} from "src/environments/environment.development";
 import {MemberModel} from "../../../core/models/member.model";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
@@ -82,8 +82,7 @@ export class MemberHttpService {
       .set("commission", filters?.commission ? filters?.commission : "")
       .set("sessionIdForRegistration", filters?.year ? filters?.year : "");
 
-    return this.httpClient.get<ResponsePageableApi<Array<MemberModel>>>(`${environment.API_URL}/members/search`, {params}).pipe(delay(5000)
-    );
+    return this.httpClient.get<ResponsePageableApi<Array<MemberModel>>>(`${environment.API_URL}/members/search`, {params});
   }
 
   searchMemberToPrint(keyword: string, criteria: string, filters: any): Observable<ResponseEntityApi<Array<MemberModel>>> {

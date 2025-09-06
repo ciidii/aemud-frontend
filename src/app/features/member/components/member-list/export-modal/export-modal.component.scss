@@ -1,4 +1,4 @@
-@import '../../../../../../assets/scss/variables';
+@import 'variables';
 
 .option-section {
   margin-bottom: $space-6;
@@ -21,7 +21,7 @@
   .btn-link {
     background: none;
     border: none;
-    color: $primary;
+    color: $primary-500;
     cursor: pointer;
     font-size: $font-size-small;
     padding: 0;
@@ -83,9 +83,9 @@
   justify-content: center;
   gap: $space-2;
   padding: $space-2 $space-4;
-  border: 2px solid $color-border;
+  border: 2px solid $color-border-default;
   border-radius: $radius-sm;
-  background-color: white;
+  background-color: $white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
 
@@ -100,17 +100,17 @@
   }
 
   &:hover {
-    border-color: darken($primary, 10%);
-    background-color: lighten($primary, 40%);
+    border-color: $primary-600;
+    background-color: $primary-100;
   }
 
   &.active {
-    border-color: $primary;
-    background-color: lighten($primary, 35%);
-    color: $primary;
+    border-color: $primary-500;
+    background-color: $primary-100;
+    color: $primary-500;
 
     i {
-      color: $primary;
+      color: $primary-500;
     }
   }
 }
@@ -125,15 +125,15 @@
   transition: all 0.2s ease;
 
   &.btn-primary {
-    background-color: $primary;
-    color: white;
-    &:hover { background-color: darken($primary, 10%); }
+    background-color: $primary-500;
+    color: $white;
+    &:hover { background-color: $primary-600; }
   }
 
   &.btn-secondary {
-    background-color: $light;
-    color: $color-text;
-    border-color: $color-border;
-    &:hover { background-color: darken($light, 10%); }
+    background-color: $gray-100;
+    color: $color-text-primary;
+    border-color: $color-border-default;
+    &:hover { background-color: $gray-200; }
   }
 }

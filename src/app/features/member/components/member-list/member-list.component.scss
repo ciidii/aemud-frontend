@@ -1,26 +1,3 @@
-@import "variables";
+@import 'variables';
 
-.container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  // Panel styles
-  background-color: white;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
-  overflow: hidden; // Ensures content respects the border-radius
-}
-
-app-table-header {
-  flex: 0 0 auto;
-}
-
-app-table-body {
-  flex: 1 1 auto;
-  overflow-y: auto;
-  display: block;
-}
-
-app-table-footer {
-  flex: 0 0 auto;
-}
+// Empty file. No styles needed as it is a container component.

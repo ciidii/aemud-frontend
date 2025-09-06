@@ -1,4 +1,4 @@
-@import 'src/assets/scss/variables';
+@import 'variables';
 
 // --- Main Page Layout ---
 .detail-page-container {
@@ -15,8 +15,8 @@
   justify-content: space-between;
   align-items: center;
   padding: $space-4 $space-6;
-  background-color: white;
-  border-bottom: 1px solid $color-border;
+  background-color: $white;
+  border-bottom: 1px solid $color-border-default;
   box-shadow: $shadow-sm;
   z-index: 10;
 }
@@ -30,8 +30,8 @@
 .avatar-placeholder {
   width: 56px;
   height: 56px;
-  background-color: $primary;
-  color: white;
+  background-color: $primary-500;
+  color: $white;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -65,11 +65,12 @@
 }
 
 .dropdown-menu {
+  display: none; // Masqué par défaut
   position: absolute;
   top: calc(100% + #{$space-2});
   right: 0;
-  background-color: white;
-  border: 1px solid $color-border;
+  background-color: $white;
+  border: 1px solid $color-border-default;
   border-radius: $radius-sm;
   box-shadow: $shadow-lg;
   list-style: none;
@@ -78,19 +79,23 @@
   min-width: 200px;
   z-index: 100;
 
+  &.show {
+    display: block;
+  }
+
   li a {
     display: flex;
     align-items: center;
     gap: $space-3;
     padding: $space-2 $space-4;
     font-size: $font-size-small;
-    color: $color-text;
+    color: $color-text-primary;
     text-decoration: none;
     cursor: pointer;
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: $light;
+      background-color: $gray-100;
     }
 
     i {
@@ -99,9 +104,9 @@
     }
 
     &.text-danger {
-      color: $danger;
+      color: $danger-500;
       i {
-        color: $danger;
+        color: $danger-500;
       }
     }
   }
@@ -135,8 +140,8 @@
 
 // --- Right Sidebar Card ---
 .sidebar-card {
-  background-color: white;
-  border: 1px solid $color-border;
+  background-color: $white;
+  border: 1px solid $color-border-default;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
 }
@@ -146,12 +151,13 @@
   justify-content: space-between;
   align-items: center;
   padding: $space-4;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid $color-border-default;
 
   h4 {
     margin: 0;
     font-size: $font-size-h6;
     font-weight: 600;
+    color: $color-text-primary;
   }
 }
 
@@ -162,16 +168,24 @@
     font-size: $font-size-body;
     font-weight: 600;
     margin-bottom: $space-3;
+    color: $color-text-primary;
   }
 }
 
 .sidebar-divider {
   margin: $space-6 0;
   border: 0;
-  border-top: 1px solid $color-border;
+  border-top: 1px solid $color-border-default;
 }
 
 // --- Year Selector (Right Column) ---
+.cotisation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-4;
+}
+
 .year-selector-group {
   display: flex;
   align-items: center;
@@ -187,7 +201,7 @@
     padding: $space-1 $space-2;
     font-size: $font-size-small;
     border-radius: $radius-sm;
-    border: 1px solid $color-border;
+    border: 1px solid $color-border-default;
   }
 }
 
@@ -198,32 +212,38 @@
   gap: $space-2;
 }
 
+.cotisation-actions {
+  margin-top: $space-4;
+  display: flex;
+  justify-content: flex-end;
+}
+
 .month-box {
   text-align: center;
   padding: $space-2;
   border-radius: $radius-sm;
   font-size: $font-size-small;
   font-weight: 500;
-  background-color: $light;
-  border: 1px solid $color-border;
+  background-color: $gray-100;
+  border: 1px solid $color-border-default;
 
   &.paid {
-    background-color: lighten($success, 35%);
-    color: darken($success, 10%);
-    border-color: darken($success, 5%);
+    background-color: $success-100;
+    color: $success-900;
+    border-color: $success-500;
   }
 
-  &.pending {
-    background-color: lighten($warning, 30%);
-    color: darken($warning, 20%);
-    border-color: darken($warning, 5%);
+  &.unpaid {
+    // Using default .month-box styles
+    background-color: $gray-100;
+    color: $color-text-secondary;
   }
 }
 
 // --- Permanent Info Cards (Left Column) ---
 .permanent-info-card {
-  background-color: white;
-  border: 1px solid $color-border;
+  background-color: $white;
+  border: 1px solid $color-border-default;
   border-radius: $radius-md;
   margin-bottom: $space-6;
   box-shadow: $shadow-sm;
@@ -233,12 +253,14 @@
     justify-content: space-between;
     align-items: center;
     padding: $space-4;
-    border-bottom: 1px solid $color-border;
+    border-bottom: 1px solid $color-border-default;
 
     h5 {
       margin: 0;
       font-size: $font-size-h6;
       font-weight: 600;
+      color: $color-text-primary;
+
     }
   }
 
@@ -249,8 +271,8 @@
 
 .btn-modify-card {
   background: transparent;
-  border: 1px solid $color-border;
-  color: $color-text;
+  border: 1px solid $color-border-default;
+  color: $color-text-primary;
   padding: $space-2 $space-3;
   border-radius: $radius-sm;
   font-size: $font-size-small;
@@ -259,9 +281,9 @@
   transition: all 0.2s ease;
 
   &:hover {
-    background: $primary;
-    color: white;
-    border-color: $primary;
+    background: $primary-500;
+    color: $white;
+    border-color: $primary-500;
   }
 }
 
@@ -286,22 +308,147 @@
 
   .info-value {
     font-size: $font-size-body;
-    color: $color-text;
+    color: $color-text-primary;
     font-weight: 400;
   }
 }
 
 // --- Re-used styles from previous steps ---
 .badge { font-size: 1.2rem; padding: 0.4em 0.7em; border-radius: $radius-md; font-weight: 600; }
-.bg-success { background-color: $success; color: white; }
-.bg-warning { background-color: $warning; color: white; }
+.bg-success { background-color: $success-500; color: $white; }
+.bg-warning { background-color: $warning-500; color: $white; }
 .btn { padding: $space-2 $space-4; border-radius: $radius-sm; font-size: $font-size-body; font-weight: 500; border: 1px solid transparent; cursor: pointer; }
-.btn-primary { background-color: $primary; color: white; }
-.btn-danger { background-color: $danger; color: white; border-color: $danger; &:hover { background-color: darken($danger, 10%); } }
-.btn-secondary { background-color: white; color: $color-text; border-color: $color-border; &:hover { background-color: darken(white, 5%); } }
-.btn-re-register { background-color: $primary; color: white; border: none; padding: $space-2 $space-3; font-size: $font-size-small; font-weight: 500; border-radius: $radius-sm; cursor: pointer; display: flex; align-items: center; gap: $space-2; &:hover { background-color: darken($primary, 10%); } }
+.btn-primary { background-color: $primary-500; color: $white; }
+.btn-danger { background-color: $danger-500; color: $white; border-color: $danger-500; &:hover { background-color: darken($danger-500, 10%); } }
+.btn-secondary { background-color: $white; color: $color-text-primary; border-color: $color-border-default; &:hover { background-color: $gray-200; } }
+.btn-re-register { background-color: $primary-500; color: $white; border: none; padding: $space-2 $space-3; font-size: $font-size-small; font-weight: 500; border-radius: $radius-sm; cursor: pointer; display: flex; align-items: center; gap: $space-2; &:hover { background-color: $primary-600; } }
 .registration-history { display: flex; flex-direction: column; gap: $space-3; }
-.registration-item { display: flex; justify-content: space-between; align-items: center; padding: $space-3; background-color: $light; border-radius: $radius-sm; border: 1px solid $color-border; }
+.registration-item { display: flex; justify-content: space-between; align-items: center; padding: $space-3; background-color: $gray-100; border-radius: $radius-sm; border: 1px solid $color-border-default; }
 .registration-year { font-weight: 600; font-size: $font-size-body; }
-.registration-details { display: flex; align-items: center; gap: $space-4; }
+.registration-details {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.registration-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-2 $space-3;
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border-default;
+  transition: background-color 0.2s ease;
+}
+
+.registration-info {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.registration-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  opacity: 0; // Masqué par défaut
+  transition: opacity 0.2s ease-in-out;
+}
+
+.registration-item:hover .registration-actions {
+  opacity: 1; // Visible au survol
+}
+
+.btn-sm {
+  padding: $space-1 $space-3;
+  font-size: $font-size-small;
+}
+
+.btn-outline-success {
+  color: $success-900;
+  border-color: $success-500;
+  background-color: $white;
+  &:hover {
+    background-color: $success-500;
+    color: $white;
+  }
+}
+
+.btn-icon-primary {
+  background-color: transparent;
+  border: 1px solid $success-500;
+  color: $success-900;
+  padding: $space-1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: $success-100;
+  }
+}
+
+.btn-icon-secondary {
+  background-color: transparent;
+  border: 1px solid $color-border-default;
+  color: $color-text-secondary;
+  padding: $space-1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &:hover {
+    background-color: $gray-200;
+  }
+}
 .registration-type { font-size: $font-size-small; color: $color-text-secondary; }
+
+// --- Contact Person Cards ---
+.info-pair.full-width {
+  grid-column: 1 / -1; // Make this pair span the full width of the grid
+}
+
+.contact-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $space-3;
+  margin-top: $space-2;
+}
+
+.contact-card {
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  padding: $space-3;
+  border: 1px solid $color-border-default;
+}
+
+.contact-name {
+  font-weight: 600;
+  font-size: $font-size-body;
+  color: $color-text-primary;
+}
+
+.contact-relation {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+  margin-bottom: $space-2;
+}
+
+.contact-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-body;
+  color: $primary-700;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}

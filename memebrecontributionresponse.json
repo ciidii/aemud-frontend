@@ -1,0 +1,103 @@
+{
+  "status": "OK",
+  "result": "Succeeded",
+  "error": null,
+  "data": [
+    {
+      "contributionId": "bb0a6042-fb5f-4914-a5ea-5ef16cffc487",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        7
+      ]
+    },
+    {
+      "contributionId": "2afc457a-f364-41de-b8ea-aaa89c791edd",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        7
+      ]
+    },
+    {
+      "contributionId": "8b7c95da-6ad1-45d7-82b7-0661048b5298",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        7
+      ]
+    },
+    {
+      "contributionId": "5ca2440c-62a9-4a0d-9ab1-998cdd3a9ce2",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "1e99cde1-055e-4d98-8ef6-f0d19ff7468b",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        7
+      ]
+    },
+    {
+      "contributionId": "cf099e56-eaba-4c58-83bd-38cd98e1af55",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        7
+      ]
+    },
+    {
+      "contributionId": "5f4a80cc-681c-4238-9b81-d5280f681176",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        8
+      ]
+    },
+    {
+      "contributionId": "a4f0b32a-174a-4eb3-bfe0-fd259df8ebee",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        8
+      ]
+    },
+    {
+      "contributionId": "dfd50a35-2150-483c-8e38-fdee41667073",
+      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
+      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
+      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
+      "amount": 9000.0,
+      "paymentDate": [
+        2025,
+        2,
+        8
+      ]
+    }
+  ]
+}

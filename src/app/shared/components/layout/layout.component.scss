@@ -1,4 +1,5 @@
-@import "variables";
+@import 'variables';
+
 .app-container {
   display: grid;
   grid-template-columns: 24rem 1fr; // sidebar ouverte = 250px
@@ -10,7 +11,7 @@
 }
 
 app-aside-bare {
-  color: $text-color;
+  color: $color-text-on-primary;
   overflow: hidden;
   transition: width 0.3s ease-in-out;
   .nav-text,
@@ -31,6 +32,6 @@ app-aside-bare {
 
 .main-content {
   padding: $space-6;
-  background-color: $light;
+  background-color: $gray-100;
   overflow-y: auto;
 }

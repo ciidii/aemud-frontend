@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {environment} from "../../../../environments/environment";
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpHeaders, HttpParams} from '@angular/common/http';
 import {AppStateService} from "../../../core/services/app-state.service";
 import {Observable} from "rxjs";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
@@ -26,5 +26,12 @@ export class ContributionService {
       sessionId: sessionId
     }
     return this.httpClient.post<ResponseEntityApi<ContributionModel>>(`${this.url}` + "/contribution/contribute-phone", contributionData, options);
+  }
+
+  public getContributionsByMemberAndSession(memberId: string, sessionId: string): Observable<ResponseEntityApi<ContributionModel[]>> {
+    const params = new HttpParams()
+      .set('sessionId', sessionId)
+      .set('memberId', memberId);
+    return this.httpClient.get<ResponseEntityApi<ContributionModel[]>>(`${this.url}/contribution/member-contributions`, {params});
   }
 }

@@ -1,4 +1,4 @@
-@import '../../../../../../assets/scss/variables';
+@import 'variables';
 
 // --- Base (reusing same modal base as send-message-modal) --- //
 .modal-overlay {
@@ -7,7 +7,7 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba($dark, 0.6);
+  background-color: rgba($gray-900, 0.6);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -20,7 +20,7 @@
 }
 
 .modal-content {
-  background-color: white;
+  background-color: $white;
   border-radius: $radius-md;
   box-shadow: $shadow-lg;
   border: none;
@@ -35,13 +35,13 @@
   justify-content: space-between;
   align-items: center;
   padding: $space-4 $space-6;
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid $color-border-default;
   flex-shrink: 0;
 
   .modal-title {
     font-size: $font-size-h5;
     font-weight: 600;
-    color: $color-text;
+    color: $color-text-primary;
   }
 
   .btn-close {
@@ -55,7 +55,7 @@
     transition: background-color 0.2s ease;
 
     &:hover {
-      background-color: $light;
+      background-color: $gray-100;
     }
   }
 }
@@ -71,7 +71,7 @@
     align-items: center;
     gap: $space-3;
     padding: $space-2 $space-3;
-    border: 1px solid $color-border;
+    border: 1px solid $color-border-default;
     border-radius: $radius-sm;
     margin-bottom: $space-4;
 
@@ -100,13 +100,13 @@
     justify-content: space-between;
     align-items: center;
     padding: $space-4;
-    border: 1px solid $color-border;
+    border: 1px solid $color-border-default;
     border-radius: $radius-sm;
     transition: background-color 0.2s, border-color 0.2s;
 
     &:hover {
-      background-color: lighten($primary, 45%);
-      border-color: lighten($primary, 30%);
+      background-color: $primary-100;
+      border-color: $primary-300;
     }
   }
 
@@ -114,7 +114,7 @@
     .template-title {
       font-size: $font-size-body;
       font-weight: 600;
-      color: $color-text;
+      color: $color-text-primary;
       margin: 0 0 $space-1 0;
     }
 

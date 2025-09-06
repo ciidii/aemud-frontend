@@ -34,4 +34,8 @@ export class InfoSectionComponent {
   toggleSection(): void {
     this.isOpen = !this.isOpen;
   }
+
+  isPersonToCallArray(value: any): boolean {
+    return Array.isArray(value) && value.length > 0 && 'name' in value[0];
+  }
 }

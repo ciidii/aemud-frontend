@@ -1,4 +1,4 @@
-@import "variables";
+@import 'variables';
 
 .container {
   display: flex;
@@ -6,7 +6,7 @@
   gap: $space-4;
   padding: $space-3 $space-6;
   background-color: #f9f9f9; // Should this be a variable?
-  border-bottom: 1px solid $color-border;
+  border-bottom: 1px solid $color-border-default;
 }
 
 .filters {
@@ -18,8 +18,8 @@
 .search-input-group {
   display: flex;
   align-items: center;
-  background: white;
-  border: 1px solid $color-border;
+  background: $white;
+  border: 1px solid $color-border-default;
   border-radius: $radius-sm;
   overflow: hidden;
   width: 100%;
@@ -42,7 +42,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    border-left: 1px solid $color-border;
+    border-left: 1px solid $color-border-default;
     i {
       font-size: $icon-sm;
       color: $color-text-secondary;
@@ -58,7 +58,7 @@
     color: $color-text-secondary;
     transition: color 0.2s ease;
     &:hover {
-      color: $color-text;
+      color: $color-text-primary;
     }
   }
 }
@@ -73,7 +73,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all 0.2s ease;
-  border: 1px solid $color-border;
+  border: 1px solid $color-border-default;
   box-shadow: $shadow-sm;
 
   i {
@@ -82,30 +82,30 @@
 }
 
 .filter-btn {
-  background: white;
-  color: $color-text;
+  background: $white;
+  color: $color-text-primary;
 
   &:hover {
-    background: darken(white, 5%);
+    background: $gray-200;
     box-shadow: $shadow-md;
   }
 
   &.active {
-    background-color: lighten($primary, 35%);
-    color: darken($primary, 10%);
-    border-color: lighten($primary, 20%);
+    background-color: $primary-100;
+    color: $primary-700;
+    border-color: $primary-200;
     font-weight: 600;
   }
 }
 
 .action-btn {
-  background: $primary;
-  color: white;
-  border-color: $primary;
+  background: $primary-500;
+  color: $white;
+  border-color: $primary-500;
 
   &:hover {
-    background: lighten($primary, 5%);
-    border-color: lighten($primary, 5%);
+    background: $primary-400;
+    border-color: $primary-400;
     box-shadow: $shadow-md;
   }
 }

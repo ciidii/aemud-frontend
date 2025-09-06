@@ -20,7 +20,7 @@
         <button class="btn btn-secondary btn-icon" (click)="toggleActionsDropdown($event)">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
-        <ul class="dropdown-menu" *ngIf="isActionsDropdownOpen">
+        <ul class="dropdown-menu" [class.show]="isActionsDropdownOpen">
           <li><a (click)="openExportModal()"><i class="bi bi-upload"></i> Exporter</a></li>
           <li><a (click)="toggleDeleteModal()" class="text-danger"><i class="bi bi-trash"></i> Supprimer</a></li>
         </ul>
@@ -48,13 +48,19 @@
   {{ item.value | toDate | date:'d MMMM yyyy' }}
 </span>
 
+<ng-container *ngIf="item.key === 'maritalStatus'">
+  <span *ngIf="item.value === 'SINGLE'">Célibataire</span>
+  <span *ngIf="item.value === 'MARRIED'">Marié(e)</span>
+  <span *ngIf="item.value !== 'SINGLE' && item.value !== 'MARRIED'">{{ item.value }}</span>
+</ng-container>
+
 <span *ngIf="item.value === true || item.value === false">
   <i class="bi"
      [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
 </span>
 
-<span *ngIf="item.key !== 'birthday' && !(item.value === true || item.value === false)">
-  {{ item.value | json }}
+<span *ngIf="item.key !== 'birthday' && item.key !== 'maritalStatus' && !(item.value === true || item.value === false)">
+  {{ item.value }}
 </span>
 
             </span>
@@ -69,20 +75,39 @@
           <button class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
-          <div class="info-pair" *ngFor="let item of objectToArray(member.contactInfo)">
-            <span class="info-key">{{ item.key | formatKey }}</span>
-            <span class="info-value">
-              <ng-container [ngSwitch]="true">
-                <a *ngSwitchCase="item.key === 'email'" [href]="'mailto:' + item.value">{{ item.value }}</a>
-                <a *ngSwitchCase="item.key === 'numberPhone'" [href]="'tel:' + item.value">{{ item.value }}</a>
-<span *ngIf="item.value === true || item.value === false">
-  <i class="bi" [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
-</span>
+          <ng-container *ngFor="let item of objectToArray(member.contactInfo)">
 
-                <span *ngSwitchDefault>{{ item.value | json }}</span>
-              </ng-container>
-            </span>
-          </div>
+            <!-- Special Case for PersonToCalls Array -->
+            <ng-container *ngIf="item.key === 'personToCalls' && item.value.length > 0">
+              <div class="info-pair full-width">
+                <span class="info-key">{{ item.key | formatKey }}</span>
+                <div class="contact-list">
+                  <div class="contact-card" *ngFor="let contact of item.value">
+                    <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
+                    <div class="contact-relation">{{ contact.relationship }}</div>
+                    <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
+                      <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </ng-container>
+
+            <!-- Default Case for other key-value pairs -->
+            <ng-container *ngIf="item.key !== 'personToCalls'">
+              <div class="info-pair">
+                <span class="info-key">{{ item.key | formatKey }}</span>
+                <span class="info-value">
+                  <ng-container [ngSwitch]="true">
+                    <a *ngSwitchCase="item.key === 'email'" [href]="'mailto:' + item.value">{{ item.value }}</a>
+                    <a *ngSwitchCase="item.key === 'numberPhone'" [href]="'tel:' + item.value">{{ item.value }}</a>
+                    <span *ngSwitchDefault>{{ item.value }}</span>
+                  </ng-container>
+                </span>
+              </div>
+            </ng-container>
+
+          </ng-container>
         </div>
       </div>
 
@@ -109,28 +134,26 @@
 
           <!-- Subscription Status -->
           <h5>État des Cotisations</h5>
-          <div class="year-selector-group">
-            <label for="subscription-year">Session :</label>
-            <select id="subscription-year" class="form-select-sm" (change)="onYearChange($event)">
-              <option *ngFor="let year of subscriptionYears" [value]="year"
-                      [selected]="year === selectedSubscriptionYear">
-                {{ year }} - {{ year + 1 }}
-              </option>
-            </select>
+          <div class="cotisation-header">
+            <div class="year-selector-group">
+              <label for="subscription-year">Session :</label>
+              <select id="subscription-year" class="form-select-sm" (change)="onYearChange($event)">
+                <option *ngFor="let year of subscriptionYears" [value]="year"
+                        [selected]="year === selectedSubscriptionYear">
+                  {{ year }} - {{ year + 1 }}
+                </option>
+              </select>
+            </div>
           </div>
           <div class="cotisation-grid">
-            <div class="month-box paid">Janv</div>
-            <div class="month-box paid">Fév</div>
-            <div class="month-box paid">Mars</div>
-            <div class="month-box pending">Avr</div>
-            <div class="month-box">Mai</div>
-            <div class="month-box">Juin</div>
-            <div class="month-box">Juil</div>
-            <div class="month-box">Août</div>
-            <div class="month-box">Sept</div>
-            <div class="month-box">Oct</div>
-            <div class="month-box">Nov</div>
-            <div class="month-box">Déc</div>
+            <div class="month-box" *ngFor="let item of monthlyContributions" [ngClass]="item.status">
+              {{ item.month }}
+            </div>
+          </div>
+          <div class="cotisation-actions">
+            <button class="btn btn-sm btn-secondary" (click)="sendContributionReminder()">
+              <i class="bi bi-bell"></i> Envoyer un rappel
+            </button>
           </div>
 
           <hr class="sidebar-divider">
@@ -139,6 +162,7 @@
           <div class="registration-history"
                *ngIf="member.registration && member.registration.length > 0; else noRegistrations">
             <div class="registration-item" *ngFor="let reg of member.registration">
+            <div class="registration-info">
               <div class="registration-year">Session {{ reg.session }}</div>
               <div class="registration-details">
                 <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
@@ -147,6 +171,15 @@
                 <span class="registration-type">{{ reg.registrationType }}</span>
               </div>
             </div>
+            <div class="registration-actions" *ngIf="!reg.statusPayment">
+              <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé" (click)="markAsPaid(reg.session)">
+                <i class="bi bi-check-circle"></i>
+              </button>
+              <button class="btn btn-sm btn-icon-secondary" title="Envoyer un rappel SMS">
+                <i class="bi bi-bell"></i>
+              </button>
+            </div>
+          </div>
           </div>
           <ng-template #noRegistrations>
             <p>Aucun historique d'inscription.</p>

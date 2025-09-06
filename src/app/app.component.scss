@@ -1,6 +1,4 @@
-@import "variables";
-
-
+@import 'variables';
 
 .navigation-buttons {
   display: flex;
@@ -17,21 +15,21 @@
     transition: all 0.2s ease-in-out;
 
     &.btn-outline-primary {
-      border-color: $primary;
-    color: $primary;
+      border-color: $primary-500;
+    color: $primary-500;
 
       &:hover {
-        background-color: $primary;
-        color: white;
+        background-color: $primary-500;
+        color: $white;
       }
     }
 
     &.btn-primary {
-      background-color: $primary;
-    color: white;
+      background-color: $primary-500;
+    color: $white;
 
       &:hover {
-        background-color: darken($primary, 10%);
+        background-color: $primary-600;
       }
     }
   }

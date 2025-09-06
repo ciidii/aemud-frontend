@@ -1,5 +1,6 @@
+@import 'variables';
+
 /* Styles globaux */
-@import "../../../../../assets/scss/variables";
 html, body {
   padding: 0;
   margin: 0;
@@ -8,15 +9,15 @@ html, body {
 }
 
 .div-1 {
-  background-color: $primary;
+  background-color: $primary-500;
 }
 
 .sidebar-header{
-  background-color: rgba($secondary, 0.8);
+  background-color: rgba($secondary-500, 0.8);
 }
 
 .div-2 {
-  background-color: rgba($secondary, 0);
+  background-color: rgba($secondary-500, 0);
 }
 
 .logo {
@@ -25,9 +26,9 @@ html, body {
 
 .mosque-ucad {
   font-family: police-lieu, sans-serif;
-  background-color: $primary;
+  background-color: $primary-500;
   text-align: justify;
-  color: white;
+  color: $white;
   vertical-align: center;
 }
 
@@ -40,7 +41,7 @@ html, body {
 }
 
 .h2 {
-  color: white;
+  color: $white;
   font-family: police-titre, serif;
 }
 
@@ -55,17 +56,17 @@ html, body {
 
 /* Styles pour le bouton de connexion */
 .btn-connexion {
-  background-color: $primary;
-  color: white;
+  background-color: $primary-500;
+  color: $white;
 
   &:hover {
-    background-color: darken($primary, 10%);
+    background-color: $primary-600;
   }
 }
 
 /* Styles pour les labels */
 label {
-  color: $primary;
+  color: $primary-500;
 }
 
 .card {
@@ -74,8 +75,8 @@ label {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); // Ombre portée
 
   .card-header {
-    background-color: $primary;
-    color: white; // Texte en blanc pour contraster avec le fond
+    background-color: $primary-500;
+    color: $white; // Texte en blanc pour contraster avec le fond
     font-weight: bold;
     padding: 1rem;
     text-align: center;
@@ -88,12 +89,12 @@ label {
 
 /* Styles pour les champs de formulaire */
 .form-control {
-  border: 1px solid $primary; // Bordure de la couleur principale
+  border: 1px solid $primary-500; // Bordure de la couleur principale
   border-radius: 0.25rem; // Coins arrondis
   padding: 0.5rem;
 
   &:focus {
-    border-color: $primary; // Bordure de la couleur secondaire au focus
-    box-shadow: 0 0 0 0.2rem rgba($primary, 0.25); // Ombre portée au focus
+    border-color: $primary-500; // Bordure de la couleur secondaire au focus
+    box-shadow: 0 0 0 0.2rem rgba($primary-500, 0.25); // Ombre portée au focus
   }
 }

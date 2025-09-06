@@ -1,10 +1,10 @@
-@import "variables";
+@import 'variables';
 
 :host {
   display: block;
   height: 100vh;
-  background-color: $primary;
-  color: $text-color;
+  background-color: $primary-500;
+  color: $color-text-on-primary;
   transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out;
 }
 
@@ -19,7 +19,7 @@
   align-items: center;
   justify-content: flex-start;
   padding: 0.75rem 1rem;
-  background-color: darken($primary, 5%);
+  background-color: $primary-600;
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   position: sticky;
   top: 0;
@@ -31,13 +31,13 @@
     justify-content: center;
     background: none;
     border: none;
-    color: $text-color;
+    color: $color-text-on-primary;
     font-size: 1.5rem;
     cursor: pointer;
     transition: color 0.2s, transform 0.3s;
 
     &:hover {
-      color: lighten($text-color, 20%);
+      color: $primary-100;
       transform: rotate(90deg);
     }
 
@@ -73,7 +73,7 @@
   display: flex;
   flex-direction: column;
   padding: $space-2;
-  background: darken($primary, 5%);
+  background: $primary-600;
   box-shadow: $shadow-md;
   gap: 0.75rem;
 
@@ -109,7 +109,7 @@
     padding: 0.5rem;
     background: transparent;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    color: $text-color;
+    color: $color-text-on-primary;
     font-size: $font-size-small;
     cursor: pointer;
     display: flex;
@@ -120,8 +120,8 @@
     transition: background 0.2s, color 0.2s;
 
     &:hover {
-      background: lighten($primary, 5%);
-      color: lighten($text-color, 20%);
+      background: $primary-400;
+      color: $white;
     }
 
     i {
@@ -145,13 +145,13 @@ ul {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: $text-color;
+    color: $color-text-on-primary;
     text-decoration: none;
     transition: background 0.2s;
 
     &:hover,
     &.active {
-      background: lighten($primary, 10%);
+      background: $primary-400;
     }
 
     i {
@@ -173,8 +173,8 @@ ul {
   top: 50%;
   transform: translateY(-50%);
   margin-left: 1rem;
-  background-color: $dark;
-  color: white;
+  background-color: $gray-900;
+  color: $white;
   padding: $space-1 $space-2;
   border-radius: $radius-sm;
   font-size: $font-size-small;
@@ -250,8 +250,8 @@ ul {
   margin-bottom: 0.25rem;
 
   &:hover {
-    color: lighten($text-color, 15%);
-    border-left-color: lighten($text-color, 30%);
+    color: $primary-100;
+    border-left-color: $primary-200;
   }
 }
 

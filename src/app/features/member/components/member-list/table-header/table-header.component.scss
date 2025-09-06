@@ -1,11 +1,11 @@
-@import "variables";
+@import 'variables';
 
 :host {
   display: block;
   width: 100%;
   padding: $space-4 $space-6;
-  border-bottom: 1px solid $color-border;
-  background-color: white;
+  border-bottom: 1px solid $color-border-default;
+  background-color: $white;
 }
 
 .header-container {
@@ -19,7 +19,7 @@
   .page-title {
     font-size: $font-size-h4;
     font-weight: 700;
-    color: $color-text;
+    color: $color-text-primary;
   }
 }
 
@@ -46,24 +46,24 @@
     }
 
     &.primary {
-      background-color: $primary;
-      color: white;
-      border-color: $primary;
+      background-color: $primary-500;
+      color: $white;
+      border-color: $primary-500;
 
       &:hover {
-        background: lighten($primary, 5%);
-        border-color: lighten($primary, 5%);
+        background: $primary-400;
+        border-color: $primary-400;
         box-shadow: $shadow-md;
       }
     }
 
     &:not(.primary) {
-      background-color: white;
-      color: $color-text;
-      border-color: $color-border;
+      background-color: $white;
+      color: $color-text-primary;
+      border-color: $color-border-default;
 
       &:hover {
-        background: darken(white, 5%);
+        background: $gray-200;
         box-shadow: $shadow-md;
       }
     }
@@ -96,15 +96,15 @@
     }
 
     &:hover {
-      background-color: $light;
+      background-color: $gray-100;
     }
 
     .badge {
       position: absolute;
       top: 4px;
       right: 4px;
-      background-color: $danger;
-      color: white;
+      background-color: $danger-500;
+      color: $white;
       font-size: 1rem;
       width: 1.8rem;
       height: 1.8rem;
@@ -112,7 +112,7 @@
       align-items: center;
       justify-content: center;
       border-radius: 50%;
-      border: 2px solid white;
+      border: 2px solid $white;
     }
   }
 }
