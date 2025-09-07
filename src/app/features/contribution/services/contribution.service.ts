@@ -5,6 +5,7 @@ import {AppStateService} from "../../../core/services/app-state.service";
 import {Observable} from "rxjs";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {ContributionModel} from "../../../core/models/contribution.model";
+import {ContributionCalendarItem} from "../../../core/models/contribution-calendar-item.model";
 
 @Injectable({
   providedIn: 'root'
@@ -33,5 +34,16 @@ export class ContributionService {
       .set('sessionId', sessionId)
       .set('memberId', memberId);
     return this.httpClient.get<ResponseEntityApi<ContributionModel[]>>(`${this.url}/contribution/member-contributions`, {params});
+  }
+
+  public getContributionCalendar(memberId: string, sessionId: string): Observable<ResponseEntityApi<ContributionCalendarItem[]>> {
+    const params = new HttpParams()
+      .set('sessionId', sessionId)
+      .set('memberId', memberId);
+    return this.httpClient.get<ResponseEntityApi<ContributionCalendarItem[]>>(`${this.url}/contribution/member-contribution-calendar`, {params});
+  }
+
+  public recordPayment(paymentData: { contributionsID: string[]; payementMethode: string; }): Observable<any> {
+    return this.httpClient.post(`${this.url}/contribution/pay-contributions`, paymentData);
   }
 }

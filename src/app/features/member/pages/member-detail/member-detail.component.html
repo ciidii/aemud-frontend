@@ -29,7 +29,7 @@
   </div>
 
   <!-- Body Grid (Two Columns) -->
-  <div class="detail-body-grid">
+  <div class="detail-body-grid" [class.sidebar-collapsed]="isSidebarCollapsed">
 
     <!-- Left Column: Main Info (Scrollable) -->
     <div class="main-content-col">
@@ -125,12 +125,28 @@
     <div class="sidebar-col">
       <div class="sidebar-card">
         <div class="sidebar-header">
-          <h4>Historique des inscriptions</h4>
-          <button class="btn-re-register" (click)="toggleReregisterModal()">
-            <i class="bi bi-plus-circle"></i> Réinscrire
+          <h4 *ngIf="!isSidebarCollapsed">Historique des inscriptions</h4>
+          <button class="btn-icon btn-toggle-sidebar" (click)="toggleSidebar()" [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'">
+            <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
           </button>
         </div>
-        <div class="sidebar-content">
+        <div class="sidebar-content" *ngIf="!isSidebarCollapsed">
+
+          <!-- Subscription Summary -->
+          <div class="cotisation-summary" *ngIf="contributionSummary">
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
+              <span class="summary-label">Total Payé</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
+              <span class="summary-label">Restant Dû</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.completionRate }}</span>
+              <span class="summary-label">Complétion</span>
+            </div>
+          </div>
 
           <!-- Subscription Status -->
           <h5>État des Cotisations</h5>
@@ -146,10 +162,30 @@
             </div>
           </div>
           <div class="cotisation-grid">
-            <div class="month-box" *ngFor="let item of monthlyContributions" [ngClass]="item.status">
+            <button *ngFor="let item of monthlyContributions" 
+                    class="month-box" 
+                    [ngClass]="item.status"
+                    [class.selected]="isMonthSelected(item)"
+                    (click)="onMonthClick(item)">
               {{ item.month }}
-            </div>
+            </button>
           </div>
+          <div class="cotisation-legend">
+            <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
+            <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
+            <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
+            <div class="legend-item"><span class="legend-color not-applicable"></span>Non applicable</div>
+          </div>
+
+          <!-- Multi-select Action Bar -->
+          <div class="multi-select-bar" *ngIf="selectedContributions.length > 0">
+            <div class="selection-info">
+              <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
+              <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
+            </div>
+            <button class="btn btn-primary" (click)="openRecordPaymentModal()">Enregistrer le paiement</button>
+          </div>
+
           <div class="cotisation-actions">
             <button class="btn btn-sm btn-secondary" (click)="sendContributionReminder()">
               <i class="bi bi-bell"></i> Envoyer un rappel
@@ -206,3 +242,10 @@
                           (confirm)="onDeleteConfirmed()"></app-confirm-delete-modal>
 <app-send-message-modal *ngIf="isSendMessageModalOpen" (close)="closeSendMessageModal()"></app-send-message-modal>
 <app-export-modal *ngIf="isExportModalOpen" (close)="closeExportModal()"></app-export-modal>
+
+<!-- Record Payment Modal -->
+<app-record-payment-modal *ngIf="isRecordPaymentModalOpen"
+                          [contributions]="selectedContributions"
+                          (close)="handleClosePaymentModal()"
+                          (save)="handleSavePayment($event)">
+</app-record-payment-modal>

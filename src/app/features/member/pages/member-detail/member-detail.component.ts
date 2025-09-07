@@ -1,5 +1,5 @@
 import {Component, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
+import {AsyncPipe, CurrencyPipe, JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberHttpService} from "../../services/member.http.service";
 import {MemberModel} from "../../../../core/models/member.model";
@@ -15,14 +15,22 @@ import {FormatKeyPipe} from "../../../../shared/pipes/format-key.pipe";
 import {DatePipe} from "@angular/common";
 import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
 import {SessionModel} from "../../../../core/models/session.model";
-import {MonthDataModel} from "../../../../core/models/month-data.model";
 import {ContributionService} from "../../../contribution/services/contribution.service";
 import {YearOfSessionService} from "../../../../core/services/year-of-session.service";
+import {ContributionCalendarItem} from "../../../../core/models/contribution-calendar-item.model";
+import {RecordPaymentModalComponent} from "../../components/record-payment-modal/record-payment-modal.component";
+import {NotificationService} from "../../../../core/services/notification.service";
+
+interface MonthlyContributionDisplay {
+  month: string;
+  status: string;
+  data: ContributionCalendarItem;
+}
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, NgIf, InfoSectionComponent, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, FormatKeyPipe, DatePipe, ToDatePipe, NgSwitch, NgClass, NgSwitchCase, NgSwitchDefault],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, InfoSectionComponent, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, FormatKeyPipe, DatePipe, ToDatePipe, NgSwitch, NgClass, NgSwitchCase, NgSwitchDefault, RecordPaymentModalComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -33,6 +41,7 @@ export class MemberDetailComponent implements OnInit {
   private memberStateService = inject(MemberStateService);
   private contributionService = inject(ContributionService);
   private yearOfSessionService = inject(YearOfSessionService);
+  private notificationService = inject(NotificationService);
 
   member$!: Observable<MemberModel | undefined>;
   isReregisterModalOpen = false;
@@ -40,12 +49,19 @@ export class MemberDetailComponent implements OnInit {
   isSendMessageModalOpen = false;
   isExportModalOpen = false;
   isActionsDropdownOpen = false;
-  subscriptionYears = [new Date().getFullYear(), new Date().getFullYear() - 1, new Date().getFullYear() - 2];
-  selectedSubscriptionYear = new Date().getFullYear();
+  isRecordPaymentModalOpen = false;
+  isSidebarCollapsed = false;
+  selectedContributions: ContributionCalendarItem[] = [];
+  subscriptionYears: number[] = [];
+  selectedSubscriptionYear!: number;
   private memberId: string | null = null;
   private sessions: SessionModel[] = [];
-  private allMonths: MonthDataModel[] = [];
-  monthlyContributions: { month: string, monthId: string, status: 'paid' | 'unpaid' }[] = [];
+  monthlyContributions: MonthlyContributionDisplay[] = [];
+  contributionSummary: { totalPaid: number; totalDue: number; completionRate: string; } | null = null;
+
+  get selectedTotalAmount(): number {
+    return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
+  }
 
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
@@ -56,19 +72,11 @@ export class MemberDetailComponent implements OnInit {
 
       forkJoin({
         allSessions: this.yearOfSessionService.getYears(),
-        currentSession: this.yearOfSessionService.getCurrentYear(),
-        months: this.yearOfSessionService.getElevenMonths()
-      }).subscribe(({ allSessions, currentSession, months }) => {
+        currentSession: this.yearOfSessionService.getCurrentYear()
+      }).subscribe(({ allSessions, currentSession }) => {
         this.sessions = allSessions.data;
-        this.allMonths = months.data;
-
-        // Populate dropdown with all available years
         this.subscriptionYears = this.sessions.map(s => s.session).sort((a, b) => b - a);
-
-        // Set the selected year directly from the dedicated service call
         this.selectedSubscriptionYear = currentSession.data.session;
-
-        // Load contributions for the current year
         this.loadContributions(this.selectedSubscriptionYear);
       });
     }
@@ -118,11 +126,15 @@ export class MemberDetailComponent implements OnInit {
     this.isActionsDropdownOpen = false;
   }
 
+  toggleSidebar(): void {
+    this.isSidebarCollapsed = !this.isSidebarCollapsed;
+  }
+
   onYearChange(event: Event): void {
     const selectedYear = (event.target as HTMLSelectElement).value;
     this.selectedSubscriptionYear = Number(selectedYear);
-    console.log(`Subscription year changed to: ${this.selectedSubscriptionYear}.`);
-    // TODO: Add logic to refetch subscription data for the selected year.
+    this.selectedContributions = []; // Clear selection on year change
+    this.loadContributions(this.selectedSubscriptionYear);
   }
 
   // --- Action Handlers ---
@@ -133,31 +145,116 @@ export class MemberDetailComponent implements OnInit {
     const session = this.sessions.find(s => s.session === year);
     if (!session) {
       console.error(`Session ID for year ${year} not found.`);
-      this.monthlyContributions = []; // Clear contributions
+      this.monthlyContributions = [];
+      this.contributionSummary = null;
       return;
     }
     const sessionId = session.id;
 
-    this.contributionService.getContributionsByMemberAndSession(this.memberId, sessionId).subscribe(response => {
-      const paidContributions = response.data || [];
-      // Map all months to a new array with status
-      this.monthlyContributions = this.allMonths.map(month => {
-        const isPaid = paidContributions.some(c => c.monthId === month.id);
+    this.contributionService.getContributionCalendar(this.memberId, sessionId).subscribe(response => {
+      const contributions = response.data || [];
+
+      // Map to display model
+      this.monthlyContributions = contributions.map(contribution => {
+        const monthName = new Date(contribution.month[0], contribution.month[1] - 1).toLocaleString('fr-FR', { month: 'short' });
         return {
-          month: month.monthName.substring(0, 4),
-          monthId: month.id,
-          status: isPaid ? 'paid' : 'unpaid'
+          month: monthName.charAt(0).toUpperCase() + monthName.slice(1, 4),
+          status: this.mapContributionStatusToCssClass(contribution.status),
+          data: contribution
         };
-      });
+      }).sort((a, b) => a.data.month[1] - b.data.month[1]); // Ensure months are sorted
+
+      // Calculate summary
+      this.calculateSummary(contributions);
     });
   }
+
+  private calculateSummary(contributions: ContributionCalendarItem[]): void {
+    const applicableContributions = contributions.filter(c => c.status !== 'NOT_APPLICABLE');
+    const totalPaid = applicableContributions.reduce((sum, c) => sum + c.amountPaid, 0);
+    const totalDue = applicableContributions.reduce((sum, c) => c.status !== 'PAID' ? sum + (c.amountDue - c.amountPaid) : sum, 0);
+    const paidCount = applicableContributions.filter(c => c.status === 'PAID').length;
+    const totalCount = applicableContributions.length;
+
+    this.contributionSummary = {
+      totalPaid,
+      totalDue,
+      completionRate: `${paidCount}/${totalCount} mois`
+    };
+  }
+
+  private mapContributionStatusToCssClass(status: ContributionCalendarItem['status']): string {
+    switch (status) {
+      case 'PAID':
+        return 'paid';
+      case 'DELAYED':
+        return 'delayed';
+      case 'PENDING':
+        return 'pending';
+      case 'NOT_APPLICABLE':
+        return 'not-applicable';
+      default:
+        return 'unpaid'; // Fallback, though should not happen
+    }
+  }
+
+  onMonthClick(contribution: MonthlyContributionDisplay): void {
+    const underlyingContribution = contribution.data;
+    if (underlyingContribution.status === 'PAID' || underlyingContribution.status === 'NOT_APPLICABLE') {
+      return; // Do not select paid or N/A months
+    }
+
+    const index = this.selectedContributions.findIndex(c => c.id === underlyingContribution.id);
+    if (index > -1) {
+      this.selectedContributions.splice(index, 1); // Deselect
+    } else {
+      this.selectedContributions.push(underlyingContribution); // Select
+    }
+  }
+
+  isMonthSelected(contribution: MonthlyContributionDisplay): boolean {
+    return this.selectedContributions.some(c => c.id === contribution.data.id);
+  }
+
+  openRecordPaymentModal(): void {
+    if (this.selectedContributions.length > 0) {
+      this.isRecordPaymentModalOpen = true;
+    }
+  }
+
+  handleClosePaymentModal(): void {
+    this.isRecordPaymentModalOpen = false;
+  }
+
+  handleSavePayment(paymentData: { contributionsID: string[], payementMethode: string }): void {
+    this.contributionService.recordPayment(paymentData).subscribe({
+      next: () => {
+        this.notificationService.showSuccess(`${paymentData.contributionsID.length} mois payés avec succès.`);
+        this.selectedContributions = []; // Clear selection
+        this.loadContributions(this.selectedSubscriptionYear);
+        this.handleClosePaymentModal();
+      },
+      error: (err) => {
+        this.notificationService.showError("Échec de l'enregistrement du paiement.");
+        console.error('Failed to record payment', err);
+      }
+    });
+  }
+
 
   handleSaveRegistration(formData: any): void {
     if (!this.memberId) return;
     const registrationPayload = { ...formData, member: this.memberId };
     this.memberHttpService.register(registrationPayload).subscribe({
-      next: () => console.log('Registration successful'), // TODO: Refresh data
-      error: (err) => console.error('Registration failed', err)
+      next: () => {
+        this.notificationService.showSuccess("Réinscription réussie.");
+        // TODO: Refresh data without full reload if possible
+        this.loadContributions(this.selectedSubscriptionYear);
+      },
+      error: (err) => {
+        this.notificationService.showError("Échec de la réinscription.");
+        console.error('Registration failed', err);
+      }
     });
   }
 
@@ -166,11 +263,13 @@ export class MemberDetailComponent implements OnInit {
     this.memberHttpService.deleteMember(this.memberId).subscribe({
       next: () => {
         this.toggleDeleteModal();
+        this.notificationService.showSuccess("Membre supprimé avec succès.");
         this.router.navigate(['/members/list-members']);
       },
       error: (err) => {
-        console.error('Failed to delete member', err);
         this.toggleDeleteModal();
+        this.notificationService.showError("Échec de la suppression du membre.");
+        console.error('Failed to delete member', err);
       }
     });
   }

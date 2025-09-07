@@ -4,100 +4,149 @@
   "error": null,
   "data": [
     {
-      "contributionId": "bb0a6042-fb5f-4914-a5ea-5ef16cffc487",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "9344d8d8-c6b8-43c0-a1e7-06443beca6c2",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        7
-      ]
+        1
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "2afc457a-f364-41de-b8ea-aaa89c791edd",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "70a25e5b-dc5c-4c44-8481-3ab6e6e9a85c",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        7
-      ]
+        2
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "8b7c95da-6ad1-45d7-82b7-0661048b5298",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "0f182bd6-959a-4503-ad6d-4b0043c37806",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "a1c5c1dd-f7b1-4c80-9daa-23aa2b853aed",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        7
-      ]
+        3
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "5ca2440c-62a9-4a0d-9ab1-998cdd3a9ce2",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "1e99cde1-055e-4d98-8ef6-f0d19ff7468b",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "91361e9e-45f0-495d-af0f-f5b890fed89d",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        7
-      ]
+        4
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "cf099e56-eaba-4c58-83bd-38cd98e1af55",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "7a4b62f9-038b-4d68-aebb-86dcf7b1046d",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        7
-      ]
+        5
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "5f4a80cc-681c-4238-9b81-d5280f681176",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "5ec4b29d-4b62-4e07-a1dc-be255f948ef7",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
+        6
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "id": "0b22e4c3-5711-47a1-aae2-c2ef6b109118",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
+        2025,
+        7
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
+    },
+    {
+      "id": "2a480510-3ee1-46bb-a421-5137e758a59b",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
+        2025,
         8
-      ]
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "NOT_APPLICABLE"
     },
     {
-      "contributionId": "a4f0b32a-174a-4eb3-bfe0-fd259df8ebee",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "9f7f427a-8a68-4fe7-918c-325cc38dd012",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        8
-      ]
+        9
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "PENDING"
     },
     {
-      "contributionId": "dfd50a35-2150-483c-8e38-fdee41667073",
-      "memberId": "931b41ee-2709-4e47-a453-1f703bb17a13",
-      "sessionId": "d8da3147-9d11-4047-8108-c197fba2b1d9",
-      "monthId": "75752827-f3ab-49f4-abcb-b45d7b1e0117",
-      "amount": 9000.0,
-      "paymentDate": [
+      "id": "f19427b6-9b56-4db7-951c-4280a2ad603b",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
         2025,
-        2,
-        8
-      ]
+        10
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "PENDING"
+    },
+    {
+      "id": "6e5ec43e-bb52-46b5-a328-068c94e61345",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
+        2025,
+        11
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "PENDING"
+    },
+    {
+      "id": "2800cb40-fea1-4188-9b3b-bcfca13a6e68",
+      "sessionID": "c1dc0970-4cf4-4567-ad3d-da5906529d8d",
+      "memberID": "012f712a-ad17-4e36-b6f4-842fbf37de36",
+      "month": [
+        2025,
+        12
+      ],
+      "amountDue": 900199.0,
+      "amountPaid": 0.0,
+      "status": "PENDING"
     }
   ]
 }
+

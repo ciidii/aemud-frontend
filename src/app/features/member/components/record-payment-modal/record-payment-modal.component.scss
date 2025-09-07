@@ -1,0 +1,219 @@
+@import '../../../../../assets/scss/variables';
+
+:host {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1050; // Higher than the main layout
+}
+
+.modal-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($gray-900, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-container {
+  background-color: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  width: 100%;
+  max-width: 500px;
+  display: flex;
+  flex-direction: column;
+  animation: slideInUp 0.4s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-5;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.modal-title {
+  font-size: $font-size-h5;
+  font-weight: 600;
+  margin: 0;
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: $font-size-h6;
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: $space-2;
+  line-height: 1;
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+.modal-body {
+  padding: $space-5;
+  p {
+    margin-top: 0;
+    margin-bottom: $space-5;
+    color: $color-text-secondary;
+  }
+}
+
+.month-list {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: $space-4;
+  max-height: 150px;
+  overflow-y: auto;
+  background-color: $gray-100;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  padding: $space-3;
+
+  li {
+    padding: $space-1 0;
+  }
+}
+
+.total-amount-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4;
+  margin-bottom: $space-4;
+  background-color: $primary-100;
+  border-radius: $radius-md;
+  border-left: 4px solid $primary-500;
+}
+
+.total-label {
+  font-weight: 600;
+  font-size: $font-size-body;
+  color: $primary-900;
+}
+
+.total-value {
+  font-weight: 700;
+  font-size: $font-size-h5;
+  color: $primary-700;
+}
+
+.form-group {
+  margin-bottom: $space-4;
+  label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: $space-2;
+    font-size: $font-size-small;
+  }
+}
+
+.form-control {
+  width: 100%;
+  padding: $form-input-padding-y $form-input-padding-x;
+  border: 1px solid $form-input-border-color;
+  border-radius: $form-input-border-radius;
+  font-size: $font-size-body;
+  background-color: $form-input-background;
+
+  &:focus {
+    outline: none;
+    border-color: $color-border-focus;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.2);
+  }
+}
+
+.input-group {
+  display: flex;
+  .form-control {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+  .input-group-text {
+    padding: $space-2 $space-3;
+    background-color: $gray-100;
+    border: 1px solid $color-border-default;
+    border-left: 0;
+    border-top-right-radius: $radius-sm;
+    border-bottom-right-radius: $radius-sm;
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+  }
+}
+
+.invalid-feedback {
+  display: block;
+  color: $danger-500;
+  font-size: $font-size-small;
+  margin-top: $space-1;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding: $space-4 $space-5;
+  border-top: 1px solid $color-border-default;
+  background-color: $gray-100; // Changed from gray-50
+  border-bottom-left-radius: $radius-lg;
+  border-bottom-right-radius: $radius-lg;
+}
+
+// Re-using button styles from the main app
+.btn {
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+  font-size: $button-font-size;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $white;
+  &:hover {
+    background-color: $primary-600;
+  }
+  &:disabled {
+    background-color: $primary-200;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: $white;
+  color: $color-text-primary;
+  border-color: $color-border-default;
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+// --- Animations ---
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slideInUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}

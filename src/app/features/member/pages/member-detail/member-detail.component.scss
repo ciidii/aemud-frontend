@@ -120,13 +120,15 @@
   overflow: hidden;
   gap: $space-8;
   padding: $space-6;
-  background-color: #f9fafb;
+  background-color: $color-background-body;
+  transition: gap 0.3s ease-in-out;
 }
 
 .main-content-col, .sidebar-col {
   height: 100%;
   overflow-y: auto;
   padding-right: $space-3;
+  transition: flex-basis 0.3s ease-in-out;
 }
 
 .main-content-col {
@@ -138,12 +140,30 @@
   flex-shrink: 0;
 }
 
+// Collapsed State
+.detail-body-grid.sidebar-collapsed {
+  gap: $space-3;
+
+  .sidebar-col {
+    flex-basis: 56px; // Width of the collapsed sidebar
+    padding-right: 0;
+  }
+
+  .sidebar-header {
+    justify-content: center; // Center the toggle button
+  }
+}
+
+
 // --- Right Sidebar Card ---
 .sidebar-card {
   background-color: $white;
   border: 1px solid $color-border-default;
   border-radius: $radius-md;
   box-shadow: $shadow-sm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .sidebar-header {
@@ -152,6 +172,7 @@
   align-items: center;
   padding: $space-4;
   border-bottom: 1px solid $color-border-default;
+  flex-shrink: 0;
 
   h4 {
     margin: 0;
@@ -161,8 +182,28 @@
   }
 }
 
+.btn-toggle-sidebar {
+  padding: $space-1;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $color-text-primary;
+  }
+}
+
 .sidebar-content {
   padding: $space-4;
+  overflow-y: auto;
+  flex-grow: 1;
 
   h5 {
     font-size: $font-size-body;
@@ -224,8 +265,14 @@
   border-radius: $radius-sm;
   font-size: $font-size-small;
   font-weight: 500;
-  background-color: $gray-100;
   border: 1px solid $color-border-default;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
 
   &.paid {
     background-color: $success-100;
@@ -233,10 +280,57 @@
     border-color: $success-500;
   }
 
-  &.unpaid {
-    // Using default .month-box styles
+  &.delayed {
+    background-color: $warning-100;
+    color: $warning-900;
+    border-color: $warning-500;
+  }
+
+  &.pending {
     background-color: $gray-100;
     color: $color-text-secondary;
+  }
+
+  &.not-applicable {
+    background-color: $gray-200;
+    color: $gray-500;
+    cursor: not-allowed;
+    text-decoration: line-through;
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &.selected {
+    border-color: $primary-500;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.3);
+    background-color: $primary-100;
+    color: $primary-900;
+  }
+}
+
+// --- Cotisation Multi-Select Bar ---
+.multi-select-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3 $space-4;
+  margin-top: $space-4;
+  background-color: $primary-900;
+  color: $white;
+  border-radius: $radius-md;
+  animation: slideInUp 0.3s ease-out;
+
+  .selection-info {
+    strong {
+      font-size: $font-size-body;
+    }
+    span {
+      margin-left: $space-4;
+      font-size: $font-size-small;
+      color: $gray-300;
+    }
   }
 }
 
@@ -452,3 +546,62 @@
     text-decoration: underline;
   }
 }
+
+// --- Cotisation Summary ---
+.cotisation-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-4;
+  padding: $space-4;
+  margin-bottom: $space-5;
+  background-color: $gray-100; // Changed from gray-50 to gray-100 for better contrast with panel
+  border-radius: $radius-md;
+  border: 1px solid $color-border-default;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-value {
+  display: block;
+  font-size: $font-size-h6;
+  font-weight: 700;
+  color: $color-text-primary;
+}
+
+.summary-label {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+// --- Cotisation Legend ---
+.cotisation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-4;
+  margin-top: $space-4;
+  padding: $space-3 0; // Reduced padding
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: $radius-sm;
+
+  // Use the same background colors as the month-box statuses
+  &.paid { background-color: $success-100; border: 1px solid $success-500; }
+  &.delayed { background-color: $warning-100; border: 1px solid $warning-500; }
+  &.pending { background-color: $gray-100; border: 1px solid $color-border-default; }
+  &.not-applicable { background-color: $gray-200; border: 1px solid $gray-300; }
+}
+
