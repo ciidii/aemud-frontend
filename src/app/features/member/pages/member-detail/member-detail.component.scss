@@ -36,7 +36,10 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  i { font-size: $icon-lg; }
+
+  i {
+    font-size: $icon-lg;
+  }
 }
 
 .header-text h1 {
@@ -105,6 +108,7 @@
 
     &.text-danger {
       color: $danger-500;
+
       i {
         color: $danger-500;
       }
@@ -296,6 +300,7 @@
     color: $gray-500;
     cursor: not-allowed;
     text-decoration: line-through;
+
     &:hover {
       transform: none;
       box-shadow: none;
@@ -326,6 +331,7 @@
     strong {
       font-size: $font-size-body;
     }
+
     span {
       margin-left: $space-4;
       font-size: $font-size-small;
@@ -408,17 +414,96 @@
 }
 
 // --- Re-used styles from previous steps ---
-.badge { font-size: 1.2rem; padding: 0.4em 0.7em; border-radius: $radius-md; font-weight: 600; }
-.bg-success { background-color: $success-500; color: $white; }
-.bg-warning { background-color: $warning-500; color: $white; }
-.btn { padding: $space-2 $space-4; border-radius: $radius-sm; font-size: $font-size-body; font-weight: 500; border: 1px solid transparent; cursor: pointer; }
-.btn-primary { background-color: $primary-500; color: $white; }
-.btn-danger { background-color: $danger-500; color: $white; border-color: $danger-500; &:hover { background-color: darken($danger-500, 10%); } }
-.btn-secondary { background-color: $white; color: $color-text-primary; border-color: $color-border-default; &:hover { background-color: $gray-200; } }
-.btn-re-register { background-color: $primary-500; color: $white; border: none; padding: $space-2 $space-3; font-size: $font-size-small; font-weight: 500; border-radius: $radius-sm; cursor: pointer; display: flex; align-items: center; gap: $space-2; &:hover { background-color: $primary-600; } }
-.registration-history { display: flex; flex-direction: column; gap: $space-3; }
-.registration-item { display: flex; justify-content: space-between; align-items: center; padding: $space-3; background-color: $gray-100; border-radius: $radius-sm; border: 1px solid $color-border-default; }
-.registration-year { font-weight: 600; font-size: $font-size-body; }
+.badge {
+  font-size: 1.2rem;
+  padding: 0.4em 0.7em;
+  border-radius: $radius-md;
+  font-weight: 600;
+}
+
+.bg-success {
+  background-color: $success-500;
+  color: $white;
+}
+
+.bg-warning {
+  background-color: $warning-500;
+  color: $white;
+}
+
+.btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
+  font-size: $font-size-body;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $white;
+}
+
+.btn-danger {
+  background-color: $danger-500;
+  color: $white;
+  border-color: $danger-500;
+
+  &:hover {
+    background-color: darken($danger-500, 10%);
+  }
+}
+
+.btn-secondary {
+  background-color: $white;
+  color: $color-text-primary;
+  border-color: $color-border-default;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+.btn-re-register {
+  background-color: $primary-500;
+  color: $white;
+  border: none;
+  padding: $space-2 $space-3;
+  font-size: $font-size-small;
+  font-weight: 500;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+}
+
+.registration-history {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.registration-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3;
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border-default;
+}
+
+.registration-year {
+  font-weight: 600;
+  font-size: $font-size-body;
+}
+
 .registration-details {
   display: flex;
   align-items: center;
@@ -463,6 +548,7 @@
   color: $success-900;
   border-color: $success-500;
   background-color: $white;
+
   &:hover {
     background-color: $success-500;
     color: $white;
@@ -480,6 +566,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   &:hover {
     background-color: $success-100;
   }
@@ -496,11 +583,16 @@
   display: flex;
   align-items: center;
   justify-content: center;
+
   &:hover {
     background-color: $gray-200;
   }
 }
-.registration-type { font-size: $font-size-small; color: $color-text-secondary; }
+
+.registration-type {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
 
 // --- Contact Person Cards ---
 .info-pair.full-width {
@@ -599,9 +691,24 @@
   border-radius: $radius-sm;
 
   // Use the same background colors as the month-box statuses
-  &.paid { background-color: $success-100; border: 1px solid $success-500; }
-  &.delayed { background-color: $warning-100; border: 1px solid $warning-500; }
-  &.pending { background-color: $gray-100; border: 1px solid $color-border-default; }
-  &.not-applicable { background-color: $gray-200; border: 1px solid $gray-300; }
+  &.paid {
+    background-color: $success-100;
+    border: 1px solid $success-500;
+  }
+
+  &.delayed {
+    background-color: $warning-100;
+    border: 1px solid $warning-500;
+  }
+
+  &.pending {
+    background-color: $gray-100;
+    border: 1px solid $color-border-default;
+  }
+
+  &.not-applicable {
+    background-color: $gray-200;
+    border: 1px solid $gray-300;
+  }
 }
 

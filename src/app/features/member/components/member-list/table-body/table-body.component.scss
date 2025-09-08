@@ -26,10 +26,9 @@
         font-size: $font-size-small;
         color: $color-text-secondary;
         white-space: nowrap;
-
+        cursor: pointer;
         .sort-icon {
           margin-right: $space-2;
-          cursor: pointer;
         }
       }
     }

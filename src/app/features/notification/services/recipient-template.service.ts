@@ -1,11 +1,11 @@
 import {HttpClient, HttpErrorResponse, HttpParams} from '@angular/common/http';
 import {Observable, throwError} from 'rxjs';
 import {catchError, tap} from 'rxjs/operators';
-import {MessageTemplateModel} from "../../services/models/message-template.model";
-import {environment} from "../../../environments/environment";
-import {ResponseEntityApi} from "../../services/models/response-entity-api";
 import {Injectable} from "@angular/core";
-import {RecipientsTemplateModel} from "../../services/models/recipients-template.model";
+import {ResponseEntityApi} from "../../../core/models/response-entity-api";
+import {MessageTemplateModel} from "../../../core/models/message-template.model";
+import {RecipientsTemplateModel} from "../../../core/models/recipients-template.model";
+import {environment} from "../../../../environments/environment";
 
 @Injectable({
   providedIn: 'root'

@@ -18,12 +18,9 @@
     </tr>
     </thead>
     <tbody>
-    <!-- Loading State -->
     <ng-container *ngIf="loading">
       <tr app-skeleton-loader *ngFor="let row of skeletonRows"></tr>
     </ng-container>
-
-    <!-- Data State -->
     <ng-container *ngIf="!loading && hasMembers">
       <tr *ngFor="let member of members" (click)="navigateToMember(member.id)">
         <td>

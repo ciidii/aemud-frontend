@@ -1,9 +1,10 @@
 import {inject, Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ResponseEntityApi} from "../models/response-entity-api";
-import {environment} from "../../../environments/environment.development";
-import {ClubModel} from "../models/club.model";
+import {ResponseEntityApi} from "../../../core/models/response-entity-api";
+import {ClubModel} from "../../../core/models/club.model";
+import {environment} from "../../../../environments/environment";
+
 
 @Injectable({
   providedIn: 'root'

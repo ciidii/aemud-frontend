@@ -1,9 +1,10 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ResponseEntityApi} from "../models/response-entity-api";
-import {environment} from "../../../environments/environment.development";
-import {CommissionModel} from "../models/commission.model";
+import {ResponseEntityApi} from "../../../core/models/response-entity-api";
+import {CommissionModel} from "../../../core/models/commission.model";
+import {environment} from "../../../../environments/environment";
+
 
 @Injectable({
   providedIn: 'root'

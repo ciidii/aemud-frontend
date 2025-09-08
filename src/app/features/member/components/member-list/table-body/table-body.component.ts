@@ -1,7 +1,6 @@
 import {Component, inject, Input, OnInit} from '@angular/core';
 import {AsyncPipe, NgClass, NgFor, NgIf} from "@angular/common";
 import {MemberStateService} from "../../../services/member.state.service";
-import {TableFiltersComponent} from "../table-filters/table-filters.component";
 import {MemberModel} from "../../../../../core/models/member.model";
 import {map, Observable} from "rxjs";
 import {SkeletonLoaderComponent} from "../../../../../shared/components/skeleton-loader/skeleton-loader.component";
@@ -12,7 +11,6 @@ import {Router} from "@angular/router";
   standalone: true,
   imports: [
     NgIf,
-    TableFiltersComponent,
     NgFor,
     AsyncPipe,
     NgClass,
@@ -25,7 +23,7 @@ export class TableBodyComponent implements OnInit {
   @Input() members: MemberModel[] | null = [];
   @Input() loading: boolean | null = false;
 
-  skeletonRows = Array(10); // For repeating the skeleton loader
+  skeletonRows = Array(10);
   memberStateService = inject(MemberStateService);
   selectedMemberIds$!: Observable<string[]>;
   isAllSelected$!: Observable<boolean>;

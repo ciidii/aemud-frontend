@@ -70,7 +70,6 @@ export class MemberListComponent implements OnInit {
   }
 
   onDeleteConfirmed() {
-    console.log('Deletion confirmed. Logic to be implemented.');
-    this.toggleDeleteModal(); // Close modal after confirmation
+    this.toggleDeleteModal();
   }
 }
