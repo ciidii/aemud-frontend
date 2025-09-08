@@ -8,6 +8,7 @@
   &.sidebar--collapsed {
     grid-template-columns: 5rem 1fr;
   }
+
 }
 
 app-aside-bare {
@@ -31,7 +32,8 @@ app-aside-bare {
 }
 
 .main-content {
-  padding: $space-6;
   background-color: $gray-100;
   overflow-y: auto;
+  padding: 0 ;
+
 }

@@ -1,5 +1,8 @@
 @import 'variables';
-
+:host{
+  position: sticky;
+  bottom: 0;
+}
 .footer-bar {
   display: flex;
   justify-content: space-between;

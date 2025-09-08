@@ -3,9 +3,12 @@
 :host {
   display: block;
   width: 100%;
-  padding: $space-4 $space-6;
   border-bottom: 1px solid $color-border-default;
   background-color: $white;
+  position: sticky;
+  top: 0;
+  padding: $space-4 20rem $space-4 $space-6;
+  z-index: 1000;
 }
 
 .header-container {

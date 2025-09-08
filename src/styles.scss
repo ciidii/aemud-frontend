@@ -43,6 +43,8 @@ body {
   @include text-body-regular;
   background-color: $color-background-body;
   color: $color-text-primary;
+  margin: 0;
+  padding: 0;
 }
 
 // --- Styles de typographie de base ---
