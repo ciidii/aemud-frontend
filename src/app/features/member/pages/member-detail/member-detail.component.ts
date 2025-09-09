@@ -1,5 +1,5 @@
 import {Component, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, CurrencyPipe, JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
+import {AsyncPipe, CurrencyPipe, JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, Location} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberHttpService} from "../../services/member.http.service";
 import {MemberModel} from "../../../../core/models/member.model";
@@ -42,7 +42,7 @@ export class MemberDetailComponent implements OnInit {
   private contributionService = inject(ContributionService);
   private yearOfSessionService = inject(YearOfSessionService);
   private notificationService = inject(NotificationService);
-
+  private location = inject(Location)
   member$!: Observable<MemberModel | undefined>;
   isReregisterModalOpen = false;
   isDeleteModalOpen = false;
@@ -309,5 +309,9 @@ export class MemberDetailComponent implements OnInit {
       return [];
     }
     return Object.keys(obj).map(key => ({ key, value: obj[key] }));
+  }
+
+ goBack(){
+    this.location.back();
   }
 }

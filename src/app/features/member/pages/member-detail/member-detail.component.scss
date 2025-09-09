@@ -21,6 +21,35 @@
   z-index: 10;
 }
 
+.header-left-side {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  color: $color-text-secondary;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: $icon-lg; // Larger icon for a primary back button
+  }
+
+  &:hover {
+    background-color: $gray-100;
+    color: $color-text-primary;
+  }
+}
+
 .header-main-info {
   display: flex;
   align-items: center;

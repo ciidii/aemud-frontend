@@ -6,7 +6,6 @@ import {MemberModel} from "../../../core/models/member.model";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 import {RegistrationModel} from "../../../core/models/RegistrationModel";
-import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -72,7 +71,7 @@ export class MemberHttpService {
     return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(environment.API_URL + `/registration/new-inscription-session`, {params});
   }
 
-  searchMember(keyword: string, criteria: string, filters: any, currentPage: number, pageSize: number): Observable<ResponsePageableApi<Array<MemberModel>>> {
+  searchMember(keyword: string, criteria: string, filters: any, currentPage: number, pageSize: number, sortColumn: string, sortDirection: boolean): Observable<ResponsePageableApi<Array<MemberModel>>> {
     let params = new HttpParams()
       .set("criteria", criteria)
       .set("value", keyword)
@@ -80,7 +79,9 @@ export class MemberHttpService {
       .set("rpp", pageSize)
       .set("club", filters?.club ? filters?.club : "")
       .set("commission", filters?.commission ? filters?.commission : "")
-      .set("sessionIdForRegistration", filters?.year ? filters?.year : "");
+      .set("sessionIdForRegistration", filters?.year ? filters?.year : "")
+      .set("sortColumn", sortColumn)
+      .set("sortDirection", sortDirection);
 
     return this.httpClient.get<ResponsePageableApi<Array<MemberModel>>>(`${environment.API_URL}/members/search`, {params});
   }

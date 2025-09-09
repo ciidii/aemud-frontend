@@ -30,8 +30,6 @@ export class TableFooterComponent {
         this.memberStateService.fetchMembers("", "", null, info.pageIndex + 1, info.pageSize).subscribe();
       }
     });
-    this.memberStateService.selectedMemberIds$.subscribe(selectedMemberIds => {
-    })
   }
 
   previousPage(): void {
@@ -40,7 +38,5 @@ export class TableFooterComponent {
         this.memberStateService.fetchMembers("", "", null, info.pageIndex - 1, info.pageSize).subscribe();
       }
     });
-    this.memberStateService.selectedMemberIds$.subscribe(selectedMemberIds => {
-    })
   }
 }

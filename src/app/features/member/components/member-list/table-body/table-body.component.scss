@@ -28,8 +28,15 @@
         color: $color-text-secondary;
         white-space: nowrap;
         cursor: pointer;
+        transition: color 0.2s ease;
+
         .sort-icon {
           margin-right: $space-2;
+        }
+
+        &.active-sort {
+          color: $primary-600;
+          font-weight: 700;
         }
       }
     }

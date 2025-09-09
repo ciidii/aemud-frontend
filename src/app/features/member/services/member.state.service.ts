@@ -37,10 +37,14 @@ export class MemberStateService {
     totalPages: 0
   });
   private readonly _loading = new BehaviorSubject<boolean>(false);
+  private readonly _sortColumn = new BehaviorSubject<string>('personalInfo.name');
+  private readonly _sortDirection = new BehaviorSubject<SortDirection>('asc');
 
   readonly paginatedMembers$ = this._paginatedMemberSubject.asObservable();
   readonly paginationInfo$ = this._paginationInfoSubject.asObservable();
   readonly loading$ = this._loading.asObservable();
+  readonly sortColumn$ = this._sortColumn.asObservable();
+  readonly sortDirection$ = this._sortDirection.asObservable();
 
   // --- State for selection ---
   private readonly _selectedMemberIds = new BehaviorSubject<string[]>([]);
@@ -50,9 +54,18 @@ export class MemberStateService {
 
 
   // --- Methods for data fetching ---
-  fetchMembers(keyword: string = "", criteria: string = "", filters: any = null, currentPage: number = 1, pageSize: number = 10) {
+  fetchMembers(keyword: string = "", criteria: string = "", filters: any = null, currentPage: number = 1, pageSize: number = 10, clear: boolean = false) {
     this._loading.next(true);
-    return this.memberHttpService.searchMember(keyword, criteria, filters, currentPage, pageSize).pipe(
+    if (clear) {
+      this.clearSelection();
+    }
+
+    const sortColumn = this._sortColumn.getValue();
+    const sortDirection = this._sortDirection.getValue();
+    // Traduction de la direction du tri pour le backend
+    const isAscending = sortDirection === 'asc';
+
+    return this.memberHttpService.searchMember(keyword, criteria, filters, currentPage, pageSize, sortColumn, isAscending).pipe(
       tap(response => {
         this._paginatedMemberSubject.next(response.items);
         this._paginationInfoSubject.next({
@@ -62,9 +75,25 @@ export class MemberStateService {
           totalPages: response.pages
         });
         this._loading.next(false);
-        this.clearSelection(); // Clear selection on new data fetch
       })
     );
+  }
+
+  updateSort(column: string) {
+    const currentSortColumn = this._sortColumn.getValue();
+    const currentSortDirection = this._sortDirection.getValue();
+
+    if (column === currentSortColumn) {
+      // If it's the same column, toggle direction
+      this._sortDirection.next(currentSortDirection === 'asc' ? 'desc' : 'asc');
+    } else {
+      // If it's a new column, set it and default to 'asc'
+      this._sortColumn.next(column);
+      this._sortDirection.next('asc');
+    }
+
+    // Fetch data with new sort parameters
+    this.fetchMembers().subscribe();
   }
 
   // --- Methods for selection ---
@@ -79,13 +108,17 @@ export class MemberStateService {
     }
   }
 
-  toggleSelectAll(memberIds: string[]): void {
-    const currentSelection = this._selectedMemberIds.getValue();
-    if (currentSelection.length === memberIds.length) {
-      this._selectedMemberIds.next([]);
+  toggleSelectAll(pageMemberIds: string[], isPageSelected: boolean): void {
+    const currentIds = new Set(this._selectedMemberIds.getValue());
+
+    if (isPageSelected) {
+      // Si la page est déjà toute sélectionnée, on retire ces membres de la sélection
+      pageMemberIds.forEach(id => currentIds.delete(id));
     } else {
-      this._selectedMemberIds.next(memberIds);
+      // Sinon, on ajoute les membres de cette page à la sélection
+      pageMemberIds.forEach(id => currentIds.add(id));
     }
+    this._selectedMemberIds.next(Array.from(currentIds));
   }
 
   clearSelection(): void {

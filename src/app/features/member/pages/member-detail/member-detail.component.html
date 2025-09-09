@@ -2,14 +2,19 @@
 
   <!-- Header (Fixed) -->
   <div class="detail-header">
-    <div class="header-main-info">
-      <div class="avatar-placeholder">
-        <i class="bi bi-person-fill"></i>
-      </div>
-      <div class="header-text">
-        <h1>{{ member.personalInfo?.firstname }} {{ member.personalInfo?.name }}</h1>
-        <div class="status-badges">
-          <span class="badge bg-success">Membre Actif</span>
+    <div class="header-left-side">
+      <button class="back-button" (click)="goBack()" aria-label="Go back">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-main-info">
+        <div class="avatar-placeholder">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="header-text">
+          <h1>{{ member.personalInfo?.firstname }} {{ member.personalInfo?.name }}</h1>
+          <div class="status-badges">
+            <span class="badge bg-success">Membre Actif</span>
+          </div>
         </div>
       </div>
     </div>

@@ -80,7 +80,7 @@
     position: absolute;
     top: calc(100% + #{$space-2});
     right: 0;
-    z-index: 1100;
+    z-index: 2000;
   }
 
   .notification-icon {

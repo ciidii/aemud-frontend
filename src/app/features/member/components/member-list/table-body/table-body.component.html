@@ -8,9 +8,31 @@
           [checked]="isAllSelected$ | async"
           (change)="toggleSelectAll()">
       </th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Prénom</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Nom</th>
-      <th><i class="bi bi-arrow-down-up sort-icon"></i> Email</th>
+      <th (click)="onSort('personalInfo.firstname')"
+          [ngClass]="{'active-sort': (sortColumn$ | async) === 'personalInfo.firstname'}">
+        <i class="bi sort-icon"
+           [ngClass]="{
+              'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.firstname',
+              'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'asc',
+              'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'desc'
+           }"></i> Prénom
+      </th>
+      <th (click)="onSort('personalInfo.name')" [ngClass]="{'active-sort': (sortColumn$ | async) === 'personalInfo.name'}">
+        <i class="bi sort-icon"
+           [ngClass]="{
+              'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.name',
+              'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.name' && (sortDirection$ | async) === 'asc',
+              'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.name' && (sortDirection$ | async) === 'desc'
+           }"></i> Nom
+      </th>
+      <th (click)="onSort('contactInfo.email')" [ngClass]="{'active-sort': (sortColumn$ | async) === 'contactInfo.email'}">
+        <i class="bi sort-icon"
+           [ngClass]="{
+              'bi-arrow-down-up': (sortColumn$ | async) !== 'contactInfo.email',
+              'bi-arrow-up': (sortColumn$ | async) === 'contactInfo.email' && (sortDirection$ | async) === 'asc',
+              'bi-arrow-down': (sortColumn$ | async) === 'contactInfo.email' && (sortDirection$ | async) === 'desc'
+           }"></i> Email
+      </th>
       <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
       <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
       <th><i class="bi bi-arrow-down-up sort-icon"></i> Inscription Status</th>
