@@ -71,7 +71,7 @@
 
 .user-profile {
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse; // Actions on top, user info below
   padding: $space-2;
   background: $primary-600;
   box-shadow: $shadow-md;
@@ -101,31 +101,6 @@
         font-size: $font-size-small;
         color: rgba(255, 255, 255, 0.6);
       }
-    }
-  }
-
-  .logout-btn {
-    width: 100%; // prend toute la largeur
-    padding: 0.5rem;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    color: $color-text-on-primary;
-    font-size: $font-size-small;
-    cursor: pointer;
-    display: flex;
-    align-items: center;
-    justify-content: center; // icône + texte centrés
-    gap: 0.4rem;
-    border-radius: $radius-sm;
-    transition: background 0.2s, color 0.2s;
-
-    &:hover {
-      background: $primary-400;
-      color: $white;
-    }
-
-    i {
-      font-size: $font-size-small;
     }
   }
 }
@@ -262,5 +237,74 @@ ul {
 
   .nav-body > hr {
     display: block;
+  }
+}
+
+// Styles for Notification Bell
+.user-actions {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-container {
+  position: relative;
+}
+
+app-notification-popover {
+  position: fixed; // Use fixed to break out of the sidebar
+  bottom: $space-4;
+  z-index: 1100;
+
+  // Position based on sidebar collapsed state
+  :host-context(.sidebar--collapsed) & {
+    left: calc(#{$sidebar-collapsed-width} + #{$space-3});
+  }
+  :host-context(:not(.sidebar--collapsed)) & {
+    left: calc(#{$sidebar-expanded-width} + #{$space-3});
+  }
+}
+
+.notification-btn, .logout-btn {
+  padding: 0.5rem;
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: $color-text-on-primary;
+  font-size: $font-size-small;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  border-radius: $radius-sm;
+  transition: background 0.2s, color 0.2s;
+
+  &:hover {
+    background: $primary-400;
+    color: $white;
+  }
+
+  i {
+    font-size: 1.2rem; // Consistent icon size
+  }
+}
+
+.notification-btn {
+  position: relative;
+  .badge {
+    position: absolute;
+    top: -4px;
+    right: -4px;
+    background-color: $danger-500;
+    color: $white;
+    font-size: 1rem;
+    width: 1.6rem;
+    height: 1.6rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    border: 2px solid $primary-600;
   }
 }
