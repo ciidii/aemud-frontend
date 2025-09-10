@@ -1,0 +1,28 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+// Importation des styles de formulaire partagés
+@import "../personal-info-form/personal-info-form.component.scss";
+
+.engagements-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.form-select-multiple {
+  @extend .form-select; // Hérite des styles du select simple
+  height: auto;
+
+  padding: $space-2; // Ajustement du padding pour les listes
+
+  option {
+    padding: $space-2;
+    border-radius: $radius-sm;
+
+    &:checked {
+      background-color: rgba($primary-500, 0.2);
+      font-weight: $font-weight-bold;
+    }
+  }
+}

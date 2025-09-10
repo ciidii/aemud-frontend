@@ -1,0 +1,81 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+// Importation des styles de formulaire partagés
+@import "../personal-info-form/personal-info-form.component.scss";
+
+.contact-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.section-title {
+  @include text-heading-5;
+  color: $color-text-primary;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $color-border-default;
+  margin-bottom: $space-6;
+}
+
+.address-grid {
+  .full-width {
+    grid-column: 1 / -1; // Le champ prend toute la largeur
+  }
+}
+
+.emergency-contacts-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-4; // Espace avant la première carte
+}
+
+.button-add {
+  @include text-button;
+  background-color: $primary-100;
+  color: $primary-700;
+  border: none;
+  border-radius: $radius-md;
+  padding: $space-2 $space-3;
+  cursor: pointer;
+  font-weight: $font-weight-bold;
+
+  &:hover {
+    background-color: $primary-200;
+  }
+}
+
+.person-card {
+  background-color: $gray-100;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+  padding: $space-6;
+  margin-bottom: $space-6;
+
+  .person-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-6;
+
+    h4 {
+      @include text-heading-6;
+      margin: 0;
+    }
+  }
+}
+
+.button-remove {
+  background: none;
+  border: none;
+  color: $danger-500;
+  cursor: pointer;
+  font-weight: $font-weight-bold;
+  padding: $space-1 $space-2;
+  border-radius: $radius-sm;
+
+  &:hover {
+    background-color: $danger-100;
+  }
+}

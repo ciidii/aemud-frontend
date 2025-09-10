@@ -1,0 +1,34 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+.form-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: $space-6;
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+}
+
+.form-label {
+  @include text-label;
+  color: $color-text-secondary;
+  margin-bottom: $space-2;
+}
+
+.form-input, .form-select {
+  @include text-body-regular;
+  padding: $form-input-padding-y $form-input-padding-x;
+  background-color: $form-input-background;
+  border: 1px solid $form-input-border-color;
+  border-radius: $form-input-border-radius;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: $color-border-focus;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.2);
+  }
+}

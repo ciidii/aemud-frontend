@@ -1,0 +1,82 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+// Importation des styles de formulaire partagés
+@import "../personal-info-form/personal-info-form.component.scss";
+@import "../contact-info-form/contact-info-form.component.scss"; // Pour les styles des cartes et boutons
+
+.knowledge-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.section-title {
+  @include text-heading-5;
+  color: $color-text-primary;
+  margin-bottom: $space-2; // Réduction de la marge pour l'en-tête dynamique
+}
+
+.form-grid-checkbox {
+  display: flex;
+  gap: $space-8;
+  margin-bottom: $space-6;
+}
+
+.form-field-checkbox {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.form-checkbox {
+  width: 1.8rem;
+  height: 1.8rem;
+  accent-color: $primary-500;
+}
+
+.form-label-checkbox {
+  @include text-body-regular;
+  color: $color-text-secondary;
+}
+
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+  margin-bottom: $space-6;
+}
+
+.form-field-radio {
+  display: flex;
+  align-items: center;
+  background-color: $gray-100;
+  padding: $space-3 $space-4;
+  border-radius: $radius-md;
+  border: 1px solid $color-border-default;
+}
+
+.form-radio {
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-right: $space-3;
+  accent-color: $primary-500;
+}
+
+.form-label-radio {
+  @include text-body-regular;
+  color: $color-text-primary;
+}
+
+.dynamic-section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $color-border-default;
+  margin-bottom: $space-6;
+}
+
+.item-card {
+  @extend .person-card; // Réutilisation du style de la carte de contact
+}

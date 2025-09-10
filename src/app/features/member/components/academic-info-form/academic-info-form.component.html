@@ -1,0 +1,68 @@
+<div class="academic-form-container" [formGroup]="academicInfoForm">
+
+  <!-- Section Cursus Actuel -->
+  <h3 class="section-title">Cursus Actuel</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="institutionName" class="form-label">Établissement</label>
+      <input id="institutionName" type="text" formControlName="institutionName" class="form-input">
+      <app-validation-message [control]="institutionName"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label for="studiesDomain" class="form-label">Domaine d'études</label>
+      <input id="studiesDomain" type="text" formControlName="studiesDomain" class="form-input">
+      <app-validation-message [control]="studiesDomain"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label for="studiesLevel" class="form-label">Niveau d'études</label>
+      <input id="studiesLevel" type="text" formControlName="studiesLevel" class="form-input">
+      <app-validation-message [control]="studiesLevel"></app-validation-message>
+    </div>
+  </div>
+
+  <!-- Section Baccalauréat -->
+  <h3 class="section-title">Informations sur le Baccalauréat</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label for="yearOfBac" class="form-label">Année d'obtention</label>
+      <input id="yearOfBac" type="text" formControlName="yearOfBac" class="form-input">
+      <app-validation-message [control]="yearOfBac"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label for="bacSeries" class="form-label">Série</label>
+      <input id="bacSeries" type="text" formControlName="bacSeries" class="form-input">
+      <app-validation-message [control]="bacSeries"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label for="bacMention" class="form-label">Mention</label>
+      <input id="bacMention" type="text" formControlName="bacMention" class="form-input">
+      <app-validation-message [control]="bacMention"></app-validation-message>
+    </div>
+  </div>
+
+  <!-- Section Historique AEMUD et Autres -->
+  <h3 class="section-title">Historique et Implication</h3>
+  <div class="form-grid other-info-grid">
+    <div class="form-field">
+      <label for="legacyInstitution" class="form-label">Ancien établissement (si transféré)</label>
+      <input id="legacyInstitution" type="text" formControlName="legacyInstitution" class="form-input">
+    </div>
+    <div class="form-field">
+      <label for="aemudCourses" class="form-label">Cours AEMUD déjà suivis</label>
+      <input id="aemudCourses" type="text" formControlName="aemudCourses" class="form-input">
+    </div>
+    <div class="form-field">
+      <label for="otherCourses" class="form-label">Autres formations pertinentes</label>
+      <input id="otherCourses" type="text" formControlName="otherCourses" class="form-input">
+    </div>
+    <div class="form-field">
+      <label for="participatedActivity" class="form-label">Activités AEMUD auxquelles vous avez participé</label>
+      <input id="participatedActivity" type="text" formControlName="participatedActivity" class="form-input">
+    </div>
+    <div class="form-field full-width">
+      <label for="politicOrganisation" class="form-label">Avez-vous déjà milité dans une organisation politique ?</label>
+      <input id="politicOrganisation" type="text" formControlName="politicOrganisation" class="form-input">
+    </div>
+  </div>
+
+</div>

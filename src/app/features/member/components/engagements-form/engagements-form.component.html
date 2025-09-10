@@ -1,0 +1,28 @@
+<div [formGroup]="engagementsForm" class="engagements-form-container">
+
+  <!-- Section Bourse -->
+  <div class="form-field">
+    <label for="bourse" class="form-label">Bourse / Allocation</label>
+    <select id="bourse" formControlName="bourse" class="form-select">
+      <option [ngValue]="null">Aucune</option>
+      <option *ngFor="let bourse of bourses" [ngValue]="bourse.bourseId">{{ bourse.lebelle }}</option>
+    </select>
+  </div>
+
+  <!-- Section Clubs -->
+  <div class="form-field">
+    <label for="clubs" class="form-label">Clubs (maintenez Ctrl/Cmd pour sélectionner plusieurs)</label>
+    <select id="clubs" multiple formControlName="clubs" class="form-select-multiple">
+      <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
+    </select>
+  </div>
+
+  <!-- Section Commissions -->
+  <div class="form-field">
+    <label for="commissions" class="form-label">Commissions (maintenez Ctrl/Cmd pour sélectionner plusieurs)</label>
+    <select id="commissions" multiple formControlName="commissions" class="form-select-multiple">
+      <option *ngFor="let commission of commissions" [value]="commission.id">{{ commission.name }}</option>
+    </select>
+  </div>
+
+</div>

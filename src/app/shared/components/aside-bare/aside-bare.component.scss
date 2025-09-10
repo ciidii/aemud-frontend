@@ -259,7 +259,7 @@ app-notification-popover {
 
   // Position based on sidebar collapsed state
   :host-context(.sidebar--collapsed) & {
-    left: calc(#{$sidebar-collapsed-width} + #{$space-3});
+    left: calc(#{$sidebar-collapsed-width} + #{$space-2});
   }
   :host-context(:not(.sidebar--collapsed)) & {
     left: calc(#{$sidebar-expanded-width} + #{$space-3});

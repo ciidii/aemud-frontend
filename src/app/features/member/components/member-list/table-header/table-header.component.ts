@@ -1,8 +1,10 @@
-import { Component, ElementRef, EventEmitter, HostListener, inject, Output } from '@angular/core';
-import { NgIf } from '@angular/common';
+import {Component, ElementRef, EventEmitter, HostListener, inject, Output} from '@angular/core';
+import {NgIf} from '@angular/common';
 import {
   NotificationPopoverComponent
 } from "../../../../../shared/components/notification-popover/notification-popover.component";
+import {Router} from "@angular/router";
+
 @Component({
   selector: 'app-table-header',
   standalone: true,
@@ -18,6 +20,7 @@ export class TableHeaderComponent {
 
   isPopoverOpen = false;
   private elementRef = inject(ElementRef);
+  private router = inject(Router);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
@@ -29,5 +32,9 @@ export class TableHeaderComponent {
   togglePopover(event: Event): void {
     event.stopPropagation();
     this.isPopoverOpen = !this.isPopoverOpen;
+  }
+
+  onAddMember() {
+    this.router.navigateByUrl("/members/register-form");
   }
 }

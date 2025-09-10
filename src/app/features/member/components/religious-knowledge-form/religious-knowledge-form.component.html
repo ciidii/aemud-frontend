@@ -1,0 +1,81 @@
+<div [formGroup]="religiousKnowledgeForm" class="knowledge-form-container">
+
+  <!-- Section Arabe & Coran -->
+  <h3 class="section-title">Niveau de langue Arabe</h3>
+  <div class="radio-group" role="radiogroup" formControlName="arabicProficiency">
+    <div *ngFor="let level of arabicProficiencyLevels" class="form-field-radio">
+      <input [id]="'prof-' + level" type="radio" [value]="level" name="arabicProficiency" class="form-radio">
+      <label [for]="'prof-' + level" class="form-label-radio">{{ proficiencyLabels[level] }}</label>
+    </div>
+  </div>
+
+  <h3 class="section-title">Coran</h3>
+  <div class="form-field">
+    <label for="coranLevel" class="form-label">Niveau de mémorisation</label>
+    <select id="coranLevel" formControlName="coranLevel" class="form-select">
+      <option value="" disabled>Sélectionner un niveau...</option>
+      <option *ngFor="let level of coranLevels" [value]="level">{{ level }}</option>
+    </select>
+  </div>
+
+  <!-- Section Aqida -->
+  <div class="dynamic-section">
+    <div class="dynamic-section-header">
+      <h3 class="section-title">Aqida (Croyance)</h3>
+      <button type="button" (click)="addAqida()" class="button-add">+ Ajouter une étude</button>
+    </div>
+    <div formArrayName="aqida">
+      <div *ngFor="let group of aqida.controls; let i = index" [formGroupName]="i" class="item-card">
+        <div class="item-card-header">
+          <h4>Étude #{{ i + 1 }}</h4>
+          <button type="button" (click)="removeAqida(i)" class="button-remove">Retirer</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label [for]="'aqidaBook-' + i" class="form-label">Livre étudié</label>
+            <input [id]="'aqidaBook-' + i" type="text" formControlName="bookName" class="form-input">
+          </div>
+          <div class="form-field">
+            <label [for]="'aqidaTeacher-' + i" class="form-label">Professeur</label>
+            <input [id]="'aqidaTeacher-' + i" type="text" formControlName="teacherName" class="form-input">
+          </div>
+          <div class="form-field">
+            <label [for]="'aqidaPlace-' + i" class="form-label">Lieu d'apprentissage</label>
+            <input [id]="'aqidaPlace-' + i" type="text" formControlName="learningPlace" class="form-input">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section Fiqh -->
+  <div class="dynamic-section">
+    <div class="dynamic-section-header">
+      <h3 class="section-title">Fiqh (Jurisprudence)</h3>
+      <button type="button" (click)="addFiqh()" class="button-add">+ Ajouter une étude</button>
+    </div>
+    <div formArrayName="fiqh">
+      <div *ngFor="let group of fiqh.controls; let i = index" [formGroupName]="i" class="item-card">
+        <div class="item-card-header">
+          <h4>Étude #{{ i + 1 }}</h4>
+          <button type="button" (click)="removeFiqh(i)" class="button-remove">Retirer</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label [for]="'fiqhBook-' + i" class="form-label">Livre étudié</label>
+            <input [id]="'fiqhBook-' + i" type="text" formControlName="bookName" class="form-input">
+          </div>
+          <div class="form-field">
+            <label [for]="'fiqhTeacher-' + i" class="form-label">Professeur</label>
+            <input [id]="'fiqhTeacher-' + i" type="text" formControlName="teacherName" class="form-input">
+          </div>
+          <div class="form-field">
+            <label [for]="'fiqhPlace-' + i" class="form-label">Lieu d'apprentissage</label>
+            <input [id]="'fiqhPlace-' + i" type="text" formControlName="learningPlace" class="form-input">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

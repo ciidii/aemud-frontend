@@ -1,0 +1,25 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+// Importation des styles de formulaire partagés
+@import "../personal-info-form/personal-info-form.component.scss";
+
+.academic-form-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-8;
+}
+
+.section-title {
+  @include text-heading-5;
+  color: $color-text-primary;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $color-border-default;
+  margin-bottom: $space-6;
+}
+
+.other-info-grid {
+  .full-width {
+    grid-column: 1 / -1;
+  }
+}
