@@ -1,5 +1,5 @@
 import { CommonModule } from "@angular/common";
-import {ArabicProficiency, CORAN_LEVEL} from "../../../../core/models/member-data.model";
+import {ArabicProficiency, CORAN_LEVEL} from "../../../../../core/models/member-data.model";
 import {Component, forwardRef, OnInit} from "@angular/core";
 import {
   ControlValueAccessor, FormArray,
@@ -9,11 +9,12 @@ import {
   ReactiveFormsModule,
   Validators
 } from "@angular/forms";
+import {ValidationMessageComponent} from "../../../../../shared/components/validation-message/validation-message.component";
 
 @Component({
   selector: 'app-religious-knowledge-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
   templateUrl: './religious-knowledge-form.component.html',
   styleUrls: ['./religious-knowledge-form.component.scss'],
   providers: [
@@ -51,6 +52,8 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
   }
 
   // --- Getters pour un accès facile dans le template ---
+  get arabicProficiency() { return this.religiousKnowledgeForm.get('arabicProficiency'); }
+
   get aqida(): FormArray {
     return this.religiousKnowledgeForm.get('aqida') as FormArray;
   }
@@ -59,11 +62,15 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
     return this.religiousKnowledgeForm.get('fiqh') as FormArray;
   }
 
+  getKnowledgeControl(formArrayName: 'aqida' | 'fiqh', index: number, controlName: string) {
+    return (this.religiousKnowledgeForm.get(formArrayName) as FormArray).at(index).get(controlName);
+  }
+
   // --- Méthodes pour créer et manipuler les FormArray ---
   private newKnowledgeGroup(): FormGroup {
     return this.fb.group({
       acquired: [true], // Par défaut à true quand on ajoute un bloc
-      bookName: [''],
+      bookName: ['', Validators.required],
       teacherName: [''],
       learningPlace: ['']
     });
@@ -102,4 +109,3 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
     isDisabled ? this.religiousKnowledgeForm.disable() : this.religiousKnowledgeForm.enable();
   }
 }
-

@@ -8,58 +8,38 @@ Ce document détaille les étapes de développement pour la création du nouveau
 -   [x] **Choix d'Architecture :** Adoption d'une stratégie de "Composition de Formulaires Réactifs" avec un composant parent "intelligent" et des composants enfants "réutilisables".
 -   [x] **Création de la Feuille de Route :** Rédaction de ce document pour suivre la progression.
 
-## Phase 1 : Développement des Composants de Base
+## Phase 1 : Développement des Composants de Base (Terminée)
 
 L'objectif est de créer la structure de chaque composant de formulaire, d'implémenter `ControlValueAccessor`, et de les intégrer dans le composant parent.
 
--   [ ] **1. Créer le Composant Parent `MemberAddComponent` :**
-    -   [ ] Générer le composant `features/member/components/member-add/member-add.component.ts`.
-    -   [ ] Mettre en place le `mainForm` `FormGroup` qui orchestrera les sous-formulaires.
-    -   [ ] Ajouter la route nécessaire pour accéder à ce nouveau formulaire.
+-   [x] **1. Créer le Composant Parent `MemberAddComponent`**
+-   [x] **2. Développer `PersonalInfoFormComponent`**
+-   [x] **3. Développer `ContactInfoFormComponent`**
+-   [x] **4. Développer `AcademicInfoFormComponent`**
+-   [x] **5. Développer `ReligiousKnowledgeFormComponent`**
+-   [x] **6. Développer `EngagementsFormComponent`**
 
--   [ ] **2. Développer `PersonalInfoFormComponent` :**
-    -   [ ] Créer le composant.
-    -   [ ] Implémenter `ControlValueAccessor`.
-    -   [ ] Définir le `FormGroup` interne pour les informations personnelles.
-    -   [ ] Créer le template HTML avec les champs correspondants.
-    -   [ ] Lier le composant au parent via `formControlName="personalInfo"`.
+## Phase 2 : Logique du Wizard et Fonctionnalités Avancées (Terminée)
 
--   [ ] **3. Développer `ContactInfoFormComponent` :**
-    -   [ ] Créer le composant.
-    -   [ ] Implémenter `ControlValueAccessor`.
-    -   [ ] Définir le `FormGroup` interne (il contiendra un `FormArray` pour les personnes à contacter).
-    -   [ ] Créer le template HTML.
-    -   [ ] Lier le composant au parent via `formControlName="contactInfo"`.
+-   [x] **1. Mettre en place la navigation du Wizard :**
+    -   [x] Dans `MemberAddComponent`, gérer l'état de l'étape actuelle (`currentStep`).
+    -   [x] Ajouter les boutons "Suivant" / "Précédent" et la logique pour afficher/cacher les composants enfants.
+    -   [x] Ajouter une barre de progression visuelle.
 
--   [ ] **4. Développer `AcademicInfoFormComponent` :**
-    -   [ ] Répéter le processus : Création, `ControlValueAccessor`, `FormGroup`, Template, Liaison (`formControlName="academicInfo"`).
+-   [x] **2. Implémenter les `FormArray` :**
+    -   [x] Dans `ContactInfoFormComponent` et `ReligiousKnowledgeFormComponent`.
 
--   [ ] **5. Développer `ReligiousKnowledgeFormComponent` :**
-    -   [ ] Répéter le processus : Création, `ControlValueAccessor`, `FormGroup`, Template, Liaison (`formControlName="religiousKnowledge"`).
+-   [x] **3. Implémenter la logique conditionnelle :**
+    -   [x] Dans `ReligiousKnowledgeFormComponent`.
 
--   [ ] **6. Développer `EngagementsFormComponent` :**
-    -   [ ] Répéter le processus : Création, `ControlValueAccessor`, `FormGroup`, Template, Liaison (`formControlName="engagements"`).
+-   [x] **4. Validation et Messages d'Erreur :**
+    -   [x] Création et intégration d'un `ValidationMessageComponent` réutilisable.
+    -   [x] Ajout des validateurs et des messages d'erreur sur tous les composants du formulaire.
 
-## Phase 2 : Logique du Wizard et Fonctionnalités Avancées
-
--   [ ] **1. Mettre en place la navigation du Wizard :**
-    -   [ ] Dans `MemberAddComponent`, gérer l'état de l'étape actuelle (`currentStep`).
-    -   [ ] Ajouter les boutons "Suivant" / "Précédent" et la logique pour afficher/cacher les composants enfants.
-    -   [ ] Ajouter une barre de progression visuelle.
-
--   [ ] **2. Implémenter les `FormArray` :**
-    -   [ ] Dans `ContactInfoFormComponent`, ajouter la logique pour ajouter/supprimer dynamiquement des formulaires pour les "personnes à contacter".
-
--   [ ] **3. Implémenter la logique conditionnelle :**
-    -   [ ] Dans `ReligiousKnowledgeFormComponent`, afficher/cacher les champs de détails en fonction de la valeur de la case à cocher `acquired`.
-
--   [ ] **4. Validation et Messages d'Erreur :**
-    -   [ ] Ajouter des validateurs robustes à tous les champs.
-    -   [ ] Afficher des messages d'erreur clairs et conviviaux pour l'utilisateur.
-
-## Phase 3 : Intégration et Finalisation
+## Phase 3 : Intégration et Finalisation (À FAIRE)
 
 -   [ ] **1. Logique de Soumission :**
+    -   [ ] Remplacer les données Mock pour les bourses, clubs, commissions par des appels de service réels.
     -   [ ] Implémenter la méthode `onSubmit()` dans `MemberAddComponent`.
     -   [ ] S'assurer que la méthode `mainForm.getRawValue()` produit un objet conforme au modèle `MemberDataResponse`.
     -   [ ] Appeler le service `MemberHttpService` pour envoyer les données à l'API.

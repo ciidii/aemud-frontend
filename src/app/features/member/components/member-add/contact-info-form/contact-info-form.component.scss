@@ -1,8 +1,8 @@
-@import '../../../../../assets/scss/variables';
-@import '../../../../../assets/scss/typography';
+@import '../../../../../../assets/scss/variables';
+@import '../../../../../../assets/scss/typography';
 
 // Importation des styles de formulaire partagés
-@import "../personal-info-form/personal-info-form.component.scss";
+@import "../personal-info-form/personal-info-form.component";
 
 .contact-form-container {
   display: flex;

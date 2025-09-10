@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
-import {PersonalInfoFormComponent} from "../personal-info-form/personal-info-form.component";
-import {ContactInfoFormComponent} from "../contact-info-form/contact-info-form.component";
-import {AcademicInfoFormComponent} from "../academic-info-form/academic-info-form.component";
-import {ReligiousKnowledgeFormComponent} from "../religious-knowledge-form/religious-knowledge-form.component";
-import {EngagementsFormComponent} from "../engagements-form/engagements-form.component";
+import {PersonalInfoFormComponent} from "./personal-info-form/personal-info-form.component";
+import {ContactInfoFormComponent} from "./contact-info-form/contact-info-form.component";
+import {AcademicInfoFormComponent} from "./academic-info-form/academic-info-form.component";
+import {ReligiousKnowledgeFormComponent} from "./religious-knowledge-form/religious-knowledge-form.component";
+import {EngagementsFormComponent} from "./engagements-form/engagements-form.component";
 import {Bourse, Club, Commission} from "../../../../core/models/member-data.model";
 
 @Component({

@@ -5,7 +5,7 @@ import {
 import { CommonModule } from "@angular/common";
 import {
   ValidationMessageComponent
-} from "../../../../shared/components/validation-message/validation-message.component";
+} from "../../../../../shared/components/validation-message/validation-message.component";
 
 @Component({
   selector: 'app-academic-info-form',

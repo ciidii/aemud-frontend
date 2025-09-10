@@ -4,9 +4,10 @@
   <div class="form-field">
     <label for="bourse" class="form-label">Bourse / Allocation</label>
     <select id="bourse" formControlName="bourse" class="form-select">
-      <option [ngValue]="null">Aucune</option>
+      <option [ngValue]="null">Sélectionner...</option>
       <option *ngFor="let bourse of bourses" [ngValue]="bourse.bourseId">{{ bourse.lebelle }}</option>
     </select>
+    <app-validation-message [control]="bourse"></app-validation-message>
   </div>
 
   <!-- Section Clubs -->
@@ -15,6 +16,7 @@
     <select id="clubs" multiple formControlName="clubs" class="form-select-multiple">
       <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
     </select>
+    <app-validation-message [control]="clubs_"></app-validation-message>
   </div>
 
   <!-- Section Commissions -->
@@ -23,6 +25,6 @@
     <select id="commissions" multiple formControlName="commissions" class="form-select-multiple">
       <option *ngFor="let commission of commissions" [value]="commission.id">{{ commission.name }}</option>
     </select>
+    <app-validation-message [control]="commissions_"></app-validation-message>
   </div>
-
 </div>

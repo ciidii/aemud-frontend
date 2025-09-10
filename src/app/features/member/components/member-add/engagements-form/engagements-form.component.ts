@@ -1,14 +1,15 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule
+  ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators
 } from "@angular/forms";
 import {CommonModule} from "@angular/common";
-import {Bourse, Club, Commission} from "../../../../core/models/member-data.model";
+import {Bourse, Club, Commission} from "../../../../../core/models/member-data.model";
+import {ValidationMessageComponent} from "../../../../../shared/components/validation-message/validation-message.component";
 
 @Component({
   selector: 'app-engagements-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
   templateUrl: './engagements-form.component.html',
   styleUrls: ['./engagements-form.component.scss'],
   providers: [
@@ -31,19 +32,22 @@ export class EngagementsFormComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this.engagementsForm = this.fb.group({
-      bourse: [null],
-      clubs: [[]], // Le formControl va maintenant contenir directement le tableau d'IDs
-      commissions: [[]] // Idem pour les commissions
+      bourse: [null, Validators.required],
+      clubs: [[]],
+      commissions: [[]]
     });
   }
 
+  // Getters for easy access in template
+  get bourse() { return this.engagementsForm.get('bourse'); }
+  get clubs_() { return this.engagementsForm.get('clubs'); }
+  get commissions_() { return this.engagementsForm.get('commissions'); }
+
   writeValue(val: any): void {
-    // La valeur peut être patchée directement si elle correspond à la structure
     val && this.engagementsForm.patchValue(val, { emitEvent: false });
   }
 
   registerOnChange(fn: any): void {
-    // La valeur du formulaire est maintenant directement ce dont le parent a besoin
     this.engagementsForm.valueChanges.subscribe(fn);
   }
 

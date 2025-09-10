@@ -8,6 +8,7 @@
       <label [for]="'prof-' + level" class="form-label-radio">{{ proficiencyLabels[level] }}</label>
     </div>
   </div>
+  <app-validation-message [control]="arabicProficiency"></app-validation-message>
 
   <h3 class="section-title">Coran</h3>
   <div class="form-field">
@@ -34,6 +35,7 @@
           <div class="form-field">
             <label [for]="'aqidaBook-' + i" class="form-label">Livre étudié</label>
             <input [id]="'aqidaBook-' + i" type="text" formControlName="bookName" class="form-input">
+            <app-validation-message [control]="getKnowledgeControl('aqida', i, 'bookName')"></app-validation-message>
           </div>
           <div class="form-field">
             <label [for]="'aqidaTeacher-' + i" class="form-label">Professeur</label>
@@ -64,6 +66,7 @@
           <div class="form-field">
             <label [for]="'fiqhBook-' + i" class="form-label">Livre étudié</label>
             <input [id]="'fiqhBook-' + i" type="text" formControlName="bookName" class="form-input">
+            <app-validation-message [control]="getKnowledgeControl('fiqh', i, 'bookName')"></app-validation-message>
           </div>
           <div class="form-field">
             <label [for]="'fiqhTeacher-' + i" class="form-label">Professeur</label>
