@@ -17,7 +17,7 @@ export interface PersonalInfo {
   firstname: string;
   nationality: string;
   gender: string;
-  birthday: string; // LocalDate is string in JSON
+  birthday: number[]; // LocalDate is string in JSON
   maritalStatus: MaritalStatus;
 }
 

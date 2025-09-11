@@ -10,8 +10,8 @@
         <div class="avatar-placeholder">
           <i class="bi bi-person-fill"></i>
         </div>
-        <div class="header-text">
-          <h1>{{ member.personalInfo?.firstname }} {{ member.personalInfo?.name }}</h1>
+        <div class="header-text" *ngIf="member.personalInfo">
+          <h1>{{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h1>
           <div class="status-badges">
             <span class="badge bg-success">Membre Actif</span>
           </div>
@@ -39,91 +39,214 @@
     <!-- Left Column: Main Info (Scrollable) -->
     <div class="main-content-col">
 
-      <!-- Permanent Info Card: Personal -->
-      <div class="permanent-info-card">
+      <!-- Personal Info Card -->
+      <div class="permanent-info-card" *ngIf="member.personalInfo as personalInfo">
         <div class="card-header">
           <h5>Informations Personnelles</h5>
           <button class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
-          <div class="info-pair" *ngFor="let item of objectToArray(member.personalInfo)">
-            <span class="info-key">{{ item.key | formatKey }}</span>
-            <span class="info-value">
-<span *ngIf="item.key === 'birthday'">
-  {{ item.value | toDate | date:'d MMMM yyyy' }}
-</span>
-
-<ng-container *ngIf="item.key === 'maritalStatus'">
-  <span *ngIf="item.value === 'SINGLE'">Célibataire</span>
-  <span *ngIf="item.value === 'MARRIED'">Marié(e)</span>
-  <span *ngIf="item.value !== 'SINGLE' && item.value !== 'MARRIED'">{{ item.value }}</span>
-</ng-container>
-
-<span *ngIf="item.value === true || item.value === false">
-  <i class="bi"
-     [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
-</span>
-
-<span *ngIf="item.key !== 'birthday' && item.key !== 'maritalStatus' && !(item.value === true || item.value === false)">
-  {{ item.value }}
-</span>
-
-            </span>
+          <div class="info-pair">
+            <span class="info-key">Nom complet</span>
+            <span class="info-value">{{ personalInfo.firstname }} {{ personalInfo.name }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Nationalité</span>
+            <span class="info-value">{{ personalInfo.nationality }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Genre</span>
+            <span class="info-value">{{ personalInfo.gender }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Date de naissance</span>
+            <span class="info-value">{{ personalInfo.birthday | toDate | date:'d MMMM yyyy' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Statut Marital</span>
+            <span class="info-value">{{ personalInfo.maritalStatus }}</span>
           </div>
         </div>
       </div>
 
-      <!-- Permanent Info Card: Contact -->
-      <div class="permanent-info-card">
+      <!-- Contact Info Card -->
+      <div class="permanent-info-card" *ngIf="member.contactInfo as contactInfo">
         <div class="card-header">
           <h5>Informations de Contact</h5>
           <button class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
-          <ng-container *ngFor="let item of objectToArray(member.contactInfo)">
-
-            <!-- Special Case for PersonToCalls Array -->
-            <ng-container *ngIf="item.key === 'personToCalls' && item.value.length > 0">
-              <div class="info-pair full-width">
-                <span class="info-key">{{ item.key | formatKey }}</span>
-                <div class="contact-list">
-                  <div class="contact-card" *ngFor="let contact of item.value">
-                    <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
-                    <div class="contact-relation">{{ contact.relationship }}</div>
-                    <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
-                      <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
-                    </a>
-                  </div>
+          <div class="info-pair">
+            <span class="info-key">Numéro de téléphone</span>
+            <span class="info-value"><a
+              [href]="'tel:' + contactInfo.numberPhone">{{ contactInfo.numberPhone }}</a></span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Email</span>
+            <span class="info-value"><a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a></span>
+          </div>
+          <!-- PersonToCalls -->
+          <ng-container *ngIf="contactInfo.personToCalls.length > 0">
+            <div class="info-pair full-width">
+              <span class="info-key">Personnes à contacter</span>
+              <div class="contact-list">
+                <div class="contact-card" *ngFor="let contact of contactInfo.personToCalls">
+                  <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
+                  <div class="contact-relation">{{ contact.relationship }}</div>
+                  <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
+                    <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
+                  </a>
                 </div>
               </div>
-            </ng-container>
-
-            <!-- Default Case for other key-value pairs -->
-            <ng-container *ngIf="item.key !== 'personToCalls'">
-              <div class="info-pair">
-                <span class="info-key">{{ item.key | formatKey }}</span>
-                <span class="info-value">
-                  <ng-container [ngSwitch]="true">
-                    <a *ngSwitchCase="item.key === 'email'" [href]="'mailto:' + item.value">{{ item.value }}</a>
-                    <a *ngSwitchCase="item.key === 'numberPhone'" [href]="'tel:' + item.value">{{ item.value }}</a>
-                    <span *ngSwitchDefault>{{ item.value }}</span>
-                  </ng-container>
-                </span>
-              </div>
-            </ng-container>
-
+            </div>
           </ng-container>
         </div>
       </div>
 
-      <!-- Collapsible sections for other info -->
-      <app-info-section *ngIf="member.academicInfo?.institutionName" title="Informations Académiques"
-                        [data]="member.academicInfo"></app-info-section>
-      <app-info-section *ngIf="member.membershipInfo?.legacyInstitution" title="Informations d'Adhésion Complémentaires"
-                        [data]="member.membershipInfo"></app-info-section>
-      <app-info-section *ngIf="member.addressInfo?.addressInDakar" title="Adresse"
-                        [data]="member.addressInfo"></app-info-section>
-      <app-info-section *ngIf="member.bourse?.bourseId" title="Bourse" [data]="member.bourse"></app-info-section>
+      <!-- Academic & Membership Info Card -->
+      <div class="permanent-info-card" *ngIf="member.academicInfo || member.membershipInfo">
+        <div class="card-header">
+          <h5>Informations Académiques & Adhésion</h5>
+          <button class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <ng-container *ngIf="member.academicInfo as academicInfo">
+            <div class="info-pair"><span class="info-key">Établissement</span><span
+              class="info-value">{{ academicInfo.institutionName }}</span></div>
+            <div class="info-pair"><span class="info-key">Domaine d'études</span><span
+              class="info-value">{{ academicInfo.studiesDomain }}</span></div>
+            <div class="info-pair"><span class="info-key">Niveau d'études</span><span
+              class="info-value">{{ academicInfo.studiesLevel }}</span></div>
+          </ng-container>
+          <ng-container *ngIf="member.membershipInfo as membershipInfo">
+            <div class="info-pair"><span class="info-key">Établissement d'origine</span><span
+              class="info-value">{{ membershipInfo.legacyInstitution }}</span></div>
+            <div class="info-pair"><span class="info-key">Série du BAC</span><span
+              class="info-value">{{ membershipInfo.bacSeries }}</span></div>
+            <div class="info-pair"><span class="info-key">Mention du BAC</span><span
+              class="info-value">{{ membershipInfo.bacMention }}</span></div>
+            <div class="info-pair"><span class="info-key">Année du BAC</span><span
+              class="info-value">{{ membershipInfo.yearOfBac }}</span></div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Engagements Card -->
+      <div class="permanent-info-card">
+        <div class="card-header">
+          <h5>Engagements Associatifs</h5>
+          <button class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body">
+          <div class="info-pair">
+            <span class="info-key">Clubs</span>
+            <div class="info-value tag-list" *ngIf="member.clubs && member.clubs.length > 0; else noClubs">
+              <span class="tag" *ngFor="let club of member.clubs">{{ club.name }}</span>
+            </div>
+            <ng-template #noClubs><span class="info-value text-muted">Aucun club</span></ng-template>
+          </div>
+          <div class="info-pair mt-4">
+            <span class="info-key">Commissions</span>
+            <div class="info-value tag-list"
+                 *ngIf="member.commissions && member.commissions.length > 0; else noCommissions">
+              <span class="tag" *ngFor="let commission of member.commissions">{{ commission.name }}</span>
+            </div>
+            <ng-template #noCommissions><span class="info-value text-muted">Aucune commission</span></ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Religious Knowledge Card -->
+      <div class="permanent-info-card" *ngIf="member.religiousKnowledge as religiousKnowledge">
+        <div class="card-header">
+          <h5>Connaissances Religieuses</h5>
+          <button class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair"><span class="info-key">Niveau de Coran</span><span
+            class="info-value">{{ religiousKnowledge.coranLevel }}</span></div>
+          <div class="info-pair"><span class="info-key">Maîtrise de l'arabe</span><span
+            class="info-value">{{ religiousKnowledge.arabicProficiency }}</span></div>
+        </div>
+        <div class="card-body pt-0" *ngIf="religiousKnowledge.aqida && religiousKnowledge.aqida.length > 0">
+          <h6 class="knowledge-header">Aqida</h6>
+          <div class="table-responsive">
+            <table class="knowledge-table">
+              <thead>
+              <tr>
+                <th>Acquis</th>
+                <th>Livre</th>
+                <th>Enseignant</th>
+                <th>Lieu</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let knowledge of religiousKnowledge.aqida">
+                <td><i class="bi"
+                       [ngClass]="knowledge.acquired ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+                </td>
+                <td>{{ knowledge.bookName }}</td>
+                <td>{{ knowledge.teacherName }}</td>
+                <td>{{ knowledge.learningPlace }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body pt-0" *ngIf="religiousKnowledge.fiqh && religiousKnowledge.fiqh.length > 0">
+          <h6 class="knowledge-header">Fiqh</h6>
+          <div class="table-responsive">
+            <table class="knowledge-table">
+              <thead>
+              <tr>
+                <th>Acquis</th>
+                <th>Livre</th>
+                <th>Enseignant</th>
+                <th>Lieu</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let knowledge of religiousKnowledge.fiqh">
+                <td><i class="bi"
+                       [ngClass]="knowledge.acquired ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+                </td>
+                <td>{{ knowledge.bookName }}</td>
+                <td>{{ knowledge.teacherName }}</td>
+                <td>{{ knowledge.learningPlace }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Card -->
+      <div class="permanent-info-card" *ngIf="member.addressInfo as addressInfo">
+        <div class="card-header">
+          <h5>Adresse</h5>
+          <button class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair"><span class="info-key">Adresse à Dakar</span><span
+            class="info-value">{{ addressInfo.addressInDakar }}</span></div>
+          <div class="info-pair"><span class="info-key">Adresse au Campus</span><span
+            class="info-value">{{ addressInfo.addressToCampus }}</span></div>
+        </div>
+      </div>
+
+      <!-- Bourse Card -->
+      <div class="permanent-info-card" *ngIf="member.bourse as bourse">
+        <div class="card-header">
+          <h5>Bourse</h5>
+          <button class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body info-grid" *ngIf="bourse.bourseId">
+          <div class="info-pair"><span class="info-key">Libellé</span><span
+            class="info-value">{{ bourse.lebelle }}</span></div>
+          <div class="info-pair"><span class="info-key">Montant</span><span
+            class="info-value">{{ bourse.montant | currency:'XOF':'symbol':'1.0-0' }}</span></div>
+        </div>
+      </div>
     </div>
 
     <!-- Right Column: History & Status (Scrollable) -->
@@ -131,7 +254,8 @@
       <div class="sidebar-card">
         <div class="sidebar-header">
           <h4 *ngIf="!isSidebarCollapsed">Historique des inscriptions</h4>
-          <button class="btn-icon btn-toggle-sidebar" (click)="toggleSidebar()" [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'">
+          <button class="btn-icon btn-toggle-sidebar" (click)="toggleSidebar()"
+                  [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'">
             <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
           </button>
         </div>
@@ -167,8 +291,8 @@
             </div>
           </div>
           <div class="cotisation-grid">
-            <button *ngFor="let item of monthlyContributions" 
-                    class="month-box" 
+            <button *ngFor="let item of monthlyContributions"
+                    class="month-box"
                     [ngClass]="item.status"
                     [class.selected]="isMonthSelected(item)"
                     (click)="onMonthClick(item)">
@@ -203,24 +327,25 @@
           <div class="registration-history"
                *ngIf="member.registration && member.registration.length > 0; else noRegistrations">
             <div class="registration-item" *ngFor="let reg of member.registration">
-            <div class="registration-info">
-              <div class="registration-year">Session {{ reg.session }}</div>
-              <div class="registration-details">
+              <div class="registration-info">
+                <div class="registration-year">Session {{ reg.session }}</div>
+                <div class="registration-details">
                 <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
                   {{ reg.statusPayment ? 'Payé' : 'En attente' }}
                 </span>
-                <span class="registration-type">{{ reg.registrationType }}</span>
+                  <span class="registration-type">{{ reg.registrationType }}</span>
+                </div>
+              </div>
+              <div class="registration-actions" *ngIf="!reg.statusPayment">
+                <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
+                        (click)="markAsPaid(reg.session)">
+                  <i class="bi bi-check-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-icon-secondary" title="Envoyer un rappel SMS">
+                  <i class="bi bi-bell"></i>
+                </button>
               </div>
             </div>
-            <div class="registration-actions" *ngIf="!reg.statusPayment">
-              <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé" (click)="markAsPaid(reg.session)">
-                <i class="bi bi-check-circle"></i>
-              </button>
-              <button class="btn btn-sm btn-icon-secondary" title="Envoyer un rappel SMS">
-                <i class="bi bi-bell"></i>
-              </button>
-            </div>
-          </div>
           </div>
           <ng-template #noRegistrations>
             <p>Aucun historique d'inscription.</p>

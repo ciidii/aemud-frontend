@@ -741,3 +741,70 @@
   }
 }
 
+// --- Engagements Card ---
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-1;
+}
+
+.tag {
+  background-color: $primary-100;
+  color: $primary-900;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-small;
+  font-weight: 500;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.mt-4 {
+  margin-top: $space-4;
+}
+
+// --- Religious Knowledge Card ---
+.knowledge-header {
+  font-size: $font-size-body;
+  font-weight: 600;
+  margin-bottom: $space-3;
+  padding-bottom: $space-2;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.knowledge-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-small;
+
+  th, td {
+    text-align: left;
+    padding: $space-2 $space-3;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  thead th {
+    font-weight: 600;
+    color: $color-text-secondary;
+    background-color: $gray-100;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  td i {
+    font-size: $icon-sm;
+  }
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+.table-responsive {
+  overflow-x: auto;
+}

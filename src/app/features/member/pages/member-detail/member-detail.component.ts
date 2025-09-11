@@ -1,25 +1,24 @@
 import {Component, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, CurrencyPipe, JsonPipe, NgClass, NgForOf, NgIf, NgSwitch, NgSwitchCase, NgSwitchDefault, Location} from "@angular/common";
+import {AsyncPipe, CurrencyPipe, DatePipe, Location, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberHttpService} from "../../services/member.http.service";
-import {MemberModel} from "../../../../core/models/member.model";
+import {MemberDataResponse} from "../../../../core/models/member-data.model";
 import {forkJoin, map, Observable} from "rxjs";
 import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
-import {InfoSectionComponent} from "../../../../shared/components/info-section/info-section.component";
 import {ReregisterModalComponent} from "../../components/reregister-modal/reregister-modal.component";
-import {ConfirmDeleteModalComponent} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {
+  ConfirmDeleteModalComponent
+} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 import {MemberStateService} from "../../services/member.state.service";
 import {SendMessageModalComponent} from "../../components/member-list/send-message-modal/send-message-modal.component";
 import {ExportModalComponent} from "../../components/member-list/export-modal/export-modal.component";
-import {FormatKeyPipe} from "../../../../shared/pipes/format-key.pipe";
-import {DatePipe} from "@angular/common";
-import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
 import {SessionModel} from "../../../../core/models/session.model";
 import {ContributionService} from "../../../contribution/services/contribution.service";
 import {YearOfSessionService} from "../../../../core/services/year-of-session.service";
 import {ContributionCalendarItem} from "../../../../core/models/contribution-calendar-item.model";
 import {RecordPaymentModalComponent} from "../../components/record-payment-modal/record-payment-modal.component";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
 
 interface MonthlyContributionDisplay {
   month: string;
@@ -30,7 +29,7 @@ interface MonthlyContributionDisplay {
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, InfoSectionComponent, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, FormatKeyPipe, DatePipe, ToDatePipe, NgSwitch, NgClass, NgSwitchCase, NgSwitchDefault, RecordPaymentModalComponent],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -43,7 +42,7 @@ export class MemberDetailComponent implements OnInit {
   private yearOfSessionService = inject(YearOfSessionService);
   private notificationService = inject(NotificationService);
   private location = inject(Location)
-  member$!: Observable<MemberModel | undefined>;
+  member$!: Observable<MemberDataResponse | undefined>;
   isReregisterModalOpen = false;
   isDeleteModalOpen = false;
   isSendMessageModalOpen = false;
@@ -67,13 +66,13 @@ export class MemberDetailComponent implements OnInit {
     this.memberId = this.route.snapshot.paramMap.get('id');
     if (this.memberId) {
       this.member$ = this.memberHttpService.getMemberById(this.memberId).pipe(
-        map((response: ResponseEntityApi<MemberModel>) => response.data)
+        map((response: ResponseEntityApi<MemberDataResponse>) => response.data)
       );
 
       forkJoin({
         allSessions: this.yearOfSessionService.getYears(),
         currentSession: this.yearOfSessionService.getCurrentYear()
-      }).subscribe(({ allSessions, currentSession }) => {
+      }).subscribe(({allSessions, currentSession}) => {
         this.sessions = allSessions.data;
         this.subscriptionYears = this.sessions.map(s => s.session).sort((a, b) => b - a);
         this.selectedSubscriptionYear = currentSession.data.session;
@@ -156,7 +155,7 @@ export class MemberDetailComponent implements OnInit {
 
       // Map to display model
       this.monthlyContributions = contributions.map(contribution => {
-        const monthName = new Date(contribution.month[0], contribution.month[1] - 1).toLocaleString('fr-FR', { month: 'short' });
+        const monthName = new Date(contribution.month[0], contribution.month[1] - 1).toLocaleString('fr-FR', {month: 'short'});
         return {
           month: monthName.charAt(0).toUpperCase() + monthName.slice(1, 4),
           status: this.mapContributionStatusToCssClass(contribution.status),
@@ -244,7 +243,7 @@ export class MemberDetailComponent implements OnInit {
 
   handleSaveRegistration(formData: any): void {
     if (!this.memberId) return;
-    const registrationPayload = { ...formData, member: this.memberId };
+    const registrationPayload = {...formData, member: this.memberId};
     this.memberHttpService.register(registrationPayload).subscribe({
       next: () => {
         this.notificationService.showSuccess("Réinscription réussie.");
@@ -287,12 +286,12 @@ export class MemberDetailComponent implements OnInit {
 
         const updatedRegistrations = member.registration.map(reg => {
           if (reg.session === session) {
-            return { ...reg, statusPayment: true };
+            return {...reg, statusPayment: true};
           }
           return reg;
         });
 
-        return { ...member, registration: updatedRegistrations };
+        return {...member, registration: updatedRegistrations};
       })
     );
   }
@@ -308,10 +307,10 @@ export class MemberDetailComponent implements OnInit {
     if (!obj) {
       return [];
     }
-    return Object.keys(obj).map(key => ({ key, value: obj[key] }));
+    return Object.keys(obj).map(key => ({key, value: obj[key]}));
   }
 
- goBack(){
+  goBack() {
     this.location.back();
   }
 }

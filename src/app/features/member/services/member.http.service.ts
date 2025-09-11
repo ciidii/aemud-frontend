@@ -1,11 +1,12 @@
 import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {delay, Observable} from "rxjs";
+import {Observable} from "rxjs";
 import {environment} from "src/environments/environment.development";
 import {MemberModel} from "../../../core/models/member.model";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 import {RegistrationModel} from "../../../core/models/RegistrationModel";
+import {MemberDataResponse} from "../../../core/models/member-data.model";
 
 @Injectable({
   providedIn: 'root'
@@ -97,14 +98,14 @@ export class MemberHttpService {
     return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(`${environment.API_URL}/members/print`, {params});
   }
 
-  getMemberById(memberId: string | null): Observable<ResponseEntityApi<MemberModel>> {
+  getMemberById(memberId: string | null): Observable<ResponseEntityApi<MemberDataResponse>> {
 
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json"),
       // @ts-ignore
       params: new HttpParams().set("member-id", memberId),
     }
-    return this.httpClient.get<ResponseEntityApi<MemberModel>>(`${this.url}/members`, options);
+    return this.httpClient.get<ResponseEntityApi<MemberDataResponse>>(`${this.url}/members`, options);
   }
 
   updateMember(memberChange: MemberModel): Observable<MemberModel> {
