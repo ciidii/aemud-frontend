@@ -12,19 +12,29 @@
 
   <!-- Section Clubs -->
   <div class="form-field">
-    <label for="clubs" class="form-label">Clubs (maintenez Ctrl/Cmd pour sélectionner plusieurs)</label>
-    <select id="clubs" multiple formControlName="clubs" class="form-select-multiple">
-      <option *ngFor="let club of clubs" [value]="club.id">{{ club.name }}</option>
-    </select>
+    <label class="form-label">Clubs</label>
+    <app-custom-multiselect
+      formControlName="clubs"
+      [items]="clubs"
+      displayField="name"
+      valueField="id"
+      placeholder="Sélectionner un ou plusieurs clubs">
+    </app-custom-multiselect>
     <app-validation-message [control]="clubs_"></app-validation-message>
   </div>
 
   <!-- Section Commissions -->
   <div class="form-field">
-    <label for="commissions" class="form-label">Commissions (maintenez Ctrl/Cmd pour sélectionner plusieurs)</label>
-    <select id="commissions" multiple formControlName="commissions" class="form-select-multiple">
-      <option *ngFor="let commission of commissions" [value]="commission.id">{{ commission.name }}</option>
-    </select>
+    <label class="form-label">Commissions</label>
+    <app-custom-multiselect
+      formControlName="commissions"
+      [items]="commissions"
+      displayField="name"
+      valueField="id"
+      placeholder="Sélectionner une ou plusieurs commissions">
+    </app-custom-multiselect>
     <app-validation-message [control]="commissions_"></app-validation-message>
   </div>
+
 </div>
+

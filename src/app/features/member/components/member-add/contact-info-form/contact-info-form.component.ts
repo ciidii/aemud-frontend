@@ -40,8 +40,7 @@ export class ContactInfoFormComponent implements ControlValueAccessor, OnInit {
       numberPhone: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       addressInDakar: ['', Validators.required],
-      holidayAddress: [''],
-      addressToCampus: [''],
+      addressOnCampus: [''],
       personToCalls: this.fb.array([])
     });
   }

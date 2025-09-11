@@ -40,7 +40,6 @@ export interface AcademicInfoRequest {
 
 export interface AddressInfoRequest {
   addressInDakar: string;
-  holidayAddress: string;
   addressToCampus: string;
 }
 

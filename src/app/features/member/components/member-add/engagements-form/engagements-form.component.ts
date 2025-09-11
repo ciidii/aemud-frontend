@@ -5,11 +5,15 @@ import {
 import {CommonModule} from "@angular/common";
 import {Bourse, Club, Commission} from "../../../../../core/models/member-data.model";
 import {ValidationMessageComponent} from "../../../../../shared/components/validation-message/validation-message.component";
+import {
+  CustomMultiselectComponent
+} from "../../../../../shared/components/custom-multiselect/custom-multiselect.component";
+import {FormsModule} from "@angular/forms";
 
 @Component({
   selector: 'app-engagements-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
+  imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent, CustomMultiselectComponent, FormsModule],
   templateUrl: './engagements-form.component.html',
   styleUrls: ['./engagements-form.component.scss'],
   providers: [
