@@ -1,0 +1,117 @@
+@import '../../../../../../assets/scss/variables';
+
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 1040;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  z-index: 1050;
+  width: 90%;
+  max-width: 700px; // Made it a bit wider for this form
+  display: flex;
+  flex-direction: column;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $color-border-default;
+
+  h3 {
+    margin: 0;
+    font-size: $font-size-h5;
+  }
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  font-size: 2.4rem;
+  color: $color-text-secondary;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+
+  &:hover {
+    color: $color-text-primary;
+  }
+}
+
+.modal-body {
+  padding: $space-6;
+  overflow-y: auto;
+  max-height: 70vh;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding: $space-4 $space-6;
+  border-top: 1px solid $color-border-default;
+  background-color: $gray-100;
+  border-bottom-left-radius: $radius-lg;
+  border-bottom-right-radius: $radius-lg;
+}
+
+.btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
+  font-size: $font-size-body;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $white;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+
+  &:disabled {
+    background-color: $gray-300;
+    border-color: $gray-300;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: $white;
+  color: $color-text-primary;
+  border-color: $color-border-default;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -45%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}

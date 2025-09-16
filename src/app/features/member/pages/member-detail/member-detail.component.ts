@@ -2,8 +2,15 @@ import {Component, HostListener, inject, OnInit} from '@angular/core';
 import {AsyncPipe, CurrencyPipe, DatePipe, Location, NgClass, NgForOf, NgIf} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberHttpService} from "../../services/member.http.service";
-import {MemberDataResponse} from "../../../../core/models/member-data.model";
-import {forkJoin, map, Observable} from "rxjs";
+import {
+  AcademicInfoRequest,
+  ContactInfoRequest,
+  MemberDataResponse,
+  MembershipInfo,
+  PersonalInfo,
+  ReligiousKnowledge
+} from "../../../../core/models/member-data.model";
+import {forkJoin, map, Observable, tap} from "rxjs";
 import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
 import {ReregisterModalComponent} from "../../components/reregister-modal/reregister-modal.component";
 import {
@@ -19,6 +26,22 @@ import {ContributionCalendarItem} from "../../../../core/models/contribution-cal
 import {RecordPaymentModalComponent} from "../../components/record-payment-modal/record-payment-modal.component";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
+import {EditPersonalInfoModalComponent} from "./edit-personal-info-modal/edit-personal-info-modal.component";
+import {EditContactInfoModalComponent} from "./edit-contact-info-modal/edit-contact-info-modal.component";
+import {
+  AcademicAndMembershipData,
+  EditAcademicInfoModalComponent
+} from "./edit-academic-info-modal/edit-academic-info-modal.component";
+import {
+  EditEngagementsModalComponent,
+  EngagementsData
+} from "./edit-engagements-modal/edit-engagements-modal.component";
+import {
+  EditReligiousKnowledgeModalComponent
+} from "./edit-religious-knowledge-modal/edit-religious-knowledge-modal.component";
+import {AddressInfo, EditAddressInfoModalComponent} from "./edit-address-info-modal/edit-address-info-modal.component";
+import {EditBourseInfoModalComponent} from "./edit-bourse-info-modal/edit-bourse-info-modal.component";
+import {BourseModel} from "../../../../core/models/bourse.model";
 
 interface MonthlyContributionDisplay {
   month: string;
@@ -29,7 +52,7 @@ interface MonthlyContributionDisplay {
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -42,6 +65,7 @@ export class MemberDetailComponent implements OnInit {
   private yearOfSessionService = inject(YearOfSessionService);
   private notificationService = inject(NotificationService);
   private location = inject(Location)
+  protected currentSessionYear: SessionModel | null = null;
   member$!: Observable<MemberDataResponse | undefined>;
   isReregisterModalOpen = false;
   isDeleteModalOpen = false;
@@ -50,13 +74,22 @@ export class MemberDetailComponent implements OnInit {
   isActionsDropdownOpen = false;
   isRecordPaymentModalOpen = false;
   isSidebarCollapsed = false;
+  isEditPersonalInfoModalOpen = false;
+  isEditContactInfoModalOpen = false;
+  isEditAcademicInfoModalOpen = false;
+  isEditEngagementsModalOpen = false;
+  isEditReligiousKnowledgeModalOpen = false;
+  isEditAddressInfoModalOpen = false;
+  isEditBourseInfoModalOpen = false;
   selectedContributions: ContributionCalendarItem[] = [];
   subscriptionYears: number[] = [];
   selectedSubscriptionYear!: number;
   private memberId: string | null = null;
-  private sessions: SessionModel[] = [];
+  protected sessions: SessionModel[] = [];
   monthlyContributions: MonthlyContributionDisplay[] = [];
   contributionSummary: { totalPaid: number; totalDue: number; completionRate: string; } | null = null;
+  currentMember: MemberDataResponse | null = null;
+  academicAndMembershipDataForModal: AcademicAndMembershipData | null = null;
 
   get selectedTotalAmount(): number {
     return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
@@ -65,9 +98,7 @@ export class MemberDetailComponent implements OnInit {
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
     if (this.memberId) {
-      this.member$ = this.memberHttpService.getMemberById(this.memberId).pipe(
-        map((response: ResponseEntityApi<MemberDataResponse>) => response.data)
-      );
+      this.refreshMemberData();
 
       forkJoin({
         allSessions: this.yearOfSessionService.getYears(),
@@ -77,11 +108,130 @@ export class MemberDetailComponent implements OnInit {
         this.subscriptionYears = this.sessions.map(s => s.session).sort((a, b) => b - a);
         this.selectedSubscriptionYear = currentSession.data.session;
         this.loadContributions(this.selectedSubscriptionYear);
+        this.currentSessionYear = currentSession.data;
       });
     }
   }
 
-  // --- Modal Toggle Methods ---
+  // --- Edit Modals Methods ---
+  openEditPersonalInfoModal(): void {
+    this.isEditPersonalInfoModalOpen = true;
+  }
+
+  closeEditPersonalInfoModal(): void {
+    this.isEditPersonalInfoModalOpen = false;
+  }
+
+  handleSavePersonalInfo(updatedInfo: PersonalInfo): void {
+    this.notificationService.showSuccess("Informations personnelles mises à jour (simulation).");
+    this.closeEditPersonalInfoModal();
+    if (this.currentMember) {
+      this.currentMember = {...this.currentMember, personalInfo: updatedInfo};
+      this.refreshMemberData();
+    }
+  }
+
+  openEditContactInfoModal(): void {
+    this.isEditContactInfoModalOpen = true;
+  }
+
+  closeEditContactInfoModal(): void {
+    this.isEditContactInfoModalOpen = false;
+  }
+
+  handleSaveContactInfo(updatedInfo: ContactInfoRequest): void {
+    this.notificationService.showSuccess("Informations de contact mises à jour (simulation).");
+    this.closeEditContactInfoModal();
+    if (this.currentMember) {
+      this.currentMember = {...this.currentMember, contactInfo: updatedInfo};
+      this.refreshMemberData();
+    }
+  }
+
+  openEditAcademicInfoModal(): void {
+    this.isEditAcademicInfoModalOpen = true;
+  }
+
+  closeEditAcademicInfoModal(): void {
+    this.isEditAcademicInfoModalOpen = false;
+  }
+
+  handleSaveAcademicInfo(updatedInfo: AcademicAndMembershipData): void {
+    this.notificationService.showSuccess("Informations académiques mises à jour (simulation).");
+    this.closeEditAcademicInfoModal();
+    if (this.currentMember) {
+      const {institutionName, studiesDomain, studiesLevel, ...membershipInfo} = updatedInfo;
+      const academicInfo: AcademicInfoRequest = {institutionName, studiesDomain, studiesLevel};
+
+      this.currentMember = {
+        ...this.currentMember,
+        academicInfo: academicInfo,
+        membershipInfo: membershipInfo as MembershipInfo
+      };
+      this.refreshMemberData();
+    }
+  }
+
+  openEditEngagementsModal(): void {
+    this.isEditEngagementsModalOpen = true;
+  }
+
+  closeEditEngagementsModal(): void {
+    this.isEditEngagementsModalOpen = false;
+  }
+
+  handleSaveEngagements(engagementsData: EngagementsData): void {
+    // TODO: Implement actual save logic with a service call
+    this.notificationService.showSuccess("Engagements mis à jour (simulation).");
+    this.refreshMemberData(); // Refresh data to show changes
+  }
+
+  openEditAddressInfoModal(): void {
+    this.isEditAddressInfoModalOpen = true;
+  }
+
+  closeEditAddressInfoModal(): void {
+    this.isEditAddressInfoModalOpen = false;
+  }
+
+  handleSaveAddressInfo(updatedInfo: AddressInfo): void {
+    this.notificationService.showSuccess("Adresse mise à jour (simulation).");
+    this.closeEditAddressInfoModal();
+    if (this.currentMember) {
+      this.currentMember = {...this.currentMember, addressInfo: updatedInfo};
+      this.refreshMemberData();
+    }
+  }
+
+  openEditBourseInfoModal(): void {
+    this.isEditBourseInfoModalOpen = true;
+  }
+
+  closeEditBourseInfoModal(): void {
+    this.isEditBourseInfoModalOpen = false;
+  }
+
+  handleSaveBourseInfo(updatedInfo: BourseModel): void {
+    this.notificationService.showSuccess("Bourse mise à jour (simulation).");
+    this.closeEditBourseInfoModal();
+    if (this.currentMember) {
+      this.currentMember = {...this.currentMember, bourse: updatedInfo};
+      this.refreshMemberData();
+    }
+  }
+
+  private refreshMemberData(): void {
+    if (!this.memberId) return;
+    this.member$ = this.memberHttpService.getMemberById(this.memberId).pipe(
+      map((response: ResponseEntityApi<MemberDataResponse>) => response.data),
+      tap(member => {
+        if (member) this.currentMember = member;
+      })
+    );
+  }
+
+
+  // --- Other Modal Toggle Methods ---
 
   toggleDeleteModal(): void {
     this.isDeleteModalOpen = !this.isDeleteModalOpen;
@@ -313,4 +463,22 @@ export class MemberDetailComponent implements OnInit {
   goBack() {
     this.location.back();
   }
+
+  closeEditReligiousKnowledgeModal() {
+    this.isEditReligiousKnowledgeModalOpen = false;
+  }
+
+  handleSaveReligiousKnowledge($event: ReligiousKnowledge) {
+
+  }
+
+  openEditReligiousKnowledgeModal() {
+    this.isEditReligiousKnowledgeModalOpen = true;
+  }
+
+  isRegisteredForCurrentSession(): boolean {
+    return this.currentMember?.registration?.some(reg => reg.session === this.currentSessionYear?.session) ?? false;
+  }
+
+
 }

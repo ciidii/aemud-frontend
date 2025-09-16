@@ -1,10 +1,14 @@
 import {Component, forwardRef, OnInit} from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators, FormArray
 } from "@angular/forms";
 import {CommonModule} from "@angular/common";
@@ -23,10 +27,15 @@ import {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ContactInfoFormComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ContactInfoFormComponent),
+      multi: true
     }
   ]
 })
-export class ContactInfoFormComponent implements ControlValueAccessor, OnInit {
+export class ContactInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   contactInfoForm!: FormGroup;
   onTouched: () => void = () => {
@@ -69,11 +78,11 @@ export class ContactInfoFormComponent implements ControlValueAccessor, OnInit {
 
   private newPersonToCall(): FormGroup {
     return this.fb.group({
-      lastname: ['', Validators.required],
-      firstname: ['', Validators.required],
-      requiredNumberPhone: ['', Validators.required],
+      lastname: ['', [Validators.required, Validators.minLength(3)]],
+      firstname: ['', [Validators.required, Validators.minLength(3)]],
+      requiredNumberPhone: ['', [Validators.required, Validators.minLength(3)]],
       optionalNumberPhone: [''],
-      relationship: ['', Validators.required]
+      relationship: ['', [Validators.required, Validators.minLength(3)]]
     });
   }
 
@@ -106,5 +115,9 @@ export class ContactInfoFormComponent implements ControlValueAccessor, OnInit {
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.contactInfoForm.disable() : this.contactInfoForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.contactInfoForm.valid ? null : { invalid: true };
   }
 }

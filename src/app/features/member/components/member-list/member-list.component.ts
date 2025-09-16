@@ -5,14 +5,14 @@ import {TableFooterComponent} from "./table-footer/table-footer.component";
 import {MemberStateService} from "../../services/member.state.service";
 import {Observable} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
-import { ExportModalComponent } from './export-modal/export-modal.component';
-import {MemberModel} from "../../../../core/models/member.model";
+import {ExportModalComponent} from './export-modal/export-modal.component';
 import {SendMessageModalComponent} from "./send-message-modal/send-message-modal.component";
 import {TableFiltersComponent} from "./table-filters/table-filters.component";
 import {FilterPanelComponent} from "./filter-panel/filter-panel.component";
 import {
   ConfirmDeleteModalComponent
 } from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {MemberDataResponse} from "../../../../core/models/member-data.model";
 
 @Component({
   selector: 'app-member-list',
@@ -35,7 +35,7 @@ import {
 export class MemberListComponent implements OnInit {
   private memberStateService = inject(MemberStateService);
 
-  members$: Observable<MemberModel[]>;
+  members$: Observable<MemberDataResponse[]>;
   loading$: Observable<boolean>;
   selectedMembersCount$: Observable<number>;
   isExportModalOpen = false;

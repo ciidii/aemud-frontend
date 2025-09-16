@@ -1,6 +1,15 @@
 import { Component, forwardRef, OnInit } from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators
+  AbstractControl,
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
+  Validators
 } from "@angular/forms";
 import { CommonModule } from "@angular/common";
 import {
@@ -18,44 +27,45 @@ import {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => AcademicInfoFormComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => AcademicInfoFormComponent),
+      multi: true
     }
   ]
 })
-export class AcademicInfoFormComponent implements ControlValueAccessor, OnInit {
-  get academicInfoForm(): FormGroup {
-    return this._academicInfoForm;
-  }
-
-  private _academicInfoForm!: FormGroup;
+export class AcademicInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
+  academicInfoForm!: FormGroup;
   onTouched: () => void = () => {};
 
   constructor(private fb: FormBuilder) {}
 
   ngOnInit(): void {
-    this._academicInfoForm = this.fb.group({
+    this.academicInfoForm = this.fb.group({
       // Infos Académiques Actuelles
-      institutionName: ['', Validators.required],
-      studiesDomain: ['', Validators.required],
-      studiesLevel: ['', Validators.required],
+      institutionName: ['', [Validators.required, Validators.minLength(3)]],
+      studiesDomain: ['', [Validators.required, Validators.minLength(3)]],
+      studiesLevel: ['', [Validators.required, Validators.minLength(3)]],
       // Infos BAC
-      bacSeries: ['', Validators.required],
-      bacMention: ['', Validators.required],
+      bacSeries: ['', [Validators.required, Validators.minLength(3)]],
+      bacMention: ['', [Validators.required, Validators.minLength(3)]],
       yearOfBac: ['', Validators.required],
       // Infos AEMUD et autres
-      legacyInstitution: [''],
-      aemudCourses: [''],
-      otherCourses: [''],
-      participatedActivity: [''],
-      politicOrganisation: ['']
+      legacyInstitution: ['', Validators.minLength(3)],
+      aemudCourses: ['', Validators.minLength(3)],
+      otherCourses: ['', Validators.minLength(3)],
+      participatedActivity: ['', Validators.minLength(3)],
+      politicOrganisation: ['', Validators.minLength(3)]
     });
   }
 
   writeValue(val: any): void {
-    val && this._academicInfoForm.setValue(val, { emitEvent: false });
+    val && this.academicInfoForm.patchValue(val, { emitEvent: false });
   }
 
   registerOnChange(fn: any): void {
-    this._academicInfoForm.valueChanges.subscribe(fn);
+    this.academicInfoForm.valueChanges.subscribe(fn);
   }
 
   registerOnTouched(fn: any): void {
@@ -63,50 +73,54 @@ export class AcademicInfoFormComponent implements ControlValueAccessor, OnInit {
   }
 
   setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this._academicInfoForm.disable() : this._academicInfoForm.enable();
+    isDisabled ? this.academicInfoForm.disable() : this.academicInfoForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.academicInfoForm.valid ? null : { invalid: true };
   }
 
   get institutionName() {
-    return this._academicInfoForm.get('institutionName');
+    return this.academicInfoForm.get('institutionName');
   }
 
   get studiesDomain() {
-    return this._academicInfoForm.get('studiesDomain');
+    return this.academicInfoForm.get('studiesDomain');
   }
 
   get studiesLevel() {
-    return this._academicInfoForm.get('studiesLevel');
+    return this.academicInfoForm.get('studiesLevel');
   }
 
   get bacSeries() {
-    return this._academicInfoForm.get('bacSeries');
+    return this.academicInfoForm.get('bacSeries');
   }
 
   get bacMention() {
-    return this._academicInfoForm.get('bacMention');
+    return this.academicInfoForm.get('bacMention');
   }
 
   get yearOfBac() {
-    return this._academicInfoForm.get('yearOfBac');
+    return this.academicInfoForm.get('yearOfBac');
   }
 
   get legacyInstitution() {
-    return this._academicInfoForm.get('legacyInstitution');
+    return this.academicInfoForm.get('legacyInstitution');
   }
 
   get aemudCourses() {
-    return this._academicInfoForm.get('aemudCourses');
+    return this.academicInfoForm.get('aemudCourses');
   }
 
   get otherCourses() {
-    return this._academicInfoForm.get('otherCourses');
+    return this.academicInfoForm.get('otherCourses');
   }
 
   get participatedActivity() {
-    return this._academicInfoForm.get('participatedActivity');
+    return this.academicInfoForm.get('participatedActivity');
   }
 
   get politicOrganisation() {
-    return this._academicInfoForm.get('politicOrganisation');
+    return this.academicInfoForm.get('politicOrganisation');
   }
 }

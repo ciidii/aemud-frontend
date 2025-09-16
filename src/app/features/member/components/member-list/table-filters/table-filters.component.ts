@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import {FormsModule} from "@angular/forms";
 import {NgIf} from "@angular/common";
-import {MemberModel} from "../../../../../core/models/member.model";
+import {MemberDataResponse} from "../../../../../core/models/member-data.model";
 
 @Component({
   selector: 'app-table-filters',
@@ -19,7 +19,7 @@ export class TableFiltersComponent {
   filtersActive = true; // Just for visual demo
   activeFilterCount = 3; // Just for visual demo
 
-  currentTypeFilter: MemberModel | '' = '';
+  currentTypeFilter: MemberDataResponse | '' = '';
   searchTerm: string = '';
   currentStatusFilter: string = '';
 

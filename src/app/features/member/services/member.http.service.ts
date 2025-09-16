@@ -2,7 +2,6 @@ import {Injectable} from "@angular/core";
 import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {environment} from "src/environments/environment.development";
-import {MemberModel} from "../../../core/models/member.model";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 import {RegistrationModel} from "../../../core/models/RegistrationModel";
@@ -22,14 +21,14 @@ export class MemberHttpService {
   public deleteMember(memberId: string | null): Observable<any> {
     // @ts-ignore
     let params = new HttpParams().set("memberId", memberId)
-    return this.httpClient.delete<Array<MemberModel>>(`${this.url}/members`, {params});
+    return this.httpClient.delete<Array<MemberDataResponse>>(`${this.url}/members`, {params});
   }
 
   addMember(member: any) {
     let options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
-    return this.httpClient.post<ResponseEntityApi<MemberModel>>(environment.API_URL + `/members`, member, options);
+    return this.httpClient.post<ResponseEntityApi<MemberDataResponse>>(environment.API_URL + `/members`, member, options);
   }
 
   register(registrationRequest: any) { // Renamed parameter for clarity (was registrationRequestWithNumberPhone)
@@ -66,13 +65,13 @@ export class MemberHttpService {
   // Your existing getMemberBySession (which returns Members)
   // This seems to be intended for "new-inscription-session" which might filter members that are newly inscribed.
   // We'll keep this as is, but our `getRegistrations` method will fetch the actual registration records.
-  getMemberBySession(sessionId: string): Observable<ResponseEntityApi<Array<MemberModel>>> {
+  getMemberBySession(sessionId: string): Observable<ResponseEntityApi<Array<MemberDataResponse>>> {
     let params = new HttpParams()
       .set("session", sessionId)
-    return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(environment.API_URL + `/registration/new-inscription-session`, {params});
+    return this.httpClient.get<ResponseEntityApi<Array<MemberDataResponse>>>(environment.API_URL + `/registration/new-inscription-session`, {params});
   }
 
-  searchMember(keyword: string, criteria: string, filters: any, currentPage: number, pageSize: number, sortColumn: string, sortDirection: boolean): Observable<ResponsePageableApi<Array<MemberModel>>> {
+  searchMember(keyword: string, criteria: string, filters: any, currentPage: number, pageSize: number, sortColumn: string, sortDirection: boolean): Observable<ResponsePageableApi<Array<MemberDataResponse>>> {
     let params = new HttpParams()
       .set("criteria", criteria)
       .set("value", keyword)
@@ -84,10 +83,10 @@ export class MemberHttpService {
       .set("sortColumn", sortColumn)
       .set("sortDirection", sortDirection);
 
-    return this.httpClient.get<ResponsePageableApi<Array<MemberModel>>>(`${environment.API_URL}/members/search`, {params});
+    return this.httpClient.get<ResponsePageableApi<Array<MemberDataResponse>>>(`${environment.API_URL}/members/search`, {params});
   }
 
-  searchMemberToPrint(keyword: string, criteria: string, filters: any): Observable<ResponseEntityApi<Array<MemberModel>>> {
+  searchMemberToPrint(keyword: string, criteria: string, filters: any): Observable<ResponseEntityApi<Array<MemberDataResponse>>> {
     let params = new HttpParams()
       .set("criteria", criteria)
       .set("value", keyword)
@@ -95,7 +94,7 @@ export class MemberHttpService {
       .set("commission", filters?.commission ? filters?.commission : "")
       .set("year", filters?.year ? filters?.year : "");
 
-    return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(`${environment.API_URL}/members/print`, {params});
+    return this.httpClient.get<ResponseEntityApi<Array<MemberDataResponse>>>(`${environment.API_URL}/members/print`, {params});
   }
 
   getMemberById(memberId: string | null): Observable<ResponseEntityApi<MemberDataResponse>> {
@@ -108,8 +107,8 @@ export class MemberHttpService {
     return this.httpClient.get<ResponseEntityApi<MemberDataResponse>>(`${this.url}/members`, options);
   }
 
-  updateMember(memberChange: MemberModel): Observable<MemberModel> {
-    return this.httpClient.put<MemberModel>(`${this.url}/members`, memberChange);
+  updateMember(memberChange: MemberDataResponse): Observable<MemberDataResponse> {
+    return this.httpClient.put<MemberDataResponse>(`${this.url}/members`, memberChange);
   }
 
   // --- NEW METHOD FOR FETCHING REGISTRATIONS ---
@@ -134,62 +133,7 @@ export class MemberHttpService {
    * Assuming your backend has an endpoint for getting all members.
    * You mentioned `getMemberBySession` earlier; this `getMembers` is a general list.
    */
-  public getMembers(): Observable<ResponseEntityApi<Array<MemberModel>>> {
-    return this.httpClient.get<ResponseEntityApi<Array<MemberModel>>>(`${environment.API_URL}/members/all`); // Assuming /members/all or similar
+  public getMembers(): Observable<ResponseEntityApi<Array<MemberDataResponse>>> {
+    return this.httpClient.get<ResponseEntityApi<Array<MemberDataResponse>>>(`${environment.API_URL}/members/all`); // Assuming /members/all or similar
   }
-
-  static empty(): MemberModel {
-    return {
-      id: '',
-      personalInfo: {
-        name: '',
-        firstname: '',
-        nationality: '',
-        gender: '',
-        birthday: [0, 0, 0],
-        maritalStatus: ''
-      },
-      membershipInfo: {
-        legacyInstitution: '',
-        bacSeries: '',
-        bacMention: '',
-        yearOfBac: '',
-        aemudCourses: '',
-        otherCourses: '',
-        participatedActivity: '',
-        politicOrganisation: ''
-      },
-      academicInfo: {
-        institutionName: '',
-        studiesDomain: '',
-        studiesLevel: ''
-      },
-      addressInfo: {
-        addressInDakar: '',
-        holidayAddress: '',
-        addressToCampus: ''
-      },
-      contactInfo: {
-        numberPhone: '',
-        email: '',
-        personToCalls: [{
-          lastname: '',
-          firstname: '',
-          requiredNumberPhone: '',
-          optionalNumberPhone: '',
-          relationship: ''
-        }]
-      },
-      bourse: {
-        bourseId: '',
-        lebelle: '',
-        montant: 0
-      },
-      clubs: [{id: '', name: ''}],
-      commissions: [{id: '', name: ''}],
-      registration: []
-    };
-  }
-
-
 }

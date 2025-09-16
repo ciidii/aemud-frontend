@@ -1,10 +1,21 @@
 import {Component, forwardRef, Input, OnInit} from '@angular/core';
 import {
-  ControlValueAccessor, FormBuilder, FormGroup, NG_VALUE_ACCESSOR, ReactiveFormsModule, Validators
+  AbstractControl,
+  ControlValueAccessor,
+  FormBuilder,
+  FormGroup,
+  NG_VALIDATORS,
+  NG_VALUE_ACCESSOR,
+  ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
+  Validators
 } from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {Bourse, Club, Commission} from "../../../../../core/models/member-data.model";
-import {ValidationMessageComponent} from "../../../../../shared/components/validation-message/validation-message.component";
+import {
+  ValidationMessageComponent
+} from "../../../../../shared/components/validation-message/validation-message.component";
 import {
   CustomMultiselectComponent
 } from "../../../../../shared/components/custom-multiselect/custom-multiselect.component";
@@ -21,34 +32,49 @@ import {FormsModule} from "@angular/forms";
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => EngagementsFormComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => EngagementsFormComponent),
+      multi: true
     }
   ]
 })
-export class EngagementsFormComponent implements ControlValueAccessor, OnInit {
+export class EngagementsFormComponent implements ControlValueAccessor, OnInit, Validator {
   @Input() bourses: Bourse[] = [];
   @Input() clubs: Club[] = [];
   @Input() commissions: Commission[] = [];
 
   engagementsForm!: FormGroup;
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => {
+  };
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.engagementsForm = this.fb.group({
       bourse: [null, Validators.required],
-      clubs: [[]],
-      commissions: [[]]
+      clubs: [[], Validators.required],
+      commissions: [[], Validators.required]
     });
   }
 
   // Getters for easy access in template
-  get bourse() { return this.engagementsForm.get('bourse'); }
-  get clubs_() { return this.engagementsForm.get('clubs'); }
-  get commissions_() { return this.engagementsForm.get('commissions'); }
+  get bourse() {
+    return this.engagementsForm.get('bourse');
+  }
+
+  get clubs_() {
+    return this.engagementsForm.get('clubs');
+  }
+
+  get commissions_() {
+    return this.engagementsForm.get('commissions');
+  }
 
   writeValue(val: any): void {
-    val && this.engagementsForm.patchValue(val, { emitEvent: false });
+    val && this.engagementsForm.patchValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {
@@ -62,5 +88,8 @@ export class EngagementsFormComponent implements ControlValueAccessor, OnInit {
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.engagementsForm.disable() : this.engagementsForm.enable();
   }
-}
 
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.engagementsForm.valid ? null : {invalid: true};
+  }
+}

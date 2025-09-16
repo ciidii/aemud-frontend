@@ -1,7 +1,12 @@
 @import 'variables';
 
+:host {
+  z-index: 3000;
+}
+
 .option-section {
   margin-bottom: $space-6;
+
   &:last-of-type {
     margin-bottom: 0;
   }
@@ -127,13 +132,19 @@
   &.btn-primary {
     background-color: $primary-500;
     color: $white;
-    &:hover { background-color: $primary-600; }
+
+    &:hover {
+      background-color: $primary-600;
+    }
   }
 
   &.btn-secondary {
     background-color: $gray-100;
     color: $color-text-primary;
     border-color: $color-border-default;
-    &:hover { background-color: $gray-200; }
+
+    &:hover {
+      background-color: $gray-200;
+    }
   }
 }

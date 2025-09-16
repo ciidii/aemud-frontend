@@ -2,9 +2,9 @@
 
   <!-- Section Arabe & Coran -->
   <h3 class="section-title">Niveau de langue Arabe</h3>
-  <div class="radio-group" role="radiogroup" formControlName="arabicProficiency">
+  <div class="radio-group" role="radiogroup">
     <div *ngFor="let level of arabicProficiencyLevels" class="form-field-radio">
-      <input [id]="'prof-' + level" type="radio" [value]="level" name="arabicProficiency" class="form-radio">
+      <input [id]="'prof-' + level" type="radio" [value]="level" formControlName="arabicProficiency" class="form-radio">
       <label [for]="'prof-' + level" class="form-label-radio">{{ proficiencyLabels[level] }}</label>
     </div>
   </div>

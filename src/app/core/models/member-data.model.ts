@@ -1,3 +1,5 @@
+import {BourseModel} from "./bourse.model";
+
 export interface MemberDataResponse {
   id: string;
   personalInfo: PersonalInfo;
@@ -5,7 +7,7 @@ export interface MemberDataResponse {
   academicInfo: AcademicInfoRequest;
   addressInfo: AddressInfoRequest;
   contactInfo: ContactInfoRequest;
-  bourse: Bourse;
+  bourse: BourseModel;
   clubs: Club[];
   commissions: Commission[];
   registration: RegistrationResponse[];
@@ -79,7 +81,7 @@ export interface Commission {
 export interface RegistrationResponse {
   member: string;
   session: number;
-  dateInscription: string; // LocalDate is string in JSON
+  // dateInscription: string; // LocalDate is string in JSON
   registrationType: TypeInscription;
   statusPayment: boolean;
   registrationStatus: RegistrationStatus;

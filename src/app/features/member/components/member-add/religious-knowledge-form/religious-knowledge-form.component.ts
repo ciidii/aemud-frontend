@@ -1,15 +1,21 @@
-import { CommonModule } from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {ArabicProficiency, CORAN_LEVEL} from "../../../../../core/models/member-data.model";
 import {Component, forwardRef, OnInit} from "@angular/core";
 import {
+  AbstractControl,
   ControlValueAccessor, FormArray,
   FormBuilder,
   FormGroup,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators
 } from "@angular/forms";
-import {ValidationMessageComponent} from "../../../../../shared/components/validation-message/validation-message.component";
+import {
+  ValidationMessageComponent
+} from "../../../../../shared/components/validation-message/validation-message.component";
 
 @Component({
   selector: 'app-religious-knowledge-form',
@@ -22,13 +28,19 @@ import {ValidationMessageComponent} from "../../../../../shared/components/valid
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => ReligiousKnowledgeFormComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => ReligiousKnowledgeFormComponent),
+      multi: true
     }
   ]
 })
-export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, OnInit {
+export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   religiousKnowledgeForm!: FormGroup;
-  onTouched: () => void = () => {};
+  onTouched: () => void = () => {
+  };
 
   // Exposer les enums au template
   coranLevels = Object.values(CORAN_LEVEL);
@@ -40,7 +52,8 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
     [ArabicProficiency.READ_AND_UNDERSTAND]: 'Sait lire et comprendre'
   };
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.religiousKnowledgeForm = this.fb.group({
@@ -52,7 +65,9 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
   }
 
   // --- Getters pour un accès facile dans le template ---
-  get arabicProficiency() { return this.religiousKnowledgeForm.get('arabicProficiency'); }
+  get arabicProficiency() {
+    return this.religiousKnowledgeForm.get('arabicProficiency');
+  }
 
   get aqida(): FormArray {
     return this.religiousKnowledgeForm.get('aqida') as FormArray;
@@ -70,9 +85,9 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
   private newKnowledgeGroup(): FormGroup {
     return this.fb.group({
       acquired: [true], // Par défaut à true quand on ajoute un bloc
-      bookName: ['', Validators.required],
-      teacherName: [''],
-      learningPlace: ['']
+      bookName: ['', [Validators.required, Validators.minLength(3)]],
+      teacherName: ['', Validators.minLength(3)],
+      learningPlace: ['', Validators.minLength(3)]
     });
   }
 
@@ -94,7 +109,11 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
 
   // --- Implémentation de ControlValueAccessor ---
   writeValue(val: any): void {
-    val && this.religiousKnowledgeForm.setValue(val, { emitEvent: false });
+    // patchValue est plus sûr que setValue car il n'exige pas que toutes les valeurs du formulaire soient présentes.
+    // Cela évite des erreurs si le composant est initialisé avec des données partielles.
+    if (val) {
+      this.religiousKnowledgeForm.patchValue(val, {emitEvent: false});
+    }
   }
 
   registerOnChange(fn: any): void {
@@ -107,5 +126,9 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.religiousKnowledgeForm.disable() : this.religiousKnowledgeForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.religiousKnowledgeForm.valid ? null : {invalid: true};
   }
 }

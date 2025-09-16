@@ -1,12 +1,10 @@
-import { Component, EventEmitter, inject, Input, OnInit, Output } from '@angular/core';
-import { NgClass } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from '@angular/forms';
 
 @Component({
   selector: 'app-filter-panel',
   standalone: true,
   imports: [
-    NgClass,
     ReactiveFormsModule
   ],
   templateUrl: './filter-panel.component.html',

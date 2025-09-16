@@ -1,34 +1,35 @@
-import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
+import {SessionModel} from "../../../../core/models/session.model";
+import {TypeInscription} from "../../../../core/models/member-data.model";
 
 @Component({
   selector: 'app-reregister-modal',
   standalone: true,
   imports: [
     ReactiveFormsModule,
-    NgIf,
     NgForOf
   ],
   templateUrl: './reregister-modal.component.html',
   styleUrl: './reregister-modal.component.scss'
 })
 export class ReregisterModalComponent implements OnInit {
+  @Input() availableSessions: SessionModel[] = [];
+  @Input() currentSessionYear: number | undefined;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
   private formBuilder = inject(FormBuilder);
   reregisterForm!: FormGroup;
 
-  // TODO: Fetch sessions/years from a service
-  availableSessions = [new Date().getFullYear(), new Date().getFullYear() - 1];
-  registrationTypes = ['Initiale', 'Réinscription'];
+  registrationTypes = Object.values(TypeInscription);
 
   ngOnInit(): void {
     this.reregisterForm = this.formBuilder.group({
-      session: [new Date().getFullYear(), Validators.required],
+      session: [this.currentSessionYear, Validators.required],
       statusPayment: [false, Validators.required],
-      registrationType: ['Réinscription', Validators.required]
+      registrationType: [TypeInscription.REINSCRIPTION, Validators.required]
     });
   }
 

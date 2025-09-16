@@ -43,7 +43,7 @@
       <div class="permanent-info-card" *ngIf="member.personalInfo as personalInfo">
         <div class="card-header">
           <h5>Informations Personnelles</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditPersonalInfoModal()">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
@@ -69,11 +69,36 @@
         </div>
       </div>
 
+      <!-- Registration Status Card -->
+      <div class="permanent-info-card">
+        <div class="card-header">
+          <h5>Inscription à la session en cours</h5>
+        </div>
+        <div class="card-body">
+          <ng-container *ngIf="isRegisteredForCurrentSession()">
+            <div class="info-grid">
+              <div class="info-pair">
+                <span class="info-key">Statut</span>
+                <span class="info-value"><span class="badge bg-success">Inscrit</span></span>
+              </div>
+              <!-- Optional: Display more registration details here -->
+            </div>
+          </ng-container>
+          <ng-container *ngIf="!isRegisteredForCurrentSession()">
+            <div class="registration-action">
+              <p>Ce membre n'est pas encore inscrit pour la session {{ currentSessionYear!.session }}
+                - {{ currentSessionYear!.session + 1 }}.</p>
+              <button class="btn btn-primary" (click)="toggleReregisterModal()">Inscrire maintenant</button>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
       <!-- Contact Info Card -->
       <div class="permanent-info-card" *ngIf="member.contactInfo as contactInfo">
         <div class="card-header">
           <h5>Informations de Contact</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditContactInfoModal()">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
@@ -107,7 +132,7 @@
       <div class="permanent-info-card" *ngIf="member.academicInfo || member.membershipInfo">
         <div class="card-header">
           <h5>Informations Académiques & Adhésion</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditAcademicInfoModal()">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <ng-container *ngIf="member.academicInfo as academicInfo">
@@ -135,7 +160,7 @@
       <div class="permanent-info-card">
         <div class="card-header">
           <h5>Engagements Associatifs</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditEngagementsModal()">Modifier</button>
         </div>
         <div class="card-body">
           <div class="info-pair">
@@ -160,7 +185,7 @@
       <div class="permanent-info-card" *ngIf="member.religiousKnowledge as religiousKnowledge">
         <div class="card-header">
           <h5>Connaissances Religieuses</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditReligiousKnowledgeModal()">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair"><span class="info-key">Niveau de Coran</span><span
@@ -174,7 +199,6 @@
             <table class="knowledge-table">
               <thead>
               <tr>
-                <th>Acquis</th>
                 <th>Livre</th>
                 <th>Enseignant</th>
                 <th>Lieu</th>
@@ -182,9 +206,6 @@
               </thead>
               <tbody>
               <tr *ngFor="let knowledge of religiousKnowledge.aqida">
-                <td><i class="bi"
-                       [ngClass]="knowledge.acquired ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
-                </td>
                 <td>{{ knowledge.bookName }}</td>
                 <td>{{ knowledge.teacherName }}</td>
                 <td>{{ knowledge.learningPlace }}</td>
@@ -199,7 +220,6 @@
             <table class="knowledge-table">
               <thead>
               <tr>
-                <th>Acquis</th>
                 <th>Livre</th>
                 <th>Enseignant</th>
                 <th>Lieu</th>
@@ -207,9 +227,6 @@
               </thead>
               <tbody>
               <tr *ngFor="let knowledge of religiousKnowledge.fiqh">
-                <td><i class="bi"
-                       [ngClass]="knowledge.acquired ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
-                </td>
                 <td>{{ knowledge.bookName }}</td>
                 <td>{{ knowledge.teacherName }}</td>
                 <td>{{ knowledge.learningPlace }}</td>
@@ -224,7 +241,7 @@
       <div class="permanent-info-card" *ngIf="member.addressInfo as addressInfo">
         <div class="card-header">
           <h5>Adresse</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditAddressInfoModal()">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair"><span class="info-key">Adresse à Dakar</span><span
@@ -238,7 +255,7 @@
       <div class="permanent-info-card" *ngIf="member.bourse as bourse">
         <div class="card-header">
           <h5>Bourse</h5>
-          <button class="btn-modify-card">Modifier</button>
+          <button class="btn-modify-card" (click)="openEditBourseInfoModal()">Modifier</button>
         </div>
         <div class="card-body info-grid" *ngIf="bourse.bourseId">
           <div class="info-pair"><span class="info-key">Libellé</span><span
@@ -366,8 +383,13 @@
   <p>Member not found.</p>
 </ng-template>
 
-<app-reregister-modal *ngIf="isReregisterModalOpen" (close)="toggleReregisterModal()"
-                      (save)="handleSaveRegistration($event)"></app-reregister-modal>
+<app-reregister-modal *ngIf="isReregisterModalOpen"
+                      [availableSessions]="sessions"
+                      [currentSessionYear]="selectedSubscriptionYear"
+                      (close)="toggleReregisterModal()"
+                      (save)="handleSaveRegistration($event)">
+</app-reregister-modal>
+
 <app-confirm-delete-modal *ngIf="isDeleteModalOpen" [itemCount]="1" (close)="toggleDeleteModal()"
                           (confirm)="onDeleteConfirmed()"></app-confirm-delete-modal>
 <app-send-message-modal *ngIf="isSendMessageModalOpen" (close)="closeSendMessageModal()"></app-send-message-modal>
@@ -379,3 +401,59 @@
                           (close)="handleClosePaymentModal()"
                           (save)="handleSavePayment($event)">
 </app-record-payment-modal>
+
+<!-- Edit Personal Info Modal -->
+<app-edit-personal-info-modal
+  *ngIf="isEditPersonalInfoModalOpen && currentMember?.personalInfo"
+  [initialData]="currentMember!.personalInfo"
+  (close)="closeEditPersonalInfoModal()"
+  (save)="handleSavePersonalInfo($event)">
+</app-edit-personal-info-modal>
+
+<!-- Edit Contact Info Modal -->
+<app-edit-contact-info-modal
+  *ngIf="isEditContactInfoModalOpen && currentMember?.contactInfo"
+  [initialData]="currentMember!.contactInfo"
+  (close)="closeEditContactInfoModal()"
+  (save)="handleSaveContactInfo($event)">
+</app-edit-contact-info-modal>
+
+<!-- Edit Academic Info Modal -->
+<app-edit-academic-info-modal
+  *ngIf="isEditAcademicInfoModalOpen"
+  (close)="closeEditAcademicInfoModal()"
+  (save)="handleSaveAcademicInfo($event)">
+</app-edit-academic-info-modal>
+
+<app-edit-engagements-modal
+  *ngIf="isEditEngagementsModalOpen && currentMember"
+  [memberClubs]="currentMember.clubs || []"
+  [memberCommissions]="currentMember.commissions || []"
+  (close)="closeEditEngagementsModal()"
+  (save)="handleSaveEngagements($event)">
+</app-edit-engagements-modal>
+
+<!-- Edit Religious Knowledge Modal -->
+<app-edit-religious-knowledge-modal
+  *ngIf="isEditReligiousKnowledgeModalOpen && currentMember?.religiousKnowledge"
+  [initialData]="currentMember!.religiousKnowledge"
+  (close)="closeEditReligiousKnowledgeModal()"
+  (save)="handleSaveReligiousKnowledge($event)">
+</app-edit-religious-knowledge-modal>
+
+<!-- Edit Address Info Modal -->
+<app-edit-address-info-modal
+  *ngIf="isEditAddressInfoModalOpen && currentMember?.addressInfo"
+  [initialData]="currentMember!.addressInfo"
+  (close)="closeEditAddressInfoModal()"
+  (save)="handleSaveAddressInfo($event)">
+</app-edit-address-info-modal>
+
+<!-- Edit Bourse Info Modal -->
+<app-edit-bourse-info-modal
+  *ngIf="isEditBourseInfoModalOpen && currentMember?.bourse"
+  [initialData]="currentMember!.bourse"
+  (close)="closeEditBourseInfoModal()"
+  (save)="handleSaveBourseInfo($event)">
+</app-edit-bourse-info-modal>
+

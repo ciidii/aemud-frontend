@@ -1,36 +1,23 @@
-import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ResponseEntityApi} from "../../../core/models/response-entity-api";
-import {ClubModel} from "../../../core/models/club.model";
-import {environment} from "../../../../environments/environment";
-
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { Club } from '../../../core/models/member-data.model';
+import { environment } from '../../../../environments/environment';
+import { ResponseEntityApi } from '../../../core/models/response-entity-api';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ClubService {
-  private http = inject(HttpClient);
+  private readonly apiUrl = `${environment.API_URL}/clubs`;
 
-  public getClubs(): Observable<ResponseEntityApi<Array<ClubModel>>> {
-    return this.http.get<ResponseEntityApi<Array<ClubModel>>>(environment.API_URL + '/clubs/all')
-  }
+  constructor(private http: HttpClient) { }
 
-  addClubs(club: ClubModel): Observable<ResponseEntityApi<ClubModel>> {
-    let options = {
-      headers: new HttpHeaders().set("Content-Type", "application/json")
-    }
-    return this.http.post<ResponseEntityApi<ClubModel>>(environment.API_URL + `/clubs`, club, options);
-  }
-
-  deleteClub(clubId: number): Observable<ResponseEntityApi<void>> {
-    let params = new HttpParams
-    ().set("clubId", clubId)
-    return this.http.delete<ResponseEntityApi<void>>(environment.API_URL + "/clubs", {params})
-  }
-
-  getSingleClub(clubId: number): Observable<ResponseEntityApi<ClubModel>> {
-    let params = new HttpParams().set("clubId", clubId);
-    return this.http.get<ResponseEntityApi<ClubModel>>(environment.API_URL + "/clubs", {params})
+  getAllClubs(): Observable<Club[]> {
+    return this.http.get<ResponseEntityApi<Club[]>>(`${this.apiUrl}/all`).pipe(
+      map(response => response.data)
+    );
   }
 }
+

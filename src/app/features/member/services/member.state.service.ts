@@ -1,7 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, map, tap} from "rxjs";
-import {MemberModel} from "../../../core/models/member.model";
 import {MemberHttpService} from "./member.http.service";
+import {MemberDataResponse} from "../../../core/models/member-data.model";
 
 export type SortDirection = 'asc' | 'desc' | '';
 
@@ -29,7 +29,7 @@ export class MemberStateService {
   private memberHttpService = inject(MemberHttpService);
 
   // --- State for data fetching and pagination ---
-  private readonly _paginatedMemberSubject = new BehaviorSubject<MemberModel[]>([]);
+  private readonly _paginatedMemberSubject = new BehaviorSubject<MemberDataResponse[]>([]);
   private readonly _paginationInfoSubject = new BehaviorSubject<PaginationInfo>({
     pageIndex: 1,
     pageSize: 10,

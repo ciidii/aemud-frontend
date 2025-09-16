@@ -1,10 +1,14 @@
 import { Component, forwardRef, OnInit } from '@angular/core';
 import {
+  AbstractControl,
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
+  NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
+  ValidationErrors,
+  Validator,
   Validators
 } from "@angular/forms";
 import { CommonModule } from "@angular/common";
@@ -23,10 +27,15 @@ import {
       provide: NG_VALUE_ACCESSOR,
       useExisting: forwardRef(() => PersonalInfoFormComponent),
       multi: true
+    },
+    {
+      provide: NG_VALIDATORS,
+      useExisting: forwardRef(() => PersonalInfoFormComponent),
+      multi: true
     }
   ]
 })
-export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit {
+export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   personalInfoForm!: FormGroup; // Initialized in ngOnInit, so we use '!'
   onTouched: () => void = () => {};
@@ -35,9 +44,9 @@ export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit {
 
   ngOnInit(): void {
     this.personalInfoForm = this.fb.group({
-      name: ['', Validators.required],
-      firstname: ['', Validators.required],
-      nationality: ['', Validators.required],
+      name: ['', [Validators.required, Validators.minLength(3)]],
+      firstname: ['', [Validators.required, Validators.minLength(3)]],
+      nationality: ['', [Validators.required, Validators.minLength(3)]],
       gender: ['', Validators.required],
       birthday: ['', Validators.required],
       maritalStatus: ['', Validators.required]
@@ -66,5 +75,9 @@ export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit {
 
   setDisabledState?(isDisabled: boolean): void {
     isDisabled ? this.personalInfoForm.disable() : this.personalInfoForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.personalInfoForm.valid ? null : { invalid: true };
   }
 }
