@@ -136,7 +136,7 @@ export class MemberAddComponent implements OnInit {
         next: (response) => {
           this.notificationService.showSuccess('Membre ajouté avec succès !');
           // @ts-ignore
-          this.router.navigate(['/members', response.data.id]);
+          this.router.navigate(['/members/details', response.data.id]);
         },
         error: (err) => {
           console.error('Error adding member', err);
