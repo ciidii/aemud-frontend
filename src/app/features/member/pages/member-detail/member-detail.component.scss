@@ -805,6 +805,98 @@
   padding-top: 0;
 }
 
+
 .table-responsive {
   overflow-x: auto;
+}
+
+// --- Unified Registration Card ---
+.registration-card {
+  .card-body {
+    padding: $space-5;
+  }
+
+  .current-registration-status {
+    padding: $space-5;
+    border-radius: $radius-md;
+    border: 1px solid $color-border-default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $space-5;
+    transition: all 0.3s ease;
+
+    .status-main {
+      display: flex;
+      align-items: center;
+      gap: $space-4;
+    }
+
+    .status-icon {
+      font-size: $icon-lg;
+      display: flex;
+      align-items: center;
+    }
+
+    .status-title {
+      // @include text-heading-6;
+      margin: 0 0 $space-1 0;
+    }
+
+    .status-description {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      margin: 0;
+      max-width: 45ch;
+    }
+
+    // Status Colors
+    &.status-completed {
+      background-color: lighten($success-100, 2%);
+      border-color: $success-500;
+
+      .status-icon {
+        color: $success-500;
+      }
+
+      .status-title {
+        color: $success-900;
+      }
+    }
+
+    &.status-uncompleted {
+      background-color: lighten($warning-100, 2%);
+      border-color: $warning-500;
+
+      .status-icon {
+        color: $warning-500;
+      }
+
+      .status-title {
+        color: $warning-900;
+      }
+    }
+
+    &.status-not-registered {
+      background-color: $gray-100;
+      border-style: dashed;
+
+      .status-icon {
+        color: $color-text-secondary;
+      }
+    }
+
+    &.status-expired {
+      background-color: $gray-100;
+
+      .status-icon {
+        color: $color-text-secondary;
+      }
+    }
+  }
+
+  .history-title {
+    //  @include text-heading-6;
+    margin-bottom: $space-3;
+  }
 }

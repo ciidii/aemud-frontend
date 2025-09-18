@@ -81,7 +81,7 @@ export interface Commission {
 export interface RegistrationResponse {
   member: string;
   session: number;
-  // dateInscription: string; // LocalDate is string in JSON
+  dateInscription: number[];
   registrationType: TypeInscription;
   statusPayment: boolean;
   registrationStatus: RegistrationStatus;
@@ -114,13 +114,12 @@ export enum MaritalStatus {
 }
 
 export enum RegistrationStatus {
-  EXPIRED = 'EXPIRED',
-  PENDING = 'PENDING',
-  VALID = 'VALID'
+  EXPIRED = "EXPIRED",
+  COMPLETED = "COMPLETED",
+  UNCOMPLETED = "UNCOMPLETED",
 }
 
 export enum TypeInscription {
-  INITIAL = 'INITIAL',
   REINSCRIPTION = 'REINSCRIPTION'
 }
 

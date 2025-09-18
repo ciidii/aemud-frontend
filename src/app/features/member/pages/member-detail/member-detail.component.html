@@ -69,30 +69,6 @@
         </div>
       </div>
 
-      <!-- Registration Status Card -->
-      <div class="permanent-info-card">
-        <div class="card-header">
-          <h5>Inscription à la session en cours</h5>
-        </div>
-        <div class="card-body">
-          <ng-container *ngIf="isRegisteredForCurrentSession()">
-            <div class="info-grid">
-              <div class="info-pair">
-                <span class="info-key">Statut</span>
-                <span class="info-value"><span class="badge bg-success">Inscrit</span></span>
-              </div>
-              <!-- Optional: Display more registration details here -->
-            </div>
-          </ng-container>
-          <ng-container *ngIf="!isRegisteredForCurrentSession()">
-            <div class="registration-action">
-              <p>Ce membre n'est pas encore inscrit pour la session {{ currentSessionYear!.session }}
-                - {{ currentSessionYear!.session + 1 }}.</p>
-              <button class="btn btn-primary" (click)="toggleReregisterModal()">Inscrire maintenant</button>
-            </div>
-          </ng-container>
-        </div>
-      </div>
 
       <!-- Contact Info Card -->
       <div class="permanent-info-card" *ngIf="member.contactInfo as contactInfo">
@@ -316,7 +292,7 @@
               {{ item.month }}
             </button>
           </div>
-          <div class="cotisation-legend">
+          <div *ngIf="monthlyContributions" class="cotisation-legend">
             <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
             <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
             <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
@@ -340,7 +316,7 @@
 
           <hr class="sidebar-divider">
 
-          <!-- Registration History -->
+          <!-- Registration History
           <div class="registration-history"
                *ngIf="member.registration && member.registration.length > 0; else noRegistrations">
             <div class="registration-item" *ngFor="let reg of member.registration">
@@ -364,6 +340,62 @@
               </div>
             </div>
           </div>
+          -->
+          <!-- Unified Registration Status Card -->
+          <div class="sidebar-content registration-card">
+            <div class="card-header">
+              <h5>Statut d'Inscription</h5>
+            </div>
+            <div class="card-body" *ngIf="currentSessionRegistration as currentReg  else noRegistrations">
+
+              <!-- Current Session -->
+              <div class="current-registration-status" [ngClass]="getRegistrationStatusClass(currentReg)">
+                <div class="status-main">
+                  <span class="status-icon" [innerHTML]="getRegistrationStatusIcon(currentReg)"></span>
+                  <div class="status-text">
+                    <h6 class="status-title">Session {{ currentReg.session }} - {{ currentReg.session + 1 }}
+                      : {{ getRegistrationStatusText(currentReg) }}</h6>
+                    <p class="status-description">{{ getRegistrationStatusDescription(currentReg) }}</p>
+                  </div>
+                </div>
+                <div class="status-actions">
+                  <button *ngIf="!currentReg.isRegistered" class="btn btn-primary" (click)="toggleReregisterModal()">
+                    Inscrire maintenant
+                  </button>
+                  <button *ngIf="currentReg.status === RegistrationStatus.UNCOMPLETED" class="btn btn-primary"
+                          (click)="markAsPaid(currentReg.session)">Finaliser le Paiement
+                  </button>
+                </div>
+              </div>
+
+              <!-- History -->
+              <ng-container *ngIf="pastRegistrations.length > 0">
+                <hr class="sidebar-divider">
+                <div class="registration-history">
+                  <h6 class="history-title">Historique</h6>
+                  <div class="registration-item" *ngFor="let reg of pastRegistrations">
+                    <div class="registration-info">
+                      <div class="registration-year">Session {{ reg.session }} - {{ reg.session + 1 }}</div>
+                      <div class="registration-details">
+                    <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
+                      {{ reg.statusPayment ? 'Payé' : 'En attente' }}
+                    </span>
+                        <span class="registration-type">{{ reg.registrationType }}</span>
+                      </div>
+                    </div>
+                    <div class="registration-actions" *ngIf="!reg.statusPayment">
+                      <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
+                              (click)="markAsPaid(reg.session)">
+                        <i class="bi bi-check-circle"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+
           <ng-template #noRegistrations>
             <p>Aucun historique d'inscription.</p>
           </ng-template>

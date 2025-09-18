@@ -1,8 +1,8 @@
 import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf, NgIf} from "@angular/common";
-import {SessionModel} from "../../../../core/models/session.model";
-import {TypeInscription} from "../../../../core/models/member-data.model";
+import {SessionModel} from "../../../../../core/models/session.model";
+import {TypeInscription} from "../../../../../core/models/member-data.model";
 
 @Component({
   selector: 'app-reregister-modal',

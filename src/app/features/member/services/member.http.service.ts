@@ -128,6 +128,15 @@ export class MemberHttpService {
     return this.httpClient.get<ResponseEntityApi<Array<RegistrationModel>>>(`${environment.API_URL}/registration`, {params});
   }
 
+  public updateRegistration(sessionId?: string): Observable<ResponseEntityApi<Array<void>>> {
+    let params = new HttpParams();
+    if (sessionId) {
+      params = params.set("session", sessionId);
+    }
+    // Adjust this endpoint `/registration` if your backend uses a different path for listing all registrations.
+    return this.httpClient.put<ResponseEntityApi<Array<void>>>(`${environment.API_URL}/registration`, {params});
+  }
+
   /**
    * Fetches all members. This is useful for the re-enrollment component's member list.
    * Assuming your backend has an endpoint for getting all members.

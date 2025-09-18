@@ -8,11 +8,13 @@ import {
   MemberDataResponse,
   MembershipInfo,
   PersonalInfo,
-  ReligiousKnowledge
+  RegistrationStatus,
+  ReligiousKnowledge,
+  TypeInscription
 } from "../../../../core/models/member-data.model";
 import {forkJoin, map, Observable, tap} from "rxjs";
 import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
-import {ReregisterModalComponent} from "../../components/reregister-modal/reregister-modal.component";
+import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
 import {
   ConfirmDeleteModalComponent
 } from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
@@ -23,7 +25,7 @@ import {SessionModel} from "../../../../core/models/session.model";
 import {ContributionService} from "../../../contribution/services/contribution.service";
 import {YearOfSessionService} from "../../../../core/services/year-of-session.service";
 import {ContributionCalendarItem} from "../../../../core/models/contribution-calendar-item.model";
-import {RecordPaymentModalComponent} from "../../components/record-payment-modal/record-payment-modal.component";
+import {RecordPaymentModalComponent} from "./record-payment-modal/record-payment-modal.component";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
 import {EditPersonalInfoModalComponent} from "./edit-personal-info-modal/edit-personal-info-modal.component";
@@ -47,6 +49,15 @@ interface MonthlyContributionDisplay {
   month: string;
   status: string;
   data: ContributionCalendarItem;
+}
+
+export interface ProcessedRegistration {
+  isCurrentSession: boolean;
+  isRegistered: boolean;
+  session: number;
+  status: RegistrationStatus | null;
+  statusPayment: boolean | null;
+  registrationType: TypeInscription | null;
 }
 
 @Component({
@@ -91,6 +102,9 @@ export class MemberDetailComponent implements OnInit {
   currentMember: MemberDataResponse | null = null;
   academicAndMembershipDataForModal: AcademicAndMembershipData | null = null;
 
+  processedRegistrations: ProcessedRegistration[] = [];
+  RegistrationStatus = RegistrationStatus;
+
   get selectedTotalAmount(): number {
     return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
   }
@@ -107,8 +121,12 @@ export class MemberDetailComponent implements OnInit {
         this.sessions = allSessions.data;
         this.subscriptionYears = this.sessions.map(s => s.session).sort((a, b) => b - a);
         this.selectedSubscriptionYear = currentSession.data.session;
-        this.loadContributions(this.selectedSubscriptionYear);
         this.currentSessionYear = currentSession.data;
+        this.loadContributions(this.selectedSubscriptionYear);
+
+        if (this.currentMember) {
+          this.buildProcessedRegistrations(this.currentMember, this.currentSessionYear);
+        }
       });
     }
   }
@@ -225,7 +243,12 @@ export class MemberDetailComponent implements OnInit {
     this.member$ = this.memberHttpService.getMemberById(this.memberId).pipe(
       map((response: ResponseEntityApi<MemberDataResponse>) => response.data),
       tap(member => {
-        if (member) this.currentMember = member;
+        if (member) {
+          this.currentMember = member;
+          if (this.currentSessionYear) {
+            this.buildProcessedRegistrations(member, this.currentSessionYear);
+          }
+        }
       })
     );
   }
@@ -397,7 +420,7 @@ export class MemberDetailComponent implements OnInit {
     this.memberHttpService.register(registrationPayload).subscribe({
       next: () => {
         this.notificationService.showSuccess("Réinscription réussie.");
-        // TODO: Refresh data without full reload if possible
+        this.refreshMemberData();
         this.loadContributions(this.selectedSubscriptionYear);
       },
       error: (err) => {
@@ -426,10 +449,11 @@ export class MemberDetailComponent implements OnInit {
   markAsPaid(session: number): void {
     if (!this.memberId) return;
 
-    console.log(`Simulating marking session ${session} as paid for member ${this.memberId}.`);
+    // console.log(`Simulating marking session ${session} as paid for member ${this.memberId}.`);
 
     // TODO: Replace with actual HTTP call to a service.
     // For now, we simulate success and update the local data.
+
     this.member$ = this.member$.pipe(
       map(member => {
         if (!member) return undefined;
@@ -464,6 +488,78 @@ export class MemberDetailComponent implements OnInit {
     this.location.back();
   }
 
+  get currentSessionRegistration(): ProcessedRegistration | undefined {
+    return this.processedRegistrations.find(r => r.isCurrentSession);
+  }
+
+  get pastRegistrations(): ProcessedRegistration[] {
+    return this.processedRegistrations.filter(r => !r.isCurrentSession);
+  }
+
+  getRegistrationStatusClass(reg: ProcessedRegistration): string {
+    if (!reg.isRegistered) {
+      return 'status-not-registered';
+    }
+    switch (reg.status) {
+      case RegistrationStatus.COMPLETED:
+        return 'status-completed';
+      case RegistrationStatus.UNCOMPLETED:
+        return 'status-uncompleted';
+      case RegistrationStatus.EXPIRED:
+        return 'status-expired';
+      default:
+        return '';
+    }
+  }
+
+  getRegistrationStatusIcon(reg: ProcessedRegistration): string {
+    if (!reg.isRegistered) {
+      return '<i class="bi bi-x-circle-fill"></i>';
+    }
+    switch (reg.status) {
+      case RegistrationStatus.COMPLETED:
+        return '<i class="bi bi-check-circle-fill"></i>';
+      case RegistrationStatus.UNCOMPLETED:
+        return '<i class="bi bi-exclamation-triangle-fill"></i>';
+      case RegistrationStatus.EXPIRED:
+        return '<i class="bi bi-slash-circle-fill"></i>';
+      default:
+        return '';
+    }
+  }
+
+  getRegistrationStatusText(reg: ProcessedRegistration): string {
+    if (!reg.isRegistered) {
+      return 'Non inscrit';
+    }
+    switch (reg.status) {
+      case RegistrationStatus.COMPLETED:
+        return 'Inscription Complète';
+      case RegistrationStatus.UNCOMPLETED:
+        return 'Paiement Requis';
+      case RegistrationStatus.EXPIRED:
+        return 'Inscription Expirée';
+      default:
+        return 'Statut Inconnu';
+    }
+  }
+
+  getRegistrationStatusDescription(reg: ProcessedRegistration): string {
+    if (!reg.isRegistered) {
+      return `Ce membre n'est pas encore inscrit pour la session en cours.`;
+    }
+    switch (reg.status) {
+      case RegistrationStatus.COMPLETED:
+        return `L'inscription pour cette session est finalisée et le paiement a été reçu.`;
+      case RegistrationStatus.UNCOMPLETED:
+        return `L'inscription a été initiée mais le paiement n'a pas encore été confirmé.`;
+      case RegistrationStatus.EXPIRED:
+        return `L'inscription pour cette session est terminée.`;
+      default:
+        return 'Aucune information sur le statut de l\'inscription.';
+    }
+  }
+
   closeEditReligiousKnowledgeModal() {
     this.isEditReligiousKnowledgeModalOpen = false;
   }
@@ -476,8 +572,36 @@ export class MemberDetailComponent implements OnInit {
     this.isEditReligiousKnowledgeModalOpen = true;
   }
 
-  isRegisteredForCurrentSession(): boolean {
-    return this.currentMember?.registration?.some(reg => reg.session === this.currentSessionYear?.session) ?? false;
+  private buildProcessedRegistrations(member: MemberDataResponse, currentSession: SessionModel): void {
+    const registrations = member.registration || [];
+    const processed: ProcessedRegistration[] = [];
+
+    // 1. Handle current session
+    const currentSessionReg = registrations.find(r => r.session === currentSession.session);
+    processed.push({
+      isCurrentSession: true,
+      isRegistered: !!currentSessionReg,
+      session: currentSession.session,
+      status: currentSessionReg?.registrationStatus ?? null,
+      statusPayment: currentSessionReg?.statusPayment ?? null,
+      registrationType: currentSessionReg?.registrationType ?? null,
+    });
+
+    // 2. Handle past sessions
+    const otherRegistrations = registrations
+      .filter(r => r.session !== currentSession.session)
+      .map(r => ({
+        isCurrentSession: false,
+        isRegistered: true,
+        session: r.session,
+        status: r.registrationStatus,
+        statusPayment: r.statusPayment,
+        registrationType: r.registrationType,
+      }));
+
+    // 3. Combine and sort
+    this.processedRegistrations = [...processed, ...otherRegistrations]
+      .sort((a, b) => b.session - a.session);
   }
 
 
