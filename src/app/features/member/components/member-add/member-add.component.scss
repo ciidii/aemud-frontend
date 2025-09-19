@@ -1,0 +1,89 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+.form-container {
+  padding: $space-8;
+  background-color: $color-background-panel;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  max-width: 800px;
+  margin: $space-8 auto;
+}
+
+.form-title {
+  @include text-heading-3;
+  color: $color-text-primary;
+  margin-bottom: $space-2;
+}
+
+.form-subtitle {
+  @include text-body-regular;
+  color: $color-text-secondary;
+  margin-bottom: $space-6;
+}
+
+.progress-bar {
+  background-color: $gray-200;
+  border-radius: $radius-full;
+  height: 8px;
+  margin-bottom: $space-8;
+  overflow: hidden;
+
+  .progress-bar-fill {
+    background-color: $primary-500;
+    height: 100%;
+    transition: width 0.3s ease-in-out;
+  }
+}
+
+.wizard-content {
+  margin-bottom: $space-8;
+}
+
+.step-title {
+  @include text-heading-5;
+  margin-bottom: $space-6;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  padding-top: $space-6;
+  border-top: 1px solid $color-border-default;
+}
+
+// Style de base pour les boutons, à affiner si un composant bouton existe
+.button-primary, .button-secondary {
+  @include text-button;
+  padding: $button-padding-y $button-padding-x;
+  border: none;
+  border-radius: $button-border-radius;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+
+  &[disabled] {
+    background-color: $color-background-disabled;
+    color: $color-text-muted;
+    cursor: not-allowed;
+  }
+}
+
+.button-primary {
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+
+  &:hover:not([disabled]) {
+    background-color: $primary-600;
+  }
+}
+
+.button-secondary {
+  background-color: $gray-200;
+  color: $color-text-primary;
+
+  &:hover:not([disabled]) {
+    background-color: $gray-300;
+  }
+}

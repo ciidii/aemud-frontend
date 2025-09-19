@@ -2,9 +2,8 @@ import {Component, OnInit, signal} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {AppStateService} from "../../core/services/app-state.service";
 import {SmsModel} from "../../core/models/sms.model";
-import {NotificationService} from "../../notification/core/notification.service";
 import {ToastrService} from "ngx-toastr";
-import {MemberModel} from "../../core/models/member.model-copy";
+import {NotificationService} from "../../core/services/notification.service";
 
 @Component({
   selector: 'app-group-for-notification',
@@ -49,31 +48,17 @@ export class GroupForNotificationComponent implements OnInit {
     this.openPopup.set(false)
   }
 
-  savaGroup() {
-    this.getMemberNumbers();
-    console.log(this.formGroup.get("groupMessage")?.value)
-    this.message.message = this.formGroup.get("groupMessage")?.value;
-    this.message.recipientNumbers = this.tabMemberNum;
-    this.messageNotification.sendNotification(this.message).subscribe({
-      next: resp => {
-        this.toaster.success("Message envoyer avec succés")
-      },
-      error: err => {
-        this.toaster.error("Une problème c'est lors de l'envoie")
-      }
-    })
-
-
-  }
 
   getMemberNumbers() {
-    const filteredNumbers = this.appState.memberState.members
+    /*
+    const filteredNumbers = this.appState.getSnapshot().members
       .filter((member: MemberModel) => member.contactInfo?.numberPhone)
       .map((member: MemberModel) =>
         member.contactInfo.numberPhone.replace(/\+/g, '')  // Suppression du signe plus
       );
 
     this.tabMemberNum = filteredNumbers;
-  }
 
+     */
+  }
 }

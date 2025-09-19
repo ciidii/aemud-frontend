@@ -1,6 +1,6 @@
 export interface ResponseEntityApi<T> {
   status: string;
   result: string;
-  error: any;
+  error: unknown;
   data: T;
 }

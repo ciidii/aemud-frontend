@@ -1,0 +1,89 @@
+<div class="modal-backdrop" (click)="onClose()"></div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 class="modal-title">Modifier les Connaissances Religieuses</h3>
+    <button class="btn-close" (click)="onClose()" aria-label="Close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <form [formGroup]="knowledgeForm" (ngSubmit)="onSave()">
+    <div class="modal-body">
+
+      <div class="form-section">
+        <div class="form-grid">
+          <div class="form-field">
+            <label for="coranLevel">Niveau de Coran</label>
+            <input id="coranLevel" formControlName="coranLevel" class="form-input" placeholder="Ex: Lecture simple, Hizb...">
+          </div>
+          <div class="form-field">
+            <label for="arabicProficiency">Maîtrise de l'arabe</label>
+            <input id="arabicProficiency" formControlName="arabicProficiency" class="form-input" placeholder="Ex: Débutant, Intermédiaire...">
+          </div>
+        </div>
+      </div>
+
+      <!-- Fiqh Section -->
+      <div class="form-section">
+        <h4 class="section-title">Fiqh</h4>
+        <div class="knowledge-table">
+          <div class="knowledge-table-header">
+            <div class="knowledge-table-cell">Livre</div>
+            <div class="knowledge-table-cell">Enseignant</div>
+            <div class="knowledge-table-cell">Lieu d'apprentissage</div>
+            <div class="knowledge-table-cell"></div>
+          </div>
+          <div formArrayName="fiqh">
+            <div *ngFor="let item of fiqh.controls; let i = index" [formGroupName]="i" class="knowledge-table-row">
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="bookName" placeholder="Ex: Al-Akhdari"></div>
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="teacherName" placeholder="Ex: Imam Konaté"></div>
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="learningPlace" placeholder="Ex: Mosquée UCAD"></div>
+              <div class="knowledge-table-cell action-cell">
+                <button type="button" class="btn-icon-danger" (click)="removeItem('fiqh', i)" title="Supprimer">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-add-row" (click)="addItem('fiqh')">
+          <i class="bi bi-plus-circle"></i> Ajouter un livre de Fiqh
+        </button>
+      </div>
+
+      <!-- Aqida Section -->
+      <div class="form-section">
+        <h4 class="section-title">Aqida</h4>
+        <div class="knowledge-table">
+          <div class="knowledge-table-header">
+            <div class="knowledge-table-cell">Livre</div>
+            <div class="knowledge-table-cell">Enseignant</div>
+            <div class="knowledge-table-cell">Lieu d'apprentissage</div>
+            <div class="knowledge-table-cell"></div>
+          </div>
+          <div formArrayName="aqida">
+            <div *ngFor="let item of aqida.controls; let i = index" [formGroupName]="i" class="knowledge-table-row">
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="bookName" placeholder="Ex: Oumoul Barahim"></div>
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="teacherName" placeholder="Ex: Imam Konaté"></div>
+              <div class="knowledge-table-cell"><input class="form-input" formControlName="learningPlace" placeholder="Ex: Mosquée UCAD"></div>
+              <div class="knowledge-table-cell action-cell">
+                <button type="button" class="btn-icon-danger" (click)="removeItem('aqida', i)" title="Supprimer">
+                  <i class="bi bi-trash"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button type="button" class="btn btn-outline-primary btn-add-row" (click)="addItem('aqida')">
+          <i class="bi bi-plus-circle"></i> Ajouter un livre de Aqida
+        </button>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="onClose()">Annuler</button>
+      <button type="submit" class="btn btn-success" [disabled]="knowledgeForm.invalid">
+        <i class="bi bi-check-circle"></i> Enregistrer les modifications
+      </button>
+    </div>
+  </form>
+</div>

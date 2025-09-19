@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "analyze-bundle": "ng build --configuration=analyze-bundle && source-map-explorer dist/**/*.js --no-border-checks",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "start:db": "json-server --watch data/db.json"
   },
   "private": true,
   "dependencies": {
@@ -32,6 +33,7 @@
     "intl-tel-input": "^19.5.7",
     "jquery": "^3.7.1",
     "json-server": "^1.0.0-alpha.23",
+    "jwt-decode": "^4.0.0",
     "ngx-toastr": "^19.0.0",
     "rxjs": "~7.8.0",
     "ts-xlsx": "^0.0.11",

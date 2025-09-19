@@ -1,7 +1,0 @@
-<div *ngIf="isVisible()"
-     [ngStyle]="{ 'display': 'block', 'left.px': x, 'top.px': y }"
-     class="context-menu"
-     (click)="$event.stopPropagation()">
-  <div class="context-menu-item" (click)="modifyTemplate()">Modifier</div>
-  <div class="context-menu-item" (click)="onDeleteClick()">Supprimer</div>
-</div>

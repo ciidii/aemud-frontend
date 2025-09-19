@@ -1,5 +1,9 @@
-import {Component, OnInit} from '@angular/core';
+import {Component, OnInit} from "@angular/core";
 import {RouterOutlet} from "@angular/router";
+import {UserListComponent} from "./features/user/components/user-list/user-list.component";
+import {UserAddComponent} from "./features/user/components/user-add/user-add.component";
+import {UserEditComponent} from "./features/user/components/user-edit/user-edit.component";
+import {UserDetailsComponent} from "./features/user/components/user-details/user-details.component";
 
 
 @Component({
@@ -7,7 +11,7 @@ import {RouterOutlet} from "@angular/router";
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [RouterOutlet]
+  imports: [RouterOutlet, UserListComponent, UserAddComponent, UserEditComponent, UserDetailsComponent]
 })
 export class AppComponent implements OnInit {
 
@@ -19,3 +23,4 @@ export class AppComponent implements OnInit {
 
   }
 }
+""

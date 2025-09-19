@@ -1,36 +1,47 @@
-<div [style]="{'display': openPopup() ? 'block' : 'none'}" class="modal fade show" tabindex="-1" role="dialog">
-  <div class="modal-dialog modal-dialog-centered modal-md" role="document">
-    <div class="modal-content shadow-lg rounded">
+<div [style]="{'display': openPopup() ? 'block' : 'none'}" class="modal-overlay">
+  <div class="modal-container" role="document">
+    <div class="modal-content">
       <!-- Modal Header -->
-      <div class="modal-header text-center card-header">
-        <h5 class="modal-title">Envoyer un message au groupe</h5>
-        <button (click)="closeModal()" type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+      <div class="modal-header">
+        <h5 class="modal-title">Nouveau Message Groupé</h5>
+        <button (click)="closeModal()" type="button" class="btn-close" aria-label="Close">
+          <i class="bi bi-x-lg"></i>
+        </button>
       </div>
 
       <!-- Modal Body -->
       <div class="modal-body">
         <form [formGroup]="formGroup">
-          <div class="mb-4">
-            <label for="groupName" class="form-label fw-bold">Nom du groupe</label>
-            <input id="groupName" type="text" formControlName="groupName" class="form-control form-control-lg shadow-sm"
-                   placeholder="Entrez le nom du groupe">
+          <div class="recipient-info mb-4">
+            <i class="bi bi-people-fill"></i>
+            <span>Destinataires : 45 membres (valeur test)</span>
           </div>
-          <div class="mb-4">
-            <label for="groupMessage" class="form-label fw-bold">Ajouter un message template</label>
-            <textarea id="groupMessage" formControlName="groupMessage" rows="4"
-                      class="form-control shadow-sm"
-                      placeholder="Entrez votre message ici"></textarea>
+
+          <div class="mb-3">
+            <div class="d-flex justify-content-between align-items-center">
+              <label for="groupMessage" class="form-label">Message</label>
+              <button type="button" class="btn-template">
+                <i class="bi bi-file-text"></i> Utiliser un template
+              </button>
+            </div>
+            <textarea id="groupMessage" formControlName="groupMessage" rows="5"
+                      class="form-control"
+                      placeholder="Entrez votre message ici..."></textarea>
+            <div class="char-counter text-end mt-1">
+              0/160 (1 SMS)
+            </div>
           </div>
         </form>
       </div>
 
       <!-- Modal Footer -->
-      <div class="modal-footer d-flex justify-content-between">
-        <button type="button" class="btn btn-outline-secondary px-4" (click)="closeModal()" data-bs-dismiss="modal">
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" (click)="closeModal()">
           Annuler
         </button>
-        <button type="button" class="btn btn-success px-4" (click)="savaGroup()">
-          <i class="bi bi-save me-2"></i> Enregistrer
+        <button type="button" class="btn btn-primary"  [disabled]="!formGroup.get('groupMessage')?.value">
+          <i class="bi bi-send"></i>
+          Envoyer
         </button>
       </div>
     </div>

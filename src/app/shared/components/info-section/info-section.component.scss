@@ -1,0 +1,132 @@
+@import 'variables';
+
+.info-section {
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  margin-bottom: $space-6;
+  overflow: hidden;
+  transition: all 0.3s ease-in-out;
+
+  .section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-4 $space-6;
+    cursor: pointer;
+    user-select: none;
+
+    &:hover {
+      background-color: $primary-100;
+    }
+  }
+
+  .section-title {
+    font-size: $font-size-h5;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .section-actions {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+
+    .btn-modify {
+      background: transparent;
+      border: 1px solid $color-border-default;
+      color: $color-text-primary;
+      padding: $space-2 $space-3;
+      border-radius: $radius-sm;
+      font-size: $font-size-small;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: $primary-500;
+        color: $white;
+        border-color: $primary-500;
+      }
+    }
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+  }
+
+  .section-content {
+    padding: 0 $space-6 $space-6 $space-6;
+    border-top: 1px solid $color-border-default;
+  }
+
+  .info-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $space-4;
+  }
+
+  .info-pair {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+
+    &.full-width {
+      grid-column: 1 / -1; // Make this pair span the full width of the grid
+    }
+  }
+
+  .contact-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: $space-3;
+    margin-top: $space-2;
+  }
+
+  .contact-card {
+    background-color: $gray-100;
+    border-radius: $radius-sm;
+    padding: $space-3;
+    border: 1px solid $color-border-default;
+  }
+
+  .contact-name {
+    font-weight: 600;
+    font-size: $font-size-body;
+    color: $color-text-primary;
+  }
+
+  .contact-relation {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+    margin-bottom: $space-2;
+  }
+
+  .contact-phone {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    font-size: $font-size-body;
+    color: $primary-700;
+    text-decoration: none;
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+
+    .info-key {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      font-weight: 500;
+      text-transform: capitalize;
+    }
+
+    .info-value {
+      font-size: $font-size-body;
+      color: $color-text-primary;
+      font-weight: 400;
+    }
+  }

@@ -1,0 +1,49 @@
+<app-modal (closeModal)="close.emit()">
+  <h2 modal-title>Exporter les Membres</h2>
+
+  <div modal-body class="export-options">
+    <section class="option-section">
+      <h3 class="section-title">1. Choisir les colonnes à inclure</h3>
+      <div class="section-actions">
+        <button class="btn-link" (click)="selectAll()">Tout sélectionner</button>
+        <button class="btn-link" (click)="deselectAll()">Tout désélectionner</button>
+      </div>
+
+      <div class="columns-container">
+        <div class="column-group" *ngFor="let group of groupedColumns">
+          <h4 class="group-title">{{ group.groupTitle }}</h4>
+          <div class="columns-grid">
+            <div class="checkbox-wrapper" *ngFor="let column of group.columns">
+              <input type="checkbox" [id]="'col-' + column.id" [checked]="selectedColumns[column.id]"
+                     (change)="toggleColumn(column.id)">
+              <label [for]="'col-' + column.id">{{ column.label }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="option-section">
+      <h3 class="section-title">2. Choisir le format d'export</h3>
+      <div class="format-chooser">
+        <button class="format-btn" [class.active]="selectedFormat === 'excel'" (click)="selectedFormat = 'excel'">
+          <i class="bi bi-file-earmark-excel"></i>
+          <span>Excel</span>
+        </button>
+        <button class="format-btn" [class.active]="selectedFormat === 'pdf'" (click)="selectedFormat = 'pdf'">
+          <i class="bi bi-file-earmark-pdf"></i>
+          <span>PDF</span>
+        </button>
+        <button class="format-btn" [class.active]="selectedFormat === 'csv'" (click)="selectedFormat = 'csv'">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>CSV</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div modal-footer>
+    <button class="btn btn-secondary" (click)="close.emit()">Annuler</button>
+    <button class="btn btn-primary" (click)="onExport()">Exporter les données</button>
+  </div>
+</app-modal>

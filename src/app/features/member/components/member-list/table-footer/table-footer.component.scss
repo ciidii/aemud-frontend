@@ -1,0 +1,123 @@
+@import 'variables';
+:host{
+  position: sticky;
+  bottom: 0;
+}
+.footer-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-1 $space-6; // Further reduced padding
+  background: $white;
+  border-top: 1px solid $color-border-default;
+  box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+  width: 100%;
+}
+
+.actions-container {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $color-text-secondary;
+
+  i {
+    color: $primary-500;
+    font-size: $icon-sm;
+  }
+}
+
+.actions {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.footer-action-btn {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  background: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-sm;
+  padding: $space-1 $space-3; // Reduced padding
+  font-size: $font-size-small;
+  font-weight: 500;
+  color: $color-text-primary;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: $shadow-sm;
+
+  i {
+    font-size: $icon-sm;
+  }
+
+  &:hover:not(:disabled) {
+    background: $gray-200;
+    box-shadow: $shadow-md;
+  }
+
+  &.primary {
+    background: $danger-500;
+    color: $white;
+    border-color: $danger-500;
+
+    &:hover:not(:disabled) {
+      background: $danger-500;
+      border-color: $danger-500;
+    }
+  }
+
+  &:disabled {
+    background-color: $gray-200;
+    color: $gray-500;
+    border-color: $gray-300;
+    box-shadow: none;
+    cursor: not-allowed;
+    opacity: 1; // On n'utilise plus l'opacité pour le style désactivé
+  }
+}
+
+.pagination-container {
+  // No special styles needed as it's just a flex child
+}
+
+.pagination-controls {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+  font-size: $font-size-small;
+  color: $color-text-primary;
+
+  .pagination-btn {
+    background: transparent;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    padding: $space-1; // Reduced padding
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    transition: background 0.2s ease, border-color 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background: $gray-100;
+      border-color: $gray-400;
+    }
+
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.5;
+    }
+
+    i {
+      font-size: $icon-md;
+    }
+  }
+}

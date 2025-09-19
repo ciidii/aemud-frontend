@@ -1,0 +1,915 @@
+@import 'variables';
+@import 'typography';
+
+// --- Main Page Layout ---
+.detail-page-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+// --- Fixed Header ---
+.detail-header {
+  flex-shrink: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  background-color: $white;
+  border-bottom: 1px solid $color-border-default;
+  box-shadow: $shadow-sm;
+  z-index: 10;
+}
+
+.header-left-side {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.back-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  width: 4rem;
+  height: 4rem;
+  cursor: pointer;
+  color: $color-text-secondary;
+  transition: all 0.2s ease;
+
+  i {
+    font-size: $icon-lg; // Larger icon for a primary back button
+  }
+
+  &:hover {
+    background-color: $gray-100;
+    color: $color-text-primary;
+  }
+}
+
+.header-main-info {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.avatar-placeholder {
+  width: 56px;
+  height: 56px;
+  background-color: $primary-500;
+  color: $white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  i {
+    font-size: $icon-lg;
+  }
+}
+
+.header-text h1 {
+  font-size: $font-size-h4;
+  font-weight: 700;
+  margin: 0 0 2px 0;
+}
+
+.header-actions {
+  display: flex;
+  gap: $space-3;
+}
+
+// --- Actions Dropdown ---
+.actions-dropdown {
+  position: relative;
+}
+
+.btn-icon {
+  padding: $space-2;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dropdown-menu {
+  display: none; // Masqué par défaut
+  position: absolute;
+  top: calc(100% + #{$space-2});
+  right: 0;
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-sm;
+  box-shadow: $shadow-lg;
+  list-style: none;
+  padding: $space-2 0;
+  margin: 0;
+  min-width: 200px;
+  z-index: 100;
+
+  &.show {
+    display: block;
+  }
+
+  li a {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    padding: $space-2 $space-4;
+    font-size: $font-size-small;
+    color: $color-text-primary;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+
+    i {
+      font-size: $icon-sm;
+      color: $color-text-secondary;
+    }
+
+    &.text-danger {
+      color: $danger-500;
+
+      i {
+        color: $danger-500;
+      }
+    }
+  }
+}
+
+
+// --- Two-Column Body ---
+.detail-body-grid {
+  display: flex;
+  flex-grow: 1;
+  overflow: hidden;
+  gap: $space-8;
+  padding: $space-6;
+  background-color: $color-background-body;
+  transition: gap 0.3s ease-in-out;
+}
+
+.main-content-col, .sidebar-col {
+  height: 100%;
+  overflow-y: auto;
+  padding-right: $space-3;
+  transition: flex-basis 0.3s ease-in-out;
+}
+
+.main-content-col {
+  flex: 1;
+}
+
+.sidebar-col {
+  flex-basis: 400px;
+  flex-shrink: 0;
+}
+
+// Collapsed State
+.detail-body-grid.sidebar-collapsed {
+  gap: $space-3;
+
+  .sidebar-col {
+    flex-basis: 56px; // Width of the collapsed sidebar
+    padding-right: 0;
+  }
+
+  .sidebar-header {
+    justify-content: center; // Center the toggle button
+  }
+}
+
+
+// --- Right Sidebar Card ---
+.sidebar-card {
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4;
+  border-bottom: 1px solid $color-border-default;
+  flex-shrink: 0;
+
+  h4 {
+    margin: 0;
+    font-size: $font-size-h6;
+    font-weight: 600;
+    color: $color-text-primary;
+  }
+}
+
+.btn-toggle-sidebar {
+  padding: $space-1;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  border: 1px solid transparent;
+  background-color: transparent;
+  color: $color-text-secondary;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $gray-100;
+    color: $color-text-primary;
+  }
+}
+
+.sidebar-content {
+  padding: $space-4;
+  overflow-y: auto;
+  flex-grow: 1;
+
+  h5 {
+    font-size: $font-size-body;
+    font-weight: 600;
+    margin-bottom: $space-3;
+    color: $color-text-primary;
+  }
+}
+
+.sidebar-divider {
+  margin: $space-6 0;
+  border: 0;
+  border-top: 1px solid $color-border-default;
+}
+
+// --- Year Selector (Right Column) ---
+.cotisation-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-4;
+}
+
+.year-selector-group {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  margin-bottom: $space-4;
+
+  label {
+    font-weight: 500;
+    font-size: $font-size-small;
+  }
+
+  .form-select-sm {
+    padding: $space-1 $space-2;
+    font-size: $font-size-small;
+    border-radius: $radius-sm;
+    border: 1px solid $color-border-default;
+  }
+}
+
+// --- Cotisation (Subscription) Grid ---
+.cotisation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-2;
+}
+
+.cotisation-actions {
+  margin-top: $space-4;
+  display: flex;
+  justify-content: flex-end;
+}
+
+.month-box {
+  text-align: center;
+  padding: $space-2;
+  border-radius: $radius-sm;
+  font-size: $font-size-small;
+  font-weight: 500;
+  border: 1px solid $color-border-default;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  &.paid {
+    background-color: $success-100;
+    color: $success-900;
+    border-color: $success-500;
+  }
+
+  &.delayed {
+    background-color: $warning-100;
+    color: $warning-900;
+    border-color: $warning-500;
+  }
+
+  &.pending {
+    background-color: $gray-100;
+    color: $color-text-secondary;
+  }
+
+  &.not-applicable {
+    background-color: $gray-200;
+    color: $gray-500;
+    cursor: not-allowed;
+    text-decoration: line-through;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  &.selected {
+    border-color: $primary-500;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.3);
+    background-color: $primary-100;
+    color: $primary-900;
+  }
+}
+
+// --- Cotisation Multi-Select Bar ---
+.multi-select-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3 $space-4;
+  margin-top: $space-4;
+  background-color: $primary-900;
+  color: $white;
+  border-radius: $radius-md;
+  animation: slideInUp 0.3s ease-out;
+
+  .selection-info {
+    strong {
+      font-size: $font-size-body;
+    }
+
+    span {
+      margin-left: $space-4;
+      font-size: $font-size-small;
+      color: $gray-300;
+    }
+  }
+}
+
+// --- Permanent Info Cards (Left Column) ---
+.permanent-info-card {
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  margin-bottom: $space-6;
+  box-shadow: $shadow-sm;
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: $space-4;
+    border-bottom: 1px solid $color-border-default;
+
+    h5 {
+      margin: 0;
+      font-size: $font-size-h6;
+      font-weight: 600;
+      color: $color-text-primary;
+
+    }
+  }
+
+  .card-body {
+    padding: $space-4;
+  }
+}
+
+.btn-modify-card {
+  background: transparent;
+  border: 1px solid $color-border-default;
+  color: $color-text-primary;
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  font-size: $font-size-small;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+
+  &:hover {
+    background: $primary-500;
+    color: $white;
+    border-color: $primary-500;
+  }
+}
+
+// --- Generic Info Display Grid ---
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $space-4;
+}
+
+.info-pair {
+  display: flex;
+  flex-direction: column;
+  gap: $space-1;
+
+  .info-key {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+    font-weight: 500;
+    text-transform: capitalize;
+  }
+
+  .info-value {
+    font-size: $font-size-body;
+    color: $color-text-primary;
+    font-weight: 400;
+  }
+}
+
+// --- Re-used styles from previous steps ---
+.badge {
+  font-size: 1.2rem;
+  padding: 0.4em 0.7em;
+  border-radius: $radius-md;
+  font-weight: 600;
+}
+
+.bg-success {
+  background-color: $success-500;
+  color: $white;
+}
+
+.bg-warning {
+  background-color: $warning-500;
+  color: $white;
+}
+
+.btn {
+  padding: $space-2 $space-4;
+  border-radius: $radius-sm;
+  font-size: $font-size-body;
+  font-weight: 500;
+  border: 1px solid transparent;
+  cursor: pointer;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $white;
+}
+
+.btn-danger {
+  background-color: $danger-500;
+  color: $white;
+  border-color: $danger-500;
+
+  &:hover {
+    background-color: darken($danger-500, 10%);
+  }
+}
+
+.btn-secondary {
+  background-color: $white;
+  color: $color-text-primary;
+  border-color: $color-border-default;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+.btn-re-register {
+  background-color: $primary-500;
+  color: $white;
+  border: none;
+  padding: $space-2 $space-3;
+  font-size: $font-size-small;
+  font-weight: 500;
+  border-radius: $radius-sm;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+}
+
+.registration-history {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.registration-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-3;
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border-default;
+}
+
+.registration-year {
+  font-weight: 600;
+  font-size: $font-size-body;
+}
+
+.registration-details {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.registration-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-2 $space-3;
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border-default;
+  transition: background-color 0.2s ease;
+}
+
+.registration-info {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+}
+
+.registration-actions {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  opacity: 0; // Masqué par défaut
+  transition: opacity 0.2s ease-in-out;
+}
+
+.registration-item:hover .registration-actions {
+  opacity: 1; // Visible au survol
+}
+
+.btn-sm {
+  padding: $space-1 $space-3;
+  font-size: $font-size-small;
+}
+
+.btn-outline-success {
+  color: $success-900;
+  border-color: $success-500;
+  background-color: $white;
+
+  &:hover {
+    background-color: $success-500;
+    color: $white;
+  }
+}
+
+.btn-icon-primary {
+  background-color: transparent;
+  border: 1px solid $success-500;
+  color: $success-900;
+  padding: $space-1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $success-100;
+  }
+}
+
+.btn-icon-secondary {
+  background-color: transparent;
+  border: 1px solid $color-border-default;
+  color: $color-text-secondary;
+  padding: $space-1;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+.registration-type {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+// --- Contact Person Cards ---
+.info-pair.full-width {
+  grid-column: 1 / -1; // Make this pair span the full width of the grid
+}
+
+.contact-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  gap: $space-3;
+  margin-top: $space-2;
+}
+
+.contact-card {
+  background-color: $gray-100;
+  border-radius: $radius-sm;
+  padding: $space-3;
+  border: 1px solid $color-border-default;
+}
+
+.contact-name {
+  font-weight: 600;
+  font-size: $font-size-body;
+  color: $color-text-primary;
+}
+
+.contact-relation {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+  margin-bottom: $space-2;
+}
+
+.contact-phone {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-size: $font-size-body;
+  color: $primary-700;
+  text-decoration: none;
+  font-weight: 500;
+
+  &:hover {
+    text-decoration: underline;
+  }
+}
+
+// --- Cotisation Summary ---
+.cotisation-summary {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-4;
+  padding: $space-4;
+  margin-bottom: $space-5;
+  background-color: $gray-100; // Changed from gray-50 to gray-100 for better contrast with panel
+  border-radius: $radius-md;
+  border: 1px solid $color-border-default;
+}
+
+.summary-item {
+  text-align: center;
+}
+
+.summary-value {
+  display: block;
+  font-size: $font-size-h6;
+  font-weight: 700;
+  color: $color-text-primary;
+}
+
+.summary-label {
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+// --- Cotisation Legend ---
+.cotisation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-4;
+  margin-top: $space-4;
+  padding: $space-3 0; // Reduced padding
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: $radius-sm;
+
+  // Use the same background colors as the month-box statuses
+  &.paid {
+    background-color: $success-100;
+    border: 1px solid $success-500;
+  }
+
+  &.delayed {
+    background-color: $warning-100;
+    border: 1px solid $warning-500;
+  }
+
+  &.pending {
+    background-color: $gray-100;
+    border: 1px solid $color-border-default;
+  }
+
+  &.not-applicable {
+    background-color: $gray-200;
+    border: 1px solid $gray-300;
+  }
+}
+
+// --- Engagements Card ---
+.tag-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-1;
+}
+
+.tag {
+  background-color: $primary-100;
+  color: $primary-900;
+  padding: $space-1 $space-3;
+  border-radius: $radius-full;
+  font-size: $font-size-small;
+  font-weight: 500;
+}
+
+.text-muted {
+  color: $color-text-muted;
+}
+
+.mt-4 {
+  margin-top: $space-4;
+}
+
+// --- Religious Knowledge Card ---
+.knowledge-header {
+  font-size: $font-size-body;
+  font-weight: 600;
+  margin-bottom: $space-3;
+  padding-bottom: $space-2;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.knowledge-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: $font-size-small;
+
+  th, td {
+    text-align: left;
+    padding: $space-2 $space-3;
+    border-bottom: 1px solid $color-border-default;
+  }
+
+  thead th {
+    font-weight: 600;
+    color: $color-text-secondary;
+    background-color: $gray-100;
+  }
+
+  tbody tr:last-child td {
+    border-bottom: none;
+  }
+
+  td i {
+    font-size: $icon-sm;
+  }
+}
+
+.pt-0 {
+  padding-top: 0;
+}
+
+
+.table-responsive {
+  overflow-x: auto;
+}
+
+// --- Unified Registration Card ---
+.registration-card {
+  background-color: $color-background-panel;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+
+  .card-header {
+    padding: $space-4;
+    border-bottom: 1px solid $color-border-default;
+
+    h5 {
+      @include text-heading-6;
+      margin: 0;
+    }
+  }
+
+  .card-body {
+    padding: $space-4;
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+  }
+
+  .current-registration-status {
+    padding: $space-4;
+    border-radius: $radius-md;
+    border-width: 1px;
+    border-style: solid;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: $space-4;
+
+    .status-main {
+      display: flex;
+      align-items: center;
+      gap: $space-4;
+    }
+
+    .status-icon {
+      font-size: $icon-lg;
+      display: flex;
+      align-items: center;
+    }
+
+    .status-title {
+      @include text-body-bold;
+      margin: 0 0 $space-1 0;
+    }
+
+    .status-description {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      margin: 0;
+      max-width: 45ch;
+    }
+
+    // Status Colors
+    &.status-completed {
+      background-color: $success-100;
+      border-color: darken($success-100, 15%);
+      .status-icon { color: $success-500; }
+      .status-title { color: $success-900; }
+    }
+
+    &.status-uncompleted {
+      background-color: $warning-100;
+      border-color: darken($warning-100, 15%);
+      .status-icon { color: $warning-500; }
+      .status-title { color: $warning-900; }
+    }
+
+    &.status-not-registered {
+      background-color: $gray-100;
+      border-color: $color-border-default;
+      border-style: dashed;
+      .status-icon { color: $color-text-secondary; }
+    }
+
+    &.status-expired {
+      background-color: $gray-100;
+      border-color: $color-border-default;
+      .status-icon { color: $color-text-secondary; }
+    }
+  }
+
+  .registration-history {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
+  .history-title {
+    @include text-body-bold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    font-size: 1.1rem; // Slightly smaller for a sub-header
+    letter-spacing: 0.5px;
+    margin-bottom: $space-2;
+  }
+}

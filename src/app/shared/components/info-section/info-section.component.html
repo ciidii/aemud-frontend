@@ -1,0 +1,60 @@
+<div class="info-section" [class.is-open]="isOpen">
+  <div class="section-header" (click)="toggleSection()">
+    <h3 class="section-title">{{ title }}</h3>
+    <div class="section-actions">
+      <button class="btn-modify" (click)="$event.stopPropagation()">Modifier</button>
+      <i class="bi" [ngClass]="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+    </div>
+  </div>
+  <div class="section-content" *ngIf="isOpen">
+    <div class="info-grid">
+      <ng-container *ngFor="let item of dataAsArray">
+
+        <!-- Special Case for PersonToCall Array -->
+        <ng-container *ngIf="item.key === 'personToCall' && isPersonToCallArray(item.value)">
+          <div class="info-pair full-width">
+            <span class="info-key">{{ item.key | formatKey }}</span>
+            <div class="contact-list">
+              <div class="contact-card" *ngFor="let contact of item.value">
+                <div class="contact-name">{{ contact.name }}</div>
+                <div class="contact-relation">{{ contact.relationship }}</div>
+                <a [href]="'tel:' + contact.numberPhone" class="contact-phone">
+                  <i class="bi bi-telephone-fill"></i> {{ contact.numberPhone }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </ng-container>
+
+        <!-- Default Case for other key-value pairs -->
+        <ng-container *ngIf="item.key !== 'personToCall'">
+          <div class="info-pair">
+            <span class="info-key">{{ item.key | formatKey }}</span>
+            <span class="info-value"><!-- Specific Key Cases -->
+              <a *ngIf="item.key === 'email'" [href]="'mailto:' + item.value">{{ item.value }}</a>
+              <a *ngIf="item.key === 'numberPhone'" [href]="'tel:' + item.value">{{ item.value }}</a>
+              <span *ngIf="item.key === 'birthday'">
+                {{ item.value | toDate | date:'d MMMM yyyy' }}
+              </span>
+
+              <!-- Generic Type Cases -->
+              <span *ngIf="item.value === true || item.value === false">
+                <i class="bi"
+                   [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+              </span>
+
+              <!-- Default Fallback -->
+              <span *ngIf="item.key !== 'email'
+                        && item.key !== 'numberPhone'
+                        && item.key !== 'birthday'
+                        && !(item.value === true || item.value === false)">
+                {{ item.value }}
+              </span>
+            </span>
+          </div>
+        </ng-container>
+
+      </ng-container>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,52 @@
+<div class="form-grid" [formGroup]="personalInfoForm">
+  <!-- Prénom -->
+  <div class="form-field">
+    <label for="firstname" class="form-label">Prénom</label>
+    <input id="firstname" type="text" formControlName="firstname" class="form-input">
+    <app-validation-message [control]="firstname"></app-validation-message>
+  </div>
+
+  <!-- Nom -->
+  <div class="form-field">
+    <label for="name" class="form-label">Nom de famille</label>
+    <input id="name" type="text" formControlName="name" class="form-input">
+    <app-validation-message [control]="name"></app-validation-message>
+  </div>
+
+  <!-- Nationalité -->
+  <div class="form-field">
+    <label for="nationality" class="form-label">Nationalité</label>
+    <input id="nationality" type="text" formControlName="nationality" class="form-input">
+    <app-validation-message [control]="nationality"></app-validation-message>
+  </div>
+
+  <!-- Date de naissance -->
+  <div class="form-field">
+    <label for="birthday" class="form-label">Date de naissance</label>
+    <input id="birthday" type="date" formControlName="birthday" class="form-input">
+    <app-validation-message [control]="birthday"></app-validation-message>
+  </div>
+
+  <!-- Genre -->
+  <div class="form-field">
+    <label for="gender" class="form-label">Genre</label>
+    <select id="gender" formControlName="gender" class="form-select">
+      <option value="" disabled>Sélectionner...</option>
+      <option value="MALE">Homme</option>
+      <option value="FEMALE">Femme</option>
+    </select>
+    <app-validation-message [control]="gender"></app-validation-message>
+  </div>
+
+  <!-- Statut marital -->
+  <div class="form-field">
+    <label for="maritalStatus" class="form-label">Statut social</label>
+    <select id="maritalStatus" formControlName="maritalStatus" class="form-select">
+      <option value="" disabled>Sélectionner...</option>
+      <option value="SINGLE">Célibataire</option>
+      <option value="MARRIED">Marié(e)</option>
+      <option value="DIVORCED">Divorcé(e)</option>
+    </select>
+    <app-validation-message [control]="maritalStatus"></app-validation-message>
+  </div>
+</div>

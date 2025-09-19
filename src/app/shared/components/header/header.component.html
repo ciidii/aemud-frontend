@@ -13,9 +13,9 @@
              routerLink="{{hc.retourLinh}}">{{hc.title}}</a>
         </li>
       </ul>
-      <form class="d-flex">
-        <button class="btn btn-outline-success" routerLink="/" type="submit" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Deconnexion</button>
-      </form>
+      <div *ngIf="isLoggedIn$ | async">
+        <button class="btn btn-outline-success" (click)="logout()">Déconnexion</button>
+      </div>
     </div>
   </div>
 </nav>

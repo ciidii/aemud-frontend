@@ -1,37 +1,42 @@
-import {Component} from '@angular/core';
+import {Component, ElementRef, HostListener, inject} from '@angular/core';
 import {RouterLink, RouterLinkActive} from "@angular/router";
+
+import {AuthService} from "../../services/auth.service";
+import {SidebarService} from "../../services/sidebar.service";
 import {NgIf} from "@angular/common";
-import {NavigationService} from "../../services/navigation.service";
+import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 
 @Component({
   selector: 'app-aside-bare',
   templateUrl: './aside-bare.component.html',
   styleUrls: ['./aside-bare.component.scss'],
-  imports: [RouterLinkActive, RouterLink, NgIf],
+  imports: [RouterLinkActive, RouterLink, NgIf, NotificationPopoverComponent],
   standalone: true
 })
-export class AsideBareComponent {
-  categories = {
-    membres: true,
-    gestionEntites: true,
-    contributions: true,
-    notifications: true,
-    parametres: true
-  };
+export class AsideBareComponent{
+  private authService = inject(AuthService);
+  protected sideBareService = inject(SidebarService);
+  private elementRef = inject(ElementRef);
 
-  constructor(public navigationService: NavigationService) {
-  }
+  isPopoverOpen = false;
 
-  toggleCategory(category: keyof typeof this.categories, event?: MouseEvent) {
-    if (event) {
-      event.stopPropagation();
-    }
-    if (!event || (event.target as HTMLElement).closest('a')) {
-      this.categories[category] = !this.categories[category];
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: Event): void {
+    if (!this.elementRef.nativeElement.contains(event.target)) {
+      this.isPopoverOpen = false;
     }
   }
 
-  logout() {
-    // Implémentation de la déconnexion
+  togglePopover(event: Event): void {
+    event.stopPropagation();
+    this.isPopoverOpen = !this.isPopoverOpen;
+  }
+
+   toggleCollapse() {
+    this.sideBareService.toggleCollapse();
+  }
+
+  logout(): void {
+    this.authService.logout();
   }
 }

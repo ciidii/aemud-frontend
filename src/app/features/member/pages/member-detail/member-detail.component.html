@@ -1,0 +1,491 @@
+<div class="detail-page-container" *ngIf="member$ | async as member; else loading">
+
+  <!-- Header (Fixed) -->
+  <div class="detail-header">
+    <div class="header-left-side">
+      <button class="back-button" (click)="goBack()" aria-label="Go back">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <div class="header-main-info">
+        <div class="avatar-placeholder">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="header-text" *ngIf="member.personalInfo">
+          <h1>{{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h1>
+          <div class="status-badges">
+            <span class="badge bg-success">Membre Actif</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="header-actions">
+      <button class="btn btn-primary" (click)="openSendMessageModal()"><i class="bi bi-send"></i> Envoyer un message
+      </button>
+      <div class="actions-dropdown">
+        <button class="btn btn-secondary btn-icon" (click)="toggleActionsDropdown($event)">
+          <i class="bi bi-three-dots-vertical"></i>
+        </button>
+        <ul class="dropdown-menu" [class.show]="isActionsDropdownOpen">
+          <li><a (click)="openExportModal()"><i class="bi bi-upload"></i> Exporter</a></li>
+          <li><a (click)="toggleDeleteModal()" class="text-danger"><i class="bi bi-trash"></i> Supprimer</a></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- Body Grid (Two Columns) -->
+  <div class="detail-body-grid" [class.sidebar-collapsed]="isSidebarCollapsed">
+
+    <!-- Left Column: Main Info (Scrollable) -->
+    <div class="main-content-col">
+
+      <!-- Personal Info Card -->
+      <div class="permanent-info-card" *ngIf="member.personalInfo as personalInfo">
+        <div class="card-header">
+          <h5>Informations Personnelles</h5>
+          <button class="btn-modify-card" (click)="openEditPersonalInfoModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair">
+            <span class="info-key">Nom complet</span>
+            <span class="info-value">{{ personalInfo.firstname }} {{ personalInfo.name }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Nationalité</span>
+            <span class="info-value">{{ personalInfo.nationality }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Genre</span>
+            <span class="info-value">{{ personalInfo.gender }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Date de naissance</span>
+            <span class="info-value">{{ personalInfo.birthday | toDate | date:'d MMMM yyyy' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Statut Marital</span>
+            <span class="info-value">{{ personalInfo.maritalStatus }}</span>
+          </div>
+        </div>
+      </div>
+
+
+      <!-- Contact Info Card -->
+      <div class="permanent-info-card" *ngIf="member.contactInfo as contactInfo">
+        <div class="card-header">
+          <h5>Informations de Contact</h5>
+          <button class="btn-modify-card" (click)="openEditContactInfoModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair">
+            <span class="info-key">Numéro de téléphone</span>
+            <span class="info-value"><a
+              [href]="'tel:' + contactInfo.numberPhone">{{ contactInfo.numberPhone }}</a></span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Email</span>
+            <span class="info-value"><a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a></span>
+          </div>
+          <!-- PersonToCalls -->
+          <ng-container *ngIf="contactInfo.personToCalls.length > 0">
+            <div class="info-pair full-width">
+              <span class="info-key">Personnes à contacter</span>
+              <div class="contact-list">
+                <div class="contact-card" *ngFor="let contact of contactInfo.personToCalls">
+                  <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
+                  <div class="contact-relation">{{ contact.relationship }}</div>
+                  <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
+                    <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Academic & Membership Info Card -->
+      <div class="permanent-info-card" *ngIf="member.academicInfo || member.membershipInfo">
+        <div class="card-header">
+          <h5>Informations Académiques & Adhésion</h5>
+          <button class="btn-modify-card" (click)="openEditAcademicInfoModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <ng-container *ngIf="member.academicInfo as academicInfo">
+            <div class="info-pair"><span class="info-key">Établissement</span><span
+              class="info-value">{{ academicInfo.institutionName }}</span></div>
+            <div class="info-pair"><span class="info-key">Domaine d'études</span><span
+              class="info-value">{{ academicInfo.studiesDomain }}</span></div>
+            <div class="info-pair"><span class="info-key">Niveau d'études</span><span
+              class="info-value">{{ academicInfo.studiesLevel }}</span></div>
+          </ng-container>
+          <ng-container *ngIf="member.membershipInfo as membershipInfo">
+            <div class="info-pair"><span class="info-key">Établissement d'origine</span><span
+              class="info-value">{{ membershipInfo.legacyInstitution }}</span></div>
+            <div class="info-pair"><span class="info-key">Série du BAC</span><span
+              class="info-value">{{ membershipInfo.bacSeries }}</span></div>
+            <div class="info-pair"><span class="info-key">Mention du BAC</span><span
+              class="info-value">{{ membershipInfo.bacMention }}</span></div>
+            <div class="info-pair"><span class="info-key">Année du BAC</span><span
+              class="info-value">{{ membershipInfo.yearOfBac }}</span></div>
+          </ng-container>
+        </div>
+      </div>
+
+      <!-- Engagements Card -->
+      <div class="permanent-info-card">
+        <div class="card-header">
+          <h5>Engagements Associatifs</h5>
+          <button class="btn-modify-card" (click)="openEditEngagementsModal()">Modifier</button>
+        </div>
+        <div class="card-body">
+          <div class="info-pair">
+            <span class="info-key">Clubs</span>
+            <div class="info-value tag-list" *ngIf="member.clubs && member.clubs.length > 0; else noClubs">
+              <span class="tag" *ngFor="let club of member.clubs">{{ club.name }}</span>
+            </div>
+            <ng-template #noClubs><span class="info-value text-muted">Aucun club</span></ng-template>
+          </div>
+          <div class="info-pair mt-4">
+            <span class="info-key">Commissions</span>
+            <div class="info-value tag-list"
+                 *ngIf="member.commissions && member.commissions.length > 0; else noCommissions">
+              <span class="tag" *ngFor="let commission of member.commissions">{{ commission.name }}</span>
+            </div>
+            <ng-template #noCommissions><span class="info-value text-muted">Aucune commission</span></ng-template>
+          </div>
+        </div>
+      </div>
+
+      <!-- Religious Knowledge Card -->
+      <div class="permanent-info-card" *ngIf="member.religiousKnowledge as religiousKnowledge">
+        <div class="card-header">
+          <h5>Connaissances Religieuses</h5>
+          <button class="btn-modify-card" (click)="openEditReligiousKnowledgeModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair"><span class="info-key">Niveau de Coran</span><span
+            class="info-value">{{ religiousKnowledge.coranLevel }}</span></div>
+          <div class="info-pair"><span class="info-key">Maîtrise de l'arabe</span><span
+            class="info-value">{{ religiousKnowledge.arabicProficiency }}</span></div>
+        </div>
+        <div class="card-body pt-0" *ngIf="religiousKnowledge.aqida && religiousKnowledge.aqida.length > 0">
+          <h6 class="knowledge-header">Aqida</h6>
+          <div class="table-responsive">
+            <table class="knowledge-table">
+              <thead>
+              <tr>
+                <th>Livre</th>
+                <th>Enseignant</th>
+                <th>Lieu</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let knowledge of religiousKnowledge.aqida">
+                <td>{{ knowledge.bookName }}</td>
+                <td>{{ knowledge.teacherName }}</td>
+                <td>{{ knowledge.learningPlace }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="card-body pt-0" *ngIf="religiousKnowledge.fiqh && religiousKnowledge.fiqh.length > 0">
+          <h6 class="knowledge-header">Fiqh</h6>
+          <div class="table-responsive">
+            <table class="knowledge-table">
+              <thead>
+              <tr>
+                <th>Livre</th>
+                <th>Enseignant</th>
+                <th>Lieu</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let knowledge of religiousKnowledge.fiqh">
+                <td>{{ knowledge.bookName }}</td>
+                <td>{{ knowledge.teacherName }}</td>
+                <td>{{ knowledge.learningPlace }}</td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Card -->
+      <div class="permanent-info-card" *ngIf="member.addressInfo as addressInfo">
+        <div class="card-header">
+          <h5>Adresse</h5>
+          <button class="btn-modify-card" (click)="openEditAddressInfoModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div class="info-pair"><span class="info-key">Adresse à Dakar</span><span
+            class="info-value">{{ addressInfo.addressInDakar }}</span></div>
+          <div class="info-pair"><span class="info-key">Adresse au Campus</span><span
+            class="info-value">{{ addressInfo.addressToCampus }}</span></div>
+        </div>
+      </div>
+
+      <!-- Bourse Card -->
+      <div class="permanent-info-card" *ngIf="member.bourse as bourse">
+        <div class="card-header">
+          <h5>Bourse</h5>
+          <button class="btn-modify-card" (click)="openEditBourseInfoModal()">Modifier</button>
+        </div>
+        <div class="card-body info-grid" *ngIf="bourse.bourseId">
+          <div class="info-pair"><span class="info-key">Libellé</span><span
+            class="info-value">{{ bourse.lebelle }}</span></div>
+          <div class="info-pair"><span class="info-key">Montant</span><span
+            class="info-value">{{ bourse.montant | currency:'XOF':'symbol':'1.0-0' }}</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right Column: History & Status (Scrollable) -->
+    <div class="sidebar-col">
+      <div class="sidebar-card">
+        <div class="sidebar-header">
+          <h4 *ngIf="!isSidebarCollapsed">Historique des inscriptions</h4>
+          <button class="btn-icon btn-toggle-sidebar" (click)="toggleSidebar()"
+                  [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'">
+            <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
+          </button>
+        </div>
+        <div class="sidebar-content" *ngIf="!isSidebarCollapsed">
+
+          <!-- Subscription Summary -->
+          <div class="cotisation-summary" *ngIf="contributionSummary">
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
+              <span class="summary-label">Total Payé</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
+              <span class="summary-label">Restant Dû</span>
+            </div>
+            <div class="summary-item">
+              <span class="summary-value">{{ contributionSummary.completionRate }}</span>
+              <span class="summary-label">Complétion</span>
+            </div>
+          </div>
+
+          <!-- Subscription Status -->
+          <h5>État des Cotisations</h5>
+          <div class="cotisation-header">
+            <div class="year-selector-group">
+              <label for="subscription-year">Session :</label>
+              <select id="subscription-year" class="form-select-sm" (change)="onYearChange($event)">
+                <option *ngFor="let year of subscriptionYears" [value]="year"
+                        [selected]="year === selectedSubscriptionYear">
+                  {{ year }} - {{ year + 1 }}
+                </option>
+              </select>
+            </div>
+          </div>
+          <div class="cotisation-grid">
+            <button *ngFor="let item of monthlyContributions"
+                    class="month-box"
+                    [ngClass]="item.status"
+                    [class.selected]="isMonthSelected(item)"
+                    (click)="onMonthClick(item)">
+              {{ item.month }}
+            </button>
+          </div>
+          <div *ngIf="monthlyContributions" class="cotisation-legend">
+            <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
+            <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
+            <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
+            <div class="legend-item"><span class="legend-color not-applicable"></span>Non applicable</div>
+          </div>
+
+          <!-- Multi-select Action Bar -->
+          <div class="multi-select-bar" *ngIf="selectedContributions.length > 0">
+            <div class="selection-info">
+              <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
+              <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
+            </div>
+            <button class="btn btn-primary" (click)="openRecordPaymentModal()">Enregistrer le paiement</button>
+          </div>
+
+          <div class="cotisation-actions">
+            <button class="btn btn-sm btn-secondary" (click)="sendContributionReminder()">
+              <i class="bi bi-bell"></i> Envoyer un rappel
+            </button>
+          </div>
+
+          <hr class="sidebar-divider">
+
+          <!-- Registration History
+          <div class="registration-history"
+               *ngIf="member.registration && member.registration.length > 0; else noRegistrations">
+            <div class="registration-item" *ngFor="let reg of member.registration">
+              <div class="registration-info">
+                <div class="registration-year">Session {{ reg.session }}</div>
+                <div class="registration-details">
+                <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
+                  {{ reg.statusPayment ? 'Payé' : 'En attente' }}
+                </span>
+                  <span class="registration-type">{{ reg.registrationType }}</span>
+                </div>
+              </div>
+              <div class="registration-actions" *ngIf="!reg.statusPayment">
+                <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
+                        (click)="markAsPaid(reg.session)">
+                  <i class="bi bi-check-circle"></i>
+                </button>
+                <button class="btn btn-sm btn-icon-secondary" title="Envoyer un rappel SMS">
+                  <i class="bi bi-bell"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          -->
+          <!-- Unified Registration Status Card -->
+          <div class="sidebar-content registration-card">
+            <div class="card-header">
+              <h5>Statut d'Inscription</h5>
+            </div>
+            <div class="card-body" *ngIf="currentSessionRegistration as currentReg  else noRegistrations">
+
+              <!-- Current Session -->
+              <div class="current-registration-status" [ngClass]="getRegistrationStatusClass(currentReg)">
+                <div class="status-main">
+                  <span class="status-icon" [innerHTML]="getRegistrationStatusIcon(currentReg)"></span>
+                  <div class="status-text">
+                    <h6 class="status-title">Session {{ currentReg.sessionId }} - {{ currentReg.sessionId }}
+                      : {{ getRegistrationStatusText(currentReg) }}</h6>
+                    <p class="status-description">{{ getRegistrationStatusDescription(currentReg) }}</p>
+                  </div>
+                </div>
+                <div class="status-actions">
+                  <button *ngIf="!currentReg.isRegistered" class="btn btn-primary" (click)="toggleReregisterModal()">
+                    Inscrire maintenant
+                  </button>
+                  <button *ngIf="currentReg.status === RegistrationStatus.UNCOMPLETED" class="btn btn-primary"
+                          (click)="markAsPaid(currentReg.sessionId)">Finaliser le Paiement
+                  </button>
+                </div>
+              </div>
+
+              <!-- History -->
+              <ng-container *ngIf="pastRegistrations.length > 0">
+                <hr class="sidebar-divider">
+                <div class="registration-history">
+                  <h6 class="history-title">Historique</h6>
+                  <div class="registration-item" *ngFor="let reg of pastRegistrations">
+                    <div class="registration-info">
+                      <div class="registration-year">Session {{ reg.sessionId }} - {{ reg.sessionId }}</div>
+                      <div class="registration-details">
+                    <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
+                      {{ reg.statusPayment ? 'Payé' : 'En attente' }}
+                    </span>
+                        <span class="registration-type">{{ reg.registrationType }}</span>
+                      </div>
+                    </div>
+                    <div class="registration-actions" *ngIf="!reg.statusPayment">
+                      <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
+                              (click)="markAsPaid(reg.sessionId)">
+                        <i class="bi bi-check-circle"></i>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </ng-container>
+
+            </div>
+          </div>
+
+          <ng-template #noRegistrations>
+            <p>Aucun historique d'inscription.</p>
+          </ng-template>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Fallback & Modals -->
+<ng-template #loading>
+  <p>Loading member details...</p>
+</ng-template>
+
+<ng-template #notFound>
+  <p>Member not found.</p>
+</ng-template>
+
+<app-reregister-modal *ngIf="isReregisterModalOpen"
+                      [availableSessions]="sessions"
+                      [currentSessionYear]="selectedSubscriptionYear"
+                      (close)="toggleReregisterModal()"
+                      (save)="handleSaveRegistration($event)">
+</app-reregister-modal>
+
+<app-confirm-delete-modal *ngIf="isDeleteModalOpen" [itemCount]="1" (close)="toggleDeleteModal()"
+                          (confirm)="onDeleteConfirmed()"></app-confirm-delete-modal>
+<app-send-message-modal *ngIf="isSendMessageModalOpen" (close)="closeSendMessageModal()"></app-send-message-modal>
+<app-export-modal *ngIf="isExportModalOpen" (close)="closeExportModal()"></app-export-modal>
+
+<!-- Record Payment Modal -->
+<app-record-payment-modal *ngIf="isRecordPaymentModalOpen"
+                          [contributions]="selectedContributions"
+                          (close)="handleClosePaymentModal()"
+                          (save)="handleSavePayment($event)">
+</app-record-payment-modal>
+
+<!-- Edit Personal Info Modal -->
+<app-edit-personal-info-modal
+  *ngIf="isEditPersonalInfoModalOpen && currentMember?.personalInfo"
+  [initialData]="currentMember!.personalInfo"
+  (close)="closeEditPersonalInfoModal()"
+  (save)="handleSavePersonalInfo($event)">
+</app-edit-personal-info-modal>
+
+<!-- Edit Contact Info Modal -->
+<app-edit-contact-info-modal
+  *ngIf="isEditContactInfoModalOpen && currentMember?.contactInfo"
+  [initialData]="currentMember!.contactInfo"
+  (close)="closeEditContactInfoModal()"
+  (save)="handleSaveContactInfo($event)">
+</app-edit-contact-info-modal>
+
+<!-- Edit Academic Info Modal -->
+<app-edit-academic-info-modal
+  *ngIf="isEditAcademicInfoModalOpen"
+  (close)="closeEditAcademicInfoModal()"
+  (save)="handleSaveAcademicInfo($event)">
+</app-edit-academic-info-modal>
+
+<app-edit-engagements-modal
+  *ngIf="isEditEngagementsModalOpen && currentMember"
+  [memberClubs]="currentMember.clubs || []"
+  [memberCommissions]="currentMember.commissions || []"
+  (close)="closeEditEngagementsModal()"
+  (save)="handleSaveEngagements($event)">
+</app-edit-engagements-modal>
+
+<!-- Edit Religious Knowledge Modal -->
+<app-edit-religious-knowledge-modal
+  *ngIf="isEditReligiousKnowledgeModalOpen && currentMember?.religiousKnowledge"
+  [initialData]="currentMember!.religiousKnowledge"
+  (close)="closeEditReligiousKnowledgeModal()"
+  (save)="handleSaveReligiousKnowledge($event)">
+</app-edit-religious-knowledge-modal>
+
+<!-- Edit Address Info Modal -->
+<app-edit-address-info-modal
+  *ngIf="isEditAddressInfoModalOpen && currentMember?.addressInfo"
+  [initialData]="currentMember!.addressInfo"
+  (close)="closeEditAddressInfoModal()"
+  (save)="handleSaveAddressInfo($event)">
+</app-edit-address-info-modal>
+
+<!-- Edit Bourse Info Modal -->
+<app-edit-bourse-info-modal
+  *ngIf="isEditBourseInfoModalOpen && currentMember?.bourse"
+  [initialData]="currentMember!.bourse"
+  (close)="closeEditBourseInfoModal()"
+  (save)="handleSaveBourseInfo($event)">
+</app-edit-bourse-info-modal>
+

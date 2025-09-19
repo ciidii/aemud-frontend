@@ -1,10 +1,11 @@
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {Observable} from "rxjs";
-import {ResponseEntityApi} from "../models/response-entity-api";
+import { ResponseEntityApi } from 'src/app/core/models/response-entity-api';
 import {SessionModel} from "../models/session.model";
-import {environment} from "../../../environments/environment.development";
 import {MonthDataModel} from "../models/month-data.model";
+import {environment} from "../../../environments/environment";
+
 
 @Injectable({
   providedIn: 'root'
@@ -18,7 +19,7 @@ export class YearOfSessionService {
     return this.http.get<ResponseEntityApi<SessionModel>>(environment.API_URL + '/session/current');
   }
 
-  public openNewSession(year: any): Observable<ResponseEntityApi<SessionModel>> {
+  public openNewSession(year: SessionModel): Observable<ResponseEntityApi<SessionModel>> {
     const body = year;
     return this.http.post<ResponseEntityApi<SessionModel>>(environment.API_URL + "/session", body);
   }
@@ -43,7 +44,7 @@ export class YearOfSessionService {
     return this.http.delete<ResponseEntityApi<void>>(environment.API_URL + '/session', {params})
   }
 
-  public getMonth(): Observable<ResponseEntityApi<MonthDataModel[]>> {
+  public getElevenMonths(): Observable<ResponseEntityApi<MonthDataModel[]>> {
     return this.http.get<ResponseEntityApi<MonthDataModel[]>>(environment.API_URL + '/month');
   }
 }
