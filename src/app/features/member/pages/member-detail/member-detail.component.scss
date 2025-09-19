@@ -1,4 +1,5 @@
 @import 'variables';
+@import 'typography';
 
 // --- Main Page Layout ---
 .detail-page-container {
@@ -812,19 +813,37 @@
 
 // --- Unified Registration Card ---
 .registration-card {
+  background-color: $color-background-panel;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-sm;
+
+  .card-header {
+    padding: $space-4;
+    border-bottom: 1px solid $color-border-default;
+
+    h5 {
+      @include text-heading-6;
+      margin: 0;
+    }
+  }
+
   .card-body {
-    padding: $space-5;
+    padding: $space-4;
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
   }
 
   .current-registration-status {
-    padding: $space-5;
+    padding: $space-4;
     border-radius: $radius-md;
-    border: 1px solid $color-border-default;
+    border-width: 1px;
+    border-style: solid;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    gap: $space-5;
-    transition: all 0.3s ease;
+    gap: $space-4;
 
     .status-main {
       display: flex;
@@ -839,7 +858,7 @@
     }
 
     .status-title {
-      // @include text-heading-6;
+      @include text-body-bold;
       margin: 0 0 $space-1 0;
     }
 
@@ -852,51 +871,45 @@
 
     // Status Colors
     &.status-completed {
-      background-color: lighten($success-100, 2%);
-      border-color: $success-500;
-
-      .status-icon {
-        color: $success-500;
-      }
-
-      .status-title {
-        color: $success-900;
-      }
+      background-color: $success-100;
+      border-color: darken($success-100, 15%);
+      .status-icon { color: $success-500; }
+      .status-title { color: $success-900; }
     }
 
     &.status-uncompleted {
-      background-color: lighten($warning-100, 2%);
-      border-color: $warning-500;
-
-      .status-icon {
-        color: $warning-500;
-      }
-
-      .status-title {
-        color: $warning-900;
-      }
+      background-color: $warning-100;
+      border-color: darken($warning-100, 15%);
+      .status-icon { color: $warning-500; }
+      .status-title { color: $warning-900; }
     }
 
     &.status-not-registered {
       background-color: $gray-100;
+      border-color: $color-border-default;
       border-style: dashed;
-
-      .status-icon {
-        color: $color-text-secondary;
-      }
+      .status-icon { color: $color-text-secondary; }
     }
 
     &.status-expired {
       background-color: $gray-100;
-
-      .status-icon {
-        color: $color-text-secondary;
-      }
+      border-color: $color-border-default;
+      .status-icon { color: $color-text-secondary; }
     }
   }
 
+  .registration-history {
+    display: flex;
+    flex-direction: column;
+    gap: $space-4;
+  }
+
   .history-title {
-    //  @include text-heading-6;
-    margin-bottom: $space-3;
+    @include text-body-bold;
+    color: $color-text-secondary;
+    text-transform: uppercase;
+    font-size: 1.1rem; // Slightly smaller for a sub-header
+    letter-spacing: 0.5px;
+    margin-bottom: $space-2;
   }
 }

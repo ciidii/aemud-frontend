@@ -11,7 +11,7 @@
         <!-- Session/Year -->
         <div class="form-group">
           <label for="session">Année de la session</label>
-          <select id="session" class="form-select" formControlName="session">
+          <select id="session" class="form-select" formControlName="sessionId">
             <option *ngFor="let session of availableSessions" [value]="session.id">{{ session.session }}
               - {{ session.session + 1 }}
             </option>

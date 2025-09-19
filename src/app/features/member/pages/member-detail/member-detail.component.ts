@@ -54,7 +54,7 @@ interface MonthlyContributionDisplay {
 export interface ProcessedRegistration {
   isCurrentSession: boolean;
   isRegistered: boolean;
-  session: number;
+  sessionId: string;
   status: RegistrationStatus | null;
   statusPayment: boolean | null;
   registrationType: TypeInscription | null;
@@ -417,6 +417,7 @@ export class MemberDetailComponent implements OnInit {
   handleSaveRegistration(formData: any): void {
     if (!this.memberId) return;
     const registrationPayload = {...formData, member: this.memberId};
+    console.log(registrationPayload)
     this.memberHttpService.register(registrationPayload).subscribe({
       next: () => {
         this.notificationService.showSuccess("Réinscription réussie.");
@@ -446,26 +447,30 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
-  markAsPaid(session: number): void {
+  markAsPaid(session: string): any {
     if (!this.memberId) return;
-
-    // console.log(`Simulating marking session ${session} as paid for member ${this.memberId}.`);
-
-    // TODO: Replace with actual HTTP call to a service.
-    // For now, we simulate success and update the local data.
-
     this.member$ = this.member$.pipe(
       map(member => {
         if (!member) return undefined;
 
         const updatedRegistrations = member.registration.map(reg => {
-          if (reg.session === session) {
-            return {...reg, statusPayment: true};
+          if (reg.sessionId === session) {
+            console.log({...reg, statusPayment: true})
+            this.memberHttpService.updateRegister({...reg, statusPayment: true}).subscribe({
+              next: (res) => {
+                if (res.status === "OK") {
+
+                }
+              },
+              error: err => {
+
+              }
+            })
           }
           return reg;
         });
-
-        return {...member, registration: updatedRegistrations};
+        // console.log({registration: updatedRegistrations})
+        // return {...member, registration: updatedRegistrations};
       })
     );
   }
@@ -577,23 +582,23 @@ export class MemberDetailComponent implements OnInit {
     const processed: ProcessedRegistration[] = [];
 
     // 1. Handle current session
-    const currentSessionReg = registrations.find(r => r.session === currentSession.session);
+    const currentSessionReg = registrations.find(r => r.sessionId === currentSession.id);
     processed.push({
       isCurrentSession: true,
       isRegistered: !!currentSessionReg,
-      session: currentSession.session,
+      sessionId: currentSession.id,
       status: currentSessionReg?.registrationStatus ?? null,
       statusPayment: currentSessionReg?.statusPayment ?? null,
-      registrationType: currentSessionReg?.registrationType ?? null,
+      registrationType: currentSessionReg?.registrationType ?? null
     });
 
     // 2. Handle past sessions
     const otherRegistrations = registrations
-      .filter(r => r.session !== currentSession.session)
+      .filter(r => r.sessionId !== currentSession.id)
       .map(r => ({
         isCurrentSession: false,
         isRegistered: true,
-        session: r.session,
+        sessionId: r.sessionId,
         status: r.registrationStatus,
         statusPayment: r.statusPayment,
         registrationType: r.registrationType,
@@ -601,8 +606,5 @@ export class MemberDetailComponent implements OnInit {
 
     // 3. Combine and sort
     this.processedRegistrations = [...processed, ...otherRegistrations]
-      .sort((a, b) => b.session - a.session);
   }
-
-
 }

@@ -80,7 +80,7 @@ export interface Commission {
 
 export interface RegistrationResponse {
   member: string;
-  session: number;
+  sessionId: string;
   dateInscription: number[];
   registrationType: TypeInscription;
   statusPayment: boolean;

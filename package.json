@@ -8,7 +8,8 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "analyze-bundle": "ng build --configuration=analyze-bundle && source-map-explorer dist/**/*.js --no-border-checks",
-    "lint": "ng lint"
+    "lint": "ng lint",
+    "start:db": "json-server --watch data/db.json"
   },
   "private": true,
   "dependencies": {

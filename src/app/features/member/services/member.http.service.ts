@@ -128,13 +128,11 @@ export class MemberHttpService {
     return this.httpClient.get<ResponseEntityApi<Array<RegistrationModel>>>(`${environment.API_URL}/registration`, {params});
   }
 
-  public updateRegistration(sessionId?: string): Observable<ResponseEntityApi<Array<void>>> {
-    let params = new HttpParams();
-    if (sessionId) {
-      params = params.set("session", sessionId);
+  updateRegister(registrationRequest: any): Observable<ResponseEntityApi<void>> { // Renamed parameter for clarity (was registrationRequestWithNumberPhone)
+    let options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
     }
-    // Adjust this endpoint `/registration` if your backend uses a different path for listing all registrations.
-    return this.httpClient.put<ResponseEntityApi<Array<void>>>(`${environment.API_URL}/registration`, {params});
+    return this.httpClient.put<ResponseEntityApi<void>>(environment.API_URL + `/registration`, registrationRequest, options);
   }
 
   /**

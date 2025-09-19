@@ -353,7 +353,7 @@
                 <div class="status-main">
                   <span class="status-icon" [innerHTML]="getRegistrationStatusIcon(currentReg)"></span>
                   <div class="status-text">
-                    <h6 class="status-title">Session {{ currentReg.session }} - {{ currentReg.session + 1 }}
+                    <h6 class="status-title">Session {{ currentReg.sessionId }} - {{ currentReg.sessionId }}
                       : {{ getRegistrationStatusText(currentReg) }}</h6>
                     <p class="status-description">{{ getRegistrationStatusDescription(currentReg) }}</p>
                   </div>
@@ -363,7 +363,7 @@
                     Inscrire maintenant
                   </button>
                   <button *ngIf="currentReg.status === RegistrationStatus.UNCOMPLETED" class="btn btn-primary"
-                          (click)="markAsPaid(currentReg.session)">Finaliser le Paiement
+                          (click)="markAsPaid(currentReg.sessionId)">Finaliser le Paiement
                   </button>
                 </div>
               </div>
@@ -375,7 +375,7 @@
                   <h6 class="history-title">Historique</h6>
                   <div class="registration-item" *ngFor="let reg of pastRegistrations">
                     <div class="registration-info">
-                      <div class="registration-year">Session {{ reg.session }} - {{ reg.session + 1 }}</div>
+                      <div class="registration-year">Session {{ reg.sessionId }} - {{ reg.sessionId }}</div>
                       <div class="registration-details">
                     <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
                       {{ reg.statusPayment ? 'Payé' : 'En attente' }}
@@ -385,7 +385,7 @@
                     </div>
                     <div class="registration-actions" *ngIf="!reg.statusPayment">
                       <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
-                              (click)="markAsPaid(reg.session)">
+                              (click)="markAsPaid(reg.sessionId)">
                         <i class="bi bi-check-circle"></i>
                       </button>
                     </div>

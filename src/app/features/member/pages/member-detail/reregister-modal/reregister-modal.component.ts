@@ -27,7 +27,7 @@ export class ReregisterModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.reregisterForm = this.formBuilder.group({
-      session: [this.currentSessionYear, Validators.required],
+      sessionId: [this.currentSessionYear, Validators.required],
       statusPayment: [false, Validators.required],
       registrationType: [TypeInscription.REINSCRIPTION, Validators.required]
     });
