@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from "@angular/forms";
-import { Router, RouterLink } from "@angular/router";
-import { AuthService } from "../../services/auth.service";
-import { finalize } from "rxjs";
-import { NgIf } from "@angular/common";
+import {Component, OnInit} from '@angular/core';
+import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
+import {Router, RouterLink} from "@angular/router";
+import {AuthService} from "../../services/auth.service";
+import {finalize} from "rxjs";
+import {NgIf} from "@angular/common";
 
 @Component({
   selector: 'app-signup',
@@ -21,7 +21,8 @@ export class SignupComponent implements OnInit {
     private formBuilder: FormBuilder,
     private router: Router,
     private authService: AuthService
-  ) {}
+  ) {
+  }
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
@@ -44,7 +45,7 @@ export class SignupComponent implements OnInit {
         finalize(() => this.isLoading = false)
       )
       .subscribe({
-        next:resp => {
+        next: resp => {
           this.router.navigateByUrl('/auth/login');
         },
         error: (err) => {

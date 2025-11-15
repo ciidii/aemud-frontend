@@ -1,5 +1,5 @@
 import {Component, Input} from '@angular/core';
-import {DatePipe, NgForOf, NgIf, JsonPipe, NgClass, NgSwitch, NgSwitchCase, NgSwitchDefault} from "@angular/common";
+import {DatePipe, NgClass, NgForOf, NgIf} from "@angular/common";
 import {FormatKeyPipe} from "../../pipes/format-key.pipe";
 import {ToDatePipe} from "../../pipes/to-date.pipe";
 
@@ -9,12 +9,8 @@ import {ToDatePipe} from "../../pipes/to-date.pipe";
   imports: [
     NgIf,
     NgForOf,
-    JsonPipe,
     NgClass,
     FormatKeyPipe,
-    NgSwitch,
-    NgSwitchCase,
-    NgSwitchDefault,
     DatePipe,
     ToDatePipe
   ],
@@ -22,13 +18,13 @@ import {ToDatePipe} from "../../pipes/to-date.pipe";
   styleUrl: './info-section.component.scss'
 })
 export class InfoSectionComponent {
-  @Input() title: string = 'Section Title';
+  @Input() title = 'Section Title';
   @Input() data: any = {};
-  @Input() isOpen: boolean = false;
+  @Input() isOpen = false;
 
   // We need to transform the data object into an array of key-value pairs to loop over it
   get dataAsArray(): { key: string, value: any }[] {
-    return this.data ? Object.keys(this.data).map(key => ({ key, value: this.data[key] })) : [];
+    return this.data ? Object.keys(this.data).map(key => ({key, value: this.data[key]})) : [];
   }
 
   toggleSection(): void {

@@ -4,7 +4,7 @@
   <h3 class="section-title">Niveau de langue Arabe</h3>
   <div class="radio-group" role="radiogroup">
     <div *ngFor="let level of arabicProficiencyLevels" class="form-field-radio">
-      <input [id]="'prof-' + level" type="radio" [value]="level" formControlName="arabicProficiency" class="form-radio">
+      <input [id]="'prof-' + level" [value]="level" class="form-radio" formControlName="arabicProficiency" type="radio">
       <label [for]="'prof-' + level" class="form-label-radio">{{ proficiencyLabels[level] }}</label>
     </div>
   </div>
@@ -12,9 +12,9 @@
 
   <h3 class="section-title">Coran</h3>
   <div class="form-field">
-    <label for="coranLevel" class="form-label">Niveau de mémorisation</label>
-    <select id="coranLevel" formControlName="coranLevel" class="form-select">
-      <option value="" disabled>Sélectionner un niveau...</option>
+    <label class="form-label" for="coranLevel">Niveau de mémorisation</label>
+    <select class="form-select" formControlName="coranLevel" id="coranLevel">
+      <option disabled value="">Sélectionner un niveau...</option>
       <option *ngFor="let level of coranLevels" [value]="level">{{ level }}</option>
     </select>
   </div>
@@ -23,27 +23,27 @@
   <div class="dynamic-section">
     <div class="dynamic-section-header">
       <h3 class="section-title">Aqida (Croyance)</h3>
-      <button type="button" (click)="addAqida()" class="button-add">+ Ajouter une étude</button>
+      <button (click)="addAqida()" class="button-add" type="button">+ Ajouter une étude</button>
     </div>
     <div formArrayName="aqida">
       <div *ngFor="let group of aqida.controls; let i = index" [formGroupName]="i" class="item-card">
         <div class="item-card-header">
           <h4>Étude #{{ i + 1 }}</h4>
-          <button type="button" (click)="removeAqida(i)" class="button-remove">Retirer</button>
+          <button (click)="removeAqida(i)" class="button-remove" type="button">Retirer</button>
         </div>
         <div class="form-grid">
           <div class="form-field">
             <label [for]="'aqidaBook-' + i" class="form-label">Livre étudié</label>
-            <input [id]="'aqidaBook-' + i" type="text" formControlName="bookName" class="form-input">
+            <input [id]="'aqidaBook-' + i" class="form-input" formControlName="bookName" type="text">
             <app-validation-message [control]="getKnowledgeControl('aqida', i, 'bookName')"></app-validation-message>
           </div>
           <div class="form-field">
             <label [for]="'aqidaTeacher-' + i" class="form-label">Professeur</label>
-            <input [id]="'aqidaTeacher-' + i" type="text" formControlName="teacherName" class="form-input">
+            <input [id]="'aqidaTeacher-' + i" class="form-input" formControlName="teacherName" type="text">
           </div>
           <div class="form-field">
             <label [for]="'aqidaPlace-' + i" class="form-label">Lieu d'apprentissage</label>
-            <input [id]="'aqidaPlace-' + i" type="text" formControlName="learningPlace" class="form-input">
+            <input [id]="'aqidaPlace-' + i" class="form-input" formControlName="learningPlace" type="text">
           </div>
         </div>
       </div>
@@ -54,27 +54,27 @@
   <div class="dynamic-section">
     <div class="dynamic-section-header">
       <h3 class="section-title">Fiqh (Jurisprudence)</h3>
-      <button type="button" (click)="addFiqh()" class="button-add">+ Ajouter une étude</button>
+      <button (click)="addFiqh()" class="button-add" type="button">+ Ajouter une étude</button>
     </div>
     <div formArrayName="fiqh">
       <div *ngFor="let group of fiqh.controls; let i = index" [formGroupName]="i" class="item-card">
         <div class="item-card-header">
           <h4>Étude #{{ i + 1 }}</h4>
-          <button type="button" (click)="removeFiqh(i)" class="button-remove">Retirer</button>
+          <button (click)="removeFiqh(i)" class="button-remove" type="button">Retirer</button>
         </div>
         <div class="form-grid">
           <div class="form-field">
             <label [for]="'fiqhBook-' + i" class="form-label">Livre étudié</label>
-            <input [id]="'fiqhBook-' + i" type="text" formControlName="bookName" class="form-input">
+            <input [id]="'fiqhBook-' + i" class="form-input" formControlName="bookName" type="text">
             <app-validation-message [control]="getKnowledgeControl('fiqh', i, 'bookName')"></app-validation-message>
           </div>
           <div class="form-field">
             <label [for]="'fiqhTeacher-' + i" class="form-label">Professeur</label>
-            <input [id]="'fiqhTeacher-' + i" type="text" formControlName="teacherName" class="form-input">
+            <input [id]="'fiqhTeacher-' + i" class="form-input" formControlName="teacherName" type="text">
           </div>
           <div class="form-field">
             <label [for]="'fiqhPlace-' + i" class="form-label">Lieu d'apprentissage</label>
-            <input [id]="'fiqhPlace-' + i" type="text" formControlName="learningPlace" class="form-input">
+            <input [id]="'fiqhPlace-' + i" class="form-input" formControlName="learningPlace" type="text">
           </div>
         </div>
       </div>

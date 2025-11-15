@@ -1,12 +1,12 @@
-<div class="info-section" [class.is-open]="isOpen">
-  <div class="section-header" (click)="toggleSection()">
+<div [class.is-open]="isOpen" class="info-section">
+  <div (click)="toggleSection()" class="section-header">
     <h3 class="section-title">{{ title }}</h3>
     <div class="section-actions">
-      <button class="btn-modify" (click)="$event.stopPropagation()">Modifier</button>
-      <i class="bi" [ngClass]="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'"></i>
+      <button (click)="$event.stopPropagation()" class="btn-modify">Modifier</button>
+      <i [ngClass]="isOpen ? 'bi-chevron-up' : 'bi-chevron-down'" class="bi"></i>
     </div>
   </div>
-  <div class="section-content" *ngIf="isOpen">
+  <div *ngIf="isOpen" class="section-content">
     <div class="info-grid">
       <ng-container *ngFor="let item of dataAsArray">
 
@@ -15,7 +15,7 @@
           <div class="info-pair full-width">
             <span class="info-key">{{ item.key | formatKey }}</span>
             <div class="contact-list">
-              <div class="contact-card" *ngFor="let contact of item.value">
+              <div *ngFor="let contact of item.value" class="contact-card">
                 <div class="contact-name">{{ contact.name }}</div>
                 <div class="contact-relation">{{ contact.relationship }}</div>
                 <a [href]="'tel:' + contact.numberPhone" class="contact-phone">
@@ -39,8 +39,8 @@
 
               <!-- Generic Type Cases -->
               <span *ngIf="item.value === true || item.value === false">
-                <i class="bi"
-                   [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"></i>
+                <i [ngClass]="item.value ? 'bi-check-circle-fill text-success' : 'bi-x-circle-fill text-danger'"
+                   class="bi"></i>
               </span>
 
               <!-- Default Fallback -->

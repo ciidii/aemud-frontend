@@ -3,22 +3,19 @@ import {RouterLink, RouterLinkActive} from "@angular/router";
 
 import {AuthService} from "../../services/auth.service";
 import {SidebarService} from "../../services/sidebar.service";
-import {NgIf} from "@angular/common";
-import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 
 @Component({
   selector: 'app-aside-bare',
   templateUrl: './aside-bare.component.html',
   styleUrls: ['./aside-bare.component.scss'],
-  imports: [RouterLinkActive, RouterLink, NgIf, NotificationPopoverComponent],
+  imports: [RouterLinkActive, RouterLink],
   standalone: true
 })
-export class AsideBareComponent{
-  private authService = inject(AuthService);
-  protected sideBareService = inject(SidebarService);
-  private elementRef = inject(ElementRef);
-
+export class AsideBareComponent {
   isPopoverOpen = false;
+  protected sideBareService = inject(SidebarService);
+  private authService = inject(AuthService);
+  private elementRef = inject(ElementRef);
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: Event): void {
@@ -32,7 +29,7 @@ export class AsideBareComponent{
     this.isPopoverOpen = !this.isPopoverOpen;
   }
 
-   toggleCollapse() {
+  toggleCollapse() {
     this.sideBareService.toggleCollapse();
   }
 

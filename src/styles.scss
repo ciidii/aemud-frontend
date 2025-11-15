@@ -1,6 +1,7 @@
 /* Importez vos variables personnalisées en premier */
 @import 'assets/scss/variables';
-@import 'assets/scss/typography'; // Importation des mixins de typographie
+@import 'assets/scss/typography';
+// Importation des mixins de typographie
 
 /* Importez les fonctions et variables de Bootstrap AVANT le reste de Bootstrap */
 @import "bootstrap/scss/functions";
@@ -58,14 +59,37 @@ app-root {
 }
 
 // --- Styles de typographie de base ---
-h1 { @include text-heading-1; }
-h2 { @include text-heading-2; }
-h3 { @include text-heading-3; }
-h4 { @include text-heading-4; }
-h5 { @include text-heading-5; }
-h6 { @include text-heading-6; }
-p { @include text-body-regular; }
-small { @include text-body-small; }
+h1 {
+  @include text-heading-1;
+}
+
+h2 {
+  @include text-heading-2;
+}
+
+h3 {
+  @include text-heading-3;
+}
+
+h4 {
+  @include text-heading-4;
+}
+
+h5 {
+  @include text-heading-5;
+}
+
+h6 {
+  @include text-heading-6;
+}
+
+p {
+  @include text-body-regular;
+}
+
+small {
+  @include text-body-small;
+}
 
 // --- Styles des composants ---
 
@@ -85,6 +109,7 @@ small { @include text-body-small; }
   background-color: $gray-600;
   border-color: $gray-600;
   color: $white;
+
   &:hover {
     background-color: $gray-700;
     border-color: $gray-700;
@@ -115,7 +140,8 @@ small { @include text-body-small; }
 .btn-outline-warning {
   color: $warning-900;
   border-color: $warning-500;
-   &:hover {
+
+  &:hover {
     color: $gray-900;
     background-color: $warning-500;
     border-color: $warning-500;

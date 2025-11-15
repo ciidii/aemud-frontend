@@ -2,16 +2,17 @@
   <!-- Header -->
   <div class="popover-header">
     <h6>Notifications</h6>
-    <button class="btn-link" (click)="markAllAsRead.emit()">Marquer comme lues</button>
+    <button (click)="markAllAsRead.emit()" class="btn-link">Marquer comme lues</button>
   </div>
 
   <!-- Body -->
   <div class="popover-body">
     <ng-container *ngIf="notifications.length > 0; else emptyState">
       <ul class="notification-list">
-        <li class="notification-item" *ngFor="let notification of notifications" [ngClass]="{'is-unread': !notification.read}">
+        <li *ngFor="let notification of notifications" [ngClass]="{'is-unread': !notification.read}"
+            class="notification-item">
           <div class="notification-icon">
-            <i class="bi" [ngClass]="notification.icon"></i>
+            <i [ngClass]="notification.icon" class="bi"></i>
           </div>
           <div class="notification-content">
             <p class="notification-text">{{ notification.text }}</p>
@@ -31,6 +32,6 @@
 
   <!-- Footer -->
   <div class="popover-footer">
-    <a href="#" (click)="viewAll.emit()">Voir toutes les notifications</a>
+    <a (click)="viewAll.emit()" href="#">Voir toutes les notifications</a>
   </div>
 </div>

@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
+import {Component, forwardRef, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -11,7 +11,7 @@ import {
   Validator,
   Validators
 } from "@angular/forms";
-import { CommonModule } from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {
   ValidationMessageComponent
 } from "../../../../../shared/components/validation-message/validation-message.component";
@@ -38,9 +38,37 @@ import {
 export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   personalInfoForm!: FormGroup; // Initialized in ngOnInit, so we use '!'
-  onTouched: () => void = () => {};
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
+
+  // Getters for easy access in template
+  get name() {
+    return this.personalInfoForm.get('name');
+  }
+
+  get firstname() {
+    return this.personalInfoForm.get('firstname');
+  }
+
+  get nationality() {
+    return this.personalInfoForm.get('nationality');
+  }
+
+  get gender() {
+    return this.personalInfoForm.get('gender');
+  }
+
+  get birthday() {
+    return this.personalInfoForm.get('birthday');
+  }
+
+  get maritalStatus() {
+    return this.personalInfoForm.get('maritalStatus');
+  }
+
+  onTouched: () => void = () => {
+  };
 
   ngOnInit(): void {
     this.personalInfoForm = this.fb.group({
@@ -53,16 +81,8 @@ export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit, 
     });
   }
 
-  // Getters for easy access in template
-  get name() { return this.personalInfoForm.get('name'); }
-  get firstname() { return this.personalInfoForm.get('firstname'); }
-  get nationality() { return this.personalInfoForm.get('nationality'); }
-  get gender() { return this.personalInfoForm.get('gender'); }
-  get birthday() { return this.personalInfoForm.get('birthday'); }
-  get maritalStatus() { return this.personalInfoForm.get('maritalStatus'); }
-
   writeValue(val: any): void {
-    val && this.personalInfoForm.setValue(val, { emitEvent: false });
+    val && this.personalInfoForm.setValue(val, {emitEvent: false});
   }
 
   registerOnChange(fn: any): void {
@@ -78,6 +98,6 @@ export class PersonalInfoFormComponent implements ControlValueAccessor, OnInit, 
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.personalInfoForm.valid ? null : { invalid: true };
+    return this.personalInfoForm.valid ? null : {invalid: true};
   }
 }

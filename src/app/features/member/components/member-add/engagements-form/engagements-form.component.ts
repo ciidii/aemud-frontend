@@ -4,6 +4,7 @@ import {
   ControlValueAccessor,
   FormBuilder,
   FormGroup,
+  FormsModule,
   NG_VALIDATORS,
   NG_VALUE_ACCESSOR,
   ReactiveFormsModule,
@@ -12,14 +13,14 @@ import {
   Validators
 } from "@angular/forms";
 import {CommonModule} from "@angular/common";
-import {Bourse, Club, Commission} from "../../../../../core/models/member-data.model";
+import {Club, Commission} from "../../../../../core/models/member-data.model";
 import {
   ValidationMessageComponent
 } from "../../../../../shared/components/validation-message/validation-message.component";
 import {
   CustomMultiselectComponent
 } from "../../../../../shared/components/custom-multiselect/custom-multiselect.component";
-import {FormsModule} from "@angular/forms";
+import {BourseModel} from "../../../../../core/models/bourse.model";
 
 @Component({
   selector: 'app-engagements-form',
@@ -41,23 +42,13 @@ import {FormsModule} from "@angular/forms";
   ]
 })
 export class EngagementsFormComponent implements ControlValueAccessor, OnInit, Validator {
-  @Input() bourses: Bourse[] = [];
+  @Input() bourses: BourseModel[] = [];
   @Input() clubs: Club[] = [];
   @Input() commissions: Commission[] = [];
 
   engagementsForm!: FormGroup;
-  onTouched: () => void = () => {
-  };
 
   constructor(private fb: FormBuilder) {
-  }
-
-  ngOnInit(): void {
-    this.engagementsForm = this.fb.group({
-      bourse: [null, Validators.required],
-      clubs: [[], Validators.required],
-      commissions: [[], Validators.required]
-    });
   }
 
   // Getters for easy access in template
@@ -71,6 +62,17 @@ export class EngagementsFormComponent implements ControlValueAccessor, OnInit, V
 
   get commissions_() {
     return this.engagementsForm.get('commissions');
+  }
+
+  onTouched: () => void = () => {
+  };
+
+  ngOnInit(): void {
+    this.engagementsForm = this.fb.group({
+      bourse: [null, Validators.required],
+      clubs: [[], Validators.required],
+      commissions: [[], Validators.required]
+    });
   }
 
   writeValue(val: any): void {

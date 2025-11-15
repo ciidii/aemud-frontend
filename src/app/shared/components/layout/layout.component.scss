@@ -1,39 +1,30 @@
-@import 'variables';
+@import 'src/assets/scss/variables';
+
+.app-root-container {
+  display: grid;
+  grid-template-rows: $header-height 1fr; // Header row, Content row
+  height: 100vh;
+  width: 100vw;
+}
 
 .app-container {
   display: grid;
-  grid-template-columns: 24rem 1fr; // sidebar ouverte = 250px
-  height: 100vh;
+  grid-template-columns: $sidebar-expanded-width 1fr; // sidebar, main-content
   transition: grid-template-columns 0.3s ease-in-out;
-  &.sidebar--collapsed {
-    grid-template-columns: 5rem 1fr;
-  }
+  overflow: hidden; // Prevents scrollbars on the container
 
+  &.sidebar--collapsed {
+    grid-template-columns: $sidebar-collapsed-width 1fr;
+  }
 }
 
 app-aside-bare {
-  color: $color-text-on-primary;
   overflow: hidden;
   transition: width 0.3s ease-in-out;
-  .nav-text,
-  .user-details,
-  .logout-btn span {
-    transition: opacity 0.2s ease-in-out;
-  }
-
-  .sidebar--collapsed & {
-    .nav-text,
-    .user-details,
-    .logout-btn span {
-      opacity: 0;
-      pointer-events: none;
-    }
-  }
 }
 
 .main-content {
-  background-color: $gray-100;
-  overflow-y: auto;
-  padding: 0 ;
-
+  background-color: $color-background-body;
+  overflow-y: auto; // Allow scrolling only in the main content
+  padding: $space-6;
 }

@@ -3,8 +3,8 @@
     <div class="container-fluid p-3 vh-100">
       <div class="row p-0">
         <div class="col p-0  d-flex justify-content-center align-items-center">
-          <img class="logo img-fluid text-center" src="../../../assets/background/logo_aemud_Plan_de_travail_1.png"
-               alt="logo">
+          <img alt="logo" class="logo img-fluid text-center"
+               src="../../../assets/background/logo_aemud_Plan_de_travail_1.png">
         </div>
       </div>
       <div class="row d-flex justify-content-center align-items-center">
@@ -31,14 +31,14 @@
         <div class="card">
           <div class="card-header text-center">Veuillez entrer vos coordonées pour vous connecter</div>
           <div class="card-body">
-            <form [formGroup]="formGroup" (ngSubmit)="handleLogin()">
+            <form (ngSubmit)="handleLogin()" [formGroup]="formGroup">
               <div>
                 <label class="form-label">Nom d'utilisateur</label>
                 <input class="form-control" formControlName="username">
               </div>
               <div>
                 <label class="form-label">Mot de passe</label>
-                <input type="password" class="form-control" formControlName="password">
+                <input class="form-control" formControlName="password" type="password">
               </div>
               <div class="mt-2 text-end">
                 <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
@@ -47,10 +47,11 @@
                 {{ errorMessage }}
               </div>
               <div>
-                <button [disabled]="formGroup.invalid || (loading$ | async)" type="submit"
-                        class="btn-connexion mt-3 form-control btn btn-primary">
-                  <span *ngIf="loading$ | async" class="spinner-border spinner-border-sm" role="status"
-                        aria-hidden="true"></span>
+                <button [disabled]="formGroup.invalid || (loading$ | async)"
+                        class="btn-connexion mt-3 form-control btn btn-primary"
+                        type="submit">
+                  <span *ngIf="loading$ | async" aria-hidden="true" class="spinner-border spinner-border-sm"
+                        role="status"></span>
                   Connexion
                 </button>
               </div>

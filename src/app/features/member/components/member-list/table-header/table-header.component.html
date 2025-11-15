@@ -9,15 +9,8 @@
     <button class="action-button">
       <i class="bi bi-download"></i> Importer
     </button>
-    <button class="action-button" (click)="exportTriggered.emit()">
+    <button (click)="exportTriggered.emit()" class="action-button">
       <i class="bi bi-upload"></i> Exporter
     </button>
-    <div class="notification-container">
-      <div class="notification-icon" (click)="togglePopover($event)">
-        <i class="bi bi-bell"></i>
-        <span class="badge"></span>
-      </div>
-      <app-notification-popover *ngIf="isPopoverOpen"></app-notification-popover>
-    </div>
   </div>
 </div>

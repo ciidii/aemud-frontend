@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { BourseModel } from '../../../../../core/models/bourse.model';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
+import {BourseModel} from '../../../../../core/models/bourse.model';
 
 @Component({
   selector: 'app-edit-bourse-info-modal',
@@ -14,9 +14,8 @@ export class EditBourseInfoModalComponent implements OnInit {
   @Input() initialData!: BourseModel;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<BourseModel>();
-
-  private fb = inject(FormBuilder);
   bourseForm!: FormGroup;
+  private fb = inject(FormBuilder);
 
   ngOnInit(): void {
     this.bourseForm = this.fb.group({
@@ -28,7 +27,7 @@ export class EditBourseInfoModalComponent implements OnInit {
   onSave(): void {
     if (this.bourseForm.valid) {
       // Merge the form value with the initial data to keep the bourseId
-      const saveData = { ...this.initialData, ...this.bourseForm.value };
+      const saveData = {...this.initialData, ...this.bourseForm.value};
       this.save.emit(saveData);
       this.onClose();
     }

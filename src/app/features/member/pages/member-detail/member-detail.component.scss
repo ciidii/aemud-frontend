@@ -873,28 +873,46 @@
     &.status-completed {
       background-color: $success-100;
       border-color: darken($success-100, 15%);
-      .status-icon { color: $success-500; }
-      .status-title { color: $success-900; }
+
+      .status-icon {
+        color: $success-500;
+      }
+
+      .status-title {
+        color: $success-900;
+      }
     }
 
     &.status-uncompleted {
       background-color: $warning-100;
       border-color: darken($warning-100, 15%);
-      .status-icon { color: $warning-500; }
-      .status-title { color: $warning-900; }
+
+      .status-icon {
+        color: $warning-500;
+      }
+
+      .status-title {
+        color: $warning-900;
+      }
     }
 
     &.status-not-registered {
       background-color: $gray-100;
       border-color: $color-border-default;
       border-style: dashed;
-      .status-icon { color: $color-text-secondary; }
+
+      .status-icon {
+        color: $color-text-secondary;
+      }
     }
 
     &.status-expired {
       background-color: $gray-100;
       border-color: $color-border-default;
-      .status-icon { color: $color-text-secondary; }
+
+      .status-icon {
+        color: $color-text-secondary;
+      }
     }
   }
 
@@ -911,5 +929,144 @@
     font-size: 1.1rem; // Slightly smaller for a sub-header
     letter-spacing: 0.5px;
     margin-bottom: $space-2;
+  }
+}
+
+// --- Current Registration Status Card ---
+.current-registration-status {
+  padding: $space-4;
+  border-radius: $radius-md;
+  border-width: 1px;
+  border-style: solid;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: $space-4;
+  margin-bottom: $space-5; // Add margin to separate from next element
+
+  .status-main {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  .status-icon {
+    font-size: $icon-lg;
+    display: flex;
+    align-items: center;
+  }
+
+  .status-title {
+    @include text-body-bold;
+    margin: 0 0 $space-1 0;
+  }
+
+  .status-description {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+    margin: 0;
+    max-width: 45ch;
+  }
+
+  // Status Colors
+  &.status-completed {
+    background-color: $success-100;
+    border-color: darken($success-100, 15%);
+
+    .status-icon {
+      color: $success-500;
+    }
+
+    .status-title {
+      color: $success-900;
+    }
+  }
+
+  &.status-uncompleted {
+    background-color: $warning-100;
+    border-color: darken($warning-100, 15%);
+
+    .status-icon {
+      color: $warning-500;
+    }
+
+    .status-title {
+      color: $warning-900;
+    }
+  }
+
+  &.status-not-registered {
+    background-color: $gray-100;
+    border-color: $color-border-default;
+    border-style: dashed;
+
+    .status-icon {
+      color: $color-text-secondary;
+    }
+  }
+
+  &.status-expired {
+    background-color: $gray-100;
+    border-color: $color-border-default;
+
+    .status-icon {
+      color: $color-text-secondary;
+    }
+  }
+}
+
+// --- New Registration History ---
+.history-container {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+}
+
+.mandate-group {
+  display: flex;
+  flex-direction: column;
+  gap: $space-3;
+}
+
+.mandate-title {
+  @include text-body-bold;
+  color: $color-text-secondary;
+  text-transform: uppercase;
+  font-size: 1.2rem;
+  letter-spacing: 0.5px;
+  padding-bottom: $space-2;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.registration-list {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.phase-name {
+  @include text-body-bold;
+  color: $color-text-primary;
+}
+
+// Override some styles for the item in the new context
+.registration-item {
+  .registration-info {
+    flex-grow: 1; // Allow info to take up available space
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+  }
+}
+
+.empty-history {
+  text-align: center;
+  padding: $space-8 $space-4;
+  color: $color-text-muted;
+
+  i {
+    font-size: $icon-xl;
+    margin-bottom: $space-4;
+    display: block;
   }
 }

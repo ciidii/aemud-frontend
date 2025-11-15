@@ -1,9 +1,9 @@
-import { inject } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
-import { AuthService } from "../../features/auth/services/auth.service";
-import { tap } from "rxjs/operators";
-import { ToastrService } from "ngx-toastr";
+import {inject} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
+import {AuthService} from "../../features/auth/services/auth.service";
+import {tap} from "rxjs/operators";
+import {ToastrService} from "ngx-toastr";
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
   const authService = inject(AuthService);
@@ -31,7 +31,8 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
     : req;
 
   return next(authReq).pipe(
-    tap(() => {}),
+    tap(() => {
+    }),
     catchError((error: HttpErrorResponse) => {
       console.log(error?.error?.error?.code);
       if (error?.error?.error?.code === "JWT_TOKEN_EXPIRED") {

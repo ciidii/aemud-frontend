@@ -1,31 +1,31 @@
 <div class="footer-bar">
   <!-- Left Section: Contextual Actions -->
   <div class="actions-container">
-    <div class="selection-info" *ngIf="hasSelection$ | async">
+    <div *ngIf="hasSelection$ | async" class="selection-info">
       <i class="bi bi-check-circle-fill"></i>
       <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
     </div>
     <div class="actions">
-      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)" (click)="sendMessageTriggered.emit()">
+      <button (click)="sendMessageTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
         <i class="bi bi-send"></i> Envoyer message
       </button>
-      <button class="footer-action-btn" [disabled]="!(hasSelection$ | async)" (click)="exportTriggered.emit()">
+      <button (click)="exportTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
         <i class="bi bi-upload"></i> Exporter
       </button>
-      <button class="footer-action-btn primary" [disabled]="!(hasSelection$ | async)" (click)="deleteTriggered.emit()">
+      <button (click)="deleteTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn primary">
         <i class="bi bi-trash"></i> Supprimer
       </button>
     </div>
   </div>
 
   <!-- Right Section: Pagination -->
-  <div class="pagination-container" *ngIf="(paginationInfo$ | async) as pagination">
+  <div *ngIf="(paginationInfo$ | async) as pagination" class="pagination-container">
     <div class="pagination-controls">
-      <button class="pagination-btn" [disabled]="pagination.pageIndex === 1" (click)="previousPage()">
+      <button (click)="previousPage()" [disabled]="pagination.pageIndex === 1" class="pagination-btn">
         <i class="bi bi-arrow-left"></i>
       </button>
       <span>Page {{ pagination.pageIndex }} / {{ pagination.totalPages }}</span>
-      <button class="pagination-btn" [disabled]="pagination.pageIndex === pagination.totalPages" (click)="nextPage()">
+      <button (click)="nextPage()" [disabled]="pagination.pageIndex === pagination.totalPages" class="pagination-btn">
         <i class="bi bi-arrow-right"></i>
       </button>
     </div>

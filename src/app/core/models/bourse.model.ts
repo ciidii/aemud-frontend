@@ -1,6 +1,6 @@
 export class BourseModel {
-  bourseId!: number
+  id!: number
   lebelle!: string
   montant!: number
-  members!:[]
+  members!: []
 }

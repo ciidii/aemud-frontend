@@ -12,7 +12,9 @@ import {
   ReligiousKnowledge,
   TypeInscription
 } from "../../../../core/models/member-data.model";
-import {forkJoin, map, Observable, tap} from "rxjs";
+import {combineLatest, filter, map, Observable, of, take, tap} from "rxjs";
+import {MandatDto} from "../../../../core/models/mandat.model";
+import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
 import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
 import {
@@ -21,9 +23,7 @@ import {
 import {MemberStateService} from "../../services/member.state.service";
 import {SendMessageModalComponent} from "../../components/member-list/send-message-modal/send-message-modal.component";
 import {ExportModalComponent} from "../../components/member-list/export-modal/export-modal.component";
-import {SessionModel} from "../../../../core/models/session.model";
 import {ContributionService} from "../../../contribution/services/contribution.service";
-import {YearOfSessionService} from "../../../../core/services/year-of-session.service";
 import {ContributionCalendarItem} from "../../../../core/models/contribution-calendar-item.model";
 import {RecordPaymentModalComponent} from "./record-payment-modal/record-payment-modal.component";
 import {NotificationService} from "../../../../core/services/notification.service";
@@ -44,6 +44,11 @@ import {
 import {AddressInfo, EditAddressInfoModalComponent} from "./edit-address-info-modal/edit-address-info-modal.component";
 import {EditBourseInfoModalComponent} from "./edit-bourse-info-modal/edit-bourse-info-modal.component";
 import {BourseModel} from "../../../../core/models/bourse.model";
+import {PhaseModel} from "../../../../core/models/phase.model";
+import {PhaseHttpService} from "../../../mandat/services/phase-http.service";
+import {MandatHttpService} from "../../../mandat/services/mandat-http.service";
+import {AppStateService} from "../../../../core/services/app-state.service";
+import {RegistrationModel} from "../../../../core/models/RegistrationModel";
 
 interface MonthlyContributionDisplay {
   month: string;
@@ -54,7 +59,7 @@ interface MonthlyContributionDisplay {
 export interface ProcessedRegistration {
   isCurrentSession: boolean;
   isRegistered: boolean;
-  sessionId: string;
+  sessionId: string; // Corresponds to phaseId now
   status: RegistrationStatus | null;
   statusPayment: boolean | null;
   registrationType: TypeInscription | null;
@@ -67,17 +72,15 @@ export interface ProcessedRegistration {
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
+interface GroupedRegistrationHistory {
+  mandatId: string;
+  mandatName: string;
+  registrations: RegistrationModel[];
+}
+
 export class MemberDetailComponent implements OnInit {
-  private route = inject(ActivatedRoute);
-  private router = inject(Router);
-  private memberHttpService = inject(MemberHttpService);
-  private memberStateService = inject(MemberStateService);
-  private contributionService = inject(ContributionService);
-  private yearOfSessionService = inject(YearOfSessionService);
-  private notificationService = inject(NotificationService);
-  private location = inject(Location)
-  protected currentSessionYear: SessionModel | null = null;
   member$!: Observable<MemberDataResponse | undefined>;
+  groupedHistory: GroupedRegistrationHistory[] = [];
   isReregisterModalOpen = false;
   isDeleteModalOpen = false;
   isSendMessageModalOpen = false;
@@ -93,42 +96,112 @@ export class MemberDetailComponent implements OnInit {
   isEditAddressInfoModalOpen = false;
   isEditBourseInfoModalOpen = false;
   selectedContributions: ContributionCalendarItem[] = [];
-  subscriptionYears: number[] = [];
-  selectedSubscriptionYear!: number;
-  private memberId: string | null = null;
-  protected sessions: SessionModel[] = [];
   monthlyContributions: MonthlyContributionDisplay[] = [];
   contributionSummary: { totalPaid: number; totalDue: number; completionRate: string; } | null = null;
   currentMember: MemberDataResponse | null = null;
-  academicAndMembershipDataForModal: AcademicAndMembershipData | null = null;
 
-  processedRegistrations: ProcessedRegistration[] = [];
-  RegistrationStatus = RegistrationStatus;
+
+  selectedPhaseId: string | null = null;
+  availableMandats: MandatDto[] = [];
+  activeMandat: MandatDto | null = null;
+
+
+  appStateService = inject(AppStateService);
+  private route = inject(ActivatedRoute);
+  private router = inject(Router);
+  private memberHttpService = inject(MemberHttpService);
+  private memberStateService = inject(MemberStateService);
+  private contributionService = inject(ContributionService);
+  private phaseService = inject(PhaseHttpService);
+  private mandatService = inject(MandatHttpService);
+  private notificationService = inject(NotificationService);
+  private location = inject(Location)
+  private memberId: string | null = null;
 
   get selectedTotalAmount(): number {
     return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
   }
 
+  viewedPhaseRegistration: ProcessedRegistration | null = null;
+
+
+
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
     if (this.memberId) {
-      this.refreshMemberData();
-
-      forkJoin({
-        allSessions: this.yearOfSessionService.getYears(),
-        currentSession: this.yearOfSessionService.getCurrentYear()
-      }).subscribe(({allSessions, currentSession}) => {
-        this.sessions = allSessions.data;
-        this.subscriptionYears = this.sessions.map(s => s.session).sort((a, b) => b - a);
-        this.selectedSubscriptionYear = currentSession.data.session;
-        this.currentSessionYear = currentSession.data;
-        this.loadContributions(this.selectedSubscriptionYear);
-
-        if (this.currentMember) {
-          this.buildProcessedRegistrations(this.currentMember, this.currentSessionYear);
-        }
-      });
+      this.loadData();
+    } else {
+      this.notificationService.showError("ID de membre manquant.");
     }
+  }
+
+  private loadData(): void {
+    if (!this.memberId) return;
+
+    combineLatest([
+      this.appStateService.activeMandat$.pipe(filter((m): m is MandatDto => m !== null)),
+      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data)),
+      this.appStateService.mandats$.pipe(filter(mandats => mandats.length > 0))
+    ]).pipe(
+      take(1)
+    ).subscribe(([activeMandat, member, allMandats]) => {
+      if (!member) {
+        this.notificationService.showError("Membre non trouvé.");
+        this.router.navigate(['/members/list-members']);
+        return;
+      }
+
+      this.activeMandat = activeMandat;
+      this.currentMember = member;
+      this.member$ = of(member);
+      this.availableMandats = allMandats;
+
+      this.buildGroupedHistory(member.registration, allMandats);
+
+      const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
+
+      if (activePhaseInMandate) {
+        this.selectedPhaseId = activePhaseInMandate.id;
+        this.updateViewedPhaseRegistration(activePhaseInMandate.id);
+        this.loadContributions(activePhaseInMandate.id);
+      } else {
+        this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
+        const fallbackPhase = activeMandat.phases[0];
+        if (fallbackPhase) {
+          this.updateViewedPhaseRegistration(fallbackPhase.id);
+          this.loadContributions(fallbackPhase.id);
+        }
+      }
+    });
+  }
+
+  private buildGroupedHistory(registrations: RegistrationModel[], mandats: MandatDto[]): void {
+    if (!registrations || !mandats) {
+      this.groupedHistory = [];
+      return;
+    }
+
+    const history: GroupedRegistrationHistory[] = [];
+    mandats.forEach(mandat => {
+      const mandatePhaseIds = new Set(mandat.phases.map(p => p.id));
+      const registrationsForMandate = registrations.filter(reg => mandatePhaseIds.has(reg));
+
+      if (registrationsForMandate.length > 0) {
+        history.push({
+          mandatId: mandat.id,
+          mandatName: mandat.nom,
+          registrations: registrationsForMandate
+        });
+      }
+    });
+
+    // Sort mandates by start date, descending (most recent first)
+    this.groupedHistory = history.sort((a, b) => {
+      const mandatA = mandats.find(m => m.id === a.mandatId)!;
+      const mandatB = mandats.find(m => m.id === b.mandatId)!;
+      // Assuming dateDebut is [year, month, day]
+      return new Date(mandatB.dateDebut.join('-')).getTime() - new Date(mandatA.dateDebut.join('-')).getTime();
+    });
   }
 
   // --- Edit Modals Methods ---
@@ -145,7 +218,7 @@ export class MemberDetailComponent implements OnInit {
     this.closeEditPersonalInfoModal();
     if (this.currentMember) {
       this.currentMember = {...this.currentMember, personalInfo: updatedInfo};
-      this.refreshMemberData();
+      this.loadData();
     }
   }
 
@@ -162,7 +235,7 @@ export class MemberDetailComponent implements OnInit {
     this.closeEditContactInfoModal();
     if (this.currentMember) {
       this.currentMember = {...this.currentMember, contactInfo: updatedInfo};
-      this.refreshMemberData();
+      this.loadData();
     }
   }
 
@@ -186,7 +259,7 @@ export class MemberDetailComponent implements OnInit {
         academicInfo: academicInfo,
         membershipInfo: membershipInfo as MembershipInfo
       };
-      this.refreshMemberData();
+      this.loadData();
     }
   }
 
@@ -201,7 +274,7 @@ export class MemberDetailComponent implements OnInit {
   handleSaveEngagements(engagementsData: EngagementsData): void {
     // TODO: Implement actual save logic with a service call
     this.notificationService.showSuccess("Engagements mis à jour (simulation).");
-    this.refreshMemberData(); // Refresh data to show changes
+    this.loadData(); // Refresh data to show changes
   }
 
   openEditAddressInfoModal(): void {
@@ -217,7 +290,7 @@ export class MemberDetailComponent implements OnInit {
     this.closeEditAddressInfoModal();
     if (this.currentMember) {
       this.currentMember = {...this.currentMember, addressInfo: updatedInfo};
-      this.refreshMemberData();
+      this.loadData();
     }
   }
 
@@ -229,32 +302,17 @@ export class MemberDetailComponent implements OnInit {
     this.isEditBourseInfoModalOpen = false;
   }
 
+
+  // --- Other Modal Toggle Methods ---
+
   handleSaveBourseInfo(updatedInfo: BourseModel): void {
     this.notificationService.showSuccess("Bourse mise à jour (simulation).");
     this.closeEditBourseInfoModal();
     if (this.currentMember) {
       this.currentMember = {...this.currentMember, bourse: updatedInfo};
-      this.refreshMemberData();
+      this.loadData();
     }
   }
-
-  private refreshMemberData(): void {
-    if (!this.memberId) return;
-    this.member$ = this.memberHttpService.getMemberById(this.memberId).pipe(
-      map((response: ResponseEntityApi<MemberDataResponse>) => response.data),
-      tap(member => {
-        if (member) {
-          this.currentMember = member;
-          if (this.currentSessionYear) {
-            this.buildProcessedRegistrations(member, this.currentSessionYear);
-          }
-        }
-      })
-    );
-  }
-
-
-  // --- Other Modal Toggle Methods ---
 
   toggleDeleteModal(): void {
     this.isDeleteModalOpen = !this.isDeleteModalOpen;
@@ -302,28 +360,41 @@ export class MemberDetailComponent implements OnInit {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
-  onYearChange(event: Event): void {
-    const selectedYear = (event.target as HTMLSelectElement).value;
-    this.selectedSubscriptionYear = Number(selectedYear);
-    this.selectedContributions = []; // Clear selection on year change
-    this.loadContributions(this.selectedSubscriptionYear);
-  }
-
   // --- Action Handlers ---
 
-  loadContributions(year: number): void {
+  onPhaseChange(event: Event): void {
+    const selectedId = (event.target as HTMLSelectElement).value;
+    this.selectedPhaseId = selectedId;
+    this.selectedContributions = []; // Clear selection on change
+    if (this.selectedPhaseId) {
+      this.loadContributions(this.selectedPhaseId);
+      this.updateViewedPhaseRegistration(this.selectedPhaseId);
+    }
+  }
+
+  private updateViewedPhaseRegistration(phaseId: string): void {
+    if (!this.currentMember || !this.activeMandat) return;
+
+    const phase = this.activeMandat.phases.find(p => p.id === phaseId);
+    if (!phase) return;
+
+    const registrationForPhase = this.currentMember.registration.find(r => r.phaseId === phaseId);
+    const trulyActivePhase = this.activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
+
+    this.viewedPhaseRegistration = {
+      isCurrentSession: phase.id === trulyActivePhase?.id,
+      isRegistered: !!registrationForPhase,
+      sessionId: phase.id,
+      status: registrationForPhase?.registrationStatus ?? null,
+      statusPayment: registrationForPhase?.statusPayment ?? null,
+      registrationType: registrationForPhase?.registrationType ?? null
+    };
+  }
+
+  loadContributions(phaseId: string): void {
     if (!this.memberId) return;
 
-    const session = this.sessions.find(s => s.session === year);
-    if (!session) {
-      console.error(`Session ID for year ${year} not found.`);
-      this.monthlyContributions = [];
-      this.contributionSummary = null;
-      return;
-    }
-    const sessionId = session.id;
-
-    this.contributionService.getContributionCalendar(this.memberId, sessionId).subscribe(response => {
+    this.contributionService.getContributionCalendar(this.memberId, phaseId).subscribe(response => {
       const contributions = response.data || [];
 
       // Map to display model
@@ -339,35 +410,6 @@ export class MemberDetailComponent implements OnInit {
       // Calculate summary
       this.calculateSummary(contributions);
     });
-  }
-
-  private calculateSummary(contributions: ContributionCalendarItem[]): void {
-    const applicableContributions = contributions.filter(c => c.status !== 'NOT_APPLICABLE');
-    const totalPaid = applicableContributions.reduce((sum, c) => sum + c.amountPaid, 0);
-    const totalDue = applicableContributions.reduce((sum, c) => c.status !== 'PAID' ? sum + (c.amountDue - c.amountPaid) : sum, 0);
-    const paidCount = applicableContributions.filter(c => c.status === 'PAID').length;
-    const totalCount = applicableContributions.length;
-
-    this.contributionSummary = {
-      totalPaid,
-      totalDue,
-      completionRate: `${paidCount}/${totalCount} mois`
-    };
-  }
-
-  private mapContributionStatusToCssClass(status: ContributionCalendarItem['status']): string {
-    switch (status) {
-      case 'PAID':
-        return 'paid';
-      case 'DELAYED':
-        return 'delayed';
-      case 'PENDING':
-        return 'pending';
-      case 'NOT_APPLICABLE':
-        return 'not-applicable';
-      default:
-        return 'unpaid'; // Fallback, though should not happen
-    }
   }
 
   onMonthClick(contribution: MonthlyContributionDisplay): void {
@@ -403,7 +445,9 @@ export class MemberDetailComponent implements OnInit {
       next: () => {
         this.notificationService.showSuccess(`${paymentData.contributionsID.length} mois payés avec succès.`);
         this.selectedContributions = []; // Clear selection
-        this.loadContributions(this.selectedSubscriptionYear);
+        if (this.selectedPhaseId) {
+          this.loadContributions(this.selectedPhaseId);
+        }
         this.handleClosePaymentModal();
       },
       error: (err) => {
@@ -413,16 +457,16 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
-
   handleSaveRegistration(formData: any): void {
     if (!this.memberId) return;
-    const registrationPayload = {...formData, member: this.memberId};
-    console.log(registrationPayload)
+    const registrationPayload = {...formData, memberId: this.memberId};
     this.memberHttpService.register(registrationPayload).subscribe({
       next: () => {
         this.notificationService.showSuccess("Réinscription réussie.");
-        this.refreshMemberData();
-        this.loadContributions(this.selectedSubscriptionYear);
+        this.loadData();
+        if (this.selectedPhaseId) {
+          this.loadContributions(this.selectedPhaseId);
+        }
       },
       error: (err) => {
         this.notificationService.showError("Échec de la réinscription.");
@@ -447,39 +491,29 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
-  markAsPaid(session: string): any {
+  markAsPaid(phaseId: string): any {
     if (!this.memberId) return;
-    this.member$ = this.member$.pipe(
-      map(member => {
-        if (!member) return undefined;
-
-        const updatedRegistrations = member.registration.map(reg => {
-          if (reg.sessionId === session) {
-            console.log({...reg, statusPayment: true})
-            this.memberHttpService.updateRegister({...reg, statusPayment: true}).subscribe({
-              next: (res) => {
-                if (res.status === "OK") {
-
-                }
-              },
-              error: err => {
-
-              }
-            })
+    const registration = this.currentMember?.registration.find(reg => reg.phaseId === phaseId);
+    if (registration) {
+      this.memberHttpService.updateRegister({...registration, statusPayment: true}).subscribe({
+        next: (res) => {
+          if (res.status === "OK") {
+            this.notificationService.showSuccess('Paiement marqué comme effectué.');
+            this.loadData();
           }
-          return reg;
-        });
-        // console.log({registration: updatedRegistrations})
-        // return {...member, registration: updatedRegistrations};
-      })
-    );
+        },
+        error: err => {
+          this.notificationService.showError('Erreur lors de la mise à jour du paiement.');
+        }
+      });
+    }
   }
 
   sendContributionReminder(): void {
     // TODO: Implement actual logic
-    // 1. Get list of unpaid months for the selected year.
+    // 1. Get list of unpaid months for the selected phase.
     // 2. If there are unpaid months, call a service to send an SMS.
-    console.log(`Sending contribution reminder for member ${this.memberId} for the session starting in ${this.selectedSubscriptionYear}.`);
+    console.log(`Sending contribution reminder for member ${this.memberId} for the phase ${this.selectedPhaseId}.`);
   }
 
   objectToArray(obj: any): { key: string, value: any }[] {
@@ -493,12 +527,14 @@ export class MemberDetailComponent implements OnInit {
     this.location.back();
   }
 
-  get currentSessionRegistration(): ProcessedRegistration | undefined {
-    return this.processedRegistrations.find(r => r.isCurrentSession);
-  }
-
-  get pastRegistrations(): ProcessedRegistration[] {
-    return this.processedRegistrations.filter(r => !r.isCurrentSession);
+  public getPhaseById(phaseId: string): PhaseModel | undefined {
+    for (const mandat of this.availableMandats) {
+      const phase = mandat.phases.find(p => p.id === phaseId);
+      if (phase) {
+        return phase;
+      }
+    }
+    return undefined;
   }
 
   getRegistrationStatusClass(reg: ProcessedRegistration): string {
@@ -519,15 +555,15 @@ export class MemberDetailComponent implements OnInit {
 
   getRegistrationStatusIcon(reg: ProcessedRegistration): string {
     if (!reg.isRegistered) {
-      return '<i class="bi bi-x-circle-fill"></i>';
+      return 'bi-x-circle-fill';
     }
     switch (reg.status) {
       case RegistrationStatus.COMPLETED:
-        return '<i class="bi bi-check-circle-fill"></i>';
+        return 'bi-check-circle-fill';
       case RegistrationStatus.UNCOMPLETED:
-        return '<i class="bi bi-exclamation-triangle-fill"></i>';
+        return 'bi-exclamation-triangle-fill';
       case RegistrationStatus.EXPIRED:
-        return '<i class="bi bi-slash-circle-fill"></i>';
+        return 'bi-slash-circle-fill';
       default:
         return '';
     }
@@ -577,34 +613,34 @@ export class MemberDetailComponent implements OnInit {
     this.isEditReligiousKnowledgeModalOpen = true;
   }
 
-  private buildProcessedRegistrations(member: MemberDataResponse, currentSession: SessionModel): void {
-    const registrations = member.registration || [];
-    const processed: ProcessedRegistration[] = [];
+  private calculateSummary(contributions: ContributionCalendarItem[]): void {
+    const applicableContributions = contributions.filter(c => c.status !== 'NOT_APPLICABLE');
+    const totalPaid = applicableContributions.reduce((sum, c) => sum + c.amountPaid, 0);
+    const totalDue = applicableContributions.reduce((sum, c) => c.status !== 'PAID' ? sum + (c.amountDue - c.amountPaid) : sum, 0);
+    const paidCount = applicableContributions.filter(c => c.status === 'PAID').length;
+    const totalCount = applicableContributions.length;
 
-    // 1. Handle current session
-    const currentSessionReg = registrations.find(r => r.sessionId === currentSession.id);
-    processed.push({
-      isCurrentSession: true,
-      isRegistered: !!currentSessionReg,
-      sessionId: currentSession.id,
-      status: currentSessionReg?.registrationStatus ?? null,
-      statusPayment: currentSessionReg?.statusPayment ?? null,
-      registrationType: currentSessionReg?.registrationType ?? null
-    });
-
-    // 2. Handle past sessions
-    const otherRegistrations = registrations
-      .filter(r => r.sessionId !== currentSession.id)
-      .map(r => ({
-        isCurrentSession: false,
-        isRegistered: true,
-        sessionId: r.sessionId,
-        status: r.registrationStatus,
-        statusPayment: r.statusPayment,
-        registrationType: r.registrationType,
-      }));
-
-    // 3. Combine and sort
-    this.processedRegistrations = [...processed, ...otherRegistrations]
+    this.contributionSummary = {
+      totalPaid,
+      totalDue,
+      completionRate: `${paidCount}/${totalCount} mois`
+    };
   }
+
+  private mapContributionStatusToCssClass(status: ContributionCalendarItem['status']): string {
+    switch (status) {
+      case 'PAID':
+        return 'paid';
+      case 'DELAYED':
+        return 'delayed';
+      case 'PENDING':
+        return 'pending';
+      case 'NOT_APPLICABLE':
+        return 'not-applicable';
+      default:
+        return 'unpaid';
+    }
+  }
+
+
 }

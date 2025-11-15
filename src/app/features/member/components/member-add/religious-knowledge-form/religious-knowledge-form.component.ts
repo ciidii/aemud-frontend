@@ -3,7 +3,8 @@ import {ArabicProficiency, CORAN_LEVEL} from "../../../../../core/models/member-
 import {Component, forwardRef, OnInit} from "@angular/core";
 import {
   AbstractControl,
-  ControlValueAccessor, FormArray,
+  ControlValueAccessor,
+  FormArray,
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
@@ -39,9 +40,6 @@ import {
 export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   religiousKnowledgeForm!: FormGroup;
-  onTouched: () => void = () => {
-  };
-
   // Exposer les enums au template
   coranLevels = Object.values(CORAN_LEVEL);
   arabicProficiencyLevels = Object.values(ArabicProficiency);
@@ -53,15 +51,6 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
   };
 
   constructor(private fb: FormBuilder) {
-  }
-
-  ngOnInit(): void {
-    this.religiousKnowledgeForm = this.fb.group({
-      arabicProficiency: [null, Validators.required],
-      coranLevel: [''],
-      aqida: this.fb.array([]),
-      fiqh: this.fb.array([])
-    });
   }
 
   // --- Getters pour un accès facile dans le template ---
@@ -77,18 +66,20 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
     return this.religiousKnowledgeForm.get('fiqh') as FormArray;
   }
 
-  getKnowledgeControl(formArrayName: 'aqida' | 'fiqh', index: number, controlName: string) {
-    return (this.religiousKnowledgeForm.get(formArrayName) as FormArray).at(index).get(controlName);
+  onTouched: () => void = () => {
+  };
+
+  ngOnInit(): void {
+    this.religiousKnowledgeForm = this.fb.group({
+      arabicProficiency: [null, Validators.required],
+      coranLevel: [''],
+      aqida: this.fb.array([]),
+      fiqh: this.fb.array([])
+    });
   }
 
-  // --- Méthodes pour créer et manipuler les FormArray ---
-  private newKnowledgeGroup(): FormGroup {
-    return this.fb.group({
-      acquired: [true], // Par défaut à true quand on ajoute un bloc
-      bookName: ['', [Validators.required, Validators.minLength(3)]],
-      teacherName: ['', Validators.minLength(3)],
-      learningPlace: ['', Validators.minLength(3)]
-    });
+  getKnowledgeControl(formArrayName: 'aqida' | 'fiqh', index: number, controlName: string) {
+    return (this.religiousKnowledgeForm.get(formArrayName) as FormArray).at(index).get(controlName);
   }
 
   addAqida(): void {
@@ -130,5 +121,15 @@ export class ReligiousKnowledgeFormComponent implements ControlValueAccessor, On
 
   validate(control: AbstractControl): ValidationErrors | null {
     return this.religiousKnowledgeForm.valid ? null : {invalid: true};
+  }
+
+  // --- Méthodes pour créer et manipuler les FormArray ---
+  private newKnowledgeGroup(): FormGroup {
+    return this.fb.group({
+      acquired: [true], // Par défaut à true quand on ajoute un bloc
+      bookName: ['', [Validators.required, Validators.minLength(3)]],
+      teacherName: ['', Validators.minLength(3)],
+      learningPlace: ['', Validators.minLength(3)]
+    });
   }
 }

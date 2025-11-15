@@ -3,6 +3,7 @@ import {HttpClient, HttpHeaders} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {AppStateService} from "../../../core/services/app-state.service";
 import {SmsModel} from "../../../core/models/sms.model";
+
 @Injectable({
   providedIn: 'root'
 })
@@ -13,7 +14,7 @@ export class NotificationService {
   }
 
   sendNotification(message: SmsModel) {
-    let options = {
+    const options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
     return this.httpClient.post<unknown>(environment.API_URL + `/notifications/sms`, message, options);

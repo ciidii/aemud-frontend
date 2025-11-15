@@ -13,10 +13,10 @@ import {BehaviorSubject, finalize} from "rxjs";
   imports: [FormsModule, ReactiveFormsModule, NgIf, RouterLink, AsyncPipe]
 })
 export class LoginComponent implements OnInit {
-  private formBuilder = inject(FormBuilder);
-  private authService = inject(AuthService);
   formGroup!: FormGroup;
   errorMessage: string | null = null;
+  private formBuilder = inject(FormBuilder);
+  private authService = inject(AuthService);
   private _loading = new BehaviorSubject<boolean>(false);
   loading$ = this._loading.asObservable();
 

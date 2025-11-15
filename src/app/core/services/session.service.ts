@@ -12,16 +12,6 @@ export class SessionService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private router = inject(Router);
 
-  constructor() {
-  }
-
-  /**
-   * Checks if a session token exists.
-   */
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
-  }
-
   /**
    * Starts a new session by storing the token.
    *
@@ -49,5 +39,12 @@ export class SessionService {
    */
   getToken(): string | null {
     return localStorage.getItem(this.TOKEN_KEY);
+  }
+
+  /**
+   * Checks if a session token exists.
+   */
+  private hasToken(): boolean {
+    return !!localStorage.getItem(this.TOKEN_KEY);
   }
 }

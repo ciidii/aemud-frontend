@@ -1,5 +1,5 @@
-import { Component, EventEmitter, Output } from '@angular/core';
-import { NgForOf } from '@angular/common';
+import {Component, EventEmitter, Output} from '@angular/core';
+import {NgForOf} from '@angular/common';
 
 export interface MessageTemplate {
   name: string;
@@ -44,7 +44,7 @@ export class TemplateSelectModalComponent {
     {
       name: 'Confirmation de Paiement',
       content: 'Bonjour, nous vous confirmons la bonne réception de votre paiement. Merci pour votre soutien.'
-    },{
+    }, {
       name: 'Rappel de Cotisation Annuelle',
       content: 'Cher membre, nous vous rappelons que votre cotisation annuelle arrive à échéance. Veuillez la renouveler pour continuer à bénéficier des avantages.'
     },
@@ -55,7 +55,7 @@ export class TemplateSelectModalComponent {
     {
       name: 'Confirmation de Paiement',
       content: 'Bonjour, nous vous confirmons la bonne réception de votre paiement. Merci pour votre soutien.'
-    },{
+    }, {
       name: 'Rappel de Cotisation Annuelle',
       content: 'Cher membre, nous vous rappelons que votre cotisation annuelle arrive à échéance. Veuillez la renouveler pour continuer à bénéficier des avantages.'
     },

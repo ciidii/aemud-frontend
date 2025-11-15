@@ -4,34 +4,36 @@
     <tr>
       <th>
         <input
-          type="checkbox"
+          (change)="toggleSelectAll()"
           [checked]="isAllSelected$ | async"
-          (change)="toggleSelectAll()">
+          type="checkbox">
       </th>
       <th (click)="onSort('personalInfo.firstname')"
           [ngClass]="{'active-sort': (sortColumn$ | async) === 'personalInfo.firstname'}">
-        <i class="bi sort-icon"
-           [ngClass]="{
+        <i [ngClass]="{
               'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.firstname',
               'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'asc',
               'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'desc'
-           }"></i> Prénom
+           }"
+           class="bi sort-icon"></i> Prénom
       </th>
-      <th (click)="onSort('personalInfo.name')" [ngClass]="{'active-sort': (sortColumn$ | async) === 'personalInfo.name'}">
-        <i class="bi sort-icon"
-           [ngClass]="{
+      <th (click)="onSort('personalInfo.name')"
+          [ngClass]="{'active-sort': (sortColumn$ | async) === 'personalInfo.name'}">
+        <i [ngClass]="{
               'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.name',
               'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.name' && (sortDirection$ | async) === 'asc',
               'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.name' && (sortDirection$ | async) === 'desc'
-           }"></i> Nom
+           }"
+           class="bi sort-icon"></i> Nom
       </th>
-      <th (click)="onSort('contactInfo.email')" [ngClass]="{'active-sort': (sortColumn$ | async) === 'contactInfo.email'}">
-        <i class="bi sort-icon"
-           [ngClass]="{
+      <th (click)="onSort('contactInfo.email')"
+          [ngClass]="{'active-sort': (sortColumn$ | async) === 'contactInfo.email'}">
+        <i [ngClass]="{
               'bi-arrow-down-up': (sortColumn$ | async) !== 'contactInfo.email',
               'bi-arrow-up': (sortColumn$ | async) === 'contactInfo.email' && (sortDirection$ | async) === 'asc',
               'bi-arrow-down': (sortColumn$ | async) === 'contactInfo.email' && (sortDirection$ | async) === 'desc'
-           }"></i> Email
+           }"
+           class="bi sort-icon"></i> Email
       </th>
       <th><i class="bi bi-arrow-down-up sort-icon"></i> Numéro de Téléphone</th>
       <th><i class="bi bi-arrow-down-up sort-icon"></i> Payement</th>
@@ -41,16 +43,16 @@
     </thead>
     <tbody>
     <ng-container *ngIf="loading">
-      <tr app-skeleton-loader *ngFor="let row of skeletonRows"></tr>
+      <tr *ngFor="let row of skeletonRows" app-skeleton-loader></tr>
     </ng-container>
     <ng-container *ngIf="!loading && hasMembers">
-      <tr *ngFor="let member of members" (click)="navigateToMember(member.id)">
+      <tr (click)="navigateToMember(member.id)" *ngFor="let member of members">
         <td>
           <input
-            type="checkbox"
-            [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
             (change)="toggleMemberSelection(member.id)"
-            (click)="$event.stopPropagation()">
+            (click)="$event.stopPropagation()"
+            [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
+            type="checkbox">
         </td>
         <td>{{ member.personalInfo.firstname }}</td>
         <td>{{ member.personalInfo.name }}</td>
@@ -58,8 +60,8 @@
         <td>{{ member.contactInfo.numberPhone }}</td>
         <td>
             <span *ngIf="member.registration && member.registration.length > 0"
-                  class="badge"
-                  [ngClass]="{'bg-success': member.registration[0].statusPayment, 'bg-danger': !member.registration[0].statusPayment}">
+                  [ngClass]="{'bg-success': member.registration[0].statusPayment, 'bg-danger': !member.registration[0].statusPayment}"
+                  class="badge">
               {{ member.registration[0].statusPayment ? 'Payé' : 'En attente' }}
             </span>
         </td>
@@ -70,7 +72,7 @@
         </td>
         <td>
           <div class="kebab-menu">
-            <button class="kebab-icon" (click)="$event.stopPropagation()">
+            <button (click)="$event.stopPropagation()" class="kebab-icon">
               <i class="bi bi-three-dots-vertical"></i>
             </button>
             <ul class="kebab-dropdown">

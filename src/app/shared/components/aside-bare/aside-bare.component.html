@@ -1,7 +1,7 @@
 <div class="sidebar-container">
   <!-- Header -->
   <div class="nav-header">
-    <button class="toggle-btn" (click)="toggleCollapse()">
+    <button (click)="toggleCollapse()" class="toggle-btn">
       <i class="bi bi-list"></i>
     </button>
   </div>
@@ -164,28 +164,5 @@
         </li>
       </ul>
     </nav>
-  </div>
-
-  <div class="user-profile">
-    <div class="user-actions">
-      <div class="notification-container">
-        <button class="notification-btn" (click)="togglePopover($event)">
-          <i class="bi bi-bell"></i>
-          <span class="badge"></span>
-        </button>
-        <app-notification-popover *ngIf="isPopoverOpen"></app-notification-popover>
-      </div>
-      <button class="logout-btn" (click)="logout()">
-        <i class="bi bi-box-arrow-right"></i> <span>Logout</span>
-      </button>
-    </div>
-
-    <div class="user-info">
-      <i class="bi bi-person-fill"></i>
-      <div class="user-details">
-        <div class="user-name">Olivia Williams</div>
-        <div class="user-role">Admin</div>
-      </div>
-    </div>
   </div>
 </div>

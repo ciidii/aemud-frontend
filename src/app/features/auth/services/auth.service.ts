@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {delay, finalize, Observable, of,} from 'rxjs';
+import {Observable,} from 'rxjs';
 import {UserCredential} from "../../../core/models/user-credential.model";
 import {SessionService} from "../../../core/services/session.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -18,7 +18,7 @@ export class AuthService {
 
   private apiUrl = environment.API_URL;
 
-  private username: string = '';
+  private username = '';
   private sessionService = inject(SessionService);
   private http = inject(HttpClient);
   private router = inject(Router);
@@ -46,7 +46,7 @@ export class AuthService {
   }
 
   getUserByUsername(username: string): Observable<ResponseEntityApi<UserModel>> {
-    let params = new HttpParams().set('username', username);
+    const params = new HttpParams().set('username', username);
     return this.http.get<ResponseEntityApi<UserModel>>(`${this.apiUrl}/users/user-by-username`, {params});
   }
 
@@ -72,7 +72,7 @@ export class AuthService {
 
   fetchJwt(jwt: string) {
     this.jwt_token = jwt;
-    let decodedJwt: any = jwtDecode(jwt);
+    const decodedJwt: any = jwtDecode(jwt);
     this.username = decodedJwt.sub;
 
     this.getUserByUsername(decodedJwt.sub).subscribe({

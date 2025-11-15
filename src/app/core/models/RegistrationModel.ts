@@ -1,8 +1,19 @@
+export enum RegistrationStatus {
+  EXPIRED = "EXPIRED",
+  COMPLETED = "COMPLETED",
+  UNCOMPLETED = "UNCOMPLETED"
+}
+
+export enum TypeInscription {
+  INITIAL = "INITIAL",
+  REINSCRIPTION = "REINSCRIPTION"
+}
+
 export interface RegistrationModel {
   member: string;
   session: number;
   dateInscription: number[];
-  registrationType: string;
+  registrationType: TypeInscription;
   statusPayment: boolean;
-  registrationStatus: string;
+  registrationStatus: RegistrationStatus;
 }

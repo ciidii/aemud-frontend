@@ -27,7 +27,8 @@ export class TableFooterComponent {
   nextPage(): void {
     this.paginationInfo$.pipe(take(1)).subscribe(info => {
       if (info.pageIndex < info.totalPages) {
-        this.memberStateService.fetchMembers("", "", null, info.pageIndex + 1, info.pageSize).subscribe();
+        this.memberStateService.updateSearchParams({page: info.pageIndex + 1, rpp: info.pageSize})
+        this.memberStateService.fetchMembers().subscribe();
       }
     });
   }
@@ -35,7 +36,8 @@ export class TableFooterComponent {
   previousPage(): void {
     this.paginationInfo$.pipe(take(1)).subscribe(info => {
       if (info.pageIndex > 1) {
-        this.memberStateService.fetchMembers("", "", null, info.pageIndex - 1, info.pageSize).subscribe();
+        this.memberStateService.updateSearchParams({page: info.pageIndex - 1, rpp: info.pageSize})
+        this.memberStateService.fetchMembers().subscribe();
       }
     });
   }

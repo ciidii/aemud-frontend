@@ -18,10 +18,10 @@ export class ContributionService {
   }
 
   public getContribute(phoneNumber: string, monthId: string, sessionId: string): Observable<ResponseEntityApi<ContributionModel>> {
-    let options = {
+    const options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
-    let contributionData = {
+    const contributionData = {
       phoneNumber: phoneNumber,
       monthId: monthId,
       sessionId: sessionId
@@ -31,14 +31,14 @@ export class ContributionService {
 
   public getContributionsByMemberAndSession(memberId: string, sessionId: string): Observable<ResponseEntityApi<ContributionModel[]>> {
     const params = new HttpParams()
-      .set('sessionId', sessionId)
+      .set('phaseId', sessionId)
       .set('memberId', memberId);
     return this.httpClient.get<ResponseEntityApi<ContributionModel[]>>(`${this.url}/contribution/member-contributions`, {params});
   }
 
   public getContributionCalendar(memberId: string, sessionId: string): Observable<ResponseEntityApi<ContributionCalendarItem[]>> {
     const params = new HttpParams()
-      .set('sessionId', sessionId)
+      .set('phaseId', sessionId)
       .set('memberId', memberId);
     return this.httpClient.get<ResponseEntityApi<ContributionCalendarItem[]>>(`${this.url}/contribution/member-contribution-calendar`, {params});
   }

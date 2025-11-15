@@ -1,4 +1,4 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
 import {Router, RouterLink} from "@angular/router";
@@ -15,17 +15,16 @@ import Error = types.Error; // Importer les opérateurs nécessaires
   templateUrl: './password-forgotten.component.html',
   styleUrl: './password-forgotten.component.css'
 })
-export class PasswordForgottenComponent{
+export class PasswordForgottenComponent {
   formGroup: FormGroup;
   isSubmitted = false;
   currentStep: 'email' | 'code' | 'password' = 'email';
-  completedSteps: Set<'email' | 'code' | 'password'> = new Set();
-  private userService = inject(UserService);
-
+  completedSteps = new Set<'email' | 'code' | 'password'>();
   // Pour afficher des messages utilisateur
   errorMessage: string | null = null;
   successMessage: string | null = null;
   isLoading = false;
+  private userService = inject(UserService);
   private toaster = inject(ToastrService);
   private fb = inject(FormBuilder)
   private router = inject(Router)
@@ -39,32 +38,6 @@ export class PasswordForgottenComponent{
     });
 
     this.updateValidatorsForCurrentStep();
-  }
-
-  private updateValidatorsForCurrentStep(): void {
-    this.formGroup.get('email')?.clearValidators();
-    this.formGroup.get('code')?.clearValidators();
-    this.formGroup.get('password')?.clearValidators();
-    this.formGroup.get('confirmPassword')?.clearValidators();
-
-    switch (this.currentStep) {
-      case 'email':
-        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]);
-        break;
-      case 'code':
-        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]);
-        this.formGroup.get('code')?.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]);
-        break;
-      case 'password':
-        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]); // Garde les validateurs de l'email
-        this.formGroup.get('code')?.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]); // Garde les validateurs du code
-        this.formGroup.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
-        this.formGroup.get('confirmPassword')?.setValidators([Validators.required]);
-        break;
-    }
-
-    // Mettre à jour la validité du formulaire après avoir changé les validateurs
-    this.formGroup.updateValueAndValidity();
   }
 
   isStepComplete(step: 'email' | 'code' | 'password'): boolean {
@@ -190,6 +163,32 @@ export class PasswordForgottenComponent{
         });
         break;
     }
+  }
+
+  private updateValidatorsForCurrentStep(): void {
+    this.formGroup.get('email')?.clearValidators();
+    this.formGroup.get('code')?.clearValidators();
+    this.formGroup.get('password')?.clearValidators();
+    this.formGroup.get('confirmPassword')?.clearValidators();
+
+    switch (this.currentStep) {
+      case 'email':
+        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]);
+        break;
+      case 'code':
+        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]);
+        this.formGroup.get('code')?.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]);
+        break;
+      case 'password':
+        this.formGroup.get('email')?.setValidators([Validators.required, Validators.email]); // Garde les validateurs de l'email
+        this.formGroup.get('code')?.setValidators([Validators.required, Validators.minLength(6), Validators.maxLength(6)]); // Garde les validateurs du code
+        this.formGroup.get('password')?.setValidators([Validators.required, Validators.minLength(8)]);
+        this.formGroup.get('confirmPassword')?.setValidators([Validators.required]);
+        break;
+    }
+
+    // Mettre à jour la validité du formulaire après avoir changé les validateurs
+    this.formGroup.updateValueAndValidity();
   }
 
 

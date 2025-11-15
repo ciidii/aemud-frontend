@@ -1,7 +1,7 @@
-import { Component, EventEmitter, inject, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { NgIf } from '@angular/common';
-import { TemplateSelectModalComponent, MessageTemplate } from '../template-select-modal/template-select-modal.component';
+import {Component, EventEmitter, inject, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {NgIf} from '@angular/common';
+import {MessageTemplate, TemplateSelectModalComponent} from '../template-select-modal/template-select-modal.component';
 
 @Component({
   selector: 'app-send-message-modal',
@@ -16,10 +16,9 @@ import { TemplateSelectModalComponent, MessageTemplate } from '../template-selec
 })
 export class SendMessageModalComponent implements OnInit {
   @Output() close = new EventEmitter<void>();
-
-  private formBuilder = inject(FormBuilder);
   messageForm!: FormGroup;
   isTemplateModalOpen = false;
+  private formBuilder = inject(FormBuilder);
 
   ngOnInit(): void {
     this.messageForm = this.formBuilder.group({
@@ -40,7 +39,7 @@ export class SendMessageModalComponent implements OnInit {
   }
 
   onTemplateSelected(template: MessageTemplate): void {
-    this.messageForm.patchValue({ message: template.content });
+    this.messageForm.patchValue({message: template.content});
     this.isTemplateModalOpen = false; // Close the modal after selection
   }
 }

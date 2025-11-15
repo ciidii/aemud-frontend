@@ -6,13 +6,10 @@ import {RecipientsTemplateModel} from "../../../core/models/recipients-template.
   providedIn: 'root'
 })
 export class SmsTamplateStateService {
-  private _messageTemplatesList: MessageTemplateModel[] = [];
-  private _recipientsTemplateList: RecipientsTemplateModel []= [];
-  private _selectedMessageTemplate: MessageTemplateModel | null = null;
-  private _recipientsTemplatesList: MessageTemplateModel |null  = null;
-
   constructor() {
   }
+
+  private _messageTemplatesList: MessageTemplateModel[] = [];
 
   get messageTemplatesList(): MessageTemplateModel[] {
     return this._messageTemplatesList;
@@ -22,6 +19,18 @@ export class SmsTamplateStateService {
     this._messageTemplatesList = value;
   }
 
+  private _recipientsTemplateList: RecipientsTemplateModel [] = [];
+
+  get recipientsTemplateList(): RecipientsTemplateModel[] {
+    return this._recipientsTemplateList;
+  }
+
+  set recipientsTemplateList(value: RecipientsTemplateModel[]) {
+    this._recipientsTemplateList = value;
+  }
+
+  private _selectedMessageTemplate: MessageTemplateModel | null = null;
+
   get selectedMessageTemplate(): MessageTemplateModel | null {
     return this._selectedMessageTemplate;
   }
@@ -30,6 +39,7 @@ export class SmsTamplateStateService {
     this._selectedMessageTemplate = value;
   }
 
+  private _recipientsTemplatesList: MessageTemplateModel | null = null;
 
   get recipientsTemplatesList(): MessageTemplateModel | null {
     return this._recipientsTemplatesList;
@@ -37,14 +47,5 @@ export class SmsTamplateStateService {
 
   set recipientsTemplatesList(value: MessageTemplateModel | null) {
     this._recipientsTemplatesList = value;
-  }
-
-
-  get recipientsTemplateList(): RecipientsTemplateModel[] {
-    return this._recipientsTemplateList;
-  }
-
-  set recipientsTemplateList(value: RecipientsTemplateModel[]) {
-    this._recipientsTemplateList = value;
   }
 }

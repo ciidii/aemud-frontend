@@ -1,33 +1,33 @@
-
-<div class="multiselect-container" [class.disabled]="isDisabled">
-  <div class="multiselect-display" (click)="toggleDropdown()">
+<div [class.disabled]="isDisabled" class="multiselect-container">
+  <div (click)="toggleDropdown()" class="multiselect-display">
     <span *ngIf="selectedItems.length === 0" class="placeholder">{{ placeholder }}</span>
 
     <span *ngFor="let item of selectedItems" class="pill">
       {{ item[displayField] }}
-      <span class="pill-remove" (click)="removePill(item, $event)">&times;</span>
+      <span (click)="removePill(item, $event)" class="pill-remove">&times;</span>
     </span>
 
     <span class="arrow-down"></span>
   </div>
 
-  <div class="dropdown-panel" *ngIf="isOpen">
+  <div *ngIf="isOpen" class="dropdown-panel">
     <input
-      type="text"
+      (click)="$event.stopPropagation()"
+      (ngModelChange)="onSearch()"
+      [(ngModel)]="searchTerm"
       class="search-input"
       placeholder="Rechercher..."
-      [(ngModel)]="searchTerm"
-      (ngModelChange)="onSearch()"
-      (click)="$event.stopPropagation()">
+      type="text">
 
     <ul class="items-list">
-      <li *ngIf="filteredItems.length === 0" class="no-results">Aucun résultat</li>
+      <li *ngIf="filteredItems?.length === 0" class="no-results">Aucun résultat</li>
       <li *ngFor="let item of filteredItems">
         <label>
           <input
-            type="checkbox"
+            (change)="onItemSelect(item)"
             [checked]="isSelected(item)"
-            (change)="onItemSelect(item)">
+            type="checkbox">
+
           <span>{{ item[displayField] }}</span>
         </label>
       </li>

@@ -117,16 +117,16 @@
     }
   }
 
-    .info-key {
-      font-size: $font-size-small;
-      color: $color-text-secondary;
-      font-weight: 500;
-      text-transform: capitalize;
-    }
-
-    .info-value {
-      font-size: $font-size-body;
-      color: $color-text-primary;
-      font-weight: 400;
-    }
+  .info-key {
+    font-size: $font-size-small;
+    color: $color-text-secondary;
+    font-weight: 500;
+    text-transform: capitalize;
   }
+
+  .info-value {
+    font-size: $font-size-body;
+    color: $color-text-primary;
+    font-weight: 400;
+  }
+}

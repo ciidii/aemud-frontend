@@ -1,8 +1,8 @@
 // src/app/core/services/auth.service.ts
-import { Injectable } from '@angular/core';
-import { BehaviorSubject, map, Observable, of, throwError } from 'rxjs'; // 'map' n'est pas strictement nécessaire ici si on émet directement un booléen, mais peut être gardé.
-import { delay, tap } from 'rxjs/operators';
-import { Router } from '@angular/router';
+import {Injectable} from '@angular/core';
+import {BehaviorSubject, Observable, of} from 'rxjs'; // 'map' n'est pas strictement nécessaire ici si on émet directement un booléen, mais peut être gardé.
+import {delay, tap} from 'rxjs/operators';
+import {Router} from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -11,10 +11,11 @@ export class AuthService {
   private isAuthenticatedSubject = new BehaviorSubject<boolean>(this.hasToken());
   isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {
+  }
 
-  private hasToken(): boolean {
-    return !!localStorage.getItem('access_token');
+  get isAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
   }
 
   login(email: string, password: string): Observable<boolean> {
@@ -50,7 +51,7 @@ export class AuthService {
     this.router.navigate(['/login']);
   }
 
-  get isAuthenticated(): boolean {
-    return this.isAuthenticatedSubject.value;
+  private hasToken(): boolean {
+    return !!localStorage.getItem('access_token');
   }
 }

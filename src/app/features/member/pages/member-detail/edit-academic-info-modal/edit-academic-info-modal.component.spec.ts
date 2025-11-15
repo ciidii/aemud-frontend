@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EditAcademicInfoModalComponent } from './edit-academic-info-modal.component';
+import {EditAcademicInfoModalComponent} from './edit-academic-info-modal.component';
 
 describe('EditAcademicInfoModalComponent', () => {
   let component: EditAcademicInfoModalComponent;
@@ -10,8 +10,8 @@ describe('EditAcademicInfoModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EditAcademicInfoModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(EditAcademicInfoModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

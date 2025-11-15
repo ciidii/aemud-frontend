@@ -1,6 +1,6 @@
-import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 // Define the interface for the address data
 export interface AddressInfo {
@@ -19,9 +19,8 @@ export class EditAddressInfoModalComponent implements OnInit {
   @Input() initialData!: AddressInfo;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<AddressInfo>();
-
-  private fb = inject(FormBuilder);
   addressForm!: FormGroup;
+  private fb = inject(FormBuilder);
 
   ngOnInit(): void {
     this.addressForm = this.fb.group({

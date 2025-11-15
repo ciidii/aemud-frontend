@@ -12,10 +12,10 @@
         </p>
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="close.emit()">
+        <button (click)="close.emit()" class="btn btn-secondary" type="button">
           Annuler
         </button>
-        <button type="button" class="btn btn-danger" (click)="confirm.emit()">
+        <button (click)="confirm.emit()" class="btn btn-danger" type="button">
           Oui, supprimer
         </button>
       </div>

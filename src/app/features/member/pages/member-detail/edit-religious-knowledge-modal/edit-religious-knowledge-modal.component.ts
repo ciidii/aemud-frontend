@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, inject} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormArray, FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {ReligiousKnowledge} from "../../../../../core/models/member-data.model";
@@ -14,9 +14,16 @@ export class EditReligiousKnowledgeModalComponent implements OnInit {
   @Input() initialData!: ReligiousKnowledge;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<ReligiousKnowledge>();
-
-  private fb = inject(FormBuilder);
   knowledgeForm!: FormGroup;
+  private fb = inject(FormBuilder);
+
+  get fiqh() {
+    return this.knowledgeForm.get('fiqh') as FormArray;
+  }
+
+  get aqida() {
+    return this.knowledgeForm.get('aqida') as FormArray;
+  }
 
   ngOnInit(): void {
     this.knowledgeForm = this.fb.group({
@@ -28,14 +35,6 @@ export class EditReligiousKnowledgeModalComponent implements OnInit {
 
     this.initialData?.fiqh?.forEach(item => this.fiqh.push(this.createKnowledgeItem(item)));
     this.initialData?.aqida?.forEach(item => this.aqida.push(this.createKnowledgeItem(item)));
-  }
-
-  get fiqh() {
-    return this.knowledgeForm.get('fiqh') as FormArray;
-  }
-
-  get aqida() {
-    return this.knowledgeForm.get('aqida') as FormArray;
   }
 
   createKnowledgeItem(data?: any): FormGroup {

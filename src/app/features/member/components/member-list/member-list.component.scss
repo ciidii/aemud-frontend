@@ -6,12 +6,20 @@
 }
 
 .container {
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-  padding: 0;
+  display: grid;
+  grid-template-rows: auto 1fr auto; // header, body, footer
+  height: 95%;
 }
 
-app-table-body {
-  flex-grow: 1;
+.list-header {
+  // The header content determines its own height
+}
+
+.list-body {
+  // This container will grow and shrink
+  overflow: hidden; // Crucial for the inner component's scrolling
+}
+
+.list-footer {
+  // The footer content determines its own height
 }

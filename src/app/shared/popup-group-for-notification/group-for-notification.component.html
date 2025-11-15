@@ -4,7 +4,7 @@
       <!-- Modal Header -->
       <div class="modal-header">
         <h5 class="modal-title">Nouveau Message Groupé</h5>
-        <button (click)="closeModal()" type="button" class="btn-close" aria-label="Close">
+        <button (click)="closeModal()" aria-label="Close" class="btn-close" type="button">
           <i class="bi bi-x-lg"></i>
         </button>
       </div>
@@ -19,14 +19,14 @@
 
           <div class="mb-3">
             <div class="d-flex justify-content-between align-items-center">
-              <label for="groupMessage" class="form-label">Message</label>
-              <button type="button" class="btn-template">
+              <label class="form-label" for="groupMessage">Message</label>
+              <button class="btn-template" type="button">
                 <i class="bi bi-file-text"></i> Utiliser un template
               </button>
             </div>
-            <textarea id="groupMessage" formControlName="groupMessage" rows="5"
-                      class="form-control"
-                      placeholder="Entrez votre message ici..."></textarea>
+            <textarea class="form-control" formControlName="groupMessage" id="groupMessage"
+                      placeholder="Entrez votre message ici..."
+                      rows="5"></textarea>
             <div class="char-counter text-end mt-1">
               0/160 (1 SMS)
             </div>
@@ -36,10 +36,10 @@
 
       <!-- Modal Footer -->
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" (click)="closeModal()">
+        <button (click)="closeModal()" class="btn btn-secondary" type="button">
           Annuler
         </button>
-        <button type="button" class="btn btn-primary"  [disabled]="!formGroup.get('groupMessage')?.value">
+        <button [disabled]="!formGroup.get('groupMessage')?.value" class="btn btn-primary" type="button">
           <i class="bi bi-send"></i>
           Envoyer
         </button>

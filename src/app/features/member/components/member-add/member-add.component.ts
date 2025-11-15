@@ -11,9 +11,10 @@ import {ClubService} from "../../../configuration/services/club.service";
 import {CommissionService} from "../../../configuration/services/commission.service";
 import {MemberHttpService} from "../../services/member.http.service";
 import {forkJoin} from "rxjs";
-import {Bourse, Club, Commission} from "../../../../core/models/member-data.model";
+import {Club, Commission} from "../../../../core/models/member-data.model";
 import {Router} from "@angular/router";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {BourseModel} from "../../../../core/models/bourse.model";
 
 @Component({
   selector: 'app-member-add',
@@ -41,7 +42,7 @@ export class MemberAddComponent implements OnInit {
   mainForm!: FormGroup;
   currentStep = 1;
 
-  bourses: Bourse[] = [];
+  bourses: BourseModel[] = [];
   clubs: Club[] = [];
   commissions: Commission[] = [];
 
@@ -54,6 +55,23 @@ export class MemberAddComponent implements OnInit {
     private router: Router,
     private notificationService: NotificationService
   ) {
+  }
+
+  get currentStepControl() {
+    switch (this.currentStep) {
+      case 1:
+        return this.mainForm.get('personalInfo');
+      case 2:
+        return this.mainForm.get('contactInfo');
+      case 3:
+        return this.mainForm.get('academicInfo');
+      case 4:
+        return this.mainForm.get('religiousKnowledge');
+      case 5:
+        return this.mainForm.get('engagements');
+      default:
+        return null;
+    }
   }
 
   ngOnInit(): void {
@@ -78,23 +96,6 @@ export class MemberAddComponent implements OnInit {
       this.clubs = clubs;
       this.commissions = commissions;
     });
-  }
-
-  get currentStepControl() {
-    switch (this.currentStep) {
-      case 1:
-        return this.mainForm.get('personalInfo');
-      case 2:
-        return this.mainForm.get('contactInfo');
-      case 3:
-        return this.mainForm.get('academicInfo');
-      case 4:
-        return this.mainForm.get('religiousKnowledge');
-      case 5:
-        return this.mainForm.get('engagements');
-      default:
-        return null;
-    }
   }
 
   nextStep() {
@@ -150,7 +151,7 @@ export class MemberAddComponent implements OnInit {
   }
 
   private mapFormToRequest(formValue: any): any {
-    const { personalInfo, contactInfo, academicInfo, religiousKnowledge, engagements } = formValue;
+    const {personalInfo, contactInfo, academicInfo, religiousKnowledge, engagements} = formValue;
 
     return {
       personalInfo: personalInfo,

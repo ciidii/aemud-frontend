@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EditContactInfoModalComponent } from './edit-contact-info-modal.component';
+import {EditContactInfoModalComponent} from './edit-contact-info-modal.component';
 
 describe('EditContactInfoModalComponent', () => {
   let component: EditContactInfoModalComponent;
@@ -10,8 +10,8 @@ describe('EditContactInfoModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EditContactInfoModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(EditContactInfoModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

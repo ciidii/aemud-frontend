@@ -1,5 +1,5 @@
 import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
-import { CommonModule } from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {ContributionCalendarItem} from "../../../../../core/models/contribution-calendar-item.model";
 
@@ -30,7 +30,7 @@ export class RecordPaymentModalComponent implements OnInit {
     if (this.contributions && this.contributions.length > 0) {
       this.totalAmount = this.contributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
       this.monthNames = this.contributions.map(item =>
-        new Date(item.month[0], item.month[1] - 1).toLocaleString('fr-FR', { month: 'long' })
+        new Date(item.month[0], item.month[1] - 1).toLocaleString('fr-FR', {month: 'long'})
       );
     }
   }

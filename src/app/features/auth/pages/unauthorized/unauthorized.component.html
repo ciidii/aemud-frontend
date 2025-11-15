@@ -2,15 +2,17 @@
   <div class="row">
     <div class="col-12">
       <div class="error-container p-5 rounded shadow-lg bg-white">
-        <img src="https://via.placeholder.com/150/FF6B6B/FFFFFF?text=🚫" alt="Icône Non Autorisé" class="img-fluid mb-4" style="max-width: 150px;">
+        <img alt="Icône Non Autorisé" class="img-fluid mb-4" src="https://via.placeholder.com/150/FF6B6B/FFFFFF?text=🚫"
+             style="max-width: 150px;">
         <h1 class="display-4 fw-bold text-danger mb-3">Oups ! Accès Non Autorisé</h1>
         <h2 class="lead mb-4">Il semble que vous n'ayez pas la permission d'accéder à cette page.</h2>
-        <p class="text-muted mb-5">Pas de souci, ça arrive ! Vous pourriez avoir besoin de vous connecter ou de contacter le support si vous pensez qu'il s'agit d'une erreur.</p>
+        <p class="text-muted mb-5">Pas de souci, ça arrive ! Vous pourriez avoir besoin de vous connecter ou de
+          contacter le support si vous pensez qu'il s'agit d'une erreur.</p>
         <div class="d-grid gap-3 d-sm-flex justify-content-sm-center">
-          <a href="/" class="btn btn-primary btn-lg custom-btn-shadow">
+          <a class="btn btn-primary btn-lg custom-btn-shadow" href="/">
             <i class="bi bi-house-door-fill me-2"></i> Retour à l'accueil
           </a>
-          <a href="/contact" class="btn btn-outline-secondary btn-lg">
+          <a class="btn btn-outline-secondary btn-lg" href="/contact">
             <i class="bi bi-envelope-fill me-2"></i> Contacter le support
           </a>
         </div>
@@ -24,13 +26,16 @@
   body {
     background-color: #f8f9fa; /* Arrière-plan gris clair */
   }
+
   .error-container {
     border: 1px solid #dee2e6; /* Bordure légère */
   }
+
   .custom-btn-shadow {
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
     transition: all 0.3s ease;
   }
+
   .custom-btn-shadow:hover {
     box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
     transform: translateY(-2px);

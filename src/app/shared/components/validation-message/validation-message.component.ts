@@ -13,7 +13,7 @@ export class ValidationMessageComponent {
 
   @Input() control: AbstractControl | null = null;
 
-  private readonly errorMessages: { [key: string]: (params: any) => string } = {
+  private readonly errorMessages: Record<string, (params: any) => string> = {
     'required': () => `Ce champ est requis`,
     'email': () => `L\'adresse e-mail est invalide`,
     'minlength': (params) => `Ce champ doit contenir au moins ${params.requiredLength} caractères`,

@@ -1,16 +1,16 @@
-<div class="detail-page-container" *ngIf="member$ | async as member; else loading">
+<div *ngIf="member$ | async as member; else loading" class="detail-page-container">
 
   <!-- Header (Fixed) -->
   <div class="detail-header">
     <div class="header-left-side">
-      <button class="back-button" (click)="goBack()" aria-label="Go back">
+      <button (click)="goBack()" aria-label="Go back" class="back-button">
         <i class="bi bi-arrow-left"></i>
       </button>
       <div class="header-main-info">
         <div class="avatar-placeholder">
           <i class="bi bi-person-fill"></i>
         </div>
-        <div class="header-text" *ngIf="member.personalInfo">
+        <div *ngIf="member.personalInfo" class="header-text">
           <h1>{{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h1>
           <div class="status-badges">
             <span class="badge bg-success">Membre Actif</span>
@@ -19,13 +19,13 @@
       </div>
     </div>
     <div class="header-actions">
-      <button class="btn btn-primary" (click)="openSendMessageModal()"><i class="bi bi-send"></i> Envoyer un message
+      <button (click)="openSendMessageModal()" class="btn btn-primary"><i class="bi bi-send"></i> Envoyer un message
       </button>
       <div class="actions-dropdown">
-        <button class="btn btn-secondary btn-icon" (click)="toggleActionsDropdown($event)">
+        <button (click)="toggleActionsDropdown($event)" class="btn btn-secondary btn-icon">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
-        <ul class="dropdown-menu" [class.show]="isActionsDropdownOpen">
+        <ul [class.show]="isActionsDropdownOpen" class="dropdown-menu">
           <li><a (click)="openExportModal()"><i class="bi bi-upload"></i> Exporter</a></li>
           <li><a (click)="toggleDeleteModal()" class="text-danger"><i class="bi bi-trash"></i> Supprimer</a></li>
         </ul>
@@ -34,16 +34,16 @@
   </div>
 
   <!-- Body Grid (Two Columns) -->
-  <div class="detail-body-grid" [class.sidebar-collapsed]="isSidebarCollapsed">
+  <div [class.sidebar-collapsed]="isSidebarCollapsed" class="detail-body-grid">
 
     <!-- Left Column: Main Info (Scrollable) -->
     <div class="main-content-col">
 
       <!-- Personal Info Card -->
-      <div class="permanent-info-card" *ngIf="member.personalInfo as personalInfo">
+      <div *ngIf="member.personalInfo as personalInfo" class="permanent-info-card">
         <div class="card-header">
           <h5>Informations Personnelles</h5>
-          <button class="btn-modify-card" (click)="openEditPersonalInfoModal()">Modifier</button>
+          <button (click)="openEditPersonalInfoModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
@@ -71,10 +71,10 @@
 
 
       <!-- Contact Info Card -->
-      <div class="permanent-info-card" *ngIf="member.contactInfo as contactInfo">
+      <div *ngIf="member.contactInfo as contactInfo" class="permanent-info-card">
         <div class="card-header">
           <h5>Informations de Contact</h5>
-          <button class="btn-modify-card" (click)="openEditContactInfoModal()">Modifier</button>
+          <button (click)="openEditContactInfoModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
@@ -91,7 +91,7 @@
             <div class="info-pair full-width">
               <span class="info-key">Personnes à contacter</span>
               <div class="contact-list">
-                <div class="contact-card" *ngFor="let contact of contactInfo.personToCalls">
+                <div *ngFor="let contact of contactInfo.personToCalls" class="contact-card">
                   <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
                   <div class="contact-relation">{{ contact.relationship }}</div>
                   <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
@@ -105,10 +105,10 @@
       </div>
 
       <!-- Academic & Membership Info Card -->
-      <div class="permanent-info-card" *ngIf="member.academicInfo || member.membershipInfo">
+      <div *ngIf="member.academicInfo || member.membershipInfo" class="permanent-info-card">
         <div class="card-header">
           <h5>Informations Académiques & Adhésion</h5>
-          <button class="btn-modify-card" (click)="openEditAcademicInfoModal()">Modifier</button>
+          <button (click)="openEditAcademicInfoModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <ng-container *ngIf="member.academicInfo as academicInfo">
@@ -136,21 +136,21 @@
       <div class="permanent-info-card">
         <div class="card-header">
           <h5>Engagements Associatifs</h5>
-          <button class="btn-modify-card" (click)="openEditEngagementsModal()">Modifier</button>
+          <button (click)="openEditEngagementsModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body">
           <div class="info-pair">
             <span class="info-key">Clubs</span>
-            <div class="info-value tag-list" *ngIf="member.clubs && member.clubs.length > 0; else noClubs">
-              <span class="tag" *ngFor="let club of member.clubs">{{ club.name }}</span>
+            <div *ngIf="member.clubs && member.clubs.length > 0; else noClubs" class="info-value tag-list">
+              <span *ngFor="let club of member.clubs" class="tag">{{ club.name }}</span>
             </div>
             <ng-template #noClubs><span class="info-value text-muted">Aucun club</span></ng-template>
           </div>
           <div class="info-pair mt-4">
             <span class="info-key">Commissions</span>
-            <div class="info-value tag-list"
-                 *ngIf="member.commissions && member.commissions.length > 0; else noCommissions">
-              <span class="tag" *ngFor="let commission of member.commissions">{{ commission.name }}</span>
+            <div *ngIf="member.commissions && member.commissions.length > 0; else noCommissions"
+                 class="info-value tag-list">
+              <span *ngFor="let commission of member.commissions" class="tag">{{ commission.name }}</span>
             </div>
             <ng-template #noCommissions><span class="info-value text-muted">Aucune commission</span></ng-template>
           </div>
@@ -158,10 +158,10 @@
       </div>
 
       <!-- Religious Knowledge Card -->
-      <div class="permanent-info-card" *ngIf="member.religiousKnowledge as religiousKnowledge">
+      <div *ngIf="member.religiousKnowledge as religiousKnowledge" class="permanent-info-card">
         <div class="card-header">
           <h5>Connaissances Religieuses</h5>
-          <button class="btn-modify-card" (click)="openEditReligiousKnowledgeModal()">Modifier</button>
+          <button (click)="openEditReligiousKnowledgeModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair"><span class="info-key">Niveau de Coran</span><span
@@ -169,7 +169,7 @@
           <div class="info-pair"><span class="info-key">Maîtrise de l'arabe</span><span
             class="info-value">{{ religiousKnowledge.arabicProficiency }}</span></div>
         </div>
-        <div class="card-body pt-0" *ngIf="religiousKnowledge.aqida && religiousKnowledge.aqida.length > 0">
+        <div *ngIf="religiousKnowledge.aqida && religiousKnowledge.aqida.length > 0" class="card-body pt-0">
           <h6 class="knowledge-header">Aqida</h6>
           <div class="table-responsive">
             <table class="knowledge-table">
@@ -190,7 +190,7 @@
             </table>
           </div>
         </div>
-        <div class="card-body pt-0" *ngIf="religiousKnowledge.fiqh && religiousKnowledge.fiqh.length > 0">
+        <div *ngIf="religiousKnowledge.fiqh && religiousKnowledge.fiqh.length > 0" class="card-body pt-0">
           <h6 class="knowledge-header">Fiqh</h6>
           <div class="table-responsive">
             <table class="knowledge-table">
@@ -214,10 +214,10 @@
       </div>
 
       <!-- Address Card -->
-      <div class="permanent-info-card" *ngIf="member.addressInfo as addressInfo">
+      <div *ngIf="member.addressInfo as addressInfo" class="permanent-info-card">
         <div class="card-header">
           <h5>Adresse</h5>
-          <button class="btn-modify-card" (click)="openEditAddressInfoModal()">Modifier</button>
+          <button (click)="openEditAddressInfoModal()" class="btn-modify-card">Modifier</button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair"><span class="info-key">Adresse à Dakar</span><span
@@ -228,12 +228,12 @@
       </div>
 
       <!-- Bourse Card -->
-      <div class="permanent-info-card" *ngIf="member.bourse as bourse">
+      <div *ngIf="member.bourse as bourse" class="permanent-info-card">
         <div class="card-header">
           <h5>Bourse</h5>
-          <button class="btn-modify-card" (click)="openEditBourseInfoModal()">Modifier</button>
+          <button (click)="openEditBourseInfoModal()" class="btn-modify-card">Modifier</button>
         </div>
-        <div class="card-body info-grid" *ngIf="bourse.bourseId">
+        <div *ngIf="bourse.id" class="card-body info-grid">
           <div class="info-pair"><span class="info-key">Libellé</span><span
             class="info-value">{{ bourse.lebelle }}</span></div>
           <div class="info-pair"><span class="info-key">Montant</span><span
@@ -247,15 +247,33 @@
       <div class="sidebar-card">
         <div class="sidebar-header">
           <h4 *ngIf="!isSidebarCollapsed">Historique des inscriptions</h4>
-          <button class="btn-icon btn-toggle-sidebar" (click)="toggleSidebar()"
-                  [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'">
-            <i class="bi" [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'"></i>
+          <button (click)="toggleSidebar()" [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'"
+                  class="btn-icon btn-toggle-sidebar">
+            <i [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'" class="bi"></i>
           </button>
         </div>
-        <div class="sidebar-content" *ngIf="!isSidebarCollapsed">
+        <div *ngIf="!isSidebarCollapsed" class="sidebar-content">
+
+          <!-- Current Registration Status -->
+          <div *ngIf="viewedPhaseRegistration" [ngClass]="getRegistrationStatusClass(viewedPhaseRegistration)"
+               class="current-registration-status">
+            <div class="status-main">
+              <div class="status-icon">
+                <i class="bi" [ngClass]="getRegistrationStatusIcon(viewedPhaseRegistration)"></i>
+              </div>
+              <div>
+                <h6 class="status-title">{{ getRegistrationStatusText(viewedPhaseRegistration) }}</h6>
+                <p class="status-description">{{ getRegistrationStatusDescription(viewedPhaseRegistration) }}</p>
+              </div>
+            </div>
+            <button (click)="toggleReregisterModal()" *ngIf="!viewedPhaseRegistration.isRegistered"
+                    class="btn btn-primary">
+              <i class="bi bi-person-plus-fill"></i> Inscrire
+            </button>
+          </div>
 
           <!-- Subscription Summary -->
-          <div class="cotisation-summary" *ngIf="contributionSummary">
+          <div *ngIf="contributionSummary" class="cotisation-summary">
             <div class="summary-item">
               <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
               <span class="summary-label">Total Payé</span>
@@ -274,21 +292,21 @@
           <h5>État des Cotisations</h5>
           <div class="cotisation-header">
             <div class="year-selector-group">
-              <label for="subscription-year">Session :</label>
-              <select id="subscription-year" class="form-select-sm" (change)="onYearChange($event)">
-                <option *ngFor="let year of subscriptionYears" [value]="year"
-                        [selected]="year === selectedSubscriptionYear">
-                  {{ year }} - {{ year + 1 }}
+              <label for="subscription-phase">Phase :</label>
+              <select (change)="onPhaseChange($event)" class="form-select-sm" id="subscription-phase">
+                <option *ngFor="let phase of activeMandat?.phases" [selected]="phase.id === selectedPhaseId"
+                        [value]="phase.id">
+                  {{ phase.nom }}
                 </option>
               </select>
             </div>
           </div>
           <div class="cotisation-grid">
-            <button *ngFor="let item of monthlyContributions"
-                    class="month-box"
-                    [ngClass]="item.status"
+            <button (click)="onMonthClick(item)"
+                    *ngFor="let item of monthlyContributions"
                     [class.selected]="isMonthSelected(item)"
-                    (click)="onMonthClick(item)">
+                    [ngClass]="item.status"
+                    class="month-box">
               {{ item.month }}
             </button>
           </div>
@@ -300,104 +318,51 @@
           </div>
 
           <!-- Multi-select Action Bar -->
-          <div class="multi-select-bar" *ngIf="selectedContributions.length > 0">
+          <div *ngIf="selectedContributions.length > 0" class="multi-select-bar">
             <div class="selection-info">
               <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
               <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
             </div>
-            <button class="btn btn-primary" (click)="openRecordPaymentModal()">Enregistrer le paiement</button>
+            <button (click)="openRecordPaymentModal()" class="btn btn-primary">Enregistrer le paiement</button>
           </div>
 
           <div class="cotisation-actions">
-            <button class="btn btn-sm btn-secondary" (click)="sendContributionReminder()">
+            <button (click)="sendContributionReminder()" class="btn btn-sm btn-secondary">
               <i class="bi bi-bell"></i> Envoyer un rappel
             </button>
           </div>
-
           <hr class="sidebar-divider">
 
-          <!-- Registration History
-          <div class="registration-history"
-               *ngIf="member.registration && member.registration.length > 0; else noRegistrations">
-            <div class="registration-item" *ngFor="let reg of member.registration">
-              <div class="registration-info">
-                <div class="registration-year">Session {{ reg.session }}</div>
-                <div class="registration-details">
-                <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
-                  {{ reg.statusPayment ? 'Payé' : 'En attente' }}
-                </span>
-                  <span class="registration-type">{{ reg.registrationType }}</span>
-                </div>
-              </div>
-              <div class="registration-actions" *ngIf="!reg.statusPayment">
-                <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
-                        (click)="markAsPaid(reg.session)">
-                  <i class="bi bi-check-circle"></i>
-                </button>
-                <button class="btn btn-sm btn-icon-secondary" title="Envoyer un rappel SMS">
-                  <i class="bi bi-bell"></i>
-                </button>
-              </div>
-            </div>
-          </div>
-          -->
-          <!-- Unified Registration Status Card -->
-          <div class="sidebar-content registration-card">
-            <div class="card-header">
-              <h5>Statut d'Inscription</h5>
-            </div>
-            <div class="card-body" *ngIf="currentSessionRegistration as currentReg  else noRegistrations">
-
-              <!-- Current Session -->
-              <div class="current-registration-status" [ngClass]="getRegistrationStatusClass(currentReg)">
-                <div class="status-main">
-                  <span class="status-icon" [innerHTML]="getRegistrationStatusIcon(currentReg)"></span>
-                  <div class="status-text">
-                    <h6 class="status-title">Session {{ currentReg.sessionId }} - {{ currentReg.sessionId }}
-                      : {{ getRegistrationStatusText(currentReg) }}</h6>
-                    <p class="status-description">{{ getRegistrationStatusDescription(currentReg) }}</p>
-                  </div>
-                </div>
-                <div class="status-actions">
-                  <button *ngIf="!currentReg.isRegistered" class="btn btn-primary" (click)="toggleReregisterModal()">
-                    Inscrire maintenant
-                  </button>
-                  <button *ngIf="currentReg.status === RegistrationStatus.UNCOMPLETED" class="btn btn-primary"
-                          (click)="markAsPaid(currentReg.sessionId)">Finaliser le Paiement
-                  </button>
-                </div>
-              </div>
-
-              <!-- History -->
-              <ng-container *ngIf="pastRegistrations.length > 0">
-                <hr class="sidebar-divider">
-                <div class="registration-history">
-                  <h6 class="history-title">Historique</h6>
-                  <div class="registration-item" *ngFor="let reg of pastRegistrations">
-                    <div class="registration-info">
-                      <div class="registration-year">Session {{ reg.sessionId }} - {{ reg.sessionId }}</div>
-                      <div class="registration-details">
-                    <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
-                      {{ reg.statusPayment ? 'Payé' : 'En attente' }}
-                    </span>
-                        <span class="registration-type">{{ reg.registrationType }}</span>
-                      </div>
-                    </div>
-                    <div class="registration-actions" *ngIf="!reg.statusPayment">
-                      <button class="btn btn-sm btn-icon-primary" title="Marquer comme Payé"
-                              (click)="markAsPaid(reg.sessionId)">
-                        <i class="bi bi-check-circle"></i>
-                      </button>
+          <div class="history-container" *ngIf="groupedHistory.length > 0; else noRegistrations">
+            <div class="mandate-group" *ngFor="let group of groupedHistory">
+              <h6 class="mandate-title">{{ group.mandatName }}</h6>
+              <div class="registration-list">
+                <div class="registration-item" *ngFor="let reg of group.registrations">
+                  <div class="registration-info">
+                    <div class="phase-name">{{ getPhaseById(reg.phaseId)?.nom || 'Phase inconnue' }}</div>
+                    <div class="registration-details">
+                      <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
+                        {{ reg.statusPayment ? 'Payé' : 'En attente' }}
+                      </span>
+                      <span class="registration-type">{{ reg.registrationType }}</span>
                     </div>
                   </div>
+                  <div class="registration-actions" *ngIf="!reg.statusPayment">
+                    <button (click)="markAsPaid(reg.phaseId)" class="btn btn-sm btn-icon-primary"
+                            title="Marquer comme Payé">
+                      <i class="bi bi-check-circle"></i>
+                    </button>
+                  </div>
                 </div>
-              </ng-container>
-
+              </div>
             </div>
           </div>
 
           <ng-template #noRegistrations>
-            <p>Aucun historique d'inscription.</p>
+            <div class="empty-history">
+              <i class="bi bi-clock-history"></i>
+              <p>Aucun historique d'inscription pour ce membre.</p>
+            </div>
           </ng-template>
         </div>
       </div>
@@ -406,7 +371,6 @@
 
 </div>
 
-<!-- Fallback & Modals -->
 <ng-template #loading>
   <p>Loading member details...</p>
 </ng-template>
@@ -415,77 +379,77 @@
   <p>Member not found.</p>
 </ng-template>
 
-<app-reregister-modal *ngIf="isReregisterModalOpen"
-                      [availableSessions]="sessions"
-                      [currentSessionYear]="selectedSubscriptionYear"
-                      (close)="toggleReregisterModal()"
-                      (save)="handleSaveRegistration($event)">
+<app-reregister-modal (close)="toggleReregisterModal()"
+                      (save)="handleSaveRegistration($event)"
+                      *ngIf="isReregisterModalOpen"
+                      [availableMandats]="availableMandats"
+                      [initialPhaseId]="selectedPhaseId">
 </app-reregister-modal>
 
-<app-confirm-delete-modal *ngIf="isDeleteModalOpen" [itemCount]="1" (close)="toggleDeleteModal()"
-                          (confirm)="onDeleteConfirmed()"></app-confirm-delete-modal>
-<app-send-message-modal *ngIf="isSendMessageModalOpen" (close)="closeSendMessageModal()"></app-send-message-modal>
-<app-export-modal *ngIf="isExportModalOpen" (close)="closeExportModal()"></app-export-modal>
+<app-confirm-delete-modal (close)="toggleDeleteModal()" (confirm)="onDeleteConfirmed()" *ngIf="isDeleteModalOpen"
+                          [itemCount]="1"></app-confirm-delete-modal>
+<app-send-message-modal (close)="closeSendMessageModal()" *ngIf="isSendMessageModalOpen"></app-send-message-modal>
+<app-export-modal (close)="closeExportModal()" *ngIf="isExportModalOpen"></app-export-modal>
 
 <!-- Record Payment Modal -->
-<app-record-payment-modal *ngIf="isRecordPaymentModalOpen"
-                          [contributions]="selectedContributions"
-                          (close)="handleClosePaymentModal()"
-                          (save)="handleSavePayment($event)">
+<app-record-payment-modal (close)="handleClosePaymentModal()"
+                          (save)="handleSavePayment($event)"
+                          *ngIf="isRecordPaymentModalOpen"
+                          [contributions]="selectedContributions">
 </app-record-payment-modal>
 
 <!-- Edit Personal Info Modal -->
 <app-edit-personal-info-modal
-  *ngIf="isEditPersonalInfoModalOpen && currentMember?.personalInfo"
-  [initialData]="currentMember!.personalInfo"
   (close)="closeEditPersonalInfoModal()"
-  (save)="handleSavePersonalInfo($event)">
+  (save)="handleSavePersonalInfo($event)"
+  *ngIf="isEditPersonalInfoModalOpen && currentMember?.personalInfo"
+  [initialData]="currentMember!.personalInfo">
 </app-edit-personal-info-modal>
 
 <!-- Edit Contact Info Modal -->
 <app-edit-contact-info-modal
-  *ngIf="isEditContactInfoModalOpen && currentMember?.contactInfo"
-  [initialData]="currentMember!.contactInfo"
   (close)="closeEditContactInfoModal()"
-  (save)="handleSaveContactInfo($event)">
+  (save)="handleSaveContactInfo($event)"
+  *ngIf="isEditContactInfoModalOpen && currentMember?.contactInfo"
+  [initialData]="currentMember!.contactInfo">
 </app-edit-contact-info-modal>
 
 <!-- Edit Academic Info Modal -->
 <app-edit-academic-info-modal
-  *ngIf="isEditAcademicInfoModalOpen"
   (close)="closeEditAcademicInfoModal()"
-  (save)="handleSaveAcademicInfo($event)">
+  (save)="handleSaveAcademicInfo($event)"
+  *ngIf="isEditAcademicInfoModalOpen">
 </app-edit-academic-info-modal>
 
 <app-edit-engagements-modal
+  (close)="closeEditEngagementsModal()"
+  (save)="handleSaveEngagements($event)"
   *ngIf="isEditEngagementsModalOpen && currentMember"
   [memberClubs]="currentMember.clubs || []"
-  [memberCommissions]="currentMember.commissions || []"
-  (close)="closeEditEngagementsModal()"
-  (save)="handleSaveEngagements($event)">
+  [memberCommissions]="currentMember.commissions || []">
 </app-edit-engagements-modal>
 
 <!-- Edit Religious Knowledge Modal -->
 <app-edit-religious-knowledge-modal
-  *ngIf="isEditReligiousKnowledgeModalOpen && currentMember?.religiousKnowledge"
-  [initialData]="currentMember!.religiousKnowledge"
   (close)="closeEditReligiousKnowledgeModal()"
-  (save)="handleSaveReligiousKnowledge($event)">
+  (save)="handleSaveReligiousKnowledge($event)"
+  *ngIf="isEditReligiousKnowledgeModalOpen && currentMember?.religiousKnowledge"
+  [initialData]="currentMember!.religiousKnowledge">
 </app-edit-religious-knowledge-modal>
 
 <!-- Edit Address Info Modal -->
 <app-edit-address-info-modal
-  *ngIf="isEditAddressInfoModalOpen && currentMember?.addressInfo"
-  [initialData]="currentMember!.addressInfo"
   (close)="closeEditAddressInfoModal()"
-  (save)="handleSaveAddressInfo($event)">
+  (save)="handleSaveAddressInfo($event)"
+  *ngIf="isEditAddressInfoModalOpen && currentMember?.addressInfo"
+  [initialData]="currentMember!.addressInfo">
 </app-edit-address-info-modal>
 
 <!-- Edit Bourse Info Modal -->
 <app-edit-bourse-info-modal
-  *ngIf="isEditBourseInfoModalOpen && currentMember?.bourse"
-  [initialData]="currentMember!.bourse"
   (close)="closeEditBourseInfoModal()"
-  (save)="handleSaveBourseInfo($event)">
+  (save)="handleSaveBourseInfo($event)"
+  *ngIf="isEditBourseInfoModalOpen && currentMember?.bourse"
+  [initialData]="currentMember!.bourse">
 </app-edit-bourse-info-modal>
 
