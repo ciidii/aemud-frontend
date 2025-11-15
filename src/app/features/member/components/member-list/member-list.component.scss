@@ -1,0 +1,25 @@
+@import 'variables';
+
+:host {
+  display: block;
+  height: 100%;
+}
+
+.container {
+  display: grid;
+  grid-template-rows: auto 1fr auto; // header, body, footer
+  height: 95%;
+}
+
+.list-header {
+  // The header content determines its own height
+}
+
+.list-body {
+  // This container will grow and shrink
+  overflow: hidden; // Crucial for the inner component's scrolling
+}
+
+.list-footer {
+  // The footer content determines its own height
+}

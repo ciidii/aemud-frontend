@@ -1,0 +1,31 @@
+<div (click)="onClose()" class="modal-backdrop"></div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 class="modal-title">Modifier l'Adresse</h3>
+    <button (click)="onClose()" aria-label="Close" class="btn-close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <form (ngSubmit)="onSave()" [formGroup]="addressForm">
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="addressInDakar">Adresse à Dakar</label>
+          <input class="form-input" formControlName="addressInDakar" id="addressInDakar"
+                 placeholder="Ex: Cité Keur Gorgui...">
+        </div>
+        <div class="form-field">
+          <label for="addressToCampus">Adresse au Campus</label>
+          <input class="form-input" formControlName="addressToCampus" id="addressToCampus"
+                 placeholder="Ex: Pavillon A, Chambre 123...">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="onClose()" class="btn btn-secondary" type="button">Annuler</button>
+      <button [disabled]="!addressForm.valid" class="btn btn-primary" type="submit">
+        <i class="bi bi-check-circle"></i> Enregistrer les modifications
+      </button>
+    </div>
+  </form>
+</div>

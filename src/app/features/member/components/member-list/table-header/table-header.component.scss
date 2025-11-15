@@ -1,0 +1,83 @@
+@import 'variables';
+
+:host {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid $color-border-default;
+  background-color: $white;
+  position: sticky;
+  top: 0;
+  padding: $space-4 $space-4 $space-6;
+  z-index: 1;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+
+.left-section {
+  .page-title {
+    font-size: $font-size-h4;
+    font-weight: 700;
+    color: $color-text-primary;
+  }
+}
+
+.right-section {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+
+  .action-button {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    padding: $space-2 $space-3;
+    border-radius: $radius-sm;
+    font-size: $font-size-small;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    box-shadow: $shadow-sm;
+
+    i {
+      font-size: $icon-sm;
+    }
+
+    &.primary {
+      background-color: $primary-500;
+      color: $white;
+      border-color: $primary-500;
+
+      &:hover {
+        background: $primary-400;
+        border-color: $primary-400;
+        box-shadow: $shadow-md;
+      }
+    }
+
+    &:not(.primary) {
+      background-color: $white;
+      color: $color-text-primary;
+      border-color: $color-border-default;
+
+      &:hover {
+        background: $gray-200;
+        box-shadow: $shadow-md;
+      }
+    }
+  }
+
+  app-notification-popover {
+    position: absolute;
+    top: calc(100% + #{$space-2});
+    right: 0;
+    z-index: 2000;
+  }
+
+
+}

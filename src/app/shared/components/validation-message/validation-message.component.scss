@@ -1,0 +1,10 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/typography';
+
+.error-message {
+  color: $danger-500;
+  @include text-body-small;
+  font-weight: $font-weight-bold;
+  margin-top: $space-2;
+  margin-bottom: 0;
+}

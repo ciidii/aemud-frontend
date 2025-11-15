@@ -1,0 +1,34 @@
+<div class="container">
+  <div class="list-header">
+    <app-table-header (exportTriggered)="toggleExportModal()"></app-table-header>
+    <app-table-filters (openFilterPanel)="toggleFilterPanel()"></app-table-filters>
+  </div>
+
+  <div class="list-body">
+    <div *ngIf="loading$ | async" class="loading-indicator">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Loading...</span>
+      </div>
+    </div>
+    <app-table-body [loading]="loading$ | async" [members]="members$ | async"/>
+  </div>
+
+  <div class="list-footer">
+    <app-table-footer
+      (deleteTriggered)="toggleDeleteModal()"
+      (exportTriggered)="toggleExportModal()"
+      (sendMessageTriggered)="toggleSendMessageModal()">
+    </app-table-footer>
+  </div>
+</div>
+
+<app-export-modal (close)="toggleExportModal()" *ngIf="isExportModalOpen"></app-export-modal>
+<app-send-message-modal (close)="toggleSendMessageModal()" *ngIf="isSendMessageModalOpen"></app-send-message-modal>
+<app-filter-panel (applyFilters)="applyFilters($event)" (close)="toggleFilterPanel()" (resetFilters)="resetFilters()"
+                  [isOpen]="isFilterPanelOpen"></app-filter-panel>
+<app-confirm-delete-modal
+  (close)="toggleDeleteModal()"
+  (confirm)="onDeleteConfirmed()"
+  *ngIf="isDeleteModalOpen"
+  [itemCount]="(selectedMembersCount$ | async) || 0">
+</app-confirm-delete-modal>

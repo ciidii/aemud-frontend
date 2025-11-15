@@ -1,0 +1,126 @@
+@import 'variables';
+
+.filter-panel-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 5000;
+  pointer-events: none; // Allows clicks to go through when hidden
+  color: $color-text-primary;
+}
+
+.filter-panel-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($gray-900, 0.5);
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+}
+
+.filter-panel-content {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 380px;
+  height: 100%;
+  background-color: $white;
+  box-shadow: $shadow-lg;
+  display: flex;
+  flex-direction: column;
+  transform: translateX(100%);
+  transition: transform 0.3s ease-in-out;
+}
+
+// --- Open State --- //
+.filter-panel-container.is-open {
+  pointer-events: auto; // Enable clicks when open
+
+  .filter-panel-overlay {
+    opacity: 1;
+  }
+
+  .filter-panel-content {
+    transform: translateX(0);
+  }
+}
+
+// --- Panel Sections --- //
+.panel-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $color-border-default;
+  flex-shrink: 0;
+
+  h5 {
+    font-size: $font-size-h5;
+    font-weight: 600;
+    margin: 0;
+  }
+
+  .btn-close {
+    background: transparent;
+    border: none;
+    font-size: $icon-sm;
+    color: $color-text-primary;
+    cursor: pointer;
+  }
+}
+
+.panel-body {
+  padding: $space-6;
+  overflow-y: auto;
+  flex-grow: 1;
+
+  .filter-group {
+    margin-bottom: $space-6;
+
+    h6 {
+      font-size: $font-size-body;
+      font-weight: 600;
+      margin-bottom: $space-3;
+    }
+
+    .form-group {
+      margin-bottom: $space-3;
+    }
+  }
+}
+
+.panel-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding: $space-4 $space-6;
+  border-top: 1px solid $color-border-default;
+  background-color: #f9f9f9;
+  flex-shrink: 0;
+}
+
+// --- Form elements --- //
+.form-check-label, .form-group label {
+  font-size: $font-size-body;
+  margin-bottom: $space-2;
+  display: block;
+}
+
+.form-control, .form-select {
+  width: 100%;
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  border: 1px solid $color-border-default;
+  font-size: $font-size-body;
+
+  &:focus {
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px $primary-100;
+    outline: none;
+  }
+}

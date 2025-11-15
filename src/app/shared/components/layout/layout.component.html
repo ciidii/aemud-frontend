@@ -1,0 +1,10 @@
+<div class="app-root-container">
+  <app-nav-bar></app-nav-bar>
+  <div [class.sidebar--collapsed]="!(isSidebarOpen$ | async)" class="app-container sidebar--collapsed">
+    <app-aside-bare></app-aside-bare>
+    <div class="main-content">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
+</div>
+

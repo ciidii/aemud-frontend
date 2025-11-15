@@ -1,0 +1,199 @@
+@import 'variables';
+
+.table-container {
+  background-color: $white;
+  height: 100%;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+
+  thead {
+
+
+    tr {
+      background-color: $gray-100;
+      border-bottom: 1px solid $color-border-default;
+      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      border-bottom: none;
+
+      th {
+        padding: $space-3 $space-4;
+        text-align: left;
+        font-weight: 600;
+        font-size: $font-size-small;
+        color: $color-text-secondary;
+        white-space: nowrap;
+        cursor: pointer;
+        transition: color 0.2s ease;
+
+        .sort-icon {
+          margin-right: $space-2;
+        }
+
+        &.active-sort {
+          color: $primary-600;
+          font-weight: 700;
+        }
+      }
+    }
+  }
+
+  tbody {
+    tr {
+      border-bottom: 1px solid $color-border-default;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+
+      &:hover {
+        background-color: #f9f9f9; // Should be a variable
+      }
+
+      td {
+        padding: $space-4;
+        vertical-align: middle;
+        font-size: $font-size-body;
+        color: $color-text-primary;
+        white-space: nowrap;
+
+        .badge {
+          font-size: 1.2rem; // smaller than body
+          padding: 0.4em 0.7em;
+          border-radius: $radius-md;
+          font-weight: 600;
+        }
+      }
+
+      th { // For the checkbox
+        padding: $space-4;
+        vertical-align: middle;
+
+        input[type="checkbox"]:checked {
+          background-color: $primary-500;
+          border-color: $primary-500;
+        }
+      }
+    }
+  }
+
+  .btn-action {
+    background: transparent;
+    border: 1px solid $color-border-default;
+    color: $color-text-primary;
+    padding: $space-2 $space-3;
+    border-radius: $radius-sm;
+    font-size: $font-size-small;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: $primary-500;
+      color: $white;
+      border-color: $primary-500;
+    }
+  }
+
+  // Kebab menu styles
+  .kebab-menu {
+    position: relative;
+    display: inline-block;
+  }
+
+  .kebab-icon {
+    background: transparent;
+    border: none;
+    padding: $space-1 $space-2;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+  }
+
+  .kebab-dropdown {
+    display: none; // Hidden by default
+    position: absolute;
+    right: 100%; // Position to the left of the icon
+    top: 0;
+    background-color: $white;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-sm;
+    box-shadow: $shadow-md;
+    min-width: 180px;
+    list-style: none;
+    padding: $space-2 0;
+    margin: 0;
+    z-index: 100;
+  }
+
+  .kebab-menu:hover .kebab-dropdown {
+    display: block; // Show on hover for demo
+  }
+
+  .kebab-dropdown li a {
+    display: block;
+    padding: $space-2 $space-4;
+    font-size: $font-size-small;
+    color: $color-text-primary;
+    text-decoration: none;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+  }
+}
+
+.empty-state-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-16 $space-6;
+  text-align: center;
+  height: 100%;
+
+  .empty-state-icon {
+    font-size: $icon-xl;
+    color: $primary-500;
+    margin-bottom: $space-6;
+  }
+
+  .empty-state-title {
+    font-size: $font-size-h5;
+    font-weight: 600;
+    color: $color-text-primary;
+    margin-bottom: $space-2;
+  }
+
+  .empty-state-text {
+    font-size: $font-size-body;
+    color: $color-text-secondary;
+    max-width: 400px;
+    margin-bottom: $space-8;
+  }
+
+  .empty-state-button {
+    background-color: $primary-500;
+    color: $white;
+    border: none;
+    padding: $space-3 $space-6;
+    font-size: $font-size-body;
+    font-weight: 500;
+    border-radius: $radius-sm;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: $primary-600;
+    }
+  }
+}

@@ -1,0 +1,24 @@
+<div class="modal-overlay">
+  <div class="modal-container" role="document">
+    <div class="modal-content">
+      <div class="modal-icon">
+        <i class="bi bi-exclamation-triangle-fill"></i>
+      </div>
+      <div class="modal-body">
+        <h5 class="modal-title">Êtes-vous sûr de vouloir supprimer ?</h5>
+        <p class="modal-text">
+          Vous êtes sur le point de supprimer <strong>{{ itemCount }} membre(s)</strong>.
+          Cette action est définitive et ne peut pas être annulée.
+        </p>
+      </div>
+      <div class="modal-footer">
+        <button (click)="close.emit()" class="btn btn-secondary" type="button">
+          Annuler
+        </button>
+        <button (click)="confirm.emit()" class="btn btn-danger" type="button">
+          Oui, supprimer
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

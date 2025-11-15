@@ -1,0 +1,77 @@
+<div [formGroup]="contactInfoForm" class="contact-form-container">
+
+  <!-- Section Contact Principal -->
+  <h3 class="section-title">Contact</h3>
+  <div class="form-grid">
+    <div class="form-field">
+      <label class="form-label" for="numberPhone">Numéro de téléphone</label>
+      <input class="form-input" formControlName="numberPhone" id="numberPhone" type="tel">
+      <app-validation-message [control]="numberPhone"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="email">Adresse e-mail</label>
+      <input class="form-input" formControlName="email" id="email" type="email">
+      <app-validation-message [control]="email"></app-validation-message>
+    </div>
+  </div>
+
+  <!-- Section Adresses -->
+  <h3 class="section-title">Adresses</h3>
+  <div class="form-grid address-grid">
+    <div class="form-field">
+      <label class="form-label" for="addressInDakar">Adresse à Dakar</label>
+      <input class="form-input" formControlName="addressInDakar" id="addressInDakar" type="text">
+      <app-validation-message [control]="addressInDakar"></app-validation-message>
+    </div>
+    <div class="form-field">
+      <label class="form-label" for="addressOnCampus">Adresse au campus</label>
+      <input class="form-input" formControlName="addressOnCampus" id="addressOnCampus" type="text">
+    </div>
+  </div>
+
+  <!-- Section Personnes à Contacter -->
+  <div class="emergency-contacts">
+    <div class="emergency-contacts-header">
+      <h3 class="section-title">Personnes à contacter en cas d'urgence</h3>
+      <button (click)="addPersonToCall()" class="button-add" type="button">+ Ajouter</button>
+    </div>
+
+    <div formArrayName="personToCalls">
+      <div *ngFor="let personGroup of personToCalls.controls; let i = index" [formGroupName]="i" class="person-card">
+        <div class="person-card-header">
+          <h4>Personne {{ i + 1 }}</h4>
+          <button (click)="removePersonToCall(i)" class="button-remove" type="button">Retirer</button>
+        </div>
+        <div class="form-grid">
+          <div class="form-field">
+            <label [for]="'firstname-' + i" class="form-label">Prénom</label>
+            <input [id]="'firstname-' + i" class="form-input" formControlName="firstname" type="text">
+            <app-validation-message [control]="getPersonControl(i, 'firstname')"></app-validation-message>
+          </div>
+          <div class="form-field">
+            <label [for]="'lastname-' + i" class="form-label">Nom</label>
+            <input [id]="'lastname-' + i" class="form-input" formControlName="lastname" type="text">
+            <app-validation-message [control]="getPersonControl(i, 'lastname')"></app-validation-message>
+          </div>
+          <div class="form-field">
+            <label [for]="'requiredNumberPhone-' + i" class="form-label">Téléphone (obligatoire)</label>
+            <input [id]="'requiredNumberPhone-' + i" class="form-input" formControlName="requiredNumberPhone"
+                   type="tel">
+            <app-validation-message [control]="getPersonControl(i, 'requiredNumberPhone')"></app-validation-message>
+          </div>
+          <div class="form-field">
+            <label [for]="'optionalNumberPhone-' + i" class="form-label">Téléphone (optionnel)</label>
+            <input [id]="'optionalNumberPhone-' + i" class="form-input" formControlName="optionalNumberPhone"
+                   type="tel">
+          </div>
+          <div class="form-field">
+            <label [for]="'relationship-' + i" class="form-label">Lien de parenté</label>
+            <input [id]="'relationship-' + i" class="form-input" formControlName="relationship" type="text">
+            <app-validation-message [control]="getPersonControl(i, 'relationship')"></app-validation-message>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

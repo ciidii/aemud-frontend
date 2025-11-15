@@ -1,0 +1,14 @@
+<div (click)="onClose()" class="modal-backdrop"></div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h3>Modifier les Informations Personnelles</h3>
+    <button (click)="onClose()" class="btn-close">&times;</button>
+  </div>
+  <div [formGroup]="editForm" class="modal-body">
+    <app-personal-info-form formControlName="personalInfo"></app-personal-info-form>
+  </div>
+  <div class="modal-footer">
+    <button (click)="onClose()" class="btn btn-secondary">Annuler</button>
+    <button (click)="onSave()" [disabled]="editForm.invalid" class="btn btn-primary">Enregistrer</button>
+  </div>
+</div>

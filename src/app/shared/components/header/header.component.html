@@ -1,0 +1,54 @@
+<nav class="app-header">
+  <!-- Left Section: Brand -->
+  <div class="header-left">
+    <a [routerLink]="['/shared/shell']" class="navbar-brand">AEMUD</a>
+  </div>
+
+  <!-- Right Section: Controls -->
+  <div class="header-right">
+    <!-- Mandat Selector -->
+    <div *ngIf="(activeMandat$ | async) as selectedMandat" class="dropdown">
+      <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown" id="mandatDropdown"
+              type="button">
+        {{ selectedMandat.nom }}
+      </button>
+      <ul aria-labelledby="mandatDropdown" class="dropdown-menu">
+        <li *ngFor="let mandat of (mandats$ | async)">
+          <a (click)="onMandatChange(mandat)" class="dropdown-item">{{ mandat.nom }}</a>
+        </li>
+      </ul>
+    </div>
+
+    <!-- Notification Bell -->
+    <div class="dropdown">
+      <div aria-expanded="false" class="notification-container " data-bs-toggle="dropdown">
+        <div class="notification-icon">
+          <i class="bi bi-bell"></i>
+          <span class="badge">10</span>
+        </div>
+
+      </div>
+      <div aria-labelledby="notificationDropdown" class="dropdown-menu dropdown-menu-end p-0">
+        <app-notification-popover></app-notification-popover>
+      </div>
+    </div>
+
+    <!-- User Profile -->
+    <div class="dropdown">
+      <button aria-expanded="false" class="btn btn-icon profile-button" data-bs-toggle="dropdown" id="profileDropdown"
+              type="button">
+        <span class="profile-avatar">U</span>
+      </button>
+      <ul aria-labelledby="profileDropdown" class="dropdown-menu dropdown-menu-end">
+        <li><a class="dropdown-item" href="#">Mon Profil</a></li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <button (click)="logout()" class="dropdown-item">Déconnexion</button>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+

@@ -1,0 +1,31 @@
+<div class="modal-overlay">
+  <div class="modal-container" role="document">
+    <div class="modal-content">
+      <!-- Modal Header -->
+      <div class="modal-header">
+        <h5 class="modal-title">Choisir un Template de Message</h5>
+        <button (click)="close.emit()" aria-label="Close" class="btn-close" type="button">
+          <i class="bi bi-x-lg"></i>
+        </button>
+      </div>
+
+      <!-- Modal Body -->
+      <div class="modal-body">
+        <div class="search-bar-container">
+          <i class="bi bi-search"></i>
+          <input class="form-control" placeholder="Rechercher un template..." type="text">
+        </div>
+
+        <div class="template-list">
+          <div *ngFor="let template of templates" class="template-item">
+            <div class="template-details">
+              <h6 class="template-title">{{ template.name }}</h6>
+              <p class="template-preview">{{ template.content }}</p>
+            </div>
+            <button (click)="selectTemplate(template)" class="btn btn-primary btn-sm">Choisir</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

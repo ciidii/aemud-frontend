@@ -1,0 +1,31 @@
+<div (click)="onClose()" class="modal-backdrop"></div>
+<div *ngIf="engagementsForm" class="modal-content">
+  <div class="modal-header">
+    <h3>Modifier les Engagements</h3>
+    <button (click)="onClose()" class="btn-close">&times;</button>
+  </div>
+  <form (ngSubmit)="onSave()" [formGroup]="engagementsForm">
+    <div class="modal-body">
+      <div class="form-group">
+        <label class="form-label">Clubs</label>
+        <app-custom-multiselect
+          [items]="allClubs"
+          formControlName="clubIds"
+          placeholder="Sélectionner des clubs">
+        </app-custom-multiselect>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Commissions</label>
+        <app-custom-multiselect
+          [items]="allCommissions"
+          formControlName="commissionIds"
+          placeholder="Sélectionner des commissions">
+        </app-custom-multiselect>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="onClose()" class="btn btn-secondary" type="button">Annuler</button>
+      <button [disabled]="engagementsForm.invalid" class="btn btn-primary" type="submit">Enregistrer</button>
+    </div>
+  </form>
+</div>

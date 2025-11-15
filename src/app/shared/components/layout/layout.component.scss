@@ -1,0 +1,30 @@
+@import 'src/assets/scss/variables';
+
+.app-root-container {
+  display: grid;
+  grid-template-rows: $header-height 1fr; // Header row, Content row
+  height: 100vh;
+  width: 100vw;
+}
+
+.app-container {
+  display: grid;
+  grid-template-columns: $sidebar-expanded-width 1fr; // sidebar, main-content
+  transition: grid-template-columns 0.3s ease-in-out;
+  overflow: hidden; // Prevents scrollbars on the container
+
+  &.sidebar--collapsed {
+    grid-template-columns: $sidebar-collapsed-width 1fr;
+  }
+}
+
+app-aside-bare {
+  overflow: hidden;
+  transition: width 0.3s ease-in-out;
+}
+
+.main-content {
+  background-color: $color-background-body;
+  overflow-y: auto; // Allow scrolling only in the main content
+  padding: $space-6;
+}

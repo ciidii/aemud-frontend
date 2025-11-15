@@ -1,0 +1,17 @@
+services:
+  amued-frontend:
+    container_name: aemudfrontcontainer
+    build: .
+    image: aemud-front:v1
+    ports:
+      - 80:80
+    expose:
+      - 80
+    networks:
+      - aemudnet
+    restart: always
+
+networks:
+  aemudnet:
+    driver: bridge
+

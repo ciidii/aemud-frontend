@@ -1,0 +1,42 @@
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
+import {NgForOf} from "@angular/common";
+import {TypeInscription} from "../../../../../core/models/member-data.model";
+import {MandatDto} from "../../../../../core/models/mandat.model";
+
+@Component({
+  selector: 'app-reregister-modal',
+  standalone: true,
+  imports: [
+    ReactiveFormsModule,
+    NgForOf
+  ],
+  templateUrl: './reregister-modal.component.html',
+  styleUrl: './reregister-modal.component.scss'
+})
+export class ReregisterModalComponent implements OnInit {
+  @Input() availableMandats: MandatDto[] = [];
+  @Input() initialPhaseId: string | null = null;
+  @Output() close = new EventEmitter<void>();
+  @Output() save = new EventEmitter<any>();
+
+  reregisterForm!: FormGroup;
+  registrationTypes = Object.values(TypeInscription);
+
+  private formBuilder = inject(FormBuilder);
+
+  ngOnInit(): void {
+    this.reregisterForm = this.formBuilder.group({
+      phaseId: [this.initialPhaseId, Validators.required],
+      statusPayment: [false, Validators.required],
+      registrationType: [TypeInscription.REINSCRIPTION, Validators.required]
+    });
+  }
+
+  onSave(): void {
+    if (this.reregisterForm.valid) {
+      this.save.emit(this.reregisterForm.value);
+      this.close.emit();
+    }
+  }
+}

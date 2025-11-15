@@ -1,0 +1,84 @@
+@import 'variables';
+
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba($gray-900, 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1050;
+}
+
+.modal-container {
+  width: 90%;
+  max-width: 420px;
+}
+
+.modal-content {
+  background-color: $white;
+  border-radius: $radius-md;
+  box-shadow: $shadow-lg;
+  text-align: center;
+  padding: $space-8 $space-6;
+}
+
+.modal-icon {
+  font-size: $icon-xl;
+  color: $danger-500;
+  margin-bottom: $space-4;
+}
+
+.modal-title {
+  font-size: $font-size-h5;
+  font-weight: 600;
+  color: $color-text-primary;
+  margin-bottom: $space-3;
+}
+
+.modal-text {
+  font-size: $font-size-body;
+  color: $color-text-secondary;
+  margin-bottom: $space-6;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: center;
+  gap: $space-3;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  font-weight: 500;
+  padding: $space-2 $space-6;
+  font-size: $font-size-body;
+  border-radius: $radius-sm;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.btn-danger {
+  background-color: $danger-500;
+  color: $white;
+
+  &:hover {
+    background-color: darken($danger-500, 10%);
+  }
+}
+
+.btn-secondary {
+  background-color: $gray-100;
+  color: $color-text-primary;
+  border-color: $color-border-default;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}

@@ -1,0 +1,94 @@
+<div [class.is-open]="isOpen" class="filter-panel-container">
+  <div (click)="close.emit()" class="filter-panel-overlay"></div>
+  <div class="filter-panel-content">
+    <!-- Header -->
+    <div class="panel-header">
+      <h5>Filtrer les membres</h5>
+      <button (click)="close.emit()" class="btn-close">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Body -->
+    <div class="panel-body">
+      <form [formGroup]="filterForm">
+        <!-- Group: Statut de Paiement -->
+        <div class="filter-group">
+          <h6>Statut de Paiement</h6>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="paymentStatus" id="statusAll" type="radio"
+                   value="{{null}}">
+            <label class="form-check-label" for="statusAll">Tous</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="paymentStatus" id="statusPaid" type="radio" value="PAID">
+            <label class="form-check-label" for="statusPaid">Payé</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="paymentStatus" id="statusPending" type="radio"
+                   value="PENDING">
+            <label class="form-check-label" for="statusPending">En attente</label>
+          </div>
+        </div>
+
+        <!-- Group: Statut d'Inscription -->
+        <div class="filter-group">
+          <h6>Statut d'Inscription</h6>
+          <div class="form-group">
+            <select class="form-select" formControlName="registrationStatus">
+              <option value="{{null}}">Tous</option>
+              <option value="{{RegistrationStatus.COMPLETED}}">Complété</option>
+              <option value="{{RegistrationStatus.UNCOMPLETED}}">Incomplet</option>
+              <option value="{{RegistrationStatus.EXPIRED}}">Expiré</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Group: Engagement Associatif -->
+        <div class="filter-group">
+          <h6>Engagement Associatif</h6>
+          <div class="form-group">
+            <label>Club</label>
+            <app-custom-multiselect [items]="clubs$ | async" formControlName="club"
+                                    placeholder="Sélectionner des clubs"></app-custom-multiselect>
+          </div>
+          <div class="form-group">
+            <label>Commission</label>
+            <app-custom-multiselect [items]="commissions$ | async" formControlName="commission"
+                                    placeholder="Sélectionner des commissions"></app-custom-multiselect>
+          </div>
+        </div>
+
+        <!-- Group: Bourse -->
+        <div class="filter-group">
+          <h6>Bourse</h6>
+          <div class="form-group">
+            <app-custom-multiselect formControlName="bourse" [items]="bourses$ | async" placeholder="Sélectionner des bourses"></app-custom-multiselect>
+          </div>
+        </div>
+
+        <!-- Group: Mandats -->
+        <div class="filter-group">
+          <h6>Mandats</h6>
+          <div class="form-group">
+            <app-custom-multiselect formControlName="mandatIds" [items]="mandats$ | async" placeholder="Sélectionner des mandats"></app-custom-multiselect>
+          </div>
+        </div>
+
+        <!-- Group: Phases -->
+        <div class="filter-group">
+          <h6>Phases</h6>
+          <div class="form-group">
+            <app-custom-multiselect formControlName="phaseIds" [items]="phases$ | async" placeholder="Sélectionner des phases"></app-custom-multiselect>
+          </div>
+        </div>
+      </form>
+    </div>
+
+    <!-- Footer -->
+    <div class="panel-footer">
+      <button (click)="onReset()" class="btn btn-secondary">Réinitialiser</button>
+      <button (click)="onApply()" class="btn btn-primary">Appliquer les filtres</button>
+    </div>
+  </div>
+</div>

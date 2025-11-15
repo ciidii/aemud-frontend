@@ -1,0 +1,50 @@
+<div (click)="close.emit()" class="modal-overlay">
+  <div (click)="$event.stopPropagation()" class="modal-container">
+    <div class="modal-header">
+      <h5 class="modal-title">Réinscrire le Membre</h5>
+      <button (click)="close.emit()" aria-label="Close" class="btn-close" type="button">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="reregisterForm">
+        <!-- Phase Selector -->
+        <div class="form-group">
+          <label for="phase">Phase d'inscription</label>
+          <select class="form-select" formControlName="phaseId" id="phase">
+            <option [ngValue]="null" disabled>Sélectionner une phase</option>
+            <ng-container *ngFor="let mandat of availableMandats">
+              <optgroup [label]="mandat.nom">
+                <option *ngFor="let phase of mandat.phases" [value]="phase.id">
+                  {{ phase.nom }}
+                </option>
+              </optgroup>
+            </ng-container>
+          </select>
+        </div>
+
+        <!-- Registration Type -->
+        <div class="form-group">
+          <label for="registrationType">Type d'inscription</label>
+          <select class="form-select" formControlName="registrationType" id="registrationType">
+            <option *ngFor="let type of registrationTypes" [value]="type">{{ type }}</option>
+          </select>
+        </div>
+
+        <!-- Payment Status -->
+        <div class="form-check">
+          <input class="form-check-input" formControlName="statusPayment" id="statusPayment" type="checkbox">
+          <label class="form-check-label" for="statusPayment">
+            Paiement de la cotisation effectué
+          </label>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button (click)="close.emit()" class="btn btn-secondary" type="button">Annuler</button>
+      <button (click)="onSave()" [disabled]="reregisterForm.invalid" class="btn btn-primary" type="button">
+        Enregistrer
+      </button>
+    </div>
+  </div>
+</div>

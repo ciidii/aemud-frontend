@@ -1,0 +1,143 @@
+@import '../../../../assets/scss/variables';
+@import '../../../../assets/scss/typography';
+
+:host {
+  display: block;
+  position: relative;
+}
+
+.multiselect-container.disabled {
+  .multiselect-display {
+    background-color: $color-background-disabled;
+    cursor: not-allowed;
+    color: $color-text-muted;
+  }
+
+  .pill {
+    background-color: $gray-300;
+    color: $color-text-muted;
+  }
+
+  .pill-remove {
+    cursor: not-allowed;
+  }
+}
+
+.multiselect-display {
+  //  @extend .form-input; // Réutilise le style des inputs existants
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: $space-1;
+  cursor: pointer;
+  min-height: 44px; // Hauteur similaire aux autres inputs
+  position: relative;
+  padding-right: $space-8; // Espace pour la flèche
+}
+
+.placeholder {
+  color: $color-text-muted;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  background-color: $primary-100;
+  color: $primary-700;
+  border-radius: $radius-sm;
+  padding: $space-1 $space-2;
+  font-size: $font-size-small;
+  font-weight: $font-weight-bold;
+}
+
+.pill-remove {
+  margin-left: $space-2;
+  cursor: pointer;
+  font-size: 1.6rem;
+  line-height: 1;
+
+  &:hover {
+    color: $danger-500;
+  }
+}
+
+.arrow-down {
+  position: absolute;
+  right: $space-3;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-left: 5px solid transparent;
+  border-right: 5px solid transparent;
+  border-top: 5px solid $color-text-secondary;
+}
+
+.dropdown-panel {
+  position: absolute;
+  top: calc(100% + #{$space-1});
+  left: 0;
+  right: 0;
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  z-index: 1000;
+  max-height: 250px;
+  display: flex;
+  flex-direction: column;
+}
+
+.search-input {
+  @include text-body-regular;
+  width: 100%;
+  padding: $space-2 $space-3;
+  border: none;
+  border-bottom: 1px solid $color-border-default;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.items-list {
+  list-style: none;
+  margin: 0;
+  padding: $space-1;
+  overflow-y: auto;
+
+  li {
+    padding: $space-2 $space-3;
+    border-radius: $radius-sm;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $gray-100;
+    }
+
+    label {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      cursor: pointer;
+      @include text-body-regular;
+
+      input[type="checkbox"] {
+        margin-right: $space-3;
+        width: 1.6rem;
+        height: 1.6rem;
+        accent-color: $primary-500;
+      }
+    }
+  }
+
+  .no-results {
+    color: $color-text-muted;
+    font-style: italic;
+    cursor: default;
+
+    &:hover {
+      background-color: transparent;
+    }
+  }
+}

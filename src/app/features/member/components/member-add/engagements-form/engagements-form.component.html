@@ -1,0 +1,40 @@
+<div [formGroup]="engagementsForm" class="engagements-form-container">
+
+  <!-- Section Bourse -->
+  <div class="form-field">
+    <label class="form-label" for="bourse">Bourse / Allocation</label>
+    <select class="form-select" formControlName="bourse" id="bourse">
+      <option [ngValue]="null">Sélectionner...</option>
+      <option *ngFor="let bourse of bourses" [ngValue]="bourse.id">{{ bourse.lebelle }}</option>
+    </select>
+    <app-validation-message [control]="bourse"></app-validation-message>
+  </div>
+
+  <!-- Section Clubs -->
+  <div class="form-field">
+    <label class="form-label">Clubs</label>
+    <app-custom-multiselect
+      [items]="clubs"
+      displayField="name"
+      formControlName="clubs"
+      placeholder="Sélectionner un ou plusieurs clubs"
+      valueField="id">
+    </app-custom-multiselect>
+    <app-validation-message [control]="clubs_"></app-validation-message>
+  </div>
+
+  <!-- Section Commissions -->
+  <div class="form-field">
+    <label class="form-label">Commissions</label>
+    <app-custom-multiselect
+      [items]="commissions"
+      displayField="name"
+      formControlName="commissions"
+      placeholder="Sélectionner une ou plusieurs commissions"
+      valueField="id">
+    </app-custom-multiselect>
+    <app-validation-message [control]="commissions_"></app-validation-message>
+  </div>
+
+</div>
+

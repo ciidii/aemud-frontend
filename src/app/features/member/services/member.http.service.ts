@@ -1,0 +1,149 @@
+import {Injectable} from "@angular/core";
+import {HttpClient, HttpHeaders, HttpParams} from "@angular/common/http";
+import {Observable} from "rxjs";
+import {environment} from "src/environments/environment.development";
+import {ResponseEntityApi} from "../../../core/models/response-entity-api";
+import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
+import {RegistrationModel} from "../../../core/models/RegistrationModel";
+import {MemberDataResponse} from "../../../core/models/member-data.model";
+import {SearchParams} from "../../../core/models/SearchParams";
+
+export interface MemberPrintFilters {
+  club?: string;
+  commission?: string;
+  year?: string;
+}
+
+@Injectable({
+  providedIn: 'root'
+})
+export class MemberHttpService {
+  url: string = environment.API_URL;
+
+  constructor(private httpClient: HttpClient) {
+  }
+
+  // --- EXISTING METHODS ---
+
+  public deleteMember(memberId: string | null): Observable<any> {
+    // @ts-ignore
+    const params = new HttpParams().set("memberId", memberId)
+    return this.httpClient.delete<MemberDataResponse[]>(`${this.url}/members`, {params});
+  }
+
+  addMember(member: any) {
+    const options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
+    }
+    return this.httpClient.post<ResponseEntityApi<MemberDataResponse>>(environment.API_URL + `/members`, member, options);
+  }
+
+  register(registrationRequest: any) { // Renamed parameter for clarity (was registrationRequestWithNumberPhone)
+    const options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
+    }
+    return this.httpClient.post<any>(environment.API_URL + `/registration`, registrationRequest, options);
+  }
+
+  getRegistrationBySession(sessionId: string | undefined) {
+    if (sessionId !== undefined) {
+      const params = new HttpParams()
+        .set("session", sessionId)
+      return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/registration-peer-session`, {params});
+    }
+    throw new Error("No registration registration found.");
+
+  }
+
+  getPayedOrNoPayedSessionCountPeerSession(sessionId: string, statusPayment: boolean) {
+    const params = new HttpParams()
+      .set("session", sessionId)
+      .set("statusPayment", statusPayment)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/payed-or-no-payed`, {params});
+  }
+
+  getNewOrRenewalAdherentForASession(sessionId: string, registrationType: string) {
+    const params = new HttpParams()
+      .set("session", sessionId)
+      .set("typeInscription", registrationType)
+    return this.httpClient.get<ResponseEntityApi<number>>(environment.API_URL + `/registration/new-inscription-session`, {params});
+  }
+
+  // Your existing getMemberBySession (which returns Members)
+  // This seems to be intended for "new-inscription-session" which might filter members that are newly inscribed.
+  // We'll keep this as is, but our `getRegistrations` method will fetch the actual registration records.
+  getMemberBySession(sessionId: string): Observable<ResponseEntityApi<MemberDataResponse[]>> {
+    const params = new HttpParams()
+      .set("session", sessionId)
+    return this.httpClient.get<ResponseEntityApi<MemberDataResponse[]>>(environment.API_URL + `/registration/new-inscription-session`, {params});
+  }
+
+  searchMember(searchParams: SearchParams): Observable<ResponsePageableApi<MemberDataResponse[]>> {
+    return this.httpClient.post<ResponsePageableApi<MemberDataResponse[]>>(`${environment.API_URL}/members/search`, searchParams);
+  }
+
+  searchMemberToPrint(keyword: string, criteria: string, filters: MemberPrintFilters): Observable<ResponseEntityApi<MemberDataResponse[]>> {
+    let params = new HttpParams()
+      .set("criteria", criteria)
+      .set("value", keyword);
+
+    if (filters.club) {
+      params = params.set("club", filters.club);
+    }
+    if (filters.commission) {
+      params = params.set("commission", filters.commission);
+    }
+    if (filters.year) {
+      params = params.set("year", filters.year);
+    }
+
+    return this.httpClient.get<ResponseEntityApi<MemberDataResponse[]>>(`${environment.API_URL}/members/print`, {params});
+  }
+
+  getMemberById(memberId: string | null): Observable<ResponseEntityApi<MemberDataResponse>> {
+
+    const options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json"),
+      // @ts-ignore
+      params: new HttpParams().set("member-id", memberId),
+    }
+    return this.httpClient.get<ResponseEntityApi<MemberDataResponse>>(`${this.url}/members`, options);
+  }
+
+  updateMember(memberChange: MemberDataResponse): Observable<MemberDataResponse> {
+    return this.httpClient.put<MemberDataResponse>(`${this.url}/members`, memberChange);
+  }
+
+  // --- NEW METHOD FOR FETCHING REGISTRATIONS ---
+
+  /**
+   * Fetches a list of registrations. Can be filtered by session ID.
+   * Assumes the backend endpoint is `/registration` and can take a `session` query parameter.
+   * @param sessionId Optional. The ID of the session to filter registrations by.
+   * @returns An Observable of ResponseEntityApi containing an array of RegistrationModel.
+   */
+  public getRegistrations(sessionId?: string): Observable<ResponseEntityApi<RegistrationModel[]>> {
+    let params = new HttpParams();
+    if (sessionId) {
+      params = params.set("session", sessionId);
+    }
+    // Adjust this endpoint `/registration` if your backend uses a different path for listing all registrations.
+    return this.httpClient.get<ResponseEntityApi<RegistrationModel[]>>(`${environment.API_URL}/registration`, {params});
+  }
+
+  updateRegister(registrationRequest: any): Observable<ResponseEntityApi<void>> { // Renamed parameter for clarity (was registrationRequestWithNumberPhone)
+    const options = {
+      headers: new HttpHeaders().set("Content-Type", "application/json")
+    }
+    return this.httpClient.put<ResponseEntityApi<void>>(environment.API_URL + `/registration`, registrationRequest, options);
+  }
+
+  /**
+   * Fetches all members. This is useful for the re-enrollment component's member list.
+   * Assuming your backend has an endpoint for getting all members.
+   * You mentioned `getMemberBySession` earlier; this `getMembers` is a general list.
+   */
+  public getMembers(): Observable<ResponseEntityApi<MemberDataResponse[]>> {
+    return this.httpClient.get<ResponseEntityApi<MemberDataResponse[]>>(`${environment.API_URL}/members/all`); // Assuming /members/all or similar
+  }
+}

@@ -1,0 +1,29 @@
+<div (click)="onClose()" class="modal-backdrop"></div>
+<div class="modal-content">
+  <div class="modal-header">
+    <h3 class="modal-title">Modifier la Bourse</h3>
+    <button (click)="onClose()" aria-label="Close" class="btn-close">
+      <i class="bi bi-x-lg"></i>
+    </button>
+  </div>
+  <form (ngSubmit)="onSave()" [formGroup]="bourseForm">
+    <div class="modal-body">
+      <div class="form-grid">
+        <div class="form-field">
+          <label for="lebelle">Libellé de la bourse</label>
+          <input class="form-input" formControlName="lebelle" id="lebelle" placeholder="Ex: Bourse d'excellence...">
+        </div>
+        <div class="form-field">
+          <label for="montant">Montant (XOF)</label>
+          <input class="form-input" formControlName="montant" id="montant" placeholder="Ex: 50000" type="number">
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button (click)="onClose()" class="btn btn-secondary" type="button">Annuler</button>
+      <button [disabled]="!bourseForm.valid" class="btn btn-primary" type="submit">
+        <i class="bi bi-check-circle"></i> Enregistrer les modifications
+      </button>
+    </div>
+  </form>
+</div>

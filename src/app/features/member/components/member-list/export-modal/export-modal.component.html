@@ -1,0 +1,49 @@
+<app-modal (closeModal)="close.emit()">
+  <h2 modal-title>Exporter les Membres</h2>
+
+  <div class="export-options" modal-body>
+    <section class="option-section">
+      <h3 class="section-title">1. Choisir les colonnes à inclure</h3>
+      <div class="section-actions">
+        <button (click)="selectAll()" class="btn-link">Tout sélectionner</button>
+        <button (click)="deselectAll()" class="btn-link">Tout désélectionner</button>
+      </div>
+
+      <div class="columns-container">
+        <div *ngFor="let group of groupedColumns" class="column-group">
+          <h4 class="group-title">{{ group.groupTitle }}</h4>
+          <div class="columns-grid">
+            <div *ngFor="let column of group.columns" class="checkbox-wrapper">
+              <input (change)="toggleColumn(column.id)" [checked]="selectedColumns[column.id]" [id]="'col-' + column.id"
+                     type="checkbox">
+              <label [for]="'col-' + column.id">{{ column.label }}</label>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="option-section">
+      <h3 class="section-title">2. Choisir le format d'export</h3>
+      <div class="format-chooser">
+        <button (click)="selectedFormat = 'excel'" [class.active]="selectedFormat === 'excel'" class="format-btn">
+          <i class="bi bi-file-earmark-excel"></i>
+          <span>Excel</span>
+        </button>
+        <button (click)="selectedFormat = 'pdf'" [class.active]="selectedFormat === 'pdf'" class="format-btn">
+          <i class="bi bi-file-earmark-pdf"></i>
+          <span>PDF</span>
+        </button>
+        <button (click)="selectedFormat = 'csv'" [class.active]="selectedFormat === 'csv'" class="format-btn">
+          <i class="bi bi-file-earmark-text"></i>
+          <span>CSV</span>
+        </button>
+      </div>
+    </section>
+  </div>
+
+  <div modal-footer>
+    <button (click)="close.emit()" class="btn btn-secondary">Annuler</button>
+    <button (click)="onExport()" class="btn btn-primary">Exporter les données</button>
+  </div>
+</app-modal>

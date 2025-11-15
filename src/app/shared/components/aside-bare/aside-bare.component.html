@@ -1,0 +1,168 @@
+<div class="sidebar-container">
+  <!-- Header -->
+  <div class="nav-header">
+    <button (click)="toggleCollapse()" class="toggle-btn">
+      <i class="bi bi-list"></i>
+    </button>
+  </div>
+
+  <div class="nav-body">
+    <nav class="navigation">
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="/dashboard" routerLinkActive="active">
+            <i class="bi bi-speedometer2"></i>
+            <span class="nav-text">Dashboard</span>
+            <span class="tooltip">Dashboard</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <nav class="navigation">
+      <span>Gestions Des entités</span>
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="members/list-members" routerLinkActive="active">
+            <i class="bi bi-people"></i>
+            <span class="nav-text">Liste Membres</span>
+            <span class="tooltip">Liste Membres</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/members/register-form" routerLinkActive="active">
+            <i class="bi bi-person-plus"></i>
+            <span class="nav-text">Ajouter un Membre</span>
+            <span class="tooltip">Ajouter un Membre</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <i class="bi bi-graph-up"></i>
+            <span class="nav-text">Statistiques</span>
+            <span class="tooltip">Statistiques</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <nav class="navigation">
+      <span>Contributions</span>
+      <hr>
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="/contributions/new" routerLinkActive="active">
+            <i class="bi bi-plus-circle"></i>
+            <span class="nav-text">Nouvelle Contribution</span>
+            <span class="tooltip">Nouvelle Contribution</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/contributions" routerLinkActive="active">
+            <i class="bi bi-card-checklist"></i>
+            <span class="nav-text">Liste des contributions</span>
+            <span class="tooltip">Liste des contributions</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <i class="bi bi-file-earmark-bar-graph"></i>
+            <span class="nav-text">Rapports</span>
+            <span class="tooltip">Rapports</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <hr>
+
+    <nav class="navigation">
+      <span>Notifications</span>
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="/notifications/sms" routerLinkActive="active">
+            <i class="bi bi-chat-dots"></i>
+            <span class="nav-text">SMS</span>
+            <span class="tooltip">SMS</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/notifications/emails" routerLinkActive="active">
+            <i class="bi bi-envelope"></i>
+            <span class="nav-text">Emails</span>
+            <span class="tooltip">Emails</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <hr>
+
+    <nav class="navigation">
+      <span>Paramètres</span>
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="/users" routerLinkActive="active">
+            <i class="bi bi-people-fill"></i>
+            <span class="nav-text">Utilisateurs</span>
+            <span class="tooltip">Utilisateurs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/roles" routerLinkActive="active">
+            <i class="bi bi-person-check"></i>
+            <span class="nav-text">Gestions des Rôles</span>
+            <span class="tooltip">Gestions des Rôles</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#">
+            <i class="bi bi-hdd"></i>
+            <span class="nav-text">Sauvegarde</span>
+            <span class="tooltip">Sauvegarde</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+    <hr>
+
+    <nav class="navigation">
+      <span>Gestions Des entités</span>
+      <ul class="nav-items">
+        <li class="nav-item">
+          <a routerLink="/bourses" routerLinkActive="active">
+            <i class="bi bi-award"></i>
+            <span class="nav-text">Bourses</span>
+            <span class="tooltip">Bourses</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/commissions" routerLinkActive="active">
+            <i class="bi bi-briefcase"></i>
+            <span class="nav-text">Commissions</span>
+            <span class="tooltip">Commissions</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/clubs" routerLinkActive="active">
+            <i class="bi bi-collection"></i>
+            <span class="nav-text">Clubs</span>
+            <span class="tooltip">Clubs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/sessions" routerLinkActive="active">
+            <i class="bi bi-calendar-event"></i>
+            <span class="nav-text">Sessions</span>
+            <span class="tooltip">Sessions</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/activities" routerLinkActive="active">
+            <i class="bi bi-controller"></i>
+            <span class="nav-text">Activités</span>
+            <span class="tooltip">Activités</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</div>

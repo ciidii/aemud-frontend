@@ -1,0 +1,34 @@
+<div class="footer-bar">
+  <!-- Left Section: Contextual Actions -->
+  <div class="actions-container">
+    <div *ngIf="hasSelection$ | async" class="selection-info">
+      <i class="bi bi-check-circle-fill"></i>
+      <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
+    </div>
+    <div class="actions">
+      <button (click)="sendMessageTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
+        <i class="bi bi-send"></i> Envoyer message
+      </button>
+      <button (click)="exportTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
+        <i class="bi bi-upload"></i> Exporter
+      </button>
+      <button (click)="deleteTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn primary">
+        <i class="bi bi-trash"></i> Supprimer
+      </button>
+    </div>
+  </div>
+
+  <!-- Right Section: Pagination -->
+  <div *ngIf="(paginationInfo$ | async) as pagination" class="pagination-container">
+    <div class="pagination-controls">
+      <button (click)="previousPage()" [disabled]="pagination.pageIndex === 1" class="pagination-btn">
+        <i class="bi bi-arrow-left"></i>
+      </button>
+      <span>Page {{ pagination.pageIndex }} / {{ pagination.totalPages }}</span>
+      <button (click)="nextPage()" [disabled]="pagination.pageIndex === pagination.totalPages" class="pagination-btn">
+        <i class="bi bi-arrow-right"></i>
+      </button>
+    </div>
+  </div>
+</div>
+

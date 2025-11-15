@@ -1,0 +1,211 @@
+/* Importez vos variables personnalisées en premier */
+@import 'assets/scss/variables';
+@import 'assets/scss/typography';
+// Importation des mixins de typographie
+
+/* Importez les fonctions et variables de Bootstrap AVANT le reste de Bootstrap */
+@import "bootstrap/scss/functions";
+@import "bootstrap/scss/variables";
+@import "bootstrap/scss/variables-dark";
+@import "bootstrap/scss/maps";
+@import "bootstrap/scss/mixins";
+@import "bootstrap/scss/root";
+
+/* Importez les composants Bootstrap dont vous avez besoin */
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/utilities";
+@import "bootstrap-icons/font/bootstrap-icons.css";
+
+/* ------------------------------------------------------------- */
+/* Styles Généraux de l'Application (utilisant le Design System) */
+/* ------------------------------------------------------------- */
+
+html, body {
+  height: 100%;
+}
+
+html {
+  font-size: 62.5%; // 1rem = 10px
+}
+
+body {
+  @include text-body-regular;
+  background-color: $color-background-body;
+  color: $color-text-primary;
+  margin: 0;
+  padding: 0;
+}
+
+app-root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+}
+
+// --- Styles de typographie de base ---
+h1 {
+  @include text-heading-1;
+}
+
+h2 {
+  @include text-heading-2;
+}
+
+h3 {
+  @include text-heading-3;
+}
+
+h4 {
+  @include text-heading-4;
+}
+
+h5 {
+  @include text-heading-5;
+}
+
+h6 {
+  @include text-heading-6;
+}
+
+p {
+  @include text-body-regular;
+}
+
+small {
+  @include text-body-small;
+}
+
+// --- Styles des composants ---
+
+.btn-primary {
+  background-color: $primary-500;
+  border-color: $primary-500;
+  color: $color-text-on-primary;
+
+  &:hover {
+    background-color: $primary-600;
+    border-color: $primary-600;
+    transform: translateY(-1px);
+  }
+}
+
+.btn-secondary {
+  background-color: $gray-600;
+  border-color: $gray-600;
+  color: $white;
+
+  &:hover {
+    background-color: $gray-700;
+    border-color: $gray-700;
+    color: $white;
+  }
+}
+
+.btn-danger {
+  background-color: $danger-500;
+  border-color: $danger-500;
+
+  &:hover {
+    background-color: darken($danger-500, 10%);
+    border-color: darken($danger-500, 10%);
+  }
+}
+
+.btn-outline-primary {
+  color: $primary-500;
+  border-color: $primary-500;
+
+  &:hover {
+    background-color: $primary-500;
+    color: $white;
+  }
+}
+
+.btn-outline-warning {
+  color: $warning-900;
+  border-color: $warning-500;
+
+  &:hover {
+    color: $gray-900;
+    background-color: $warning-500;
+    border-color: $warning-500;
+  }
+}
+
+.card {
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  border: 1px solid $color-border-default;
+  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: $shadow-lg;
+  }
+}
+
+.card-header {
+  background-color: $gray-100;
+  border-bottom: 1px solid $color-border-default;
+  border-top-left-radius: $radius-lg;
+  border-top-right-radius: $radius-lg;
+  padding: $space-3 $space-4;
+  font-weight: $font-weight-bold;
+  color: $primary-700;
+  font-size: $font-size-h6;
+}
+
+.form-control:focus {
+  border-color: $primary-400;
+  box-shadow: 0 0 0 0.25rem rgba($primary-500, 0.3);
+}
+
+.invalid-feedback {
+  font-size: 0.875em;
+  color: $danger-500;
+  margin-top: 0.25rem;
+}
+
+.required-asterisk {
+  color: $danger-500;
+  font-weight: $font-weight-bold;
+  margin-left: $space-1;
+}
+
+/* Améliorations de Formulaire Globales */
+.container.my-5 {
+  max-width: 900px;
+  padding: $space-8;
+  background-color: $color-background-panel;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-sm;
+}
+
+/* Ajustements pour la section dynamique "Personnes à Contacter" */
+div[formArrayName="personToCalls"] .card {
+  background-color: lighten($color-background-body, 2%);
+  border: 1px dashed $color-border-default;
+  box-shadow: none;
+}
+
+div[formArrayName="personToCalls"] .card-header {
+  background-color: darken($color-background-body, 3%);
+  color: $color-text-primary;
+  font-weight: $font-weight-regular;
+}

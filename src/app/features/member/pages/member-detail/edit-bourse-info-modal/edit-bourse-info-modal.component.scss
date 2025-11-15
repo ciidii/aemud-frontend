@@ -1,0 +1,149 @@
+@import '../../../../../../assets/scss/variables';
+@import '../../../../../../assets/scss/typography';
+
+// --- Base Modal Styles (copied from address modal) ---
+.modal-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba($gray-900, 0.6);
+  z-index: 1040;
+  animation: fadeInBackdrop 0.3s ease-out;
+}
+
+.modal-content {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: $white;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  z-index: 1050;
+  width: 90%;
+  max-width: 600px;
+  display: flex;
+  flex-direction: column;
+  animation: fadeInModal 0.3s ease-out;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: $space-4 $space-6;
+  border-bottom: 1px solid $color-border-default;
+  flex-shrink: 0;
+
+  .modal-title {
+    @include text-heading-5;
+    margin: 0;
+  }
+}
+
+.btn-close {
+  background: transparent;
+  border: none;
+  padding: $space-2;
+  margin: -$space-2;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: $color-text-secondary;
+  cursor: pointer;
+  transition: background-color 0.2s, color 0.2s;
+
+  i {
+    font-size: $icon-sm;
+  }
+
+  &:hover {
+    background-color: $gray-100;
+    color: $color-text-primary;
+  }
+}
+
+.modal-body {
+  padding: $space-6;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding: $space-4 $space-6;
+  border-top: 1px solid $color-border-default;
+  background-color: $gray-100;
+  border-bottom-left-radius: $radius-lg;
+  border-bottom-right-radius: $radius-lg;
+  flex-shrink: 0;
+
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+  }
+}
+
+// --- Form Specific Styles ---
+.form-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: $space-5;
+}
+
+@media (min-width: 576px) {
+  .form-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+}
+
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+
+  label {
+    @include text-label;
+    color: $color-text-primary;
+  }
+}
+
+.form-input {
+  width: 100%;
+  padding: $space-2 $space-3;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-sm;
+  font-size: $font-size-body;
+  transition: border-color 0.2s, box-shadow 0.2s;
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.2);
+  }
+}
+
+// --- Animations ---
+@keyframes fadeInModal {
+  from {
+    opacity: 0;
+    transform: translate(-50%, -48%);
+  }
+  to {
+    opacity: 1;
+    transform: translate(-50%, -50%);
+  }
+}
+
+@keyframes fadeInBackdrop {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}

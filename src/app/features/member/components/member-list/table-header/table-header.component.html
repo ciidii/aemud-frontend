@@ -1,0 +1,16 @@
+<div class="header-container">
+  <div class="left-section">
+    <div class="page-title">Les membres</div>
+  </div>
+  <div class="right-section">
+    <button (click)="onAddMember()" class="action-button primary">
+      <i class="bi bi-plus"></i> Ajouter un membre
+    </button>
+    <button class="action-button">
+      <i class="bi bi-download"></i> Importer
+    </button>
+    <button (click)="exportTriggered.emit()" class="action-button">
+      <i class="bi bi-upload"></i> Exporter
+    </button>
+  </div>
+</div>

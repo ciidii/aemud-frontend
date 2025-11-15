@@ -1,0 +1,42 @@
+<div (click)="onClose()" class="modal-overlay">
+  <div (click)="$event.stopPropagation()" class="modal-container">
+
+    <!-- Modal Header -->
+    <div class="modal-header">
+      <h4 class="modal-title">Enregistrer un Paiement Multiple</h4>
+      <button (click)="onClose()" class="btn-close"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <!-- Modal Body -->
+    <div class="modal-body">
+      <p>Vous êtes sur le point d'enregistrer le paiement pour les mois suivants :</p>
+      <ul class="month-list">
+        <li *ngFor="let name of monthNames">{{ name | titlecase }}</li>
+      </ul>
+
+      <div class="total-amount-section">
+        <span class="total-label">Montant Total</span>
+        <span class="total-value">{{ totalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
+      </div>
+
+      <form (ngSubmit)="onSave()" [formGroup]="paymentForm">
+        <div class="form-group">
+          <label for="payementMethode">Méthode de Paiement</label>
+          <select class="form-control" formControlName="payementMethode" id="payementMethode">
+            <option *ngFor="let method of paymentMethods" [value]="method">{{ method.replace('_', ' ') | titlecase }}
+            </option>
+          </select>
+        </div>
+      </form>
+    </div>
+
+    <!-- Modal Footer -->
+    <div class="modal-footer">
+      <button (click)="onClose()" class="btn btn-secondary">Annuler</button>
+      <button (click)="onSave()" [disabled]="paymentForm.invalid" class="btn btn-primary">
+        Payer {{ contributions.length }} mois
+      </button>
+    </div>
+
+  </div>
+</div>
