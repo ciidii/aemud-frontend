@@ -16,7 +16,6 @@ import {MandatDto} from "../../../../../core/models/mandat.model";
 })
 export class ReregisterModalComponent implements OnInit {
   @Input() availableMandats: MandatDto[] = [];
-  @Input() initialPhaseId: string | null = null;
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
@@ -27,7 +26,7 @@ export class ReregisterModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.reregisterForm = this.formBuilder.group({
-      phaseId: [this.initialPhaseId, Validators.required],
+      phaseId: [null, Validators.required],
       statusPayment: [false, Validators.required],
       registrationType: [TypeInscription.REINSCRIPTION, Validators.required]
     });

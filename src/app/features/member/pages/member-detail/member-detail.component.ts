@@ -1,5 +1,15 @@
 import {Component, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, CurrencyPipe, DatePipe, Location, NgClass, NgForOf, NgIf} from "@angular/common";
+import {
+  AsyncPipe,
+  CurrencyPipe,
+  DatePipe,
+  Location,
+  NgClass,
+  NgForOf,
+  NgIf,
+  NgSwitch,
+  NgSwitchCase
+} from "@angular/common";
 import {ActivatedRoute, Router} from "@angular/router";
 import {MemberHttpService} from "../../services/member.http.service";
 import {
@@ -8,14 +18,11 @@ import {
   MemberDataResponse,
   MembershipInfo,
   PersonalInfo,
-  RegistrationStatus,
   ReligiousKnowledge,
-  TypeInscription
 } from "../../../../core/models/member-data.model";
-import {combineLatest, filter, map, Observable, of, take, tap} from "rxjs";
+import {combineLatest, filter, map, Observable, of, take} from "rxjs";
 import {MandatDto} from "../../../../core/models/mandat.model";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
-import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
 import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
 import {
   ConfirmDeleteModalComponent
@@ -44,11 +51,9 @@ import {
 import {AddressInfo, EditAddressInfoModalComponent} from "./edit-address-info-modal/edit-address-info-modal.component";
 import {EditBourseInfoModalComponent} from "./edit-bourse-info-modal/edit-bourse-info-modal.component";
 import {BourseModel} from "../../../../core/models/bourse.model";
-import {PhaseModel} from "../../../../core/models/phase.model";
-import {PhaseHttpService} from "../../../mandat/services/phase-http.service";
-import {MandatHttpService} from "../../../mandat/services/mandat-http.service";
 import {AppStateService} from "../../../../core/services/app-state.service";
-import {RegistrationModel} from "../../../../core/models/RegistrationModel";
+import {MandateTimelineItem, RegistrationOverview} from "../../../../core/models/timeline.model";
+import {PhaseModel} from "../../../../core/models/phase.model";
 
 interface MonthlyContributionDisplay {
   month: string;
@@ -56,31 +61,17 @@ interface MonthlyContributionDisplay {
   data: ContributionCalendarItem;
 }
 
-export interface ProcessedRegistration {
-  isCurrentSession: boolean;
-  isRegistered: boolean;
-  sessionId: string; // Corresponds to phaseId now
-  status: RegistrationStatus | null;
-  statusPayment: boolean | null;
-  registrationType: TypeInscription | null;
-}
-
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
-interface GroupedRegistrationHistory {
-  mandatId: string;
-  mandatName: string;
-  registrations: RegistrationModel[];
-}
-
 export class MemberDetailComponent implements OnInit {
   member$!: Observable<MemberDataResponse | undefined>;
-  groupedHistory: GroupedRegistrationHistory[] = [];
+  registrationOverview: RegistrationOverview | null = null;
+  timeline$!: Observable<MandateTimelineItem[]>;
   isReregisterModalOpen = false;
   isDeleteModalOpen = false;
   isSendMessageModalOpen = false;
@@ -99,21 +90,15 @@ export class MemberDetailComponent implements OnInit {
   monthlyContributions: MonthlyContributionDisplay[] = [];
   contributionSummary: { totalPaid: number; totalDue: number; completionRate: string; } | null = null;
   currentMember: MemberDataResponse | null = null;
-
-
   selectedPhaseId: string | null = null;
   availableMandats: MandatDto[] = [];
   activeMandat: MandatDto | null = null;
-
-
   appStateService = inject(AppStateService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private memberHttpService = inject(MemberHttpService);
   private memberStateService = inject(MemberStateService);
   private contributionService = inject(ContributionService);
-  private phaseService = inject(PhaseHttpService);
-  private mandatService = inject(MandatHttpService);
   private notificationService = inject(NotificationService);
   private location = inject(Location)
   private memberId: string | null = null;
@@ -121,10 +106,6 @@ export class MemberDetailComponent implements OnInit {
   get selectedTotalAmount(): number {
     return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
   }
-
-  viewedPhaseRegistration: ProcessedRegistration | null = null;
-
-
 
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
@@ -138,13 +119,19 @@ export class MemberDetailComponent implements OnInit {
   private loadData(): void {
     if (!this.memberId) return;
 
+    this.appStateService.mandats$.pipe(
+      filter(mandats => mandats.length > 0),
+      take(1)
+    ).subscribe(mandats => {
+      this.availableMandats = mandats;
+    });
+
     combineLatest([
       this.appStateService.activeMandat$.pipe(filter((m): m is MandatDto => m !== null)),
-      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data)),
-      this.appStateService.mandats$.pipe(filter(mandats => mandats.length > 0))
+      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data))
     ]).pipe(
       take(1)
-    ).subscribe(([activeMandat, member, allMandats]) => {
+    ).subscribe(([activeMandat, member]) => {
       if (!member) {
         this.notificationService.showError("Membre non trouvé.");
         this.router.navigate(['/members/list-members']);
@@ -154,54 +141,27 @@ export class MemberDetailComponent implements OnInit {
       this.activeMandat = activeMandat;
       this.currentMember = member;
       this.member$ = of(member);
-      this.availableMandats = allMandats;
-
-      this.buildGroupedHistory(member.registration, allMandats);
+      this.registrationOverview = member.registrationOverview;
+      this.loadTimeline();
 
       const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
 
       if (activePhaseInMandate) {
         this.selectedPhaseId = activePhaseInMandate.id;
-        this.updateViewedPhaseRegistration(activePhaseInMandate.id);
         this.loadContributions(activePhaseInMandate.id);
       } else {
         this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
         const fallbackPhase = activeMandat.phases[0];
         if (fallbackPhase) {
-          this.updateViewedPhaseRegistration(fallbackPhase.id);
           this.loadContributions(fallbackPhase.id);
         }
       }
     });
   }
 
-  private buildGroupedHistory(registrations: RegistrationModel[], mandats: MandatDto[]): void {
-    if (!registrations || !mandats) {
-      this.groupedHistory = [];
-      return;
-    }
-
-    const history: GroupedRegistrationHistory[] = [];
-    mandats.forEach(mandat => {
-      const mandatePhaseIds = new Set(mandat.phases.map(p => p.id));
-      const registrationsForMandate = registrations.filter(reg => mandatePhaseIds.has(reg));
-
-      if (registrationsForMandate.length > 0) {
-        history.push({
-          mandatId: mandat.id,
-          mandatName: mandat.nom,
-          registrations: registrationsForMandate
-        });
-      }
-    });
-
-    // Sort mandates by start date, descending (most recent first)
-    this.groupedHistory = history.sort((a, b) => {
-      const mandatA = mandats.find(m => m.id === a.mandatId)!;
-      const mandatB = mandats.find(m => m.id === b.mandatId)!;
-      // Assuming dateDebut is [year, month, day]
-      return new Date(mandatB.dateDebut.join('-')).getTime() - new Date(mandatA.dateDebut.join('-')).getTime();
-    });
+  private loadTimeline(): void {
+    if (!this.memberId) return;
+    this.timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId);
   }
 
   // --- Edit Modals Methods ---
@@ -318,7 +278,8 @@ export class MemberDetailComponent implements OnInit {
     this.isDeleteModalOpen = !this.isDeleteModalOpen;
   }
 
-  toggleReregisterModal(): void {
+  toggleReregisterModal(phase?: PhaseModel): void {
+    // TODO: Prefill the modal with the phase if provided
     this.isReregisterModalOpen = !this.isReregisterModalOpen;
   }
 
@@ -365,30 +326,10 @@ export class MemberDetailComponent implements OnInit {
   onPhaseChange(event: Event): void {
     const selectedId = (event.target as HTMLSelectElement).value;
     this.selectedPhaseId = selectedId;
-    this.selectedContributions = []; // Clear selection on change
+    this.selectedContributions = [];
     if (this.selectedPhaseId) {
       this.loadContributions(this.selectedPhaseId);
-      this.updateViewedPhaseRegistration(this.selectedPhaseId);
     }
-  }
-
-  private updateViewedPhaseRegistration(phaseId: string): void {
-    if (!this.currentMember || !this.activeMandat) return;
-
-    const phase = this.activeMandat.phases.find(p => p.id === phaseId);
-    if (!phase) return;
-
-    const registrationForPhase = this.currentMember.registration.find(r => r.phaseId === phaseId);
-    const trulyActivePhase = this.activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
-
-    this.viewedPhaseRegistration = {
-      isCurrentSession: phase.id === trulyActivePhase?.id,
-      isRegistered: !!registrationForPhase,
-      sessionId: phase.id,
-      status: registrationForPhase?.registrationStatus ?? null,
-      statusPayment: registrationForPhase?.statusPayment ?? null,
-      registrationType: registrationForPhase?.registrationType ?? null
-    };
   }
 
   loadContributions(phaseId: string): void {
@@ -464,9 +405,6 @@ export class MemberDetailComponent implements OnInit {
       next: () => {
         this.notificationService.showSuccess("Réinscription réussie.");
         this.loadData();
-        if (this.selectedPhaseId) {
-          this.loadContributions(this.selectedPhaseId);
-        }
       },
       error: (err) => {
         this.notificationService.showError("Échec de la réinscription.");
@@ -491,114 +429,13 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
-  markAsPaid(phaseId: string): any {
-    if (!this.memberId) return;
-    const registration = this.currentMember?.registration.find(reg => reg.phaseId === phaseId);
-    if (registration) {
-      this.memberHttpService.updateRegister({...registration, statusPayment: true}).subscribe({
-        next: (res) => {
-          if (res.status === "OK") {
-            this.notificationService.showSuccess('Paiement marqué comme effectué.');
-            this.loadData();
-          }
-        },
-        error: err => {
-          this.notificationService.showError('Erreur lors de la mise à jour du paiement.');
-        }
-      });
-    }
-  }
-
   sendContributionReminder(): void {
     // TODO: Implement actual logic
-    // 1. Get list of unpaid months for the selected phase.
-    // 2. If there are unpaid months, call a service to send an SMS.
     console.log(`Sending contribution reminder for member ${this.memberId} for the phase ${this.selectedPhaseId}.`);
-  }
-
-  objectToArray(obj: any): { key: string, value: any }[] {
-    if (!obj) {
-      return [];
-    }
-    return Object.keys(obj).map(key => ({key, value: obj[key]}));
   }
 
   goBack() {
     this.location.back();
-  }
-
-  public getPhaseById(phaseId: string): PhaseModel | undefined {
-    for (const mandat of this.availableMandats) {
-      const phase = mandat.phases.find(p => p.id === phaseId);
-      if (phase) {
-        return phase;
-      }
-    }
-    return undefined;
-  }
-
-  getRegistrationStatusClass(reg: ProcessedRegistration): string {
-    if (!reg.isRegistered) {
-      return 'status-not-registered';
-    }
-    switch (reg.status) {
-      case RegistrationStatus.COMPLETED:
-        return 'status-completed';
-      case RegistrationStatus.UNCOMPLETED:
-        return 'status-uncompleted';
-      case RegistrationStatus.EXPIRED:
-        return 'status-expired';
-      default:
-        return '';
-    }
-  }
-
-  getRegistrationStatusIcon(reg: ProcessedRegistration): string {
-    if (!reg.isRegistered) {
-      return 'bi-x-circle-fill';
-    }
-    switch (reg.status) {
-      case RegistrationStatus.COMPLETED:
-        return 'bi-check-circle-fill';
-      case RegistrationStatus.UNCOMPLETED:
-        return 'bi-exclamation-triangle-fill';
-      case RegistrationStatus.EXPIRED:
-        return 'bi-slash-circle-fill';
-      default:
-        return '';
-    }
-  }
-
-  getRegistrationStatusText(reg: ProcessedRegistration): string {
-    if (!reg.isRegistered) {
-      return 'Non inscrit';
-    }
-    switch (reg.status) {
-      case RegistrationStatus.COMPLETED:
-        return 'Inscription Complète';
-      case RegistrationStatus.UNCOMPLETED:
-        return 'Paiement Requis';
-      case RegistrationStatus.EXPIRED:
-        return 'Inscription Expirée';
-      default:
-        return 'Statut Inconnu';
-    }
-  }
-
-  getRegistrationStatusDescription(reg: ProcessedRegistration): string {
-    if (!reg.isRegistered) {
-      return `Ce membre n'est pas encore inscrit pour la session en cours.`;
-    }
-    switch (reg.status) {
-      case RegistrationStatus.COMPLETED:
-        return `L'inscription pour cette session est finalisée et le paiement a été reçu.`;
-      case RegistrationStatus.UNCOMPLETED:
-        return `L'inscription a été initiée mais le paiement n'a pas encore été confirmé.`;
-      case RegistrationStatus.EXPIRED:
-        return `L'inscription pour cette session est terminée.`;
-      default:
-        return 'Aucune information sur le statut de l\'inscription.';
-    }
   }
 
   closeEditReligiousKnowledgeModal() {
@@ -606,7 +443,9 @@ export class MemberDetailComponent implements OnInit {
   }
 
   handleSaveReligiousKnowledge($event: ReligiousKnowledge) {
-
+    // TODO: Implement save logic
+    this.notificationService.showSuccess("Connaissances religieuses mises à jour (simulation).");
+    this.loadData();
   }
 
   openEditReligiousKnowledgeModal() {
@@ -641,6 +480,4 @@ export class MemberDetailComponent implements OnInit {
         return 'unpaid';
     }
   }
-
-
 }

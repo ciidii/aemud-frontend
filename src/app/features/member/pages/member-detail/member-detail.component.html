@@ -246,7 +246,7 @@
     <div class="sidebar-col">
       <div class="sidebar-card">
         <div class="sidebar-header">
-          <h4 *ngIf="!isSidebarCollapsed">Historique des inscriptions</h4>
+          <h4 *ngIf="!isSidebarCollapsed">Inscriptions & Cotisations</h4>
           <button (click)="toggleSidebar()" [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'"
                   class="btn-icon btn-toggle-sidebar">
             <i [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'" class="bi"></i>
@@ -254,116 +254,138 @@
         </div>
         <div *ngIf="!isSidebarCollapsed" class="sidebar-content">
 
-          <!-- Current Registration Status -->
-          <div *ngIf="viewedPhaseRegistration" [ngClass]="getRegistrationStatusClass(viewedPhaseRegistration)"
-               class="current-registration-status">
-            <div class="status-main">
-              <div class="status-icon">
-                <i class="bi" [ngClass]="getRegistrationStatusIcon(viewedPhaseRegistration)"></i>
+          <!-- Registration Status Card -->
+          <div *ngIf="registrationOverview" class="registration-status-card">
+            <div class="card-header">
+              <h5>Statut d'Inscription Actuel</h5>
+            </div>
+            <div class="card-body">
+              <div *ngIf="registrationOverview.nextRegistrablePhase; else upToDate" class="status-action">
+                <div class="status-text">
+                  <i class="bi bi-exclamation-triangle-fill text-warning"></i>
+                  <div>
+                    <strong>Inscription requise</strong>
+                    <span>Dernière inscription: {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}</span>
+                  </div>
+                </div>
+                <button (click)="toggleReregisterModal(registrationOverview.nextRegistrablePhase)" class="btn btn-primary">
+                  Inscrire à {{ registrationOverview.nextRegistrablePhase.nom }}
+                </button>
               </div>
-              <div>
-                <h6 class="status-title">{{ getRegistrationStatusText(viewedPhaseRegistration) }}</h6>
-                <p class="status-description">{{ getRegistrationStatusDescription(viewedPhaseRegistration) }}</p>
-              </div>
-            </div>
-            <button (click)="toggleReregisterModal()" *ngIf="!viewedPhaseRegistration.isRegistered"
-                    class="btn btn-primary">
-              <i class="bi bi-person-plus-fill"></i> Inscrire
-            </button>
-          </div>
-
-          <!-- Subscription Summary -->
-          <div *ngIf="contributionSummary" class="cotisation-summary">
-            <div class="summary-item">
-              <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
-              <span class="summary-label">Total Payé</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-value">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
-              <span class="summary-label">Restant Dû</span>
-            </div>
-            <div class="summary-item">
-              <span class="summary-value">{{ contributionSummary.completionRate }}</span>
-              <span class="summary-label">Complétion</span>
+              <ng-template #upToDate>
+                <div class="status-action">
+                  <div class="status-text">
+                    <i class="bi bi-check-circle-fill text-success"></i>
+                    <div>
+                      <strong>Membre à jour</strong>
+                      <span>Inscrit pour: {{ registrationOverview.latestRegistration?.mandatName }}</span>
+                    </div>
+                  </div>
+                </div>
+              </ng-template>
             </div>
           </div>
 
           <!-- Subscription Status -->
-          <h5>État des Cotisations</h5>
-          <div class="cotisation-header">
-            <div class="year-selector-group">
-              <label for="subscription-phase">Phase :</label>
-              <select (change)="onPhaseChange($event)" class="form-select-sm" id="subscription-phase">
-                <option *ngFor="let phase of activeMandat?.phases" [selected]="phase.id === selectedPhaseId"
-                        [value]="phase.id">
-                  {{ phase.nom }}
-                </option>
-              </select>
-            </div>
-          </div>
-          <div class="cotisation-grid">
-            <button (click)="onMonthClick(item)"
-                    *ngFor="let item of monthlyContributions"
-                    [class.selected]="isMonthSelected(item)"
-                    [ngClass]="item.status"
-                    class="month-box">
-              {{ item.month }}
-            </button>
-          </div>
-          <div *ngIf="monthlyContributions" class="cotisation-legend">
-            <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
-            <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
-            <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
-            <div class="legend-item"><span class="legend-color not-applicable"></span>Non applicable</div>
-          </div>
-
-          <!-- Multi-select Action Bar -->
-          <div *ngIf="selectedContributions.length > 0" class="multi-select-bar">
-            <div class="selection-info">
-              <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
-              <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
-            </div>
-            <button (click)="openRecordPaymentModal()" class="btn btn-primary">Enregistrer le paiement</button>
-          </div>
-
-          <div class="cotisation-actions">
-            <button (click)="sendContributionReminder()" class="btn btn-sm btn-secondary">
-              <i class="bi bi-bell"></i> Envoyer un rappel
-            </button>
-          </div>
-          <hr class="sidebar-divider">
-
-          <div class="history-container" *ngIf="groupedHistory.length > 0; else noRegistrations">
-            <div class="mandate-group" *ngFor="let group of groupedHistory">
-              <h6 class="mandate-title">{{ group.mandatName }}</h6>
-              <div class="registration-list">
-                <div class="registration-item" *ngFor="let reg of group.registrations">
-                  <div class="registration-info">
-                    <div class="phase-name">{{ getPhaseById(reg.phaseId)?.nom || 'Phase inconnue' }}</div>
-                    <div class="registration-details">
-                      <span class="badge" [ngClass]="reg.statusPayment ? 'bg-success' : 'bg-warning'">
-                        {{ reg.statusPayment ? 'Payé' : 'En attente' }}
-                      </span>
-                      <span class="registration-type">{{ reg.registrationType }}</span>
-                    </div>
-                  </div>
-                  <div class="registration-actions" *ngIf="!reg.statusPayment">
-                    <button (click)="markAsPaid(reg.phaseId)" class="btn btn-sm btn-icon-primary"
-                            title="Marquer comme Payé">
-                      <i class="bi bi-check-circle"></i>
-                    </button>
-                  </div>
-                </div>
+          <div class="sidebar-section">
+            <h5>État des Cotisations</h5>
+            <div class="cotisation-header">
+              <div class="year-selector-group">
+                <label for="subscription-phase">Phase :</label>
+                <select (change)="onPhaseChange($event)" class="form-select-sm" id="subscription-phase">
+                  <option *ngFor="let phase of activeMandat?.phases" [selected]="phase.id === selectedPhaseId"
+                          [value]="phase.id">
+                    {{ phase.nom }}
+                  </option>
+                </select>
               </div>
             </div>
+            <div *ngIf="contributionSummary" class="cotisation-summary">
+              <div class="summary-item">
+                <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
+                <span class="summary-label">Total Payé</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-value">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
+                <span class="summary-label">Restant Dû</span>
+              </div>
+              <div class="summary-item">
+                <span class="summary-value">{{ contributionSummary.completionRate }}</span>
+                <span class="summary-label">Complétion</span>
+              </div>
+            </div>
+            <div class="cotisation-grid">
+              <button (click)="onMonthClick(item)"
+                      *ngFor="let item of monthlyContributions"
+                      [class.selected]="isMonthSelected(item)"
+                      [ngClass]="item.status"
+                      class="month-box">
+                {{ item.month }}
+              </button>
+            </div>
+            <div *ngIf="monthlyContributions" class="cotisation-legend">
+              <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
+              <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
+              <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
+              <div class="legend-item"><span class="legend-color not-applicable"></span>Non applicable</div>
+            </div>
+            <div *ngIf="selectedContributions.length > 0" class="multi-select-bar">
+              <div class="selection-info">
+                <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
+                <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
+              </div>
+              <button (click)="openRecordPaymentModal()" class="btn btn-primary">Enregistrer le paiement</button>
+            </div>
+            <div class="cotisation-actions">
+              <button (click)="sendContributionReminder()" class="btn btn-sm btn-secondary">
+                <i class="bi bi-bell"></i> Envoyer un rappel
+              </button>
+            </div>
           </div>
 
-          <ng-template #noRegistrations>
-            <div class="empty-history">
-              <i class="bi bi-clock-history"></i>
-              <p>Aucun historique d'inscription pour ce membre.</p>
+
+          <hr class="sidebar-divider">
+
+          <!-- Registration Timeline -->
+          <div class="sidebar-section">
+            <h5>Historique des Inscriptions</h5>
+            <div *ngIf="timeline$ | async as timeline; else loadingTimeline" class="registration-timeline">
+              <div *ngFor="let mandateItem of timeline" class="timeline-mandate-group">
+                <h6 class="mandate-title">{{ mandateItem.mandat.nom }}</h6>
+                <ul class="timeline-phase-list">
+                  <li *ngFor="let phaseItem of mandateItem.phases" class="timeline-phase-item">
+                    <div class="phase-info">
+                      <i [ngClass]="{
+                        'bi-check-circle-fill text-success': phaseItem.status === 'REGISTERED',
+                        'bi-exclamation-diamond-fill text-warning': phaseItem.status === 'MISSED_OPEN',
+                        'bi-slash-circle-fill text-muted': phaseItem.status === 'MISSED_CLOSED',
+                        'bi-hourglass-split text-info': phaseItem.status === 'PENDING'
+                      }" class="bi phase-icon"></i>
+                      <span class="phase-name">{{ phaseItem.phase.nom }}</span>
+                    </div>
+                    <div class="phase-status">
+                      <ng-container [ngSwitch]="phaseItem.status">
+                        <span *ngSwitchCase="'REGISTERED'" class="badge bg-success-light">Inscrit</span>
+                        <span *ngSwitchCase="'MISSED_OPEN'" class="badge bg-warning-light">Action requise</span>
+                        <span *ngSwitchCase="'MISSED_CLOSED'" class="badge bg-secondary-light">Manqué</span>
+                        <span *ngSwitchCase="'PENDING'" class="badge bg-info-light">À venir</span>
+                      </ng-container>
+                    </div>
+                    <div class="phase-actions">
+                      <button *ngIf="phaseItem.isRegistrable" (click)="toggleReregisterModal(phaseItem.phase)"
+                              class="btn btn-sm btn-outline-primary">
+                        S'inscrire
+                      </button>
+                    </div>
+                  </li>
+                </ul>
+              </div>
             </div>
-          </ng-template>
+            <ng-template #loadingTimeline>
+              <p>Chargement de l'historique...</p>
+            </ng-template>
+          </div>
+
         </div>
       </div>
     </div>
@@ -382,8 +404,7 @@
 <app-reregister-modal (close)="toggleReregisterModal()"
                       (save)="handleSaveRegistration($event)"
                       *ngIf="isReregisterModalOpen"
-                      [availableMandats]="availableMandats"
-                      [initialPhaseId]="selectedPhaseId">
+                      [availableMandats]="availableMandats">
 </app-reregister-modal>
 
 <app-confirm-delete-modal (close)="toggleDeleteModal()" (confirm)="onDeleteConfirmed()" *ngIf="isDeleteModalOpen"

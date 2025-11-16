@@ -26,7 +26,6 @@ export class EditEngagementsModalComponent implements OnInit {
   @Input() memberClubs: Club[] = [];
   @Input() memberCommissions: Commission[] = [];
 
-  // Outputs to parent
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<EngagementsData>();
   // Properties

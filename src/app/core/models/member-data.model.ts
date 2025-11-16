@@ -1,4 +1,6 @@
 import {BourseModel} from "./bourse.model";
+import {RegistrationModel} from "./RegistrationModel";
+import {RegistrationOverview} from "./timeline.model";
 
 export interface MemberDataResponse {
   id: string;
@@ -10,7 +12,7 @@ export interface MemberDataResponse {
   bourse: BourseModel;
   clubs: Club[];
   commissions: Commission[];
-  registration: RegistrationResponse[];
+  registrationOverview: RegistrationOverview;
   religiousKnowledge: ReligiousKnowledge;
 }
 
