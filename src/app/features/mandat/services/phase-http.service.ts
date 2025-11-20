@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {environment} from "../../../../environments/environment";
-import {PhaseModel} from "../../../core/models/phase.model";
+import {PhaseModel} from "../models/phase.model";
 
 @Injectable({
   providedIn: 'root'

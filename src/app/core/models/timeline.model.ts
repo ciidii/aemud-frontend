@@ -1,5 +1,5 @@
-import { MandatDto } from './mandat.model';
-import { PhaseModel } from './phase.model';
+import { MandatDto } from '../../features/mandat/models/mandat.model';
+import { PhaseModel } from '../../features/mandat/models/phase.model';
 import { RegistrationModel } from './RegistrationModel';
 
 export interface RegistrationOverview {

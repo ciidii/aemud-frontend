@@ -58,18 +58,7 @@
         <td>{{ member.personalInfo.name }}</td>
         <td>{{ member.contactInfo.email }}</td>
         <td>{{ member.contactInfo.numberPhone }}</td>
-        <td>
-            <span *ngIf="member.registration && member.registration.length > 0"
-                  [ngClass]="{'bg-success': member.registration[0].statusPayment, 'bg-danger': !member.registration[0].statusPayment}"
-                  class="badge">
-              {{ member.registration[0].statusPayment ? 'Payé' : 'En attente' }}
-            </span>
-        </td>
-        <td>
-            <span *ngIf="member.registration && member.registration.length > 0" class="badge bg-primary">
-              {{ member.registration[0].registrationStatus }}
-            </span>
-        </td>
+
         <td>
           <div class="kebab-menu">
             <button (click)="$event.stopPropagation()" class="kebab-icon">

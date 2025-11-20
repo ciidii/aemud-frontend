@@ -5,7 +5,7 @@ import {AuthService} from "../../../features/auth/services/auth.service";
 import {Observable} from "rxjs";
 import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {MandatDto} from "../../../core/models/mandat.model";
+import {MandatDto} from "../../../features/mandat/models/mandat.model";
 
 @Component({
   selector: 'app-nav-bar',

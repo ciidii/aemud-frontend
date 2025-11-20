@@ -33,7 +33,9 @@ export class LayoutComponent implements OnInit {
 
   ngOnInit(): void {
     this.mandatHttpService.getAllMandats().subscribe(response => {
+      console.log("########")
       if (response.data) {
+        console.log(response.data)
         this.appStateService.setMandats(response.data);
         const activeMandat = response.data.find(m => m.estActif);
         if (activeMandat) {

@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {MandatDto} from "../models/mandat.model";
+import {MandatDto} from "../../features/mandat/models/mandat.model";
 
 
 @Injectable({

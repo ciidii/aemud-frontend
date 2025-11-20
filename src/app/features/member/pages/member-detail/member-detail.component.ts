@@ -21,7 +21,7 @@ import {
   ReligiousKnowledge,
 } from "../../../../core/models/member-data.model";
 import {combineLatest, filter, map, Observable, of, take} from "rxjs";
-import {MandatDto} from "../../../../core/models/mandat.model";
+import {MandatDto} from "../../../mandat/models/mandat.model";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
 import {
@@ -53,7 +53,7 @@ import {EditBourseInfoModalComponent} from "./edit-bourse-info-modal/edit-bourse
 import {BourseModel} from "../../../../core/models/bourse.model";
 import {AppStateService} from "../../../../core/services/app-state.service";
 import {MandateTimelineItem, RegistrationOverview} from "../../../../core/models/timeline.model";
-import {PhaseModel} from "../../../../core/models/phase.model";
+import {PhaseModel} from "../../../mandat/models/phase.model";
 
 interface MonthlyContributionDisplay {
   month: string;

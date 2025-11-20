@@ -1,4 +1,5 @@
-import {PhaseModel} from "./phase.model";
+import {PhaseModel} from "../../features/mandat/models/phase.model";
+
 
 export enum RegistrationStatus {
   EXPIRED = "EXPIRED",

@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {Observable} from "rxjs";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
 import {environment} from "../../../../environments/environment";
-import {MandatDto} from "../../../core/models/mandat.model";
+import {MandatDto} from "../models/mandat.model";
 
 @Injectable({
   providedIn: 'root'

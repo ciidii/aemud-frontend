@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {TypeInscription} from "../../../../../core/models/member-data.model";
-import {MandatDto} from "../../../../../core/models/mandat.model";
+import {MandatDto} from "../../../../mandat/models/mandat.model";
 
 @Component({
   selector: 'app-reregister-modal',

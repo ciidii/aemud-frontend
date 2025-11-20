@@ -1,5 +1,4 @@
 import {BourseModel} from "./bourse.model";
-import {RegistrationModel} from "./RegistrationModel";
 import {RegistrationOverview} from "./timeline.model";
 
 export interface MemberDataResponse {

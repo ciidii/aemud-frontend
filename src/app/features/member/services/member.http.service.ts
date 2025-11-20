@@ -43,7 +43,9 @@ export class MemberHttpService {
                 nom: 'Phase 2',
                 dateDebut: '2025-02-01',
                 dateFin: '2025-07-31',
-                status: PhaseStatus.TERMINATED
+                status: PhaseStatus.TERMINATED,
+                dateDebutInscription: '2025-02-01',
+                dateFinInscription:'2025-07-31'
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
@@ -55,7 +57,9 @@ export class MemberHttpService {
               nom: 'Phase 1',
               dateDebut: '2025-10-01',
               dateFin: '2026-01-31',
-              status: PhaseStatus.CURRENT
+              status: PhaseStatus.CURRENT,
+              dateDebutInscription: '2025-02-01',
+              dateFinInscription:'2025-07-31'
             }
           };
         }
@@ -83,7 +87,9 @@ export class MemberHttpService {
               nom: 'Phase 1',
               dateDebut: '2024-10-01',
               dateFin: '2025-01-31',
-              status: PhaseStatus.TERMINATED
+              status: PhaseStatus.TERMINATED,
+              dateDebutInscription: '2025-02-01',
+              dateFinInscription:'2025-07-31'
             },
             registration: {
               id: 'reg1',
@@ -93,7 +99,9 @@ export class MemberHttpService {
                 nom: 'Phase 1',
                 dateDebut: '2024-10-01',
                 dateFin: '2025-01-31',
-                status: PhaseStatus.TERMINATED
+                status: PhaseStatus.TERMINATED,
+                dateDebutInscription: '2025-02-01',
+                dateFinInscription:'2025-07-31'
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
@@ -110,7 +118,9 @@ export class MemberHttpService {
               nom: 'Phase 2',
               dateDebut: '2025-02-01',
               dateFin: '2025-07-31',
-              status: PhaseStatus.TERMINATED
+              status: PhaseStatus.TERMINATED,
+              dateDebutInscription: '2025-02-01',
+              dateFinInscription:'2025-07-31'
             },
             registration: {
               id: 'reg2',
@@ -120,7 +130,9 @@ export class MemberHttpService {
                 nom: 'Phase 2',
                 dateDebut: '2025-02-01',
                 dateFin: '2025-07-31',
-                status: PhaseStatus.TERMINATED
+                status: PhaseStatus.TERMINATED,
+                dateDebutInscription: '2025-02-01',
+                dateFinInscription:'2025-07-31'
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
@@ -149,7 +161,9 @@ export class MemberHttpService {
               nom: 'Phase 1',
               dateDebut: '2025-10-01',
               dateFin: '2026-01-31',
-              status: PhaseStatus.CURRENT
+              status: PhaseStatus.CURRENT,
+              dateDebutInscription: '2025-02-01',
+              dateFinInscription:'2025-07-31'
             },
             registration: null,
             isRegistrable: true,
@@ -161,7 +175,9 @@ export class MemberHttpService {
               nom: 'Phase 2',
               dateDebut: '2026-02-01',
               dateFin: '2026-07-31',
-              status: PhaseStatus.NOT_STARTED
+              status: PhaseStatus.NOT_STARTED,
+              dateDebutInscription: '2025-02-01',
+              dateFinInscription:'2025-07-31'
             },
             registration: null,
             isRegistrable: false,

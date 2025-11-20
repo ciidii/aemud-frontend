@@ -5,7 +5,7 @@ import {
 } from "../../../../../shared/components/custom-multiselect/custom-multiselect.component";
 import {MemberStateService} from "../../../services/member.state.service";
 import {filter, map, Observable, Subject, switchMap, takeUntil} from "rxjs";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, JsonPipe} from "@angular/common";
 import {ClubService} from "../../../../configuration/services/club.service";
 import {CommissionService} from "../../../../configuration/services/commission.service";
 import {BourseService} from "../../../../configuration/services/bourse.service";
@@ -76,7 +76,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
       map(phases => phases.map(p => ({id: p.id, name: p.nom})))
     );
     this.mandats$ = this.mandatService.getAllMandats().pipe(
-      map(response => response.data.map(m => ({ id: m.id, name: m.nom })))
+      map(response => response.data.map(m => ({id: m.id, name: m.nom})))
     );
   }
 
