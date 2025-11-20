@@ -16,7 +16,11 @@ export const routes: Routes = [
     component: LayoutComponent,
     canActivate: [authGuard],
     children: [
-
+      {
+        path: 'mandats',
+        loadChildren: () => import('./features/mandat/mandat.routes').then(m => m.MANDAT_ROUTES),
+        title: 'Mandats',
+      },
       {
         path: 'shared',
         loadChildren: () => import('./shared/shared.routes').then(m => m.SHARED_ROUTES),
@@ -58,13 +62,7 @@ export const routes: Routes = [
         canActivate: [authGuard, roleGuard],
         title: 'Users',
         data: {roles: [Role.SUPER_ADMIN, Role.ADMIN]}
-      },      {
-        path: 'mandat',
-        loadChildren: () => import('./features/mandat/mandat.routes').then(m => m.MANDAT_ROUTES),
-        canActivate: [authGuard, roleGuard],
-        title: 'Mandat',
-        data: {roles: [Role.SUPER_ADMIN, Role.ADMIN]}
-      }
+      },
     ]
   },
   {

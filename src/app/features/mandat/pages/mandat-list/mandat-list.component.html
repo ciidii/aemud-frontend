@@ -1,0 +1,60 @@
+<div class="mandat-list-page">
+  <header class="page-header">
+    <h1>Gestion des Mandats</h1>
+    <button class="btn-primary" (click)="goToAdd()">+ Créer un mandat</button>
+  </header>
+
+  <div class="page-content">
+    <div *ngIf="isLoading" class="loading-container">
+      <!-- Skeleton loader cards -->
+      <div *ngFor="let _ of [1, 2, 3]" class="mandate-card skeleton">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line text"></div>
+        <div class="skeleton-line text short"></div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && hasError" class="error-container">
+      <p>Impossible de charger les mandats. Veuillez réessayer plus tard.</p>
+      <button (click)="loadMandats()">Réessayer</button>
+    </div>
+
+    <ng-container *ngIf="mandats$ | async as mandats">
+      <div *ngIf="!isLoading && !hasError && mandats.length === 0" class="empty-state">
+        <div class="empty-content">
+          <!-- Add an icon here if available, e.g., <i class="icon-folder-open"></i> -->
+          <h2>Aucun mandat trouvé</h2>
+          <p>Commencez par créer votre premier mandat.</p>
+          <button class="btn-primary" (click)="goToAdd()">+ Créer un mandat</button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && mandats.length > 0" class="mandate-grid">
+        <div *ngFor="let mandat of mandats" class="mandate-card">
+          <div class="card-header">
+            <h3 class="card-title">{{ mandat.nom }}</h3>
+            <span class="status-badge" [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif">
+              {{ mandat.estActif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+          <div class="card-body clickable" (click)="goToDetail(mandat.id)">
+            <div class="mandate-period">
+              <!-- Add calendar icon if available -->
+              <span>{{ mandat.dateDebut | date: 'dd/MM/yyyy' }}</span>
+              <span>→</span>
+              <span>{{ mandat.dateFin | date: 'dd/MM/yyyy' }}</span>
+            </div>
+            <div class="phase-summary">
+              <!-- Add phases icon if available -->
+              <span>{{ mandat.phases.length }} {{ mandat.phases.length > 1 ? 'phases' : 'phase' }}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button class="btn-secondary" (click)="goToEdit(mandat.id)">Modifier</button>
+            <button class="btn-danger" (click)="deleteMandat(mandat.id)">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+  </div>
+</div>

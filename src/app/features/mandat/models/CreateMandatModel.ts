@@ -8,7 +8,7 @@ export interface CreateMandatModel {
   estActive: boolean;
   calculatePhasesAutomatically: boolean;
 
-  numberOfPhases?: number; // optionnel (backend accepte null)
+  numberOfPhases: number | undefined | null; // optionnel (backend accepte null)
 
   phases?: CreatePhaseModel[]; // optionnel
 }

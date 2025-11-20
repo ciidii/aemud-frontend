@@ -1,0 +1,167 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+.mandat-list-page {
+  padding: $space-6;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-8;
+
+  h1 {
+    @include text-heading-2;
+    margin: 0;
+  }
+}
+
+// Generic button styles - assuming they might be global, but placing them here for now
+.btn-primary, .btn-secondary, .btn-danger {
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+  border: none;
+  cursor: pointer;
+  @include text-button;
+  transition: background-color 0.2s ease-in-out;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+  &:hover { background-color: $primary-600; }
+}
+
+.btn-secondary {
+  background-color: $gray-200;
+  color: $color-text-primary;
+  border: 1px solid $color-border-default;
+  &:hover { background-color: $gray-300; }
+}
+
+.btn-danger {
+  background-color: $danger-500;
+  color: $white;
+  &:hover { background-color: darken($danger-500, 10%); }
+}
+
+.page-content {
+  .loading-container, .mandate-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: $space-6;
+  }
+
+  .error-container, .empty-state {
+    text-align: center;
+    padding: $space-16 $space-6;
+    background-color: $color-background-panel;
+    border-radius: $radius-lg;
+    border: 1px solid $color-border-default;
+  }
+}
+
+.mandate-card {
+  background-color: $color-background-panel;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  display: flex;
+  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-lg;
+  }
+
+  .card-header {
+    padding: $space-4;
+    border-bottom: 1px solid $color-border-default;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+
+    .card-title {
+      @include text-heading-5;
+      margin: 0;
+    }
+
+    .status-badge {
+      @include text-label;
+      padding: $space-1 $space-2;
+      border-radius: $radius-full;
+      font-size: 1.2rem;
+
+      &.active {
+        background-color: lighten($success-base, 45%);
+        color: darken($success-base, 10%);
+      }
+      &.inactive {
+        background-color: $gray-200;
+        color: $gray-600;
+      }
+    }
+  }
+
+  .card-body {
+    padding: $space-4;
+    flex-grow: 1;
+
+    .mandate-period, .phase-summary {
+      display: flex;
+      align-items: center;
+      color: $color-text-secondary;
+      @include text-body-small;
+
+      span {
+        margin-right: $space-2;
+      }
+    }
+    .mandate-period {
+      margin-bottom: $space-3;
+    }
+
+    .clickable:hover {
+      cursor: pointer;
+      background-color: $gray-100;
+    }
+  }
+
+  .card-footer {
+    padding: $space-4;
+    border-top: 1px solid $color-border-default;
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+  }
+}
+
+// Skeleton Loader styles
+.mandate-card.skeleton {
+  .skeleton-line {
+    background-color: $gray-200;
+    border-radius: $radius-sm;
+    animation: pulse 1.5s infinite ease-in-out;
+  }
+  .title {
+    height: 2.8rem;
+    width: 70%;
+    margin-bottom: $space-4;
+  }
+  .text {
+    height: 1.6rem;
+    width: 90%;
+    margin-bottom: $space-2;
+  }
+  .short {
+    width: 50%;
+  }
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.5; }
+  100% { opacity: 1; }
+}

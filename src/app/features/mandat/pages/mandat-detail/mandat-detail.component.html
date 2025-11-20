@@ -1,0 +1,61 @@
+<div class="mandat-detail-page">
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Chargement du mandat...</p>
+    <!-- Add more sophisticated skeleton loader here if needed -->
+  </div>
+
+  <div *ngIf="hasError && !isLoading" class="error-container">
+    <p>Le mandat n'a pas pu être chargé. Veuillez retourner à la liste.</p>
+    <a routerLink="/mandats/list">Retour à la liste</a>
+  </div>
+
+  <ng-container *ngIf="mandat$ | async as mandat">
+    <div *ngIf="mandat" class="mandat-content">
+      <header class="page-header">
+        <div class="header-content">
+          <h1>{{ mandat.nom }}</h1>
+          <div class="header-meta">
+            <span class="status-badge" [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif">
+              {{ mandat.estActif ? 'Actif' : 'Inactif' }}
+            </span>
+            <span class="mandate-period">
+              {{ mandat.dateDebut | date: 'dd/MM/yyyy' }} → {{ mandat.dateFin | date: 'dd/MM/yyyy' }}
+            </span>
+          </div>
+        </div>
+        <button class="btn-primary" (click)="goToEdit(mandat.id)">Modifier le mandat</button>
+      </header>
+
+      <section class="timeline-section">
+        <h2>Chronologie des phases</h2>
+        <app-phase-timeline
+          [mandateStartDate]="mandat.dateDebut"
+          [mandateEndDate]="mandat.dateFin"
+          >
+        </app-phase-timeline>
+      </section>
+
+      <section class="phases-list-section">
+        <h2>Détail des phases ({{mandat.phases.length}})</h2>
+        <div class="phases-grid">
+          <div *ngFor="let phase of mandat.phases" class="phase-card" [class.current-phase]="phase.id === currentPhaseId">
+            <div class="phase-card-header">
+              <h3>{{ phase.nom }}</h3>
+              <span *ngIf="phase.id === currentPhaseId" class="current-badge">En cours</span>
+            </div>
+            <div class="phase-card-body">
+              <p class="phase-dates">{{ phase.dateDebut | date: 'dd/MM/yyyy' }} → {{ phase.dateFin | date: 'dd/MM/yyyy' }}</p>
+              <div class="phase-status">
+                <span class="status-label">Statut:</span>
+                <span class="status-value" [ngClass]="'status-' + phase.status.toLowerCase()">{{ phase.status }}</span>
+              </div>
+               <div class="phase-inscriptions" *ngIf="phase.dateDebutInscription && phase.dateFinInscription">
+                  <p>Inscriptions: {{ phase.dateDebutInscription | date: 'dd/MM/yyyy' }} → {{ phase.dateFinInscription | date: 'dd/MM/yyyy' }}</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </ng-container>
+</div>
