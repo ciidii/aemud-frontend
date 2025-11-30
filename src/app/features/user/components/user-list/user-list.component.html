@@ -1,1 +1,148 @@
-<p>user-list works!</p>
+<div class="user-list-container">
+  <div class="header-row">
+    <div>
+      <h2 class="page-title">Utilisateurs</h2>
+      <p class="page-subtitle">Gérez les comptes utilisateurs, leurs rôles et leurs statuts.</p>
+    </div>
+    <button class="btn btn-primary" routerLink="/users/add">
+      + Créer un utilisateur
+    </button>
+  </div>
+
+  <!-- Zone de filtres -->
+  <div class="filters-card" [formGroup]="filterForm">
+    <div class="row g-3 align-items-end">
+      <div class="col-md-4">
+        <label class="form-label" for="keyword">Recherche</label>
+        <input
+          id="keyword"
+          type="text"
+          class="form-control"
+          formControlName="keyword"
+          placeholder="Email utilisateur"
+        />
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label">Rôles</label>
+        <div class="roles-filter">
+          <label *ngFor="let role of roleOptions" class="role-filter-item">
+            <input
+              type="checkbox"
+              [value]="role.value"
+              (change)="toggleRole(role.value)"
+            />
+            <span>{{ role.label }}</span>
+          </label>
+        </div>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label" for="locked">Verrouillé</label>
+        <select id="locked" class="form-select" formControlName="locked">
+          <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label" for="forcePasswordChange">Changement MDP</label>
+        <select id="forcePasswordChange" class="form-select" formControlName="forcePasswordChange">
+          <option *ngFor="let opt of statusOptions" [value]="opt.value">{{ opt.label }}</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="filters-actions">
+      <button type="button" class="button-secondary" (click)="resetFilters()">Réinitialiser</button>
+      <button type="button" class="button-primary" (click)="applyFilters()">Filtrer</button>
+    </div>
+  </div>
+
+  <!-- Messages d'état -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner-border text-primary" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+  </div>
+
+  <div *ngIf="errorMessage && !loading" class="alert alert-danger mt-3">
+    {{ errorMessage }}
+  </div>
+
+  <!-- Tableau des utilisateurs -->
+  <div class="table-wrapper" *ngIf="!loading && users.length > 0">
+    <table class="table table-hover align-middle">
+      <thead>
+      <tr>
+        <th>Email</th>
+        <th>Rôles</th>
+        <th>Verrouillé</th>
+        <th>Doit changer MDP</th>
+        <th>Membre</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let user of users" (click)="goToUserDetails(user)" class="clickable-row">
+        <td>{{ user.username }}</td>
+        <td>
+          <span *ngFor="let role of user.roles" class="badge bg-primary me-1">
+            {{ role }}
+          </span>
+        </td>
+        <td>
+          <span class="badge" [ngClass]="user.locked ? 'bg-danger' : 'bg-success'">
+            {{ user.locked ? 'Oui' : 'Non' }}
+          </span>
+        </td>
+        <td>
+          <span class="badge" [ngClass]="user.forcePasswordChange ? 'bg-warning text-dark' : 'bg-secondary'">
+            {{ user.forcePasswordChange ? 'Oui' : 'Non' }}
+          </span>
+        </td>
+        <td>{{ user.memberId }}</td>
+        <td>
+          <div class="actions-cell" (click)="$event.stopPropagation()">
+            <button type="button" class="btn btn-sm btn-outline-primary me-1" (click)="goToUserDetails(user)">
+              Détails
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm"
+              [ngClass]="user.locked ? 'btn-success' : 'btn-outline-danger'"
+              (click)="toggleLock(user)"
+            >
+              {{ user.locked ? 'Déverrouiller' : 'Verrouiller' }}
+            </button>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-warning ms-1"
+              (click)="toggleForcePasswordChange(user)"
+            >
+              Forcer MDP
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <div class="pagination-bar">
+      <div class="pagination-info">
+        {{ totalRecords }} utilisateur(s) · Page {{ page }} / {{ totalPages }}
+      </div>
+      <div class="pagination-controls">
+        <button class="pagination-btn" [disabled]="page === 1" (click)="goToPage(page - 1)">
+          Précédent
+        </button>
+        <button class="pagination-btn" [disabled]="page === totalPages" (click)="goToPage(page + 1)">
+          Suivant
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="!loading && users.length === 0 && !errorMessage" class="empty-state">
+    Aucun utilisateur trouvé.
+  </div>
+</div>
