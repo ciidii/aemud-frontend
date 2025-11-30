@@ -1,82 +1,177 @@
 @import '../../../../../assets/scss/variables';
 
-// GRID
-.cotisation-grid {
-  display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: $space-2;
+.year-container {
+  margin-bottom: $space-6;
 }
 
-// MONTH BOX
-.month-box {
-  text-align: center;
-  padding: $space-2;
-  border-radius: $radius-sm;
-  font-size: $font-size-small;
-  font-weight: 500;
+.year-title {
+  font-size: $font-size-h6;
+  font-weight: 600;
+  color: $color-text-secondary;
+  margin-bottom: $space-3;
+  padding-bottom: $space-2;
+  border-bottom: 1px solid $color-border-default;
+}
+
+.months-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: $space-3;
+}
+
+.month-card {
   border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  padding: $space-3;
+  background-color: $white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  background-color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 110px;
 
   &:hover {
-    transform: translateY(-2px);
+    transform: translateY(-3px);
     box-shadow: $shadow-md;
+    border-color: $primary-300;
+  }
+
+  .card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-2;
   }
 
   .month-name {
     font-weight: 600;
-    margin-bottom: $space-1;
     color: $color-text-primary;
+  }
+
+  .selection-checkbox {
+    width: 16px;
+    height: 16px;
+    accent-color: $primary-500;
+  }
+
+  .card-body {
+    text-align: center;
+    margin-bottom: $space-3;
   }
 
   .amount {
+    font-size: $font-size-h5;
     font-weight: 700;
-    font-size: $font-size-body;
     color: $color-text-primary;
   }
 
-  // ----- Status -----
-  &.paid {
-    background-color: $success-100;
-    color: $success-900;
-    border-color: $success-500;
+  .card-footer {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+  }
+
+  .status-dot {
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+  }
+
+  .status-text {
+    font-size: $font-size-small;
+    font-weight: 500;
+  }
+
+  // Status-specific styles
+  &.pending {
+    .status-dot { background-color: $gray-400; }
+    .status-text { color: $gray-700; }
   }
 
   &.delayed {
-    background-color: $warning-100;
-    color: $warning-900;
-    border-color: $warning-500;
-  }
-
-  &.pending {
-    background-color: $gray-100;
-    color: $color-text-secondary;
+    .status-dot { background-color: $warning-500; }
+    .status-text { color: $warning-900; }
   }
 
   &.partially-paid {
-    background-color: $info-100;
-    color: $info-900;
-    border-color: $info-500;
+    .status-dot { background-color: $info-500; }
+    .status-text { color: $info-900; }
   }
 
-  &.not-applicable {
-    background-color: $gray-200;
-    color: $gray-500;
+  // Paid and Not-Applicable are not clickable
+  &.paid, &.not-applicable {
     cursor: not-allowed;
-    text-decoration: line-through;
+    background-color: $gray-100;
+    color: $color-text-muted;
 
     &:hover {
       transform: none;
       box-shadow: none;
+      border-color: $color-border-default;
+    }
+
+    .month-name, .amount {
+      color: $color-text-muted;
     }
   }
 
-  // SELECTED
+  &.paid {
+    .status-dot { background-color: $success-500; }
+    .status-text { color: $success-900; }
+  }
+
+  &.not-applicable {
+    .status-dot { background-color: $gray-400; }
+    .status-text { text-decoration: line-through; }
+  }
+
+
+  // Selected State
   &.selected {
     border-color: $primary-500;
     box-shadow: 0 0 0 2px rgba($primary-500, 0.3);
     background-color: $primary-100;
-    color: $primary-900;
+  }
+}
+
+// Legend Styles
+.cotisation-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: $space-3 $space-5;
+  margin-top: $space-5;
+  padding-top: $space-4;
+  border-top: 1px solid $color-border-default;
+  font-size: $font-size-small;
+  color: $color-text-secondary;
+}
+
+.legend-item {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+}
+
+.legend-color {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: $radius-sm;
+  border: 1px solid rgba($black, 0.1);
+
+  &.paid { background-color: $success-500; }
+  &.delayed { background-color: $warning-500; }
+  &.partially-paid { background-color: $info-500; }
+  &.pending { background-color: $gray-400; }
+  &.not-applicable {
+    background: repeating-linear-gradient(
+        -45deg,
+        $gray-200,
+        $gray-200 4px,
+        $gray-300 4px,
+        $gray-300 8px
+    );
+    border-color: $gray-400;
   }
 }

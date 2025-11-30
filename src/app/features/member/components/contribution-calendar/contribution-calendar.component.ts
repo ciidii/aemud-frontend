@@ -14,6 +14,14 @@ export class ContributionCalendarComponent {
   @Input() selectedMonths: ContributionMonth[] = [];
   @Output() monthClicked = new EventEmitter<ContributionMonth>();
 
+  legend = [
+    {status: 'paid', text: 'Payé'},
+    {status: 'delayed', text: 'En retard'},
+    {status: 'partially-paid', text: 'Paiement partiel'},
+    {status: 'pending', text: 'À venir'},
+    {status: 'not-applicable', text: 'Non applicable'}
+  ];
+
   private monthNames = ['Janv', 'Févr', 'Mars', 'Avril', 'Mai', 'Juin', 'Juil', 'Août', 'Sept', 'Oct', 'Nov', 'Déc'];
 
   onMonthClick(month: ContributionMonth): void {
