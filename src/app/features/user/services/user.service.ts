@@ -1,9 +1,9 @@
-import {inject, Injectable} from '@angular/core';
-import {environment} from "../../../../environments/environment";
-import {HttpClient} from "@angular/common/http";
-import {Observable} from "rxjs";
-import {ResponseEntityApi} from "../../../core/models/response-entity-api";
-import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
+import { inject, Injectable } from '@angular/core';
+import { environment } from "../../../../environments/environment";
+import { HttpClient } from "@angular/common/http";
+import { Observable } from "rxjs";
+import { ResponseEntityApi } from "../../../core/models/response-entity-api";
+import { ResponsePageableApi } from "../../../core/models/response-pageable-api";
 export interface CreateUserRequest {
   memberId: string;
   roles: string[];
@@ -43,7 +43,7 @@ export class UserService {
   checkForgottenPasswordEmail(email: string): Observable<ResponseEntityApi<void>> {
     return this.http.post<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/forgotten-password-email`,
-      {email: email},
+      { email: email },
     );
 
   }
@@ -51,7 +51,7 @@ export class UserService {
   checkForgottenPasswordToken(email: string, token: string): Observable<boolean> {
     return this.http.post<boolean>(
       `${this.apiUrl}/users/check-valide-token`,
-      {email: email, token: token},
+      { email: email, token: token },
     );
 
   }
@@ -59,11 +59,11 @@ export class UserService {
   resetForgottenPassword(password: string, confirmPassword: string, username: string, token: string): Observable<ResponseEntityApi<void>> {
     return this.http.post<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/change-password-forgotten`, {
-        password: password,
-        confirmPassword: confirmPassword,
-        username: username,
-        token: token
-      }
+      password: password,
+      confirmPassword: confirmPassword,
+      username: username,
+      token: token
+    }
     )
   }
 
@@ -85,7 +85,7 @@ export class UserService {
 
     return this.http.get<ResponsePageableApi<UserResponseDto[]>>(
       `${this.apiUrl}/users`,
-      {params: httpParams}
+      { params: httpParams }
     );
   }
 
@@ -107,14 +107,14 @@ export class UserService {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/force-password-change`,
       null,
-      {params: {value: value.toString()}}
+      { params: { value: value.toString() } }
     );
   }
 
   updateRoles(userId: number, roles: string[]): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/roles`,
-      {roles}
+      { roles }
     );
   }
 
@@ -122,6 +122,17 @@ export class UserService {
     return this.http.post<ResponseEntityApi<void>>(
       `${this.apiUrl}/users`,
       payload,
+    );
+  }
+
+  getUserById(id: number): Observable<ResponseEntityApi<UserResponseDto>> {
+    return this.http.get<ResponseEntityApi<UserResponseDto>>(`${this.apiUrl}/users/${id}`);
+  }
+
+  changePassword(userId: number, password: string): Observable<ResponseEntityApi<void>> {
+    return this.http.patch<ResponseEntityApi<void>>(
+      `${this.apiUrl}/users/${userId}/change-password`,
+      { password }
     );
   }
 }

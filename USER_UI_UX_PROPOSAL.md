@@ -71,7 +71,35 @@ Pour la page de création, nous voulons guider l'utilisateur tout en rendant le 
 *   **Boutons** : Placer les actions (Annuler / Créer) dans une barre fixe en bas ou bien détachée du formulaire pour qu'elle soit toujours visible.
 *   **Message de succès** : Prévoir une animation de succès avant la redirection.
 
-## 3. Plan Technique (CSS/SCSS)
-*   Réutilisation des composants de "Card" et "Badge" définis pour la liste.
-*   Utilisation de `display: grid` pour la sélection des rôles.
-*   Animation d'entrée pour les résultats de recherche.
+---
+
+# Proposition d'Amélioration UI/UX - Détails Utilisateur (`user-details`)
+
+L'objectif est de créer un "Tableau de Bord Personnel" pour l'utilisateur consulté, offrant une vue d'ensemble claire et des actions rapides.
+
+## 1. Structure & Layout
+*   **Layout Asymétrique (Sidebar + Main)** :
+    *   **Gauche (30%)** : "Carte de Profil" statique contenant l'avatar, les infos clés (ID, Email) et les actions rapides (Verrouiller, Changer MDP).
+    *   **Droite (70%)** : "Panneau d'Information" contenant les détails détaillés (Membre associé, Rôles, Historique...).
+
+## 2. Améliorations Spécifiques
+
+### A. Carte de Profil (Sticky Left)
+*   **Avatar XXL** : Un grand avatar avec indicateur de statut (En ligne/Hors ligne/Verrouillé).
+*   **Actions Rapides** : Boutons pleine largeur pour les actions critiques :
+    *   "Verrouiller le compte" (Rouge/Orange).
+    *   "Changer le mot de passe" (Contour/Secondaire) -> Ouvre une **Modale**.
+
+### B. Panneau d'Information
+*   **Section "Membre Associé"** : Une carte élégante affichant les infos du membre lié (provenant du module Membre), avec un lien rapide vers sa fiche membre.
+*   **Section "Rôles & Permissions"** : Affichage visuel des rôles sous forme de cartes ou de badges enrichis (pas juste du texte).
+
+### C. Changement de Mot de Passe (Feature Demandée)
+*   **UX** : Ne pas rediriger vers une autre page. Utiliser une **Modale (Pop-in)** propre et sécurisée.
+*   **Contenu** : Champs "Nouveau mot de passe" et "Confirmer", avec validation en temps réel (longueur, complexité).
+*   **Feedback** : Notification Toast immédiate après succès.
+
+## 3. Plan Technique
+*   Utilisation de `display: grid` pour le layout responsive.
+*   Composant Modale réutilisable ou spécifique pour le changement de MDP.
+*   Ajout des méthodes manquantes dans `UserService` (`getById`, `changePassword`).
