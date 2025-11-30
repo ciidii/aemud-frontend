@@ -1,15 +1,15 @@
-import {inject, Injectable} from '@angular/core';
-import {Observable,} from 'rxjs';
-import {UserCredential} from "../../../core/models/user-credential.model";
-import {SessionService} from "../../../core/services/session.service";
-import {HttpClient, HttpParams} from "@angular/common/http";
-import {environment} from "../../../../environments/environment";
-import {ResponseEntityApi} from "../../../core/models/response-entity-api";
-import {jwtDecode} from "jwt-decode";
-import {Router} from "@angular/router";
-import {Role, UserModel} from "../../../core/models/user.model";
-import {ChangePasswordRequest} from "../../../core/models/ChangePasswordRequest";
-import {tap} from "rxjs/operators";
+import { inject, Injectable } from '@angular/core';
+import { Observable, } from 'rxjs';
+import { UserCredential } from "../../../core/models/user-credential.model";
+import { SessionService } from "../../../core/services/session.service";
+import { HttpClient, HttpParams } from "@angular/common/http";
+import { environment } from "../../../../environments/environment";
+import { ResponseEntityApi } from "../../../core/models/response-entity-api";
+import { jwtDecode } from "jwt-decode";
+import { Router } from "@angular/router";
+import { Role, UserModel } from "../../../core/models/user.model";
+import { ChangePasswordRequest } from "../../../core/models/ChangePasswordRequest";
+import { tap } from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -35,6 +35,10 @@ export class AuthService {
     }
   }
 
+  get currentUserValue(): UserModel | null {
+    return this.currentUser;
+  }
+
   login(credentials: UserCredential): Observable<ResponseEntityApi<any>> {
     return this.http.post<any>(`${this.apiUrl}/auth/authenticate`, {
       username: credentials.username,
@@ -57,7 +61,7 @@ export class AuthService {
 
   getUserByUsername(username: string): Observable<ResponseEntityApi<UserModel>> {
     const params = new HttpParams().set('username', username);
-    return this.http.get<ResponseEntityApi<UserModel>>(`${this.apiUrl}/users/user-by-username`, {params});
+    return this.http.get<ResponseEntityApi<UserModel>>(`${this.apiUrl}/users/user-by-username`, { params });
   }
 
   changePassword(password: string, confirmPassword: string): Observable<ResponseEntityApi<void>> {
