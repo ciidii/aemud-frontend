@@ -1,9 +1,9 @@
-import {Component, OnInit} from "@angular/core";
-import {CommonModule} from "@angular/common";
-import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
-import {Router, RouterLink} from "@angular/router";
-import {UserResponseDto, UserSearchParams, UserService} from "../../services/user.service";
-import {NotificationService} from "../../../../core/services/notification.service";
+import { Component, OnInit } from "@angular/core";
+import { CommonModule } from "@angular/common";
+import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
+import { Router, RouterLink } from "@angular/router";
+import { UserResponseDto, UserSearchParams, UserService } from "../../services/user.service";
+import { NotificationService } from "../../../../core/services/notification.service";
 
 
 @Component({
@@ -28,16 +28,16 @@ export class UserListComponent implements OnInit {
   totalPages = 1;
 
   roleOptions = [
-    {value: 'USER',        label: 'Utilisateur'},
-    {value: 'ADMIN',       label: 'Administrateur'},
-    {value: 'SUPER_ADMIN', label: 'Super administrateur'},
-    {value: 'GUEST',       label: 'Invité'},
+    { value: 'USER', label: 'Utilisateur' },
+    { value: 'ADMIN', label: 'Administrateur' },
+    { value: 'SUPER_ADMIN', label: 'Super administrateur' },
+    { value: 'GUEST', label: 'Invité' },
   ];
 
   statusOptions = [
-    {value: 'all',   label: 'Tous'},
-    {value: 'true',  label: 'Oui'},
-    {value: 'false', label: 'Non'},
+    { value: 'all', label: 'Tous' },
+    { value: 'true', label: 'Oui' },
+    { value: 'false', label: 'Non' },
   ];
 
   constructor(
@@ -167,6 +167,11 @@ export class UserListComponent implements OnInit {
     } else {
       this.filterForm.get('roles')?.setValue([...roles, role]);
     }
+  }
+
+  isRoleSelected(role: string): boolean {
+    const roles = this.filterForm.get('roles')?.value || [];
+    return roles.includes(role);
   }
 
 }
