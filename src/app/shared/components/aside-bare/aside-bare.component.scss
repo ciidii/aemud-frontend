@@ -1,312 +1,311 @@
 @import 'variables';
+@import 'typography';
 
 :host {
   display: block;
   height: 100vh;
-  background-color: $primary-500;
-  color: $color-text-on-primary;
-  transition: width 0.3s ease-in-out, min-width 0.3s ease-in-out;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 .sidebar-container {
   display: flex;
   flex-direction: column;
   height: 100%;
+  width: $sidebar-expanded-width;
+  // Background gradient: Primary 800 -> 900
+  background: linear-gradient(180deg, $primary-800 0%, $primary-900 100%);
+  color: $gray-300;
+  transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  box-shadow: $shadow-lg;
+  border-right: 1px solid rgba($white, 0.05);
+
+  &.collapsed {
+    width: $sidebar-collapsed-width;
+
+    .app-name,
+    .nav-text,
+    .group-title,
+    .user-info {
+      opacity: 0;
+      pointer-events: none;
+      display: none; // Hide completely to prevent layout shifts
+    }
+
+    .logo-area {
+      justify-content: center;
+      padding-left: 0;
+    }
+
+    .nav-link {
+      justify-content: center;
+      padding: $space-3 0;
+
+      i {
+        margin-right: 0;
+        font-size: $icon-md;
+      }
+
+      &:hover .tooltip-text {
+        opacity: 1;
+        visibility: visible;
+        transform: translateX(0);
+      }
+    }
+
+    .user-footer {
+      justify-content: center;
+      padding: $space-4 0;
+
+      .logout-btn {
+        margin-left: 0;
+      }
+    }
+  }
 }
 
-.nav-header {
+// --- 1. Brand Header ---
+.brand-header {
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding: 0.75rem 1rem;
-  background-color: $primary-600;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  position: sticky;
-  top: 0;
-  z-index: 10;
+  justify-content: space-between;
+  height: $header-height;
+  padding: 0 $space-4;
+  background-color: rgba($white, 0.05); // Subtle separation
+  border-bottom: 1px solid rgba($white, 0.05);
+  flex-shrink: 0;
+
+  .logo-area {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    color: $white;
+    font-weight: $font-weight-bold;
+    font-size: $font-size-h5;
+    transition: opacity 0.2s;
+    overflow: hidden;
+
+    .logo-icon {
+      color: $secondary-500; // Accent color for logo
+      font-size: $icon-lg;
+      filter: drop-shadow(0 0 5px rgba($secondary-500, 0.3));
+    }
+  }
 
   .toggle-btn {
+    background: none;
+    border: none;
+    color: $gray-400;
+    cursor: pointer;
+    padding: $space-1;
+    border-radius: $radius-sm;
+    transition: all 0.2s;
     display: flex;
     align-items: center;
     justify-content: center;
-    background: none;
-    border: none;
-    color: $color-text-on-primary;
-    font-size: 1.5rem;
-    cursor: pointer;
-    transition: color 0.2s, transform 0.3s;
 
     &:hover {
-      color: $primary-100;
-      transform: rotate(90deg);
-    }
-
-    i {
-      display: block;
+      color: $white;
+      background-color: rgba($white, 0.1);
     }
   }
 }
 
-
-:host-context(.sidebar--collapsed) {
-  .nav-header {
-    justify-content: center;
-    padding: 0.5rem;
-
-    .toggle-btn {
-      font-size: 1.3rem;
-    }
-  }
-}
-
-
-/* Body scrollable */
-.nav-body {
-  flex: 1 1 auto;
+// --- 2. Navigation Scroll ---
+.nav-scroll {
+  flex: 1;
   overflow-y: auto;
-  padding: 0.5rem 0;
-  scrollbar-width: none;
-  scroll-behavior: smooth;
+  overflow-x: hidden;
+  padding: $space-4 0;
+
+  // Custom Scrollbar
+  &::-webkit-scrollbar {
+    width: 4px;
+  }
+
+  &::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: rgba($white, 0.1);
+    border-radius: $radius-full;
+  }
 }
 
-.user-profile {
-  display: flex;
-  flex-direction: column-reverse; // Actions on top, user info below
-  padding: $space-2;
-  background: $primary-600;
-  box-shadow: $shadow-md;
-  gap: 0.75rem;
+.nav-group {
+  margin-bottom: $space-6;
 
-  .user-info {
+  .group-title {
+    display: block;
+    padding: 0 $space-6;
+    margin-bottom: $space-2;
+    font-size: 1.1rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: rgba($white, 0.5);
+    font-weight: $font-weight-bold;
+  }
+
+  .nav-items {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  .nav-item {
+    position: relative;
+    margin-bottom: 2px;
+  }
+
+  .nav-link {
     display: flex;
-    align-items: flex-start;
-    gap: 0.5rem;
+    align-items: center;
+    padding: $space-3 $space-6;
+    color: $gray-300;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border-left: 3px solid transparent;
+    position: relative;
 
     i {
       font-size: $icon-sm;
-      margin-top: 0.2rem; // ajuste pour que l’icône s’aligne bien
+      margin-right: $space-3;
+      transition: all 0.2s ease;
+      color: rgba($white, 0.7);
     }
 
-    .user-details {
-      display: flex;
-      flex-direction: column; // nom en haut, rôle en dessous
-      line-height: 1.2;
+    .nav-text {
+      font-size: $font-size-small;
+      font-weight: $font-weight-regular;
+      white-space: nowrap;
+    }
 
-      .user-name {
-        font-weight: 600;
-        font-size: $font-size-body;
-      }
+    // Hover State
+    &:hover {
+      color: $white;
+      background-color: rgba($white, 0.05);
 
-      .user-role {
-        font-size: $font-size-small;
-        color: rgba(255, 255, 255, 0.6);
+      i {
+        transform: translateX(2px);
+        color: $white;
       }
     }
-  }
-}
 
-
-/* Navigation */
-ul {
-  list-style-type: none;
-  padding: 0;
-  margin: 0;
-
-}
-
-.nav-item {
-  a {
-    position: relative; // For tooltip positioning
-    display: flex;
-    align-items: center;
-    padding: 0.75rem 1rem;
-    color: $color-text-on-primary;
-    text-decoration: none;
-    transition: background 0.2s;
-
-    &:hover,
+    // Active State
     &.active {
-      background: $primary-400;
-    }
+      color: $white;
+      background: linear-gradient(90deg, rgba($secondary-500, 0.15) 0%, rgba($secondary-500, 0) 100%);
+      border-left-color: $secondary-500;
 
-    i {
-      margin-right: 0.75rem;
-      font-size: 1.2rem;
+      i {
+        color: $secondary-400;
+        filter: drop-shadow(0 0 8px rgba($secondary-500, 0.4));
+      }
+
+      .nav-text {
+        font-weight: $font-weight-bold;
+      }
     }
   }
 }
 
-.nav-text,
-.user-details,
-.logout-btn span {
-  transition: opacity 0.2s ease;
-}
-
-.tooltip {
+// Tooltip for collapsed state
+.tooltip-text {
   position: absolute;
   left: 100%;
   top: 50%;
-  transform: translateY(-50%);
-  margin-left: 1rem;
+  transform: translateY(-50%) translateX(10px);
   background-color: $gray-900;
   color: $white;
   padding: $space-1 $space-2;
   border-radius: $radius-sm;
-  font-size: $font-size-small;
+  font-size: 1.2rem;
   white-space: nowrap;
   opacity: 0;
   visibility: hidden;
+  transition: all 0.2s ease;
+  z-index: 1001;
+  box-shadow: $shadow-md;
   pointer-events: none;
-  transition: opacity 0.2s ease, visibility 0.2s ease;
-  z-index: 100;
-}
+  border: 1px solid rgba($white, 0.1);
 
-:host-context(.sidebar--collapsed) {
-  .nav-text,
-  .user-details,
-  .logout-btn span {
-    opacity: 0;
-    pointer-events: none;
-  }
-
-  .nav-item a:hover .tooltip {
-    opacity: 1;
-    visibility: visible;
-    transition-delay: 0.3s;
-  }
-}
-
-:host-context(.sidebar--collapsed) {
-  .user-profile {
-    flex-direction: column;
-    align-items: center;
-    padding: 0.5rem;
-
-    .user-info {
-      flex-direction: column;
-      align-items: center;
-      gap: 0.25rem;
-
-      .user-details {
-        display: none;
-      }
-    }
-
-    .logout-btn {
-      margin-top: 0.5rem;
-      justify-content: center;
-
-      span {
-        display: none;
-      }
-    }
-  }
-
-}
-
-.nav-body > hr {
-  display: none;
-  width: 80%;
-  margin: 0.5rem auto;
-  border: none;
-  border-top: 1px solid rgba(255, 255, 255, 0.2);
-}
-
-.navigation > span {
-  display: block;
-  padding: 0.5rem 1rem;
-  font-weight: 600;
-  font-size: 0.85rem;
-  color: rgba(255, 255, 255, 0.6);
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border-left: 3px solid transparent;
-  transition: all 0.3s ease;
-  margin-bottom: 0.25rem;
-
-  &:hover {
-    color: $primary-100;
-    border-left-color: $primary-200;
-  }
-}
-
-:host-context(.sidebar--collapsed) {
-  .navigation > span {
-    display: none;
-  }
-
-  .nav-body > hr {
-    display: block;
-  }
-}
-
-// Styles for Notification Bell
-.user-actions {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  width: 100%;
-}
-
-.notification-container {
-  position: relative;
-}
-
-app-notification-popover {
-  position: fixed; // Use fixed to break out of the sidebar
-  bottom: $space-4;
-  z-index: 1100;
-
-  // Position based on sidebar collapsed state
-  :host-context(.sidebar--collapsed) & {
-    left: calc(#{$sidebar-collapsed-width} + #{$space-2});
-  }
-
-  :host-context(:not(.sidebar--collapsed)) & {
-    left: calc(#{$sidebar-expanded-width} + #{$space-3});
-  }
-}
-
-.notification-btn, .logout-btn {
-  padding: 0.5rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: $color-text-on-primary;
-  font-size: $font-size-small;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.4rem;
-  border-radius: $radius-sm;
-  transition: background 0.2s, color 0.2s;
-
-  &:hover {
-    background: $primary-400;
-    color: $white;
-  }
-
-  i {
-    font-size: 1.2rem; // Consistent icon size
-  }
-}
-
-.notification-btn {
-  position: relative;
-
-  .badge {
+  &::before {
+    content: '';
     position: absolute;
-    top: -4px;
-    right: -4px;
-    background-color: $danger-500;
-    color: $white;
-    font-size: 1rem;
-    width: 1.6rem;
-    height: 1.6rem;
+    left: -4px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-width: 4px 4px 4px 0;
+    border-style: solid;
+    border-color: transparent $gray-900 transparent transparent;
+  }
+}
+
+// --- 3. User Footer ---
+.user-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: $space-4 $space-6;
+  background-color: rgba($black, 0.2);
+  border-top: 1px solid rgba($white, 0.05);
+  flex-shrink: 0;
+
+  .user-info {
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-radius: 50%;
-    border: 2px solid $primary-600;
+    gap: $space-3;
+    overflow: hidden;
+
+    .avatar {
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: $radius-full;
+      background: linear-gradient(135deg, $secondary-500, $secondary-700);
+      color: $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      font-weight: $font-weight-bold;
+      flex-shrink: 0;
+      box-shadow: $shadow-sm;
+    }
+
+    .meta {
+      display: flex;
+      flex-direction: column;
+
+      .name {
+        color: $white;
+        font-size: $font-size-small;
+        font-weight: $font-weight-bold;
+        white-space: nowrap;
+      }
+
+      .role {
+        color: rgba($white, 0.6);
+        font-size: 1.1rem;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .logout-btn {
+    background: none;
+    border: none;
+    color: rgba($white, 0.6);
+    cursor: pointer;
+    padding: $space-2;
+    border-radius: $radius-sm;
+    transition: all 0.2s;
+
+    &:hover {
+      color: $danger-100;
+      background-color: rgba($danger-500, 0.2);
+    }
   }
 }

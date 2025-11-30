@@ -55,6 +55,8 @@ $info-100: lighten($info-base, 40%);
 $info-500: $info-base;
 $info-900: darken($info-base, 15%);
 
+// Noir pur (manquant dans ta palette actuelle)
+$black: #000000;
 
 // ==========================================================================
 // 2. TOKENS SÉMANTIQUES (ABSTRACTION DE L'USAGE)
@@ -98,6 +100,19 @@ $dark-color-text-secondary: $gray-400;
 $dark-color-background-body: #121212;
 $dark-color-background-panel: $gray-900;
 $dark-color-border-default: $gray-800;
+
+//les token pour hover
+
+$color-hover-primary: lighten($primary-500, 8%);
+$color-hover-secondary: lighten($secondary-500, 8%);
+$color-hover-neutral: $gray-200;
+// active/passed
+$color-active-primary: darken($primary-500, 5%);
+$color-active-secondary: darken($secondary-500, 5%);
+
+//focus (anneau)
+$focus-ring-color: rgba($primary-500, 0.45);
+$focus-ring-width: 0.3rem;
 
 
 // ==========================================================================
@@ -153,6 +168,8 @@ $radius-full: 9999px;
 $shadow-sm: 0 1px 2px rgba($gray-900, 0.05);
 $shadow-md: 0 4px 6px rgba($gray-900, 0.1);
 $shadow-lg: 0 10px 15px rgba($gray-900, 0.15);
+$shadow-xs: 0 1px 2px rgba($gray-900, 0.03);
+$shadow-xl: 0 20px 25px rgba($gray-900, 0.18);
 
 
 // ==========================================================================
