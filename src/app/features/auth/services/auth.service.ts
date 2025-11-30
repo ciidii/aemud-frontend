@@ -25,6 +25,16 @@ export class AuthService {
   private jwt_token = "";
   private currentUser: UserModel | null = null;
 
+  constructor() {
+    const token = localStorage.getItem('aemud_auth_token');
+    if (token) {
+      const user = localStorage.getItem('user');
+      if (user) {
+        this.currentUser = JSON.parse(user);
+      }
+    }
+  }
+
   login(credentials: UserCredential): Observable<ResponseEntityApi<any>> {
     return this.http.post<any>(`${this.apiUrl}/auth/authenticate`, {
       username: credentials.username,
@@ -79,7 +89,7 @@ export class AuthService {
       next: resApi => {
         if (resApi.status === "OK") {
           const rawUser = resApi.data;
-          const mappedRoles: Role[] = rawUser.roles.map((roleObj: any) => roleObj.name as Role);
+          const mappedRoles: Role[] = rawUser.roles.map((roleName: any) => roleName as Role);
           const user: UserModel = {
             id: rawUser.id,
             username: rawUser.username,

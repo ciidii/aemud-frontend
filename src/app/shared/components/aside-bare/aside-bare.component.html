@@ -8,7 +8,7 @@
     </div>
     <button class="toggle-btn" (click)="toggleCollapse()">
       <i class="bi" [class.bi-chevron-left]="sideBareService.isOpen$ | async"
-        [class.bi-chevron-right]="!(sideBareService.isOpen$ | async)"></i>
+         [class.bi-chevron-right]="!(sideBareService.isOpen$ | async)"></i>
     </button>
   </div>
 
@@ -63,7 +63,7 @@
       <ul class="nav-items">
         <li class="nav-item">
           <a routerLink="/contributions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-            class="nav-link">
+             class="nav-link">
             <i class="bi bi-cash-stack"></i>
             <span class="nav-text">Contributions</span>
             <span class="tooltip-text">Contributions</span>
@@ -106,6 +106,13 @@
       <ul class="nav-items">
         <li class="nav-item">
           <a routerLink="/users" routerLinkActive="active" class="nav-link">
+            <i class="bi bi-shield-lock"></i>
+            <span class="nav-text">Utilisateurs</span>
+            <span class="tooltip-text">Utilisateurs</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a routerLink="/users/add" routerLinkActive="active" class="nav-link">
             <i class="bi bi-shield-lock"></i>
             <span class="nav-text">Utilisateurs</span>
             <span class="tooltip-text">Utilisateurs</span>

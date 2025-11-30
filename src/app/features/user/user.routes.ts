@@ -6,7 +6,7 @@ import {UserDetailsComponent} from './components/user-details/user-details.compo
 
 export const USER_ROUTES: Routes = [
   {path: '', component: UserListComponent, title: 'User List'},
-  {path: 'add', component: UserAddComponent, title: 'Add User'},
+  {path: 'add', component: UserAddComponent, title: 'ajouter une utilisateurs'},
   {path: 'edit/:id', component: UserEditComponent, title: 'Edit User'},
   {path: 'details/:id', component: UserDetailsComponent, title: 'User Details'},
 ];
