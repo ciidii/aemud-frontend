@@ -259,21 +259,37 @@
             <div class="card-header">
               <h5>Statut d'Inscription Actuel</h5>
             </div>
+
             <div class="card-body">
-              <div *ngIf="registrationOverview.nextRegistrablePhase; else upToDate" class="status-action">
-                <div class="status-text">
-                  <i class="bi bi-exclamation-triangle-fill text-warning"></i>
-                  <div>
-                    <strong>Inscription requise</strong>
-                    <span>Dernière inscription: {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}</span>
+
+              <div *ngIf="registrationOverview.nextRegistrablePhase; else upToDate" class="status-section">
+
+                <!-- Ligne 1 : icône + texte -->
+                <div class="status-text d-flex align-items-start gap-2">
+                  <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
+
+                  <div class="d-flex flex-column">
+                    <strong class="text-dark">Inscription requise</strong>
+                    <small class="text-muted">
+                      Dernière inscription :
+                      <span class="fw-semibold">
+        {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}
+      </span>
+                    </small>
                   </div>
                 </div>
-                <button (click)="toggleReregisterModal(registrationOverview.nextRegistrablePhase)" class="btn btn-primary">
+
+
+                <!-- Ligne 2 : bouton -->
+                <button (click)="toggleReregisterModal(registrationOverview.nextRegistrablePhase)"
+                        class="btn btn-primary btn-outline-primary">
                   Inscrire à {{ registrationOverview.nextRegistrablePhase.nom }}
                 </button>
+
               </div>
+
               <ng-template #upToDate>
-                <div class="status-action">
+                <div class="status-section">
                   <div class="status-text">
                     <i class="bi bi-check-circle-fill text-success"></i>
                     <div>
@@ -283,8 +299,10 @@
                   </div>
                 </div>
               </ng-template>
+
             </div>
           </div>
+
 
           <!-- Subscription Status -->
           <div class="sidebar-section">

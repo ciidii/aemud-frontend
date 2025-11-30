@@ -829,6 +829,7 @@
   .card-header {
     padding: $space-3 $space-4;
     border-bottom: 1px solid $color-border-default;
+
     h5 {
       margin: 0;
       font-size: $font-size-body;
@@ -840,11 +841,10 @@
     padding: $space-4;
   }
 
-  .status-action {
+  .status-section {
     display: flex;
-    justify-content: space-between;
-    align-items: center;
-    gap: $space-4;
+    flex-direction: column;
+    gap: $space-4; // Séparation entre texte et bouton
   }
 
   .status-text {
@@ -856,11 +856,6 @@
       font-size: $icon-lg;
     }
 
-    div {
-      display: flex;
-      flex-direction: column;
-    }
-
     strong {
       font-weight: 600;
       color: $color-text-primary;
@@ -870,6 +865,12 @@
       font-size: $font-size-small;
       color: $color-text-secondary;
     }
+  }
+
+  .full-btn {
+    width: 100%; // Le bouton prend toute la ligne
+    padding: $space-3 $space-4;
+    font-weight: 600;
   }
 }
 
