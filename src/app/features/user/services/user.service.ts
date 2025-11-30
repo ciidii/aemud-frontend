@@ -27,6 +27,11 @@ export interface UserResponseDto {
   memberId: string;
 }
 
+export interface CreateUserRequest {
+  memberId: string;
+  roles: string[];
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -110,6 +115,13 @@ export class UserService {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/roles`,
       {roles}
+    );
+  }
+
+  createUser(payload: CreateUserRequest): Observable<ResponseEntityApi<void>> {
+    return this.http.post<ResponseEntityApi<void>>(
+      `${this.apiUrl}/users`,
+      payload,
     );
   }
 }

@@ -1,1 +1,100 @@
-<p>user-add works!</p>
+<div class="user-add-container">
+  <h2 class="page-title">Créer un utilisateur</h2>
+  <p class="page-subtitle">
+    Associez un membre existant et définissez ses rôles dans le système.
+  </p>
+
+  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="user-add-form">
+    <!-- Section 1 : Membre associé -->
+    <section class="section-card">
+      <h3 class="section-title">Membre associé</h3>
+
+      <div class="form-group">
+        <label for="memberSearch">Rechercher un membre</label>
+        <input
+          id="memberSearch"
+          type="text"
+          class="form-control"
+          formControlName="memberSearch"
+          (input)="onSearchMember()"
+          placeholder="Nom, prénom ou email du membre"
+        />
+      </div>
+
+      <!-- Liste de résultats de recherche -->
+      <ul class="search-results" *ngIf="memberResults.length > 0">
+        <li
+          class="search-result-item"
+          *ngFor="let member of memberResults"
+          (click)="selectMember(member)"
+        >
+          <div class="result-main">
+            {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}
+          </div>
+          <div class="result-secondary">
+            {{ member.contactInfo.email }} · ID: {{ member.contactInfo.numberPhone }}
+          </div>
+        </li>
+      </ul>
+
+      <!-- Résumé du membre sélectionné -->
+      <div class="selected-member-card" *ngIf="selectedMember">
+        <div class="selected-member-title">Membre sélectionné</div>
+        <div class="selected-member-body">
+          <div><strong>Nom :</strong> {{ selectedMember.personalInfo.firstname }} {{ selectedMember.personalInfo.name }}
+          </div>
+          <div><strong>Email :</strong> {{ selectedMember.contactInfo.email }}</div>
+          <div><strong>ID membre :</strong> {{ selectedMember.contactInfo.numberPhone }}</div>
+        </div>
+      </div>
+
+      <div *ngIf="form.get('memberId')?.invalid && form.get('memberId')?.touched" class="invalid-feedback">
+        Merci de sélectionner un membre.
+      </div>
+    </section>
+
+    <!-- Section 2 : Rôles et accès -->
+    <section class="section-card">
+      <h3 class="section-title">Rôles et accès</h3>
+
+      <p class="helper-text">
+        Sélectionnez les rôles qui définissent les permissions de cet utilisateur.
+      </p>
+
+      <div class="roles-grid">
+        <label *ngFor="let role of availableRoles" class="role-item">
+          <input
+            type="checkbox"
+            [value]="role"
+            (change)="toggleRole(role, $event)"
+            [checked]="form.value.roles?.includes(role)"
+          />
+          <span class="role-label">{{ role }}</span>
+        </label>
+      </div>
+
+      <div *ngIf="form.get('roles')?.invalid && form.get('roles')?.touched" class="invalid-feedback">
+        Merci de sélectionner au moins un rôle.
+      </div>
+
+      <p class="helper-text">
+        Un mot de passe temporaire sera généré et envoyé à l’adresse email du membre.
+      </p>
+    </section>
+
+    <!-- Actions -->
+    <div class="form-actions">
+      <button type="button" class="button-secondary" (click)="onCancel()">
+        Annuler
+      </button>
+
+      <button
+        type="submit"
+        class="button-primary"
+        [disabled]="loading || form.invalid"
+      >
+        {{ loading ? 'Création en cours...' : 'Créer l’utilisateur' }}
+      </button>
+    </div>
+  </form>
+</div>

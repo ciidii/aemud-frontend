@@ -1,452 +1,174 @@
-@import 'variables';
-
-:host {
-  display: block;
-  padding: 2rem;
-  background-color: $color-background-body;
-  min-height: 100vh;
-}
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
 
 .user-add-container {
-  max-width: 1200px;
-  margin: 0 auto;
+  padding: $space-8;
+  background-color: $color-background-panel;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-md;
+  max-width: 800px;
+  margin: $space-8 auto;
 }
 
-// --- Header ---
-.page-header {
+.page-title {
+  @include text-heading-3;
+  color: $color-text-primary;
+  margin-bottom: $space-2;
+}
+
+.page-subtitle {
+  @include text-body-regular;
+  color: $color-text-secondary;
+  margin-bottom: $space-6;
+}
+
+.user-add-form {
   display: flex;
-  align-items: center;
-  gap: 1.5rem;
-  margin-bottom: 2rem;
-
-  .btn-back {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
-    border: 1px solid $color-border-default;
-    background: $white;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    color: $gray-600;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: $gray-100;
-      color: $primary-600;
-      border-color: $primary-200;
-    }
-
-    i {
-      font-size: 1.6rem;
-    }
-  }
-
-  .header-content {
-    .page-title {
-      font-size: 2.4rem;
-      font-weight: 700;
-      color: $color-text-primary;
-      margin-bottom: 0.2rem;
-    }
-
-    .page-subtitle {
-      color: $color-text-secondary;
-      font-size: 1.4rem;
-    }
-  }
+  flex-direction: column;
+  gap: $space-6;
 }
 
-// --- Form Layout ---
-.form-layout {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 2rem;
-  margin-bottom: 2rem;
-
-  @media (max-width: 992px) {
-    grid-template-columns: 1fr;
-  }
-}
-
-.card-section {
-  background: $white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+.section-card {
+  padding: $space-4;
+  border-radius: $radius-md;
   border: 1px solid $color-border-default;
-  height: 100%;
+  background-color: $color-background-body;
+}
 
-  .section-title {
-    font-size: 1.8rem;
-    font-weight: 700;
-    color: $color-text-primary;
-    margin-bottom: 0.5rem;
-    display: flex;
-    align-items: center;
-    gap: 0.8rem;
+.section-title {
+  @include text-heading-5;
+  margin-bottom: $space-3;
+  padding-bottom: $space-2;
+  border-bottom: 1px solid $color-border-default;
+}
 
-    i {
-      color: $primary-500;
-    }
-  }
+.form-group {
+  margin-bottom: $space-3;
 
-  .section-desc {
-    color: $color-text-secondary;
-    font-size: 1.4rem;
-    margin-bottom: 2rem;
+  label {
+    @include text-label;
+    display: block;
+    margin-bottom: $space-1;
   }
 }
 
-// --- Member Search ---
-.search-container {
-  position: relative;
-  margin-bottom: 2rem;
-
-  .input-group {
-    position: relative;
-
-    .input-icon {
-      position: absolute;
-      left: 1.2rem;
-      top: 50%;
-      transform: translateY(-50%);
-      color: $gray-500;
-      font-size: 1.4rem;
-    }
-
-    .form-input {
-      width: 100%;
-      padding: 1.2rem 1.2rem 1.2rem 3.5rem;
-      border: 1px solid $color-border-default;
-      border-radius: 10px;
-      font-size: 1.4rem;
-      outline: none;
-      transition: all 0.2s ease;
-
-      &:focus {
-        border-color: $primary-500;
-        box-shadow: 0 0 0 3px rgba($primary-500, 0.1);
-      }
-
-      &.has-error {
-        border-color: $danger-500;
-      }
-    }
-  }
-
-  .search-results {
-    position: absolute;
-    top: 100%;
-    left: 0;
-    right: 0;
-    background: $white;
-    border: 1px solid $color-border-default;
-    border-radius: 10px;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-    margin-top: 0.5rem;
-    z-index: 10;
-    max-height: 300px;
-    overflow-y: auto;
-
-    .result-item {
-      padding: 1rem;
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      cursor: pointer;
-      transition: background 0.2s ease;
-      border-bottom: 1px solid $gray-100;
-
-      &:last-child {
-        border-bottom: none;
-      }
-
-      &:hover {
-        background: $gray-100;
-      }
-
-      .result-avatar {
-        width: 36px;
-        height: 36px;
-        border-radius: 50%;
-        background: $primary-100;
-        color: $primary-700;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-weight: 600;
-        font-size: 1.2rem;
-      }
-
-      .result-info {
-        display: flex;
-        flex-direction: column;
-
-        .result-name {
-          font-weight: 600;
-          color: $color-text-primary;
-          font-size: 1.4rem;
-        }
-
-        .result-email {
-          font-size: 1.2rem;
-          color: $gray-500;
-        }
-      }
-    }
-  }
-}
-
-// --- Selected Member Preview ---
-.selected-member-preview {
-  background: $primary-100;
-  border: 1px solid $primary-200;
-  border-radius: 12px;
-  padding: 1.5rem;
-
-  .preview-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 1rem;
-
-    .badge-success {
-      background: $success-100;
-      color: $success-900;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      font-size: 1.1rem;
-      font-weight: 600;
-    }
-
-    .btn-clear {
-      background: none;
-      border: none;
-      color: $primary-600;
-      font-size: 1.2rem;
-      font-weight: 600;
-      cursor: pointer;
-      padding: 0;
-
-      &:hover {
-        text-decoration: underline;
-      }
-    }
-  }
-
-  .preview-content {
-    display: flex;
-    align-items: center;
-    gap: 1.2rem;
-
-    .preview-avatar {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      background: $primary-500;
-      color: $white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-weight: 700;
-      font-size: 1.6rem;
-    }
-
-    .preview-details {
-      display: flex;
-      flex-direction: column;
-
-      .preview-name {
-        font-weight: 700;
-        color: $color-text-primary;
-        font-size: 1.5rem;
-      }
-
-      .preview-email {
-        color: $color-text-secondary;
-        font-size: 1.3rem;
-      }
-
-      .preview-id {
-        font-size: 1.1rem;
-        color: $gray-500;
-        margin-top: 0.2rem;
-      }
-    }
-  }
-}
-
-// --- Roles Grid ---
-.roles-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-  margin-bottom: 2rem;
-}
-
-.role-card {
-  display: flex;
-  align-items: center;
-  gap: 1.2rem;
-  padding: 1.2rem;
+.search-results {
+  list-style: none;
+  margin: 0;
+  margin-top: $space-2;
+  padding: 0;
+  border-radius: $radius-md;
   border: 1px solid $color-border-default;
-  border-radius: 12px;
+  max-height: 20rem;
+  overflow-y: auto;
+  background-color: $white;
+}
+
+.search-result-item {
+  padding: $space-2 $space-3;
   cursor: pointer;
-  transition: all 0.2s ease;
-  position: relative;
 
   &:hover {
-    border-color: $primary-300;
-    background: $gray-100;
+    background-color: $color-background-hover;
   }
 
-  &.selected {
-    border-color: $primary-500;
-    background: rgba($primary-500, 0.05);
-    box-shadow: 0 0 0 1px $primary-500;
-
-    .role-icon i {
-      color: $primary-600;
-    }
-
-    .role-check {
-      opacity: 1;
-      transform: scale(1);
-    }
+  .result-main {
+    @include text-body-regular;
+    color: $color-text-primary;
   }
 
-  .role-icon {
-    width: 40px;
-    height: 40px;
-    background: $white;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border: 1px solid $gray-200;
-
-    i {
-      font-size: 1.6rem;
-      color: $gray-500;
-      transition: color 0.2s ease;
-    }
-  }
-
-  .role-content {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-
-    .role-name {
-      font-weight: 600;
-      color: $color-text-primary;
-      font-size: 1.4rem;
-    }
-
-    .role-desc {
-      font-size: 1.2rem;
-      color: $gray-500;
-    }
-  }
-
-  .role-check {
-    color: $primary-500;
-    font-size: 1.6rem;
-    opacity: 0;
-    transform: scale(0.5);
-    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  .result-secondary {
+    @include text-body-small;
+    color: $color-text-secondary;
   }
 }
 
-// --- Info Box ---
-.info-box {
-  background: $info-100;
-  border-radius: 10px;
-  padding: 1.2rem;
+.selected-member-card {
+  margin-top: $space-3;
+  padding: $space-3;
+  border-radius: $radius-md;
+  border: 1px solid $primary-200;
+  background-color: $primary-100;
+}
+
+.selected-member-title {
+  @include text-label;
+  color: $primary-700;
+  margin-bottom: $space-1;
+}
+
+.selected-member-body {
+  @include text-body-regular;
+  color: $color-text-primary;
+}
+
+.roles-grid {
   display: flex;
-  gap: 1rem;
-  align-items: flex-start;
-  color: $info-900;
-
-  i {
-    font-size: 1.4rem;
-    margin-top: 0.2rem;
-  }
-
-  p {
-    margin: 0;
-    font-size: 1.3rem;
-    line-height: 1.4;
-  }
+  flex-wrap: wrap;
+  gap: $space-2;
+  margin-top: $space-2;
+  margin-bottom: $space-2;
 }
 
-// --- Footer ---
-.form-footer {
+.role-item {
+  @include text-body-small;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-1;
+  padding: $space-1 $space-2;
+  border-radius: $radius-md;
+  border: 1px solid $color-border-default;
+  background-color: $white;
+}
+
+.role-label {
+  color: $color-text-primary;
+}
+
+.helper-text {
+  @include text-body-small;
+  color: $color-text-muted;
+}
+
+.form-actions {
   display: flex;
   justify-content: flex-end;
-  gap: 1rem;
-  margin-top: 2rem;
+  gap: $space-3;
+  padding-top: $space-4;
+  border-top: 1px solid $color-border-default;
+}
 
-  .btn-cancel {
-    background: $white;
-    border: 1px solid $color-border-default;
-    color: $gray-700;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
+// Boutons cohérents avec member-add
+.button-primary,
+.button-secondary {
+  @include text-button;
+  padding: $button-padding-y $button-padding-x;
+  border: none;
+  border-radius: $button-border-radius;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
 
-    &:hover {
-      background: $gray-100;
-    }
-  }
-
-  .btn-submit {
-    background: $primary-600;
-    border: none;
-    color: $white;
-    padding: 1rem 2rem;
-    border-radius: 10px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s ease;
-    min-width: 160px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    &:hover:not(:disabled) {
-      background: $primary-500;
-      transform: translateY(-1px);
-      box-shadow: 0 4px 12px rgba($primary-600, 0.2);
-    }
-
-    &:disabled {
-      background: $gray-400;
-      cursor: not-allowed;
-    }
-
-    .spin {
-      animation: spin 1s linear infinite;
-      margin-right: 0.5rem;
-    }
+  &[disabled] {
+    background-color: $color-background-disabled;
+    color: $color-text-muted;
+    cursor: not-allowed;
   }
 }
 
-.error-message {
-  color: $danger-500;
-  font-size: 1.3rem;
-  margin-top: 0.5rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+.button-primary {
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+
+  &:hover:not([disabled]) {
+    background-color: $primary-600;
+  }
 }
 
-@keyframes spin {
-  to {
-    transform: rotate(360deg);
+.button-secondary {
+  background-color: $gray-200;
+  color: $color-text-primary;
+
+  &:hover:not([disabled]) {
+    background-color: $gray-300;
   }
 }
