@@ -338,21 +338,13 @@
                 <span class="summary-label">Complétion</span>
               </div>
             </div>
-            <div class="cotisation-grid">
-              <button (click)="onMonthClick(item)"
-                      *ngFor="let item of monthlyContributions"
-                      [class.selected]="isMonthSelected(item)"
-                      [ngClass]="item.status"
-                      class="month-box">
-                {{ item.month }}
-              </button>
-            </div>
-            <div *ngIf="monthlyContributions" class="cotisation-legend">
-              <div class="legend-item"><span class="legend-color paid"></span>Payé</div>
-              <div class="legend-item"><span class="legend-color delayed"></span>En retard</div>
-              <div class="legend-item"><span class="legend-color pending"></span>À venir</div>
-              <div class="legend-item"><span class="legend-color not-applicable"></span>Non applicable</div>
-            </div>
+
+            <app-contribution-calendar
+              (monthClicked)="handleMonthClick($event)"
+              [calendar]="contributionData?.calendrier || []"
+              [selectedMonths]="selectedContributions">
+            </app-contribution-calendar>
+
             <div *ngIf="selectedContributions.length > 0" class="multi-select-bar">
               <div class="selection-info">
                 <strong>{{ selectedContributions.length }} mois sélectionnés</strong>

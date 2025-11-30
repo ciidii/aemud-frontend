@@ -1,0 +1,82 @@
+@import '../../../../../assets/scss/variables';
+
+// GRID
+.cotisation-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: $space-2;
+}
+
+// MONTH BOX
+.month-box {
+  text-align: center;
+  padding: $space-2;
+  border-radius: $radius-sm;
+  font-size: $font-size-small;
+  font-weight: 500;
+  border: 1px solid $color-border-default;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  background-color: $white;
+
+  &:hover {
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
+  }
+
+  .month-name {
+    font-weight: 600;
+    margin-bottom: $space-1;
+    color: $color-text-primary;
+  }
+
+  .amount {
+    font-weight: 700;
+    font-size: $font-size-body;
+    color: $color-text-primary;
+  }
+
+  // ----- Status -----
+  &.paid {
+    background-color: $success-100;
+    color: $success-900;
+    border-color: $success-500;
+  }
+
+  &.delayed {
+    background-color: $warning-100;
+    color: $warning-900;
+    border-color: $warning-500;
+  }
+
+  &.pending {
+    background-color: $gray-100;
+    color: $color-text-secondary;
+  }
+
+  &.partially-paid {
+    background-color: $info-100;
+    color: $info-900;
+    border-color: $info-500;
+  }
+
+  &.not-applicable {
+    background-color: $gray-200;
+    color: $gray-500;
+    cursor: not-allowed;
+    text-decoration: line-through;
+
+    &:hover {
+      transform: none;
+      box-shadow: none;
+    }
+  }
+
+  // SELECTED
+  &.selected {
+    border-color: $primary-500;
+    box-shadow: 0 0 0 2px rgba($primary-500, 0.3);
+    background-color: $primary-100;
+    color: $primary-900;
+  }
+}

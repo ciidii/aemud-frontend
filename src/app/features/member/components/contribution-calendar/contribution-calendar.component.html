@@ -1,0 +1,13 @@
+<div *ngFor="let yearData of calendar" class="year-container">
+  <h6 class="year-title">{{ yearData.annee }}</h6>
+  <div class="cotisation-grid">
+    <div *ngFor="let month of yearData.mois"
+         class="month-box"
+         [ngClass]="[ getStatusClass(month), isSelected(month) ? 'selected' : '' ]"
+         (click)="onMonthClick(month)">
+
+      <div class="month-name">{{ getMonthName(month.month) }}</div>
+    </div>
+  </div>
+
+</div>

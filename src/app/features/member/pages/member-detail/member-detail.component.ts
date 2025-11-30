@@ -31,7 +31,6 @@ import {MemberStateService} from "../../services/member.state.service";
 import {SendMessageModalComponent} from "../../components/member-list/send-message-modal/send-message-modal.component";
 import {ExportModalComponent} from "../../components/member-list/export-modal/export-modal.component";
 import {ContributionService} from "../../../contribution/services/contribution.service";
-import {ContributionCalendarItem} from "../../../../core/models/contribution-calendar-item.model";
 import {RecordPaymentModalComponent} from "./record-payment-modal/record-payment-modal.component";
 import {NotificationService} from "../../../../core/services/notification.service";
 import {ToDatePipe} from "../../../../shared/pipes/to-date.pipe";
@@ -54,17 +53,20 @@ import {BourseModel} from "../../../../core/models/bourse.model";
 import {AppStateService} from "../../../../core/services/app-state.service";
 import {MandateTimelineItem, RegistrationOverview} from "../../../../core/models/timeline.model";
 import {PhaseModel} from "../../../mandat/models/phase.model";
+import {ContributionCalendarComponent} from "../../components/contribution-calendar/contribution-calendar.component";
+import {
+  ContributionData,
+  ContributionMonth,
+  ContributionYear
+} from "../../../../core/models/contribution-data.model";
+// @ts-ignore
+import * as contributionData from '../../../../../../contribution_data_response.json';
 
-interface MonthlyContributionDisplay {
-  month: string;
-  status: string;
-  data: ContributionCalendarItem;
-}
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase, ContributionCalendarComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -86,9 +88,12 @@ export class MemberDetailComponent implements OnInit {
   isEditReligiousKnowledgeModalOpen = false;
   isEditAddressInfoModalOpen = false;
   isEditBourseInfoModalOpen = false;
-  selectedContributions: ContributionCalendarItem[] = [];
-  monthlyContributions: MonthlyContributionDisplay[] = [];
+
+  // Contribution data
+  contributionData: ContributionData | null = null;
+  selectedContributions: ContributionMonth[] = [];
   contributionSummary: { totalPaid: number; totalDue: number; completionRate: string; } | null = null;
+
   currentMember: MemberDataResponse | null = null;
   selectedPhaseId: string | null = null;
   availableMandats: MandatDto[] = [];
@@ -104,7 +109,7 @@ export class MemberDetailComponent implements OnInit {
   private memberId: string | null = null;
 
   get selectedTotalAmount(): number {
-    return this.selectedContributions.reduce((sum, item) => sum + (item.amountDue - item.amountPaid), 0);
+    return this.selectedContributions.reduce((sum, item) => sum + (item.montantDu - item.montantPaye), 0);
   }
 
   ngOnInit(): void {
@@ -278,49 +283,28 @@ export class MemberDetailComponent implements OnInit {
     this.selectedPhaseId = selectedId;
     this.selectedContributions = [];
     if (this.selectedPhaseId) {
-      this.loadContributions(this.selectedPhaseId);
+      this.loadContributionData(this.selectedPhaseId);
     }
   }
 
-  loadContributions(phaseId: string): void {
+  loadContributionData(phaseId: string): void {
     if (!this.memberId) return;
 
-    this.contributionService.getContributionCalendar(this.memberId, phaseId).subscribe(response => {
-      const contributions = response.data || [];
-
-      // Map to display model
-      this.monthlyContributions = contributions.map(contribution => {
-        const monthName = new Date(contribution.month[0], contribution.month[1] - 1).toLocaleString('fr-FR', {month: 'short'});
-        return {
-          month: monthName.charAt(0).toUpperCase() + monthName.slice(1, 4),
-          status: this.mapContributionStatusToCssClass(contribution.status),
-          data: contribution
-        };
-      }).sort((a, b) => a.data.month[1] - b.data.month[1]); // Ensure months are sorted
-
-      // Calculate summary
-      this.calculateSummary(contributions);
+    // TODO: Replace with a real service call
+    // Mocking service call with imported JSON data
+    of(contributionData).pipe(map(res => res.data)).subscribe(data => {
+      this.contributionData = data;
+      this.calculateSummary(data);
     });
   }
 
-  // --- Action Handlers ---
-
-  onMonthClick(contribution: MonthlyContributionDisplay): void {
-    const underlyingContribution = contribution.data;
-    if (underlyingContribution.status === 'PAID' || underlyingContribution.status === 'NOT_APPLICABLE') {
-      return; // Do not select paid or N/A months
-    }
-
-    const index = this.selectedContributions.findIndex(c => c.id === underlyingContribution.id);
+  handleMonthClick(month: ContributionMonth): void {
+    const index = this.selectedContributions.findIndex(c => c.idContribution === month.idContribution);
     if (index > -1) {
       this.selectedContributions.splice(index, 1); // Deselect
     } else {
-      this.selectedContributions.push(underlyingContribution); // Select
+      this.selectedContributions.push(month); // Select
     }
-  }
-
-  isMonthSelected(contribution: MonthlyContributionDisplay): boolean {
-    return this.selectedContributions.some(c => c.id === contribution.data.id);
   }
 
   openRecordPaymentModal(): void {
@@ -339,7 +323,7 @@ export class MemberDetailComponent implements OnInit {
         this.notificationService.showSuccess(`${paymentData.contributionsID.length} mois payés avec succès.`);
         this.selectedContributions = []; // Clear selection
         if (this.selectedPhaseId) {
-          this.loadContributions(this.selectedPhaseId);
+          this.loadContributionData(this.selectedPhaseId);
         }
         this.handleClosePaymentModal();
       },
@@ -435,12 +419,12 @@ export class MemberDetailComponent implements OnInit {
 
       if (activePhaseInMandate) {
         this.selectedPhaseId = activePhaseInMandate.id;
-        this.loadContributions(activePhaseInMandate.id);
+        this.loadContributionData(activePhaseInMandate.id);
       } else {
         this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
         const fallbackPhase = activeMandat.phases[0];
         if (fallbackPhase) {
-          this.loadContributions(fallbackPhase.id);
+          this.loadContributionData(fallbackPhase.id);
         }
       }
     });
@@ -451,10 +435,12 @@ export class MemberDetailComponent implements OnInit {
     this.timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId);
   }
 
-  private calculateSummary(contributions: ContributionCalendarItem[]): void {
-    const applicableContributions = contributions.filter(c => c.status !== 'NOT_APPLICABLE');
-    const totalPaid = applicableContributions.reduce((sum, c) => sum + c.amountPaid, 0);
-    const totalDue = applicableContributions.reduce((sum, c) => c.status !== 'PAID' ? sum + (c.amountDue - c.amountPaid) : sum, 0);
+  private calculateSummary(data: ContributionData): void {
+    const allMonths = data.calendrier.flatMap(y => y.mois);
+    const applicableContributions = allMonths.filter(c => c.status !== 'NOT_APPLICABLE');
+
+    const totalPaid = applicableContributions.reduce((sum, c) => sum + c.montantPaye, 0);
+    const totalDue = applicableContributions.reduce((sum, c) => c.status !== 'PAID' ? sum + (c.montantDu - c.montantPaye) : sum, 0);
     const paidCount = applicableContributions.filter(c => c.status === 'PAID').length;
     const totalCount = applicableContributions.length;
 
@@ -465,20 +451,6 @@ export class MemberDetailComponent implements OnInit {
     };
   }
 
-  private mapContributionStatusToCssClass(status: ContributionCalendarItem['status']): string {
-    switch (status) {
-      case 'PAID':
-        return 'paid';
-      case 'DELAYED':
-        return 'delayed';
-      case 'PENDING':
-        return 'pending';
-      case 'NOT_APPLICABLE':
-        return 'not-applicable';
-      default:
-        return 'unpaid';
-    }
-  }
   formatArrayDate(dateArray: number[]): string {
     if (!dateArray) return '';
     const [year, month, day] = dateArray;
