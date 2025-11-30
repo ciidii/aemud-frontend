@@ -1,0 +1,162 @@
+{
+  "status": "OK",
+  "result": "Succeeded",
+  "error": null,
+  "data": {
+    "memberId": "cc7bddb4-abd9-4e9b-9f34-eaf11e48f944",
+    "phaseId": "b54a3b69-9e31-4ba6-88e6-ee586dcd4f4c",
+    "phaseNom": "Phase 1",
+    "calendrier": [
+      {
+        "annee": 2025,
+        "mois": [
+          {
+            "idContribution": "ef2f1104-2b85-4f0d-8654-999d6d5b840e",
+            "month": [
+              2025,
+              11
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "2f3a3556-37d2-4cd7-a66f-270a623743ce",
+            "month": [
+              2025,
+              12
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          }
+        ]
+      },
+      {
+        "annee": 2026,
+        "mois": [
+          {
+            "idContribution": "8896c0e5-0621-4b82-b626-f2980e96e317",
+            "month": [
+              2026,
+              1
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "29f563f9-9648-4d33-8fdd-275d043d724a",
+            "month": [
+              2026,
+              2
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "4b3b97c6-b520-4890-8cc1-06641f1d526f",
+            "month": [
+              2026,
+              3
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "0448e81a-6e53-4a01-a827-a24670672378",
+            "month": [
+              2026,
+              4
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "f2cd6ddc-1743-41b0-bd4d-f3de351eb80e",
+            "month": [
+              2026,
+              5
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "73ca4378-277d-4403-abd0-653ff7e82898",
+            "month": [
+              2026,
+              6
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "5343faf5-288d-44c0-bf76-34308b502291",
+            "month": [
+              2026,
+              7
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "5f03153f-c58b-4379-ac93-66892753a98c",
+            "month": [
+              2026,
+              8
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "5492e877-a70b-4ec6-8228-adeee860f230",
+            "month": [
+              2026,
+              9
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "ea2ab842-8be1-4aa5-a24a-a9b8b3da0c57",
+            "month": [
+              2026,
+              10
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "0fa6f9b2-01e4-42c5-98c7-f30a69e6c189",
+            "month": [
+              2026,
+              11
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          },
+          {
+            "idContribution": "3f5b1a12-d624-4f2d-a15c-0a399cb645a8",
+            "month": [
+              2026,
+              12
+            ],
+            "status": "PENDING",
+            "montantDu": 1000.0,
+            "montantPaye": 0.0
+          }
+        ]
+      }
+    ]
+  }
+}

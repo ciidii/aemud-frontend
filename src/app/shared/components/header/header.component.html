@@ -9,7 +9,7 @@
     <!-- Mandat Selector -->
     <div *ngIf="(activeMandat$ | async) as selectedMandat" class="dropdown">
       <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
-        id="mandatDropdown" type="button">
+              id="mandatDropdown" type="button">
         {{ selectedMandat.nom }}
       </button>
       <ul aria-labelledby="mandatDropdown" class="dropdown-menu">
@@ -36,11 +36,13 @@
     <!-- User Profile -->
     <div class="dropdown">
       <button aria-expanded="false" class="btn btn-icon profile-button" data-bs-toggle="dropdown" id="profileDropdown"
-        type="button">
+              type="button">
         <span class="profile-avatar">U</span>
       </button>
       <ul aria-labelledby="profileDropdown" class="dropdown-menu dropdown-menu-end">
-        <li><button class="dropdown-item" (click)="viewMyProfile()">Mon Profil</button></li>
+        <li>
+          <button (click)="viewMyProfile()" class="dropdown-item">Mon Profil</button>
+        </li>
         <li>
           <hr class="dropdown-divider">
         </li>

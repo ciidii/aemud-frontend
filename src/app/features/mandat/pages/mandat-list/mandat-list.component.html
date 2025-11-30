@@ -1,7 +1,7 @@
 <div class="mandat-list-page">
   <header class="page-header">
     <h1>Gestion des Mandats</h1>
-    <button class="btn-primary" (click)="goToAdd()">+ Créer un mandat</button>
+    <button (click)="goToAdd()" class="btn-primary">+ Créer un mandat</button>
   </header>
 
   <div class="page-content">
@@ -25,7 +25,7 @@
           <!-- Add an icon here if available, e.g., <i class="icon-folder-open"></i> -->
           <h2>Aucun mandat trouvé</h2>
           <p>Commencez par créer votre premier mandat.</p>
-          <button class="btn-primary" (click)="goToAdd()">+ Créer un mandat</button>
+          <button (click)="goToAdd()" class="btn-primary">+ Créer un mandat</button>
         </div>
       </div>
 
@@ -33,11 +33,11 @@
         <div *ngFor="let mandat of mandats" class="mandate-card">
           <div class="card-header">
             <h3 class="card-title">{{ mandat.nom }}</h3>
-            <span class="status-badge" [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif">
+            <span [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif" class="status-badge">
               {{ mandat.estActif ? 'Actif' : 'Inactif' }}
             </span>
           </div>
-          <div class="card-body clickable" (click)="goToDetail(mandat.id)">
+          <div (click)="goToDetail(mandat.id)" class="card-body clickable">
             <div class="mandate-period">
               <!-- Add calendar icon if available -->
               <span>{{ mandat.dateDebut | date: 'dd/MM/yyyy' }}</span>
@@ -50,8 +50,8 @@
             </div>
           </div>
           <div class="card-footer">
-            <button class="btn-secondary" (click)="goToEdit(mandat.id)">Modifier</button>
-            <button class="btn-danger" (click)="deleteMandat(mandat.id)">Supprimer</button>
+            <button (click)="goToEdit(mandat.id)" class="btn-secondary">Modifier</button>
+            <button (click)="deleteMandat(mandat.id)" class="btn-danger">Supprimer</button>
           </div>
         </div>
       </div>

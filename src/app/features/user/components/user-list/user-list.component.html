@@ -50,27 +50,27 @@
   </div>
 
   <!-- Filters Section -->
-  <div class="filters-section" [formGroup]="filterForm">
+  <div [formGroup]="filterForm" class="filters-section">
     <div class="search-box">
       <i class="bi bi-search search-icon"></i>
-      <input type="text" class="search-input" formControlName="keyword" placeholder="Rechercher par email, nom..." />
+      <input class="search-input" formControlName="keyword" placeholder="Rechercher par email, nom..." type="text"/>
     </div>
 
     <div class="filters-row">
       <div class="role-filters">
         <span class="filter-label">Rôles :</span>
         <div class="role-chips">
-          <div *ngFor="let role of roleOptions" class="chip" [class.active]="isRoleSelected(role.value)"
-            (click)="toggleRole(role.value)">
+          <div (click)="toggleRole(role.value)" *ngFor="let role of roleOptions" [class.active]="isRoleSelected(role.value)"
+               class="chip">
             {{ role.label }}
-            <i class="bi bi-check-lg" *ngIf="isRoleSelected(role.value)"></i>
+            <i *ngIf="isRoleSelected(role.value)" class="bi bi-check-lg"></i>
           </div>
         </div>
       </div>
 
       <div class="secondary-filters">
         <div class="select-wrapper">
-          <select formControlName="locked" class="custom-select">
+          <select class="custom-select" formControlName="locked">
             <option value="all">Statut (Tous)</option>
             <option value="true">Verrouillé</option>
             <option value="false">Actif</option>
@@ -79,7 +79,7 @@
         </div>
 
         <div class="select-wrapper">
-          <select formControlName="forcePasswordChange" class="custom-select">
+          <select class="custom-select" formControlName="forcePasswordChange">
             <option value="all">MDP (Tous)</option>
             <option value="true">Doit changer</option>
             <option value="false">À jour</option>
@@ -87,11 +87,11 @@
           <i class="bi bi-chevron-down select-icon"></i>
         </div>
 
-        <button class="btn-reset" (click)="resetFilters()" title="Réinitialiser les filtres">
+        <button (click)="resetFilters()" class="btn-reset" title="Réinitialiser les filtres">
           <i class="bi bi-arrow-counterclockwise"></i>
         </button>
 
-        <button class="btn-filter-apply" (click)="applyFilters()">
+        <button (click)="applyFilters()" class="btn-filter-apply">
           Filtrer
         </button>
       </div>
@@ -111,67 +111,67 @@
   </div>
 
   <!-- Data Table -->
-  <div class="table-wrapper" *ngIf="!loading && users.length > 0">
+  <div *ngIf="!loading && users.length > 0" class="table-wrapper">
     <table class="modern-table">
       <thead>
-        <tr>
-          <th>Utilisateur</th>
-          <th>Rôles</th>
-          <th>Statut</th>
-          <th>Sécurité</th>
-          <th>Membre ID</th>
-          <th class="text-end">Actions</th>
-        </tr>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Rôles</th>
+        <th>Statut</th>
+        <th>Sécurité</th>
+        <th>Membre ID</th>
+        <th class="text-end">Actions</th>
+      </tr>
       </thead>
       <tbody>
-        <tr *ngFor="let user of users" (click)="goToUserDetails(user)" class="table-row">
-          <td>
-            <div class="user-profile">
-              <div class="avatar-circle">
-                {{ user.username.charAt(0).toUpperCase() }}
-                <div class="status-dot" [class.online]="!user.locked" [class.offline]="user.locked"></div>
-              </div>
-              <div class="user-details">
-                <span class="user-email">{{ user.username }}</span>
-                <span class="user-id">ID: {{ user.id }}</span>
-              </div>
+      <tr (click)="goToUserDetails(user)" *ngFor="let user of users" class="table-row">
+        <td>
+          <div class="user-profile">
+            <div class="avatar-circle">
+              {{ user.username.charAt(0).toUpperCase() }}
+              <div [class.offline]="user.locked" [class.online]="!user.locked" class="status-dot"></div>
             </div>
-          </td>
-          <td>
-            <div class="roles-list">
-              <span *ngFor="let role of user.roles" class="role-badge" [ngClass]="role">
+            <div class="user-details">
+              <span class="user-email">{{ user.username }}</span>
+              <span class="user-id">ID: {{ user.id }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="roles-list">
+              <span *ngFor="let role of user.roles" [ngClass]="role" class="role-badge">
                 {{ role }}
               </span>
-            </div>
-          </td>
-          <td>
-            <span class="status-badge" [ngClass]="user.locked ? 'locked' : 'active'">
-              <i class="bi" [ngClass]="user.locked ? 'bi-lock-fill' : 'bi-check-circle-fill'"></i>
+          </div>
+        </td>
+        <td>
+            <span [ngClass]="user.locked ? 'locked' : 'active'" class="status-badge">
+              <i [ngClass]="user.locked ? 'bi-lock-fill' : 'bi-check-circle-fill'" class="bi"></i>
               {{ user.locked ? 'Verrouillé' : 'Actif' }}
             </span>
-          </td>
-          <td>
-            <span class="security-badge"
-              [ngClass]="{'warning': user.forcePasswordChange, 'safe': !user.forcePasswordChange}">
+        </td>
+        <td>
+            <span [ngClass]="{'warning': user.forcePasswordChange, 'safe': !user.forcePasswordChange}"
+                  class="security-badge">
               {{ user.forcePasswordChange ? 'Changement Requis' : 'Sécurisé' }}
             </span>
-          </td>
-          <td class="text-muted">{{ user.memberId || '-' }}</td>
-          <td>
-            <div class="actions-cell" (click)="$event.stopPropagation()">
-              <button class="btn-icon" (click)="goToUserDetails(user)" title="Voir détails">
-                <i class="bi bi-eye"></i>
-              </button>
-              <button class="btn-icon" [ngClass]="user.locked ? 'unlock' : 'lock'" (click)="toggleLock(user)"
-                [title]="user.locked ? 'Déverrouiller' : 'Verrouiller'">
-                <i class="bi" [ngClass]="user.locked ? 'bi-unlock-fill' : 'bi-lock-fill'"></i>
-              </button>
-              <button class="btn-icon warning" (click)="toggleForcePasswordChange(user)" title="Forcer changement MDP">
-                <i class="bi bi-key-fill"></i>
-              </button>
-            </div>
-          </td>
-        </tr>
+        </td>
+        <td class="text-muted">{{ user.memberId || '-' }}</td>
+        <td>
+          <div (click)="$event.stopPropagation()" class="actions-cell">
+            <button (click)="goToUserDetails(user)" class="btn-icon" title="Voir détails">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button (click)="toggleLock(user)" [ngClass]="user.locked ? 'unlock' : 'lock'" [title]="user.locked ? 'Déverrouiller' : 'Verrouiller'"
+                    class="btn-icon">
+              <i [ngClass]="user.locked ? 'bi-unlock-fill' : 'bi-lock-fill'" class="bi"></i>
+            </button>
+            <button (click)="toggleForcePasswordChange(user)" class="btn-icon warning" title="Forcer changement MDP">
+              <i class="bi bi-key-fill"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
       </tbody>
     </table>
 
@@ -181,11 +181,11 @@
         Affichage de <strong>{{ users.length }}</strong> sur <strong>{{ totalRecords }}</strong> utilisateurs
       </span>
       <div class="pagination-controls">
-        <button class="btn-page" [disabled]="page === 1" (click)="goToPage(page - 1)">
+        <button (click)="goToPage(page - 1)" [disabled]="page === 1" class="btn-page">
           <i class="bi bi-chevron-left"></i>
         </button>
         <span class="page-indicator">Page {{ page }} / {{ totalPages }}</span>
-        <button class="btn-page" [disabled]="page === totalPages" (click)="goToPage(page + 1)">
+        <button (click)="goToPage(page + 1)" [disabled]="page === totalPages" class="btn-page">
           <i class="bi bi-chevron-right"></i>
         </button>
       </div>

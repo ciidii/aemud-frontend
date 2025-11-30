@@ -1,6 +1,7 @@
 # ✅ BESOIN MÉTIER FINAL — GESTION DES PHASES DE MANDAT
 
 ## 🎯 Objectif
+
 Permettre la création et la modification d’un mandat avec gestion de phases manuellement ou automatiquement, dans le respect strict de la période du mandat (date début → date fin), en garantissant une couverture complète à 100 %.
 
 ---
@@ -10,12 +11,14 @@ Permettre la création et la modification d’un mandat avec gestion de phases m
 Lors de la création d’un mandat, l'utilisateur peut générer des phases selon deux modes :
 
 ## 1. Création MANUELLE des phases
+
 L’utilisateur définit lui-même :
 
 - Le nombre de phases
 - Les dates de début et fin de chaque phase
 
 ### Contraintes
+
 - Les phases doivent être entièrement incluses entre les dates du mandat.
 - Les phases ne doivent pas se chevaucher.
 - 100 % de la durée du mandat doit être couverte par les phases (pas de trous).
@@ -28,12 +31,15 @@ L’utilisateur définit lui-même :
 Deux cas sont possibles :
 
 ### 2.1 L’utilisateur fournit un nombre de phases **N**
+
 ➡️ Le système génère automatiquement **N phases de même durée**.
 
 ### 2.2 L’utilisateur ne fournit PAS de nombre de phases
+
 ➡️ Le système utilise la valeur par défaut : **2 phases de même durée**.
 
 ### Règles supplémentaires
+
 - Les phases doivent couvrir exactement 100 % de la durée du mandat.
 
 ---
@@ -43,6 +49,7 @@ Deux cas sont possibles :
 Lorsqu’un utilisateur modifie les dates du mandat (date début ou fin), il peut choisir :
 
 ## 1. Modification MANUELLE des phases
+
 L’utilisateur peut :
 
 - Modifier certaines phases existantes
@@ -59,6 +66,7 @@ L’utilisateur peut :
 ## 2. Modification AUTOMATIQUE des phases
 
 ### 2.1 L’utilisateur fournit un nouveau nombre de phases **N**
+
 Lors de la modification automatique avec un nombre de phases fourni :
 
 - **Aucune phase existante n’est supprimée.**
@@ -80,6 +88,7 @@ Dans tous les cas :
 ---
 
 ### 2.2 L’utilisateur ne fournit PAS de nombre de phases
+
 ➡️ Le système conserve **le même nombre de phases qu’avant la modification**, mais recalcule automatiquement :
 
 - La nouvelle date de début de chaque phase

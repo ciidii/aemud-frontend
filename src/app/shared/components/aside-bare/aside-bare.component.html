@@ -1,4 +1,4 @@
-<div class="sidebar-container" [class.collapsed]="!(sideBareService.isOpen$ | async)">
+<div [class.collapsed]="!(sideBareService.isOpen$ | async)" class="sidebar-container">
 
   <!-- 1. Brand Header -->
   <div class="brand-header">
@@ -6,9 +6,9 @@
       <i class="bi bi-grid-1x2-fill logo-icon"></i>
       <span class="app-name">AEMUD</span>
     </div>
-    <button class="toggle-btn" (click)="toggleCollapse()">
-      <i class="bi" [class.bi-chevron-left]="sideBareService.isOpen$ | async"
-         [class.bi-chevron-right]="!(sideBareService.isOpen$ | async)"></i>
+    <button (click)="toggleCollapse()" class="toggle-btn">
+      <i [class.bi-chevron-left]="sideBareService.isOpen$ | async" [class.bi-chevron-right]="!(sideBareService.isOpen$ | async)"
+         class="bi"></i>
     </button>
   </div>
 
@@ -20,7 +20,7 @@
       <span class="group-title">Principal</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a routerLink="/dashboard" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
             <i class="bi bi-speedometer2"></i>
             <span class="nav-text">Tableau de bord</span>
             <span class="tooltip-text">Tableau de bord</span>
@@ -34,21 +34,21 @@
       <span class="group-title">Gestion</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a routerLink="members/list-members" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="members/list-members" routerLinkActive="active">
             <i class="bi bi-people"></i>
             <span class="nav-text">Membres</span>
             <span class="tooltip-text">Membres</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/members/register-form" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/members/register-form" routerLinkActive="active">
             <i class="bi bi-person-plus"></i>
             <span class="nav-text">Ajouter Membre</span>
             <span class="tooltip-text">Ajouter Membre</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="mandats/list" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="mandats/list" routerLinkActive="active">
             <i class="bi bi-card-checklist"></i>
             <span class="nav-text">Mandats</span>
             <span class="tooltip-text">Mandats</span>
@@ -62,15 +62,15 @@
       <span class="group-title">Finances</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a routerLink="/contributions" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}"
-             class="nav-link">
+          <a [routerLinkActiveOptions]="{exact: true}" class="nav-link" routerLink="/contributions"
+             routerLinkActive="active">
             <i class="bi bi-cash-stack"></i>
             <span class="nav-text">Contributions</span>
             <span class="tooltip-text">Contributions</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/contributions/new" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/contributions/new" routerLinkActive="active">
             <i class="bi bi-plus-circle"></i>
             <span class="nav-text">Nouvelle Contrib.</span>
             <span class="tooltip-text">Nouvelle Contrib.</span>
@@ -84,14 +84,14 @@
       <span class="group-title">Communication</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a routerLink="/notifications/sms" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/notifications/sms" routerLinkActive="active">
             <i class="bi bi-chat-dots"></i>
             <span class="nav-text">SMS</span>
             <span class="tooltip-text">SMS</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/notifications/emails" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/notifications/emails" routerLinkActive="active">
             <i class="bi bi-envelope"></i>
             <span class="nav-text">Emails</span>
             <span class="tooltip-text">Emails</span>
@@ -105,21 +105,21 @@
       <span class="group-title">Administration</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a routerLink="/users" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/users" routerLinkActive="active">
             <i class="bi bi-shield-lock"></i>
             <span class="nav-text">Utilisateurs</span>
             <span class="tooltip-text">Utilisateurs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/users/add" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/users/add" routerLinkActive="active">
             <i class="bi bi-shield-lock"></i>
             <span class="nav-text">Utilisateurs</span>
             <span class="tooltip-text">Utilisateurs</span>
           </a>
         </li>
         <li class="nav-item">
-          <a routerLink="/roles" routerLinkActive="active" class="nav-link">
+          <a class="nav-link" routerLink="/roles" routerLinkActive="active">
             <i class="bi bi-person-badge"></i>
             <span class="nav-text">Rôles</span>
             <span class="tooltip-text">Rôles</span>

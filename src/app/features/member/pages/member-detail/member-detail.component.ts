@@ -116,54 +116,6 @@ export class MemberDetailComponent implements OnInit {
     }
   }
 
-  private loadData(): void {
-    if (!this.memberId) return;
-
-    this.appStateService.mandats$.pipe(
-      filter(mandats => mandats.length > 0),
-      take(1)
-    ).subscribe(mandats => {
-      this.availableMandats = mandats;
-    });
-
-    combineLatest([
-      this.appStateService.activeMandat$.pipe(filter((m): m is MandatDto => m !== null)),
-      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data))
-    ]).pipe(
-      take(1)
-    ).subscribe(([activeMandat, member]) => {
-      if (!member) {
-        this.notificationService.showError("Membre non trouvé.");
-        this.router.navigate(['/members/list-members']);
-        return;
-      }
-
-      this.activeMandat = activeMandat;
-      this.currentMember = member;
-      this.member$ = of(member);
-      this.registrationOverview = member.registrationOverview;
-      this.loadTimeline();
-
-      const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
-
-      if (activePhaseInMandate) {
-        this.selectedPhaseId = activePhaseInMandate.id;
-        this.loadContributions(activePhaseInMandate.id);
-      } else {
-        this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
-        const fallbackPhase = activeMandat.phases[0];
-        if (fallbackPhase) {
-          this.loadContributions(fallbackPhase.id);
-        }
-      }
-    });
-  }
-
-  private loadTimeline(): void {
-    if (!this.memberId) return;
-    this.timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId);
-  }
-
   // --- Edit Modals Methods ---
   openEditPersonalInfoModal(): void {
     this.isEditPersonalInfoModalOpen = true;
@@ -262,9 +214,6 @@ export class MemberDetailComponent implements OnInit {
     this.isEditBourseInfoModalOpen = false;
   }
 
-
-  // --- Other Modal Toggle Methods ---
-
   handleSaveBourseInfo(updatedInfo: BourseModel): void {
     this.notificationService.showSuccess("Bourse mise à jour (simulation).");
     this.closeEditBourseInfoModal();
@@ -277,6 +226,9 @@ export class MemberDetailComponent implements OnInit {
   toggleDeleteModal(): void {
     this.isDeleteModalOpen = !this.isDeleteModalOpen;
   }
+
+
+  // --- Other Modal Toggle Methods ---
 
   toggleReregisterModal(phase?: PhaseModel): void {
     // TODO: Prefill the modal with the phase if provided
@@ -321,8 +273,6 @@ export class MemberDetailComponent implements OnInit {
     this.isSidebarCollapsed = !this.isSidebarCollapsed;
   }
 
-  // --- Action Handlers ---
-
   onPhaseChange(event: Event): void {
     const selectedId = (event.target as HTMLSelectElement).value;
     this.selectedPhaseId = selectedId;
@@ -352,6 +302,8 @@ export class MemberDetailComponent implements OnInit {
       this.calculateSummary(contributions);
     });
   }
+
+  // --- Action Handlers ---
 
   onMonthClick(contribution: MonthlyContributionDisplay): void {
     const underlyingContribution = contribution.data;
@@ -452,6 +404,53 @@ export class MemberDetailComponent implements OnInit {
     this.isEditReligiousKnowledgeModalOpen = true;
   }
 
+  private loadData(): void {
+    if (!this.memberId) return;
+
+    this.appStateService.mandats$.pipe(
+      filter(mandats => mandats.length > 0),
+      take(1)
+    ).subscribe(mandats => {
+      this.availableMandats = mandats;
+    });
+
+    combineLatest([
+      this.appStateService.activeMandat$.pipe(filter((m): m is MandatDto => m !== null)),
+      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data))
+    ]).pipe(
+      take(1)
+    ).subscribe(([activeMandat, member]) => {
+      if (!member) {
+        this.notificationService.showError("Membre non trouvé.");
+        this.router.navigate(['/members/list-members']);
+        return;
+      }
+      this.activeMandat = activeMandat;
+      this.currentMember = member;
+      this.member$ = of(member);
+      this.registrationOverview = member.registrationOverview;
+      this.loadTimeline();
+
+      const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
+
+      if (activePhaseInMandate) {
+        this.selectedPhaseId = activePhaseInMandate.id;
+        this.loadContributions(activePhaseInMandate.id);
+      } else {
+        this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
+        const fallbackPhase = activeMandat.phases[0];
+        if (fallbackPhase) {
+          this.loadContributions(fallbackPhase.id);
+        }
+      }
+    });
+  }
+
+  private loadTimeline(): void {
+    if (!this.memberId) return;
+    this.timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId);
+  }
+
   private calculateSummary(contributions: ContributionCalendarItem[]): void {
     const applicableContributions = contributions.filter(c => c.status !== 'NOT_APPLICABLE');
     const totalPaid = applicableContributions.reduce((sum, c) => sum + c.amountPaid, 0);
@@ -480,4 +479,15 @@ export class MemberDetailComponent implements OnInit {
         return 'unpaid';
     }
   }
+  formatArrayDate(dateArray: number[]): string {
+    if (!dateArray) return '';
+    const [year, month, day] = dateArray;
+    const date = new Date(year, month - 1, day);
+    return date.toLocaleDateString('fr-FR', {
+      day: '2-digit',
+      month: 'short',
+      year: 'numeric'
+    });
+  }
+
 }

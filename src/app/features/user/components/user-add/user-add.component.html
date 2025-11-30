@@ -13,7 +13,7 @@
     </div>
   </div>
 
-  <form [formGroup]="form" (ngSubmit)="onSubmit()" class="user-add-form">
+  <form (ngSubmit)="onSubmit()" [formGroup]="form" class="user-add-form">
 
     <div class="form-layout">
       <!-- Left Column: Member Selection -->
@@ -28,15 +28,15 @@
             <p class="step-description">Recherchez le membre à qui vous souhaitez donner accès.</p>
 
             <!-- Search Input -->
-            <div class="search-hero" [class.has-results]="memberResults.length > 0">
+            <div [class.has-results]="memberResults.length > 0" class="search-hero">
               <i class="bi bi-search search-icon"></i>
-              <input type="text" class="hero-input" formControlName="memberSearch" (input)="onSearchMember()"
-                placeholder="Rechercher par nom, email..." autocomplete="off" />
-              <div class="spinner-border text-primary spinner-sm" *ngIf="false"></div> <!-- Placeholder for loading -->
+              <input (input)="onSearchMember()" autocomplete="off" class="hero-input" formControlName="memberSearch"
+                     placeholder="Rechercher par nom, email..." type="text"/>
+              <div *ngIf="false" class="spinner-border text-primary spinner-sm"></div> <!-- Placeholder for loading -->
 
               <!-- Search Results Dropdown -->
-              <div class="search-results-dropdown" *ngIf="memberResults.length > 0">
-                <div class="result-item" *ngFor="let member of memberResults" (click)="selectMember(member)">
+              <div *ngIf="memberResults.length > 0" class="search-results-dropdown">
+                <div (click)="selectMember(member)" *ngFor="let member of memberResults" class="result-item">
                   <div class="result-avatar">
                     {{ member.personalInfo.firstname.charAt(0) }}
                   </div>
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Selected Member Card -->
-            <div class="selected-member-card" *ngIf="selectedMember">
+            <div *ngIf="selectedMember" class="selected-member-card">
               <div class="card-content">
                 <div class="member-avatar-large">
                   {{ selectedMember.personalInfo.firstname.charAt(0) }}
@@ -66,8 +66,8 @@
                   <span class="member-id">ID: {{ selectedMember.contactInfo.numberPhone }}</span>
                 </div>
               </div>
-              <button type="button" class="btn-change"
-                (click)="selectedMember = null; form.get('memberSearch')?.setValue('')">
+              <button (click)="selectedMember = null; form.get('memberSearch')?.setValue('')" class="btn-change"
+                      type="button">
                 Changer
               </button>
             </div>
@@ -91,15 +91,15 @@
             <p class="step-description">Choisissez les niveaux d'autorisation pour cet utilisateur.</p>
 
             <div class="roles-grid">
-              <div class="role-card" *ngFor="let role of roleDefinitions" [class.selected]="isRoleSelected(role.value)"
-                (click)="toggleRoleCard(role.value)">
+              <div (click)="toggleRoleCard(role.value)" *ngFor="let role of roleDefinitions" [class.selected]="isRoleSelected(role.value)"
+                   class="role-card">
                 <div class="role-icon">
-                  <i class="bi" [ngClass]="role.icon"></i>
+                  <i [ngClass]="role.icon" class="bi"></i>
                 </div>
                 <div class="role-content">
                   <div class="role-header">
                     <span class="role-name">{{ role.label }}</span>
-                    <i class="bi bi-check-circle-fill check-icon" *ngIf="isRoleSelected(role.value)"></i>
+                    <i *ngIf="isRoleSelected(role.value)" class="bi bi-check-circle-fill check-icon"></i>
                   </div>
                   <p class="role-desc">{{ role.description }}</p>
                 </div>
@@ -121,10 +121,10 @@
 
     <!-- Actions Footer -->
     <div class="form-footer">
-      <button type="button" class="btn-cancel" (click)="onCancel()">
+      <button (click)="onCancel()" class="btn-cancel" type="button">
         Annuler
       </button>
-      <button type="submit" class="btn-submit" [disabled]="loading || form.invalid">
+      <button [disabled]="loading || form.invalid" class="btn-submit" type="submit">
         <span *ngIf="!loading">Créer l'utilisateur</span>
         <span *ngIf="loading"><span class="spinner-border spinner-border-sm me-2"></span>Création...</span>
       </button>

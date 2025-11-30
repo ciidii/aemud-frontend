@@ -1,6 +1,6 @@
-import { Component, Input, Output, EventEmitter } from '@angular/core';
-import { FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { CommonModule } from '@angular/common';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {FormGroup, ReactiveFormsModule} from '@angular/forms';
+import {CommonModule} from '@angular/common';
 
 @Component({
   selector: 'app-phase-form-item',
@@ -14,7 +14,8 @@ export class PhaseFormItemComponent {
   @Input() index!: number;
   @Output() delete = new EventEmitter<number>();
 
-  constructor() { }
+  constructor() {
+  }
 
   onDelete(): void {
     this.delete.emit(this.index);

@@ -1,24 +1,24 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {
-  FormBuilder,
-  FormGroup,
-  Validators,
-  ReactiveFormsModule,
-  FormArray,
-  FormControl,
-  ValidatorFn,
   AbstractControl,
-  ValidationErrors
+  FormArray,
+  FormBuilder,
+  FormControl,
+  FormGroup,
+  ReactiveFormsModule,
+  ValidationErrors,
+  ValidatorFn,
+  Validators
 } from '@angular/forms';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, finalize } from "rxjs";
-import { PhaseTimelineComponent, TimelinePhase } from '../../components/phase-timeline/phase-timeline.component';
-import { PhaseFormItemComponent } from '../../components/phase-form-item/phase-form-item.component';
-import { MandatHttpService } from '../../services/mandat-http.service';
-import { NotificationService } from '../../../../core/services/notification.service';
-import { CreateMandatModel } from '../../models/CreateMandatModel';
-import { CreatePhaseModel } from '../../models/CreatePhaseModel';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router} from '@angular/router';
+import {finalize, Subscription} from "rxjs";
+import {PhaseTimelineComponent, TimelinePhase} from '../../components/phase-timeline/phase-timeline.component';
+import {PhaseFormItemComponent} from '../../components/phase-form-item/phase-form-item.component';
+import {MandatHttpService} from '../../services/mandat-http.service';
+import {NotificationService} from '../../../../core/services/notification.service';
+import {CreateMandatModel} from '../../models/CreateMandatModel';
+import {CreatePhaseModel} from '../../models/CreatePhaseModel';
 
 
 // ----------------------------------------------------
@@ -61,7 +61,7 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
   const mandateEnd = new Date(dateFinMandat);
 
   if (mandateStart > mandateEnd)
-    return { mandateDateOrder: true };
+    return {mandateDateOrder: true};
 
   if (phases.length === 0)
     return null;
@@ -81,16 +81,16 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
     const end = new Date(sorted[i].dateFin!);
 
     if (start > end)
-      return { phaseDateOrder: true };
+      return {phaseDateOrder: true};
 
     if (start < expected)
-      return { phaseOverlap: true };
+      return {phaseOverlap: true};
 
     if (start > expected)
-      return { phaseGap: true };
+      return {phaseGap: true};
 
     if (end > mandateEnd)
-      return { phaseOutsideMandate: true };
+      return {phaseOutsideMandate: true};
 
     // Next expected start = end + 1
     expected = new Date(end);
@@ -98,7 +98,7 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
   }
 
   if (expected.getTime() - 1 !== mandateEnd.getTime())
-    return { phaseGap: true };
+    return {phaseGap: true};
 
   return null;
 };
@@ -126,48 +126,11 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
   private routeSubscription!: Subscription;
 
 
-  constructor() {}
-
-
-  ngOnInit(): void {
-
-    this.mandatForm = this.fb.group<MandatForm>({
-      nom: this.fb.control<string | null>(null, Validators.required),
-      dateDebut: this.fb.control<string | null>(null, Validators.required),
-      dateFin: this.fb.control<string | null>(null, Validators.required),
-      estActive: this.fb.control<boolean | null>(true),
-      calculatePhasesAutomatically: this.fb.control<boolean | null>(true),
-      numberOfPhases: this.fb.control<number | null>(null),
-      phases: this.fb.array<FormGroup<PhaseFormGroup>>([])
-    }, { validators: phasesValidator });
-
-
-    this.routeSubscription = this.route.paramMap.subscribe(params => {
-      this.mandatId = params.get('id');
-      if (this.mandatId) {
-        console.log("Editing Mandat:", this.mandatId);
-        // TODO: Fetch existing mandate data
-      }
-    });
+  constructor() {
   }
 
   get phasesFormArray(): FormArray<FormGroup<PhaseFormGroup>> {
     return this.mandatForm.controls.phases;
-  }
-
-  addPhase(): void {
-    const phase = this.fb.group<PhaseFormGroup>({
-      nom: this.fb.control<string | null>(null, Validators.required),
-      dateDebut: this.fb.control<string | null>(null, Validators.required),
-      dateFin: this.fb.control<string | null>(null, Validators.required),
-      dateDebutInscription: this.fb.control<string | null>(null),
-      dateFinInscription: this.fb.control<string | null>(null)
-    });
-    this.phasesFormArray.push(phase);
-  }
-
-  removePhase(index: number): void {
-    this.phasesFormArray.removeAt(index);
   }
 
   get timelinePhases(): TimelinePhase[] {
@@ -187,6 +150,42 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  ngOnInit(): void {
+
+    this.mandatForm = this.fb.group<MandatForm>({
+      nom: this.fb.control<string | null>(null, Validators.required),
+      dateDebut: this.fb.control<string | null>(null, Validators.required),
+      dateFin: this.fb.control<string | null>(null, Validators.required),
+      estActive: this.fb.control<boolean | null>(true),
+      calculatePhasesAutomatically: this.fb.control<boolean | null>(true),
+      numberOfPhases: this.fb.control<number | null>(null),
+      phases: this.fb.array<FormGroup<PhaseFormGroup>>([])
+    }, {validators: phasesValidator});
+
+
+    this.routeSubscription = this.route.paramMap.subscribe(params => {
+      this.mandatId = params.get('id');
+      if (this.mandatId) {
+        console.log("Editing Mandat:", this.mandatId);
+        // TODO: Fetch existing mandate data
+      }
+    });
+  }
+
+  addPhase(): void {
+    const phase = this.fb.group<PhaseFormGroup>({
+      nom: this.fb.control<string | null>(null, Validators.required),
+      dateDebut: this.fb.control<string | null>(null, Validators.required),
+      dateFin: this.fb.control<string | null>(null, Validators.required),
+      dateDebutInscription: this.fb.control<string | null>(null),
+      dateFinInscription: this.fb.control<string | null>(null)
+    });
+    this.phasesFormArray.push(phase);
+  }
+
+  removePhase(index: number): void {
+    this.phasesFormArray.removeAt(index);
+  }
 
   onSubmit(): void {
     if (this.mandatForm.invalid) {

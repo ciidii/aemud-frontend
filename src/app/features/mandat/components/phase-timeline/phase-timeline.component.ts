@@ -1,4 +1,4 @@
-import {Component, Input, OnInit, OnChanges, SimpleChanges} from '@angular/core';
+import {Component, Input, OnChanges, OnInit, SimpleChanges} from '@angular/core';
 import {CommonModule} from '@angular/common';
 
 // Assuming a simple structure for displaying phases on the timeline
@@ -11,6 +11,7 @@ export interface TimelinePhase {
   isOutsideMandate?: boolean; // New: indicates if this phase is outside mandate dates
   isDateOrderInvalid?: boolean; // New: indicates if phase start date is after end date
 }
+
 export interface TimelinePhase {
   nom: string;
   dateDebut: string; // YYYY-MM-DD
@@ -31,7 +32,7 @@ export interface TimelinePhase {
 export class PhaseTimelineComponent implements OnInit, OnChanges {
   @Input() mandateStartDate!: string; // Overall mandate start date
   @Input() mandateEndDate!: string;   // Overall mandate end date
-  @Input() phases: TimelinePhase[]  = []; // List of phases to display
+  @Input() phases: TimelinePhase[] = []; // List of phases to display
 
   timelineSegments: any[] = []; // Calculated segments for the timeline display
   totalMandateDurationDays: number = 0;

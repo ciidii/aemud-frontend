@@ -4,9 +4,10 @@ import {PhaseStatus} from "../../../core/models/phaseStatus.enum";
 export interface PhaseModel {
   id: string;
   nom: string;
-  dateDebut: string; // LocalDate in Java maps to string in TypeScript
-  dateFin: string; // LocalDate in Java maps to string in TypeScript
+  dateDebut: [number, number, number];
+  dateFin: [number, number, number];
   status: PhaseStatus;
-  dateDebutInscription: string;
-  dateFinInscription: string;
+
+  dateDebutInscription: [number, number, number];
+  dateFinInscription: [number, number, number];
 }

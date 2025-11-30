@@ -16,18 +16,19 @@ import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 })
 export class MemberHttpService {
   httpClient = inject(HttpClient);
+  private readonly _http = inject(HttpClient);
+  private readonly _url = `${environment.API_URL}/members`;
 
   searchMember(searchParams: SearchParams): Observable<ResponsePageableApi<MemberDataResponse[]>> {
     return this.httpClient.post<ResponsePageableApi<MemberDataResponse[]>>(`${environment.API_URL}/members/search`, searchParams);
   }
+
   addMember(member: any) {
     const options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     }
     return this.httpClient.post<ResponseEntityApi<MemberDataResponse>>(environment.API_URL + `/members`, member, options);
   }
-  private readonly _http = inject(HttpClient);
-  private readonly _url = `${environment.API_URL}/members`;
 
   getMemberById(id: string): Observable<ResponseEntityApi<MemberDataResponse>> {
     return this._http.get<ResponseEntityApi<MemberDataResponse>>(`${this._url}/${id}`).pipe(
@@ -39,27 +40,27 @@ export class MemberHttpService {
               id: 'reg2',
               member: id,
               phase: {
-                id: 'p2024-2',
-                nom: 'Phase 2',
-                dateDebut: '2025-02-01',
-                dateFin: '2025-07-31',
+                id: 'p2024-1',
+                nom: 'Phase 1',
+                dateDebut: [2024,10,1],
+                dateFin:[2024,10,1],
                 status: PhaseStatus.TERMINATED,
-                dateDebutInscription: '2025-02-01',
-                dateFinInscription:'2025-07-31'
+                dateDebutInscription: [2024,10,1],
+                dateFinInscription: [2024,10,1]
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
               registrationType: TypeInscription.REINSCRIPTION,
-              dateInscription:"",registrationStatus:RegistrationStatus.EXPIRED
+              dateInscription: "", registrationStatus: RegistrationStatus.EXPIRED
             },
             nextRegistrablePhase: {
-              id: 'p2025-1',
+              id: 'p2024-1',
               nom: 'Phase 1',
-              dateDebut: '2025-10-01',
-              dateFin: '2026-01-31',
-              status: PhaseStatus.CURRENT,
-              dateDebutInscription: '2025-02-01',
-              dateFinInscription:'2025-07-31'
+              dateDebut: [2024,10,1],
+              dateFin:[2024,10,1],
+              status: PhaseStatus.TERMINATED,
+              dateDebutInscription: [2024,10,1],
+              dateFinInscription: [2024,10,1]
             }
           };
         }
@@ -85,11 +86,11 @@ export class MemberHttpService {
             phase: {
               id: 'p2024-1',
               nom: 'Phase 1',
-              dateDebut: '2024-10-01',
-              dateFin: '2025-01-31',
+              dateDebut: [2024,10,1],
+              dateFin:[2024,10,1],
               status: PhaseStatus.TERMINATED,
-              dateDebutInscription: '2025-02-01',
-              dateFinInscription:'2025-07-31'
+              dateDebutInscription: [2024,10,1],
+              dateFinInscription: [2024,10,1]
             },
             registration: {
               id: 'reg1',
@@ -97,11 +98,11 @@ export class MemberHttpService {
               phase: {
                 id: 'p2024-1',
                 nom: 'Phase 1',
-                dateDebut: '2024-10-01',
-                dateFin: '2025-01-31',
+                dateDebut: [2024,10,1],
+                dateFin:[2024,10,1],
                 status: PhaseStatus.TERMINATED,
-                dateDebutInscription: '2025-02-01',
-                dateFinInscription:'2025-07-31'
+                dateDebutInscription: [2024,10,1],
+                dateFinInscription: [2024,10,1]
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
@@ -114,25 +115,25 @@ export class MemberHttpService {
           },
           {
             phase: {
-              id: 'p2024-2',
-              nom: 'Phase 2',
-              dateDebut: '2025-02-01',
-              dateFin: '2025-07-31',
+              id: 'p2024-1',
+              nom: 'Phase 1',
+              dateDebut: [2024,10,1],
+              dateFin:[2024,10,1],
               status: PhaseStatus.TERMINATED,
-              dateDebutInscription: '2025-02-01',
-              dateFinInscription:'2025-07-31'
+              dateDebutInscription: [2024,10,1],
+              dateFinInscription: [2024,10,1]
             },
             registration: {
               id: 'reg2',
               member: memberId,
               phase: {
-                id: 'p2024-2',
-                nom: 'Phase 2',
-                dateDebut: '2025-02-01',
-                dateFin: '2025-07-31',
+                id: 'p2024-1',
+                nom: 'Phase 1',
+                dateDebut: [2024,10,1],
+                dateFin:[2024,10,1],
                 status: PhaseStatus.TERMINATED,
-                dateDebutInscription: '2025-02-01',
-                dateFinInscription:'2025-07-31'
+                dateDebutInscription: [2024,10,1],
+                dateFinInscription: [2024,10,1]
               },
               mandatName: 'Mandat 2024-2025',
               statusPayment: true,
@@ -157,13 +158,13 @@ export class MemberHttpService {
         phases: [
           {
             phase: {
-              id: 'p2025-1',
+              id: 'p2024-1',
               nom: 'Phase 1',
-              dateDebut: '2025-10-01',
-              dateFin: '2026-01-31',
-              status: PhaseStatus.CURRENT,
-              dateDebutInscription: '2025-02-01',
-              dateFinInscription:'2025-07-31'
+              dateDebut: [2024,10,1],
+              dateFin:[2024,10,1],
+              status: PhaseStatus.TERMINATED,
+              dateDebutInscription: [2024,10,1],
+              dateFinInscription: [2024,10,1]
             },
             registration: null,
             isRegistrable: true,
@@ -171,13 +172,13 @@ export class MemberHttpService {
           },
           {
             phase: {
-              id: 'p2025-2',
-              nom: 'Phase 2',
-              dateDebut: '2026-02-01',
-              dateFin: '2026-07-31',
-              status: PhaseStatus.NOT_STARTED,
-              dateDebutInscription: '2025-02-01',
-              dateFinInscription:'2025-07-31'
+              id: 'p2024-1',
+              nom: 'Phase 1',
+              dateDebut: [2024,10,1],
+              dateFin:[2024,10,1],
+              status: PhaseStatus.TERMINATED,
+              dateDebutInscription: [2024,10,1],
+              dateFinInscription: [2024,10,1]
             },
             registration: null,
             isRegistrable: false,

@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 import {SidebarService} from "../../services/sidebar.service";
-import {Observable} from "rxjs";
+import {Observable, switchMap} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 import {HeaderComponent} from "../header/header.component";
@@ -32,15 +32,20 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mandatHttpService.getAllMandats().subscribe(response => {
-      console.log("########")
-      if (response.data) {
-        console.log(response.data)
-        this.appStateService.setMandats(response.data);
-        const activeMandat = response.data.find(m => m.estActif);
-        if (activeMandat) {
-          this.appStateService.setSelectedMandat(activeMandat);
+    this.mandatHttpService.getAllMandats().pipe(
+      switchMap(response => {
+        if (response.data) {
+          this.appStateService.setMandats(response.data);
+          const activeMandat = response.data.find(m => m.estActif);
+          if (activeMandat) {
+            return this.mandatHttpService.getMandatById(activeMandat.id);
+          }
         }
+        return [];
+      })
+    ).subscribe(activeMandatWithPhases => {
+      if (activeMandatWithPhases && activeMandatWithPhases.data) {
+        this.appStateService.setSelectedMandat(activeMandatWithPhases.data);
       }
     });
   }

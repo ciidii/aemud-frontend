@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { NotificationPopoverComponent } from './notification-popover.component';
+import {NotificationPopoverComponent} from './notification-popover.component';
 
 describe('NotificationPopoverComponent', () => {
   let component: NotificationPopoverComponent;
@@ -10,8 +10,8 @@ describe('NotificationPopoverComponent', () => {
     await TestBed.configureTestingModule({
       imports: [NotificationPopoverComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(NotificationPopoverComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

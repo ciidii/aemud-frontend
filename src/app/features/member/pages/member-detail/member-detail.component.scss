@@ -255,6 +255,25 @@
   margin-bottom: $space-3;
   color: $color-text-primary;
 }
+.year-selector-group {
+  display: flex;
+  flex-direction: column;    // label au-dessus
+  width: 100%;               // occupe toute la largeur
+  gap: 4px;                  // petit espace entre label et select
+}
+
+.year-selector-group label {
+  font-weight: 600;
+  color: $color-text-primary;
+}
+
+.year-selector-group select {
+  width: 100%;               // select à 100% du container
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid $color-border-default;
+  background-color: #fff;
+}
 
 // --- Year Selector (Right Column) ---
 .cotisation-header {
@@ -948,14 +967,17 @@
   background-color: $success-100;
   color: $success-900;
 }
+
 .bg-warning-light {
   background-color: $warning-100;
   color: $warning-900;
 }
+
 .bg-secondary-light {
   background-color: $gray-200;
   color: $gray-700;
 }
+
 .bg-info-light {
   background-color: $info-100;
   color: $info-900;

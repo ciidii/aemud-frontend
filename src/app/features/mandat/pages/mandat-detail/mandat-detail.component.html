@@ -15,7 +15,7 @@
         <div class="header-content">
           <h1>{{ mandat.nom }}</h1>
           <div class="header-meta">
-            <span class="status-badge" [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif">
+            <span [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif" class="status-badge">
               {{ mandat.estActif ? 'Actif' : 'Inactif' }}
             </span>
             <span class="mandate-period">
@@ -23,35 +23,37 @@
             </span>
           </div>
         </div>
-        <button class="btn-primary" (click)="goToEdit(mandat.id)">Modifier le mandat</button>
+        <button (click)="goToEdit(mandat.id)" class="btn-primary">Modifier le mandat</button>
       </header>
 
       <section class="timeline-section">
         <h2>Chronologie des phases</h2>
         <app-phase-timeline
-          [mandateStartDate]="mandat.dateDebut"
           [mandateEndDate]="mandat.dateFin"
-          >
+          [mandateStartDate]="mandat.dateDebut"
+        >
         </app-phase-timeline>
       </section>
 
       <section class="phases-list-section">
-        <h2>Détail des phases ({{mandat.phases.length}})</h2>
+        <h2>Détail des phases ({{ mandat.phases.length }})</h2>
         <div class="phases-grid">
-          <div *ngFor="let phase of mandat.phases" class="phase-card" [class.current-phase]="phase.id === currentPhaseId">
+          <div *ngFor="let phase of mandat.phases" [class.current-phase]="phase.id === currentPhaseId"
+               class="phase-card">
             <div class="phase-card-header">
               <h3>{{ phase.nom }}</h3>
               <span *ngIf="phase.id === currentPhaseId" class="current-badge">En cours</span>
             </div>
             <div class="phase-card-body">
-              <p class="phase-dates">{{ phase.dateDebut | date: 'dd/MM/yyyy' }} → {{ phase.dateFin | date: 'dd/MM/yyyy' }}</p>
-              <div class="phase-status">
-                <span class="status-label">Statut:</span>
-                <span class="status-value" [ngClass]="'status-' + phase.status.toLowerCase()">{{ phase.status }}</span>
-              </div>
-               <div class="phase-inscriptions" *ngIf="phase.dateDebutInscription && phase.dateFinInscription">
-                  <p>Inscriptions: {{ phase.dateDebutInscription | date: 'dd/MM/yyyy' }} → {{ phase.dateFinInscription | date: 'dd/MM/yyyy' }}</p>
-              </div>
+              <p class="phase-dates">
+                {{ phase.dateDebut | arrayDate }} → {{ phase.dateFin | arrayDate }}
+              </p>
+
+              <p *ngIf="phase.dateDebutInscription">
+                Inscriptions: {{ phase.dateDebutInscription | arrayDate }}
+                → {{ phase.dateFinInscription | arrayDate }}
+              </p>
+
             </div>
           </div>
         </div>

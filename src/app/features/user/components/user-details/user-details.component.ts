@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { UserResponseDto, UserService } from '../../services/user.service';
-import { NotificationService } from '../../../../core/services/notification.service';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {UserResponseDto, UserService} from '../../services/user.service';
+import {NotificationService} from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-user-details',
@@ -46,12 +46,12 @@ export class UserDetailsComponent implements OnInit {
     this.passwordForm = this.fb.group({
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', Validators.required]
-    }, { validators: this.passwordMatchValidator });
+    }, {validators: this.passwordMatchValidator});
   }
 
   passwordMatchValidator(g: FormGroup) {
     return g.get('password')?.value === g.get('confirmPassword')?.value
-      ? null : { mismatch: true };
+      ? null : {mismatch: true};
   }
 
   loadUser(id: number): void {
@@ -148,6 +148,6 @@ export class UserDetailsComponent implements OnInit {
   }
 
   redirectToMemberDetail(memberId: string) {
-        this.router.navigateByUrl(`members/details/${memberId}`)
+    this.router.navigateByUrl(`members/details/${memberId}`)
   }
 }

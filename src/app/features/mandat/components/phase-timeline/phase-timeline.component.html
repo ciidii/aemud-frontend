@@ -1,17 +1,17 @@
 <div class="phase-timeline-container">
   <div class="timeline-header">
-    <span class="timeline-status" [class.valid]="isTimelineValid" [class.invalid]="!isTimelineValid">
+    <span [class.invalid]="!isTimelineValid" [class.valid]="isTimelineValid" class="timeline-status">
       {{ timelineMessage }}
     </span>
   </div>
   <div class="timeline-bar">
     <ng-container *ngFor="let segment of timelineSegments">
       <div
-        class="timeline-segment"
-        [class.phase]="segment.type === 'phase'"
         [class.gap]="segment.type === 'gap'"
         [class.invalid-phase]="segment.type === 'phase' && segment.isInvalid"
-        [style.width.%]="segment.width">
+        [class.phase]="segment.type === 'phase'"
+        [style.width.%]="segment.width"
+        class="timeline-segment">
         <span *ngIf="segment.type === 'phase'" class="phase-name">{{ segment.name }}</span>
       </div>
     </ng-container>

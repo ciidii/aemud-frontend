@@ -32,6 +32,7 @@
       background-color: lighten($success-base, 45%);
       color: darken($success-base, 10%);
     }
+
     &.inactive {
       background-color: $gray-200;
       color: $gray-600;
@@ -106,7 +107,7 @@
       font-weight: $font-weight-bold;
       color: $color-text-primary;
     }
-    
+
     .phase-inscriptions, .phase-status {
       color: $color-text-secondary;
       @include text-body-small;
@@ -118,10 +119,21 @@
       border-radius: $radius-sm;
       color: $white;
 
-      &.status-pending { background-color: $gray-500; }
-      &.status-in_progress { background-color: $info-500; }
-      &.status-completed { background-color: $success-500; }
-      &.status-cancelled { background-color: $danger-500; }
+      &.status-pending {
+        background-color: $gray-500;
+      }
+
+      &.status-in_progress {
+        background-color: $info-500;
+      }
+
+      &.status-completed {
+        background-color: $success-500;
+      }
+
+      &.status-cancelled {
+        background-color: $danger-500;
+      }
     }
   }
 }
@@ -136,7 +148,10 @@
   background-color: $primary-500;
   color: $color-text-on-primary;
   transition: background-color 0.2s ease-in-out;
-  &:hover { background-color: $primary-600; }
+
+  &:hover {
+    background-color: $primary-600;
+  }
 }
 
 .loading-container, .error-container {

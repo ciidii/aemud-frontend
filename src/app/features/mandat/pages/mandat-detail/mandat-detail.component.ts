@@ -1,18 +1,19 @@
-import { Component, OnInit, inject } from '@angular/core';
-import { CommonModule, AsyncPipe } from '@angular/common';
-import { ActivatedRoute, Router, RouterLink } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { switchMap, catchError, map, finalize } from 'rxjs/operators';
-import { MandatHttpService } from '../../services/mandat-http.service';
-import { MandatDto } from '../../models/mandat.model';
-import { PhaseModel } from '../../models/phase.model';
-import { PhaseTimelineComponent } from '../../components/phase-timeline/phase-timeline.component';
-import { NotificationService } from '../../../../core/services/notification.service';
+import {Component, inject, OnInit} from '@angular/core';
+import {AsyncPipe, CommonModule} from '@angular/common';
+import {ActivatedRoute, Router, RouterLink} from '@angular/router';
+import {Observable, of} from 'rxjs';
+import {catchError, finalize, map, switchMap} from 'rxjs/operators';
+import {MandatHttpService} from '../../services/mandat-http.service';
+import {MandatDto} from '../../models/mandat.model';
+import {PhaseModel} from '../../models/phase.model';
+import {PhaseTimelineComponent} from '../../components/phase-timeline/phase-timeline.component';
+import {NotificationService} from '../../../../core/services/notification.service';
+import {ArrayDatePipe} from "../../../../core/pipes/array-data.pipe";
 
 @Component({
   selector: 'app-mandat-detail',
   standalone: true,
-  imports: [CommonModule, RouterLink, AsyncPipe, PhaseTimelineComponent],
+  imports: [CommonModule, RouterLink, AsyncPipe, PhaseTimelineComponent, ArrayDatePipe],
   templateUrl: './mandat-detail.component.html',
   styleUrls: ['./mandat-detail.component.scss']
 })
@@ -59,17 +60,27 @@ export class MandatDetailComponent implements OnInit {
     });
   }
 
-  private findCurrentPhase(phases: PhaseModel[]): string | null {
-    const now = new Date();
-    const currentPhase = phases.find(phase => {
-      const startDate = new Date(phase.dateDebut);
-      const endDate = new Date(phase.dateFin);
-      return now >= startDate && now <= endDate;
-    });
-    return currentPhase ? currentPhase.id : null;
-  }
-
   goToEdit(mandatId: string): void {
     this.router.navigate(['/mandats', 'edit', mandatId]);
   }
+
+  private findCurrentPhase(phases: PhaseModel[]): string | null {
+    const now = new Date();
+
+    const currentPhase = phases.find(phase => {
+      const startDate = this.toDate(phase.dateDebut);
+      const endDate = this.toDate(phase.dateFin);
+      return now >= startDate && now <= endDate;
+    });
+
+    return currentPhase?.id || null;
+  }
+
+
+  private toDate(dateArray: [number, number, number]): Date {
+    if (!dateArray) return new Date(NaN);
+    const [year, month, day] = dateArray;
+    return new Date(year, month - 1, day);
+  }
+
 }

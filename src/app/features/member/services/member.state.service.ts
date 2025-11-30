@@ -1,4 +1,4 @@
-import {inject, Injectable, OnInit} from '@angular/core';
+import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, map, tap} from "rxjs";
 import {MemberHttpService} from "./member.http.service";
 import {MemberDataResponse} from "../../../core/models/member-data.model";
@@ -18,7 +18,7 @@ export interface PaginationInfo {
 @Injectable({
   providedIn: 'root'
 })
-export class MemberStateService{
+export class MemberStateService {
 
   private readonly _searchMemberParamsObject$ = new BehaviorSubject<SearchParams>({
     page: 1,
@@ -35,17 +35,16 @@ export class MemberStateService{
     sortColumn: "personalInfo.name",
     sortDirection: true
   });
-  searchMemberParamsObject$ = this._searchMemberParamsObject$.asObservable();
-  private memberHttpService = inject(MemberHttpService);
-  private readonly _paginatedMemberSubject = new BehaviorSubject<MemberDataResponse[]>([]);
-  readonly paginatedMembers$ = this._paginatedMemberSubject.asObservable();
   private readonly _selectedMemberIds = new BehaviorSubject<string[]>([]);
+  searchMemberParamsObject$ = this._searchMemberParamsObject$.asObservable();
   readonly selectedMemberIds$ = this._selectedMemberIds.asObservable();
   readonly selectedMembersCount$ = this.selectedMemberIds$.pipe(map(ids => ids.length));
   readonly hasSelection$ = this.selectedMembersCount$.pipe(map(count => count > 0));
   readonly sortDirection$ = this.searchMemberParamsObject$.pipe(map(params => params.sortDirection ? 'asc' : 'desc'));
   readonly sortColumn$ = this.searchMemberParamsObject$.pipe(map(params => params.sortColumn));
-
+  private memberHttpService = inject(MemberHttpService);
+  private readonly _paginatedMemberSubject = new BehaviorSubject<MemberDataResponse[]>([]);
+  readonly paginatedMembers$ = this._paginatedMemberSubject.asObservable();
   private appSateService = inject(AppStateService)
   private readonly _paginationInfoSubject = new BehaviorSubject<PaginationInfo>({
     pageIndex: 1,

@@ -63,7 +63,8 @@
         <div class="filter-group">
           <h6>Bourse</h6>
           <div class="form-group">
-            <app-custom-multiselect formControlName="bourse" [items]="bourses$ | async" placeholder="Sélectionner des bourses"></app-custom-multiselect>
+            <app-custom-multiselect [items]="bourses$ | async" formControlName="bourse"
+                                    placeholder="Sélectionner des bourses"></app-custom-multiselect>
           </div>
         </div>
 
@@ -71,13 +72,15 @@
         <div class="filter-group">
           <h6>Mandats</h6>
           <div class="form-group">
-            <app-custom-multiselect formControlName="mandatIds" [items]="mandats$ | async" placeholder="Sélectionner des mandats"></app-custom-multiselect>
+            <app-custom-multiselect [items]="mandats$ | async" formControlName="mandatIds"
+                                    placeholder="Sélectionner des mandats"></app-custom-multiselect>
           </div>
         </div>
         <div class="filter-group">
           <h6>Phases</h6>
           <div class="form-group">
-            <app-custom-multiselect formControlName="phaseIds" [items]="phases$ | async" placeholder="Sélectionner des phases"></app-custom-multiselect>
+            <app-custom-multiselect [items]="phases$ | async" formControlName="phaseIds"
+                                    placeholder="Sélectionner des phases"></app-custom-multiselect>
           </div>
         </div>
       </form>

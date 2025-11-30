@@ -270,11 +270,9 @@
 
                   <div class="d-flex flex-column">
                     <strong class="text-dark">Inscription requise</strong>
-                    <small class="text-muted">
-                      Dernière inscription :
-                      <span class="fw-semibold">
-        {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}
-      </span>
+                    <small class="text-muted"> Dernière inscription :
+                      <span class="fw-semibold"> {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}
+                      </span>
                     </small>
                   </div>
                 </div>
@@ -302,20 +300,28 @@
 
             </div>
           </div>
-
-
           <!-- Subscription Status -->
           <div class="sidebar-section">
             <h5>État des Cotisations</h5>
             <div class="cotisation-header">
               <div class="year-selector-group">
                 <label for="subscription-phase">Phase :</label>
-                <select (change)="onPhaseChange($event)" class="form-select-sm" id="subscription-phase">
-                  <option *ngFor="let phase of activeMandat?.phases" [selected]="phase.id === selectedPhaseId"
-                          [value]="phase.id">
-                    {{ phase.nom }}
+                <select
+                  (change)="onPhaseChange($event)"
+                  class="form-select-sm w-100"
+                  id="subscription-phase"
+                >
+                  <option
+                    *ngFor="let phase of activeMandat?.phases"
+                    [value]="phase.id"
+                    [selected]="phase.id === selectedPhaseId"
+                  >
+                    {{ phase.nom }} —
+                    du {{ formatArrayDate(phase.dateDebut) }}
+                    au {{ formatArrayDate(phase.dateFin) }}
                   </option>
                 </select>
+
               </div>
             </div>
             <div *ngIf="contributionSummary" class="cotisation-summary">
@@ -390,7 +396,7 @@
                       </ng-container>
                     </div>
                     <div class="phase-actions">
-                      <button *ngIf="phaseItem.isRegistrable" (click)="toggleReregisterModal(phaseItem.phase)"
+                      <button (click)="toggleReregisterModal(phaseItem.phase)" *ngIf="phaseItem.isRegistrable"
                               class="btn btn-sm btn-outline-primary">
                         S'inscrire
                       </button>

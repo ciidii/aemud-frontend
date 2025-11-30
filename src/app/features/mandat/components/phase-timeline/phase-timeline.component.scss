@@ -17,9 +17,11 @@
   .timeline-status {
     @include text-body-small;
     font-weight: $font-weight-bold;
+
     &.valid {
       color: $success-500;
     }
+
     &.invalid {
       color: $danger-500;
     }

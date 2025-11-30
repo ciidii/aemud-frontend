@@ -1,15 +1,14 @@
-import { Component, OnInit } from '@angular/core';
-import { CommonModule } from '@angular/common';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Router } from '@angular/router';
+import {Component, OnInit} from '@angular/core';
+import {CommonModule} from '@angular/common';
+import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
+import {Router} from '@angular/router';
 
-import { UserService } from '../../services/user.service';
-import { NotificationService } from '../../../../core/services/notification.service';
-import { CreateUserRequest } from '../../services/user.service';
+import {CreateUserRequest, UserService} from '../../services/user.service';
+import {NotificationService} from '../../../../core/services/notification.service';
 // Pour la recherche de membre :
-import { MemberHttpService } from '../../../member/services/member.http.service';
-import { ResponsePageableApi } from '../../../../core/models/response-pageable-api';
-import { MemberDataResponse } from '../../../../core/models/member-data.model';
+import {MemberHttpService} from '../../../member/services/member.http.service';
+import {ResponsePageableApi} from '../../../../core/models/response-pageable-api';
+import {MemberDataResponse} from '../../../../core/models/member-data.model';
 
 @Component({
   selector: 'app-user-add',

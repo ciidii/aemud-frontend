@@ -1,8 +1,8 @@
-import { Component, inject } from '@angular/core';
-import { RouterLink, RouterLinkActive } from "@angular/router";
-import { AsyncPipe } from "@angular/common";
-import { AuthService } from "../../services/auth.service";
-import { SidebarService } from "../../services/sidebar.service";
+import {Component, inject} from '@angular/core';
+import {RouterLink, RouterLinkActive} from "@angular/router";
+import {AsyncPipe} from "@angular/common";
+import {AuthService} from "../../services/auth.service";
+import {SidebarService} from "../../services/sidebar.service";
 
 @Component({
   selector: 'app-aside-bare',
@@ -13,9 +13,8 @@ import { SidebarService } from "../../services/sidebar.service";
 })
 export class AsideBareComponent {
   protected sideBareService = inject(SidebarService);
-  private authService = inject(AuthService);
-
   isOpen$ = this.sideBareService.isOpen$;
+  private authService = inject(AuthService);
 
   toggleCollapse() {
     this.sideBareService.toggleCollapse();

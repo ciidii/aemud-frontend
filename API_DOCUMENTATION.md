@@ -3,6 +3,7 @@
 Ce document détaille les endpoints de l'API pour les contrôleurs `MemberController` et `RegistrationController`, à destination de l'équipe frontend.
 
 ## Table des Matières
+
 - [MemberController](#membercontroller)
   - [POST /members](#post-members)
   - [GET /members/{memberId}](#get-membersmemberid)
@@ -279,6 +280,7 @@ Préfixe du chemin : `/aemud/api/v1/registration`
   "statusPayment": "boolean"
 }
 ```
+
 - **Réponse** (`ResponseVO<Void>`).
 
 ---
@@ -300,6 +302,7 @@ Préfixe du chemin : `/aemud/api/v1/registration`
   "registrationStatus": "string (PENDING, VALIDATED, REJECTED)"
 }
 ```
+
 - **Réponse** (`ResponseVO<Void>`).
 
 ---

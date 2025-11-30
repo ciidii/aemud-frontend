@@ -1,6 +1,6 @@
-import { MandatDto } from '../../features/mandat/models/mandat.model';
-import { PhaseModel } from '../../features/mandat/models/phase.model';
-import { RegistrationModel } from './RegistrationModel';
+import {MandatDto} from '../../features/mandat/models/mandat.model';
+import {PhaseModel} from '../../features/mandat/models/phase.model';
+import {RegistrationModel} from './RegistrationModel';
 
 export interface RegistrationOverview {
   latestRegistration: RegistrationModel | null;

@@ -1,11 +1,12 @@
-import { Component, ElementRef, HostListener, inject, OnInit } from '@angular/core';
-import { AsyncPipe, NgFor, NgIf } from '@angular/common';
-import { Router, RouterLink } from '@angular/router';
-import { AuthService } from "../../../features/auth/services/auth.service";
-import { Observable } from "rxjs";
-import { NotificationPopoverComponent } from "../notification-popover/notification-popover.component";
-import { AppStateService } from "../../../core/services/app-state.service";
-import { MandatDto } from "../../../features/mandat/models/mandat.model";
+import {Component, ElementRef, HostListener, inject, OnInit} from '@angular/core';
+import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {Router, RouterLink} from '@angular/router';
+import {AuthService} from "../../../features/auth/services/auth.service";
+import {Observable} from "rxjs";
+import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
+import {AppStateService} from "../../../core/services/app-state.service";
+import {MandatDto} from "../../../features/mandat/models/mandat.model";
+import {MandatHttpService} from "../../../features/mandat/services/mandat-http.service";
 
 @Component({
   selector: 'app-nav-bar',
@@ -21,6 +22,7 @@ export class HeaderComponent implements OnInit {
   appStateService = inject(AppStateService);
   authService = inject(AuthService);
   router = inject(Router);
+  mandatHttpService = inject(MandatHttpService);
   private elementRef = inject(ElementRef);
 
   ngOnInit(): void {
@@ -30,8 +32,11 @@ export class HeaderComponent implements OnInit {
   }
 
   onMandatChange(mandat: MandatDto): void {
-    this.appStateService.setSelectedMandat(mandat);
-
+    this.mandatHttpService.getMandatById(mandat.id).subscribe(response => {
+      if (response.data) {
+        this.appStateService.setSelectedMandat(response.data);
+      }
+    });
   }
 
   logout(): void {

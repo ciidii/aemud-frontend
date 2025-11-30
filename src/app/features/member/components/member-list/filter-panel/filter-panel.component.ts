@@ -5,7 +5,7 @@ import {
 } from "../../../../../shared/components/custom-multiselect/custom-multiselect.component";
 import {MemberStateService} from "../../../services/member.state.service";
 import {filter, map, Observable, Subject, switchMap, takeUntil} from "rxjs";
-import {AsyncPipe, JsonPipe} from "@angular/common";
+import {AsyncPipe} from "@angular/common";
 import {ClubService} from "../../../../configuration/services/club.service";
 import {CommissionService} from "../../../../configuration/services/commission.service";
 import {BourseService} from "../../../../configuration/services/bourse.service";

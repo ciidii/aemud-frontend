@@ -1,7 +1,7 @@
 import {Routes} from '@angular/router';
-import { MandatListComponent } from './pages/mandat-list/mandat-list.component';
-import { MandatAddEditComponent } from './pages/mandat-add-edit/mandat-add-edit.component';
-import { MandatDetailComponent } from './pages/mandat-detail/mandat-detail.component';
+import {MandatListComponent} from './pages/mandat-list/mandat-list.component';
+import {MandatAddEditComponent} from './pages/mandat-add-edit/mandat-add-edit.component';
+import {MandatDetailComponent} from './pages/mandat-detail/mandat-detail.component';
 
 export const MANDAT_ROUTES: Routes = [
   {
