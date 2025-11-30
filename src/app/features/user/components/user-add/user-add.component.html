@@ -1,100 +1,134 @@
 <div class="user-add-container">
-  <h2 class="page-title">Créer un utilisateur</h2>
-  <p class="page-subtitle">
-    Associez un membre existant et définissez ses rôles dans le système.
-  </p>
+
+  <!-- Header -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="breadcrumbs">
+        <span>Utilisateurs</span>
+        <i class="bi bi-chevron-right"></i>
+        <span class="active">Nouveau</span>
+      </div>
+      <h1 class="page-title">Créer un utilisateur</h1>
+      <p class="page-subtitle">Configurez l'accès et les permissions pour un nouveau membre.</p>
+    </div>
+  </div>
 
   <form [formGroup]="form" (ngSubmit)="onSubmit()" class="user-add-form">
-    <!-- Section 1 : Membre associé -->
-    <section class="section-card">
-      <h3 class="section-title">Membre associé</h3>
 
-      <div class="form-group">
-        <label for="memberSearch">Rechercher un membre</label>
-        <input
-          id="memberSearch"
-          type="text"
-          class="form-control"
-          formControlName="memberSearch"
-          (input)="onSearchMember()"
-          placeholder="Nom, prénom ou email du membre"
-        />
-      </div>
-
-      <!-- Liste de résultats de recherche -->
-      <ul class="search-results" *ngIf="memberResults.length > 0">
-        <li
-          class="search-result-item"
-          *ngFor="let member of memberResults"
-          (click)="selectMember(member)"
-        >
-          <div class="result-main">
-            {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}
+    <div class="form-layout">
+      <!-- Left Column: Member Selection -->
+      <div class="form-column">
+        <section class="step-card">
+          <div class="step-header">
+            <div class="step-number">1</div>
+            <h3 class="step-title">Sélection du Membre</h3>
           </div>
-          <div class="result-secondary">
-            {{ member.contactInfo.email }} · ID: {{ member.contactInfo.numberPhone }}
+
+          <div class="step-content">
+            <p class="step-description">Recherchez le membre à qui vous souhaitez donner accès.</p>
+
+            <!-- Search Input -->
+            <div class="search-hero" [class.has-results]="memberResults.length > 0">
+              <i class="bi bi-search search-icon"></i>
+              <input type="text" class="hero-input" formControlName="memberSearch" (input)="onSearchMember()"
+                placeholder="Rechercher par nom, email..." autocomplete="off" />
+              <div class="spinner-border text-primary spinner-sm" *ngIf="false"></div> <!-- Placeholder for loading -->
+
+              <!-- Search Results Dropdown -->
+              <div class="search-results-dropdown" *ngIf="memberResults.length > 0">
+                <div class="result-item" *ngFor="let member of memberResults" (click)="selectMember(member)">
+                  <div class="result-avatar">
+                    {{ member.personalInfo.firstname.charAt(0) }}
+                  </div>
+                  <div class="result-info">
+                    <div class="result-name">
+                      {{ member.personalInfo.firstname }} {{ member.personalInfo.name }}
+                    </div>
+                    <div class="result-meta">
+                      {{ member.contactInfo.email }}
+                    </div>
+                  </div>
+                  <i class="bi bi-chevron-right result-arrow"></i>
+                </div>
+              </div>
+            </div>
+
+            <!-- Selected Member Card -->
+            <div class="selected-member-card" *ngIf="selectedMember">
+              <div class="card-content">
+                <div class="member-avatar-large">
+                  {{ selectedMember.personalInfo.firstname.charAt(0) }}
+                  <div class="check-badge"><i class="bi bi-check-lg"></i></div>
+                </div>
+                <div class="member-info-large">
+                  <h4>{{ selectedMember.personalInfo.firstname }} {{ selectedMember.personalInfo.name }}</h4>
+                  <p>{{ selectedMember.contactInfo.email }}</p>
+                  <span class="member-id">ID: {{ selectedMember.contactInfo.numberPhone }}</span>
+                </div>
+              </div>
+              <button type="button" class="btn-change"
+                (click)="selectedMember = null; form.get('memberSearch')?.setValue('')">
+                Changer
+              </button>
+            </div>
+
+            <div *ngIf="form.get('memberId')?.invalid && form.get('memberId')?.touched" class="error-message">
+              <i class="bi bi-exclamation-circle"></i> Merci de sélectionner un membre.
+            </div>
           </div>
-        </li>
-      </ul>
+        </section>
+      </div>
 
-      <!-- Résumé du membre sélectionné -->
-      <div class="selected-member-card" *ngIf="selectedMember">
-        <div class="selected-member-title">Membre sélectionné</div>
-        <div class="selected-member-body">
-          <div><strong>Nom :</strong> {{ selectedMember.personalInfo.firstname }} {{ selectedMember.personalInfo.name }}
+      <!-- Right Column: Roles -->
+      <div class="form-column">
+        <section class="step-card">
+          <div class="step-header">
+            <div class="step-number">2</div>
+            <h3 class="step-title">Définition des Rôles</h3>
           </div>
-          <div><strong>Email :</strong> {{ selectedMember.contactInfo.email }}</div>
-          <div><strong>ID membre :</strong> {{ selectedMember.contactInfo.numberPhone }}</div>
-        </div>
+
+          <div class="step-content">
+            <p class="step-description">Choisissez les niveaux d'autorisation pour cet utilisateur.</p>
+
+            <div class="roles-grid">
+              <div class="role-card" *ngFor="let role of roleDefinitions" [class.selected]="isRoleSelected(role.value)"
+                (click)="toggleRoleCard(role.value)">
+                <div class="role-icon">
+                  <i class="bi" [ngClass]="role.icon"></i>
+                </div>
+                <div class="role-content">
+                  <div class="role-header">
+                    <span class="role-name">{{ role.label }}</span>
+                    <i class="bi bi-check-circle-fill check-icon" *ngIf="isRoleSelected(role.value)"></i>
+                  </div>
+                  <p class="role-desc">{{ role.description }}</p>
+                </div>
+              </div>
+            </div>
+
+            <div *ngIf="form.get('roles')?.invalid && form.get('roles')?.touched" class="error-message">
+              <i class="bi bi-exclamation-circle"></i> Sélectionnez au moins un rôle.
+            </div>
+
+            <div class="info-box">
+              <i class="bi bi-info-circle-fill"></i>
+              <p>Un email contenant les instructions de connexion sera envoyé automatiquement au membre.</p>
+            </div>
+          </div>
+        </section>
       </div>
+    </div>
 
-      <div *ngIf="form.get('memberId')?.invalid && form.get('memberId')?.touched" class="invalid-feedback">
-        Merci de sélectionner un membre.
-      </div>
-    </section>
-
-    <!-- Section 2 : Rôles et accès -->
-    <section class="section-card">
-      <h3 class="section-title">Rôles et accès</h3>
-
-      <p class="helper-text">
-        Sélectionnez les rôles qui définissent les permissions de cet utilisateur.
-      </p>
-
-      <div class="roles-grid">
-        <label *ngFor="let role of availableRoles" class="role-item">
-          <input
-            type="checkbox"
-            [value]="role"
-            (change)="toggleRole(role, $event)"
-            [checked]="form.value.roles?.includes(role)"
-          />
-          <span class="role-label">{{ role }}</span>
-        </label>
-      </div>
-
-      <div *ngIf="form.get('roles')?.invalid && form.get('roles')?.touched" class="invalid-feedback">
-        Merci de sélectionner au moins un rôle.
-      </div>
-
-      <p class="helper-text">
-        Un mot de passe temporaire sera généré et envoyé à l’adresse email du membre.
-      </p>
-    </section>
-
-    <!-- Actions -->
-    <div class="form-actions">
-      <button type="button" class="button-secondary" (click)="onCancel()">
+    <!-- Actions Footer -->
+    <div class="form-footer">
+      <button type="button" class="btn-cancel" (click)="onCancel()">
         Annuler
       </button>
-
-      <button
-        type="submit"
-        class="button-primary"
-        [disabled]="loading || form.invalid"
-      >
-        {{ loading ? 'Création en cours...' : 'Créer l’utilisateur' }}
+      <button type="submit" class="btn-submit" [disabled]="loading || form.invalid">
+        <span *ngIf="!loading">Créer l'utilisateur</span>
+        <span *ngIf="loading"><span class="spinner-border spinner-border-sm me-2"></span>Création...</span>
       </button>
     </div>
+
   </form>
 </div>

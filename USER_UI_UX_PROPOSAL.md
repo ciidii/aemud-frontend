@@ -39,12 +39,39 @@ Nous allons passer d'un design "Admin Panel Classique" à une interface **"SaaS 
     *   **Squelette de chargement (Skeleton Loader)** au lieu du spinner pour une perception de vitesse accrue.
     *   **Empty State Illustré** : Une illustration SVG moderne et un appel à l'action clair si aucun utilisateur n'est trouvé.
 
-## 3. Plan Technique (CSS/SCSS)
-
-*   Utilisation des variables existantes (`$primary-100`, `$gray-100`) pour créer des fonds nuancés.
-*   Introduction de `backdrop-filter: blur()` pour les éléments flottants (si applicable).
-*   Transitions CSS fluides (`0.3s ease-out`) sur tous les éléments interactifs.
-
 ---
 
-**Validation** : Si cette direction vous convient, je procéderai à l'implémentation directe de ces changements dans le composant `user-list`.
+# Proposition d'Amélioration UI/UX - Création d'Utilisateur (`user-add`)
+
+Pour la page de création, nous voulons guider l'utilisateur tout en rendant le processus fluide et rassurant.
+
+## 1. Structure & Layout
+*   **Approche "Split View" ou "Centrée Focus"** : Au lieu d'un simple formulaire vertical, nous allons utiliser un conteneur centré avec une largeur maîtrisée (max-width: 800px) mais avec un design plus "aéré".
+*   **Progression Visuelle** : Bien que ce soit une page simple, séparer visuellement la "Sélection du Membre" de la "Définition des Rôles" par des cartes distinctes ou des étapes numérotées subtiles (1. Qui ? -> 2. Quoi ?).
+
+## 2. Améliorations Spécifiques
+
+### A. Recherche de Membre (Smart Search)
+*   **Actuel** : Input simple et liste basique.
+*   **Proposition** :
+    *   **Input "Hero"** : Un grand champ de recherche avec une icône de loupe proéminente.
+    *   **Résultats Enrichis** : Les résultats de recherche doivent ressembler à des "mini-cartes" avec avatar (initiales), nom en gras, et email en secondaire.
+    *   **État Sélectionné** : Une fois le membre sélectionné, afficher une "Carte d'Identité" propre du membre avec un bouton "Changer" discret, au lieu de juste remplir l'input.
+
+### B. Sélection des Rôles (Role Cards)
+*   **Actuel** : Checkboxes standard.
+*   **Proposition** :
+    *   **Cartes Sélectionnables** : Remplacer les checkboxes par des cartes cliquables (Grid layout). Chaque carte contient :
+        *   Une icône représentative (ex: Bouclier pour Admin, Bonhomme pour User).
+        *   Le nom du rôle.
+        *   Une courte description (ex: "Accès complet au système").
+    *   **Feedback Visuel** : Bordure colorée et coche verte lors de la sélection.
+
+### C. Actions & Feedback
+*   **Boutons** : Placer les actions (Annuler / Créer) dans une barre fixe en bas ou bien détachée du formulaire pour qu'elle soit toujours visible.
+*   **Message de succès** : Prévoir une animation de succès avant la redirection.
+
+## 3. Plan Technique (CSS/SCSS)
+*   Réutilisation des composants de "Card" et "Badge" définis pour la liste.
+*   Utilisation de `display: grid` pour la sélection des rôles.
+*   Animation d'entrée pour les résultats de recherche.

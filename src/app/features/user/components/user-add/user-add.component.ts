@@ -25,7 +25,32 @@ export class UserAddComponent implements OnInit {
   memberResults: MemberDataResponse[] = [];
   selectedMember: MemberDataResponse | null = null;
 
-  availableRoles: string[] = ['ROLE_USER', 'ROLE_ADMIN', 'ROLE_MEMBER'];
+  roleDefinitions = [
+    {
+      value: 'USER',
+      label: 'Utilisateur',
+      description: 'Accès standard aux fonctionnalités de base.',
+      icon: 'bi-person'
+    },
+    {
+      value: 'ADMIN',
+      label: 'Administrateur',
+      description: 'Gestion des utilisateurs et configuration globale.',
+      icon: 'bi-shield-lock'
+    },
+    {
+      value: 'SUPER_ADMIN',
+      label: 'Super Admin',
+      description: 'Accès total au système.',
+      icon: 'bi-shield-fill'
+    },
+    {
+      value: 'GUEST',
+      label: 'Invité',
+      description: 'Accès limité en lecture seule.',
+      icon: 'bi-eye'
+    }
+  ];
 
   loading = false;
 
@@ -74,15 +99,19 @@ export class UserAddComponent implements OnInit {
     this.memberResults = [];
   }
 
-  toggleRole(role: string, event: Event): void {
-    const checked = (event.target as HTMLInputElement).checked;
+  toggleRoleCard(role: string): void {
     const currentRoles: string[] = this.form.get('roles')?.value || [];
 
-    if (checked && !currentRoles.includes(role)) {
-      this.form.get('roles')?.setValue([...currentRoles, role]);
-    } else if (!checked) {
+    if (currentRoles.includes(role)) {
       this.form.get('roles')?.setValue(currentRoles.filter(r => r !== role));
+    } else {
+      this.form.get('roles')?.setValue([...currentRoles, role]);
     }
+  }
+
+  isRoleSelected(role: string): boolean {
+    const currentRoles: string[] = this.form.get('roles')?.value || [];
+    return currentRoles.includes(role);
   }
 
   onSubmit(): void {
