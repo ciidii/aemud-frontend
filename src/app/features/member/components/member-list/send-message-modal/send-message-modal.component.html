@@ -14,7 +14,9 @@
         <form [formGroup]="messageForm">
           <div class="recipient-info">
             <i class="bi bi-people-fill"></i>
-            <span>Destinataires : 45 membres (valeur test)</span>
+            <span>
+              Destinataires : {{ recipientNumbers.length }} membre{{ recipientNumbers.length > 1 ? 's' : '' }}
+            </span>
           </div>
 
           <div class="message-group">
@@ -28,7 +30,13 @@
                       placeholder="Entrez votre message ici..."
                       rows="5"></textarea>
             <div class="char-counter">
-              0/160 (1 SMS)
+              {{ charCount }}/160 ({{ smsCount }} SMS)
+            </div>
+            <div *ngIf="recipientNumbers.length === 0" class="text-warning small mt-1">
+              Aucun destinataire sélectionné. Sélectionnez au moins un membre pour envoyer le message.
+            </div>
+            <div *ngIf="recipientNumbers.length > 50" class="text-warning small mt-1">
+              Attention, vous allez envoyer un message à {{ recipientNumbers.length }} membres.
             </div>
           </div>
         </form>
@@ -39,8 +47,11 @@
         <button (click)="close.emit()" class="btn btn-secondary" type="button">
           Annuler
         </button>
-        <button (click)="sendMessage()" [disabled]="!messageForm.get('message')?.value" class="btn btn-primary"
-                type="button">
+        <button
+          (click)="sendMessage()"
+          [disabled]="messageForm.invalid || recipientNumbers.length === 0 || isSubmitting"
+          class="btn btn-primary"
+          type="button">
           <i class="bi bi-send"></i>
           Envoyer
         </button>

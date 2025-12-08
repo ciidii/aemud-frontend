@@ -1,5 +1,24 @@
 <div class="container">
   <div class="list-header">
+    <div *ngIf="isSmsSelectMode" class="alert alert-info mb-3" role="alert">
+      <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
+        <div>
+          <strong>Mode sélection SMS activé</strong>
+          <div class="small text-muted">Sélectionnez les membres à contacter, puis utilisez l'action ci-dessous pour envoyer un SMS groupé.</div>
+        </div>
+        <div class="d-flex align-items-center gap-2">
+          <button type="button"
+                  class="btn btn-primary btn-sm"
+                  [disabled]="!(hasSelection$ | async)"
+                  (click)="useSelectionForSms()">
+            <i class="bi bi-people"></i> Utiliser cette sélection pour un SMS
+          </button>
+          <button type="button" class="btn btn-outline-secondary btn-sm" routerLink="/notifications/sms">
+            Quitter le mode SMS
+          </button>
+        </div>
+      </div>
+    </div>
     <app-table-header (exportTriggered)="toggleExportModal()"></app-table-header>
     <app-table-filters (openFilterPanel)="toggleFilterPanel()"></app-table-filters>
   </div>
@@ -17,13 +36,19 @@
     <app-table-footer
       (deleteTriggered)="toggleDeleteModal()"
       (exportTriggered)="toggleExportModal()"
-      (sendMessageTriggered)="toggleSendMessageModal()">
+      (sendMessageTriggered)="toggleSendMessageModal()"
+      [isSmsSelectMode]="isSmsSelectMode"
+      (useSelectionForSms)="useSelectionForSms()">
     </app-table-footer>
   </div>
 </div>
 
 <app-export-modal (close)="toggleExportModal()" *ngIf="isExportModalOpen"></app-export-modal>
-<app-send-message-modal (close)="toggleSendMessageModal()" *ngIf="isSendMessageModalOpen"></app-send-message-modal>
+<app-send-message-modal
+  *ngIf="isSendMessageModalOpen"
+  [recipientNumbers]="recipientNumbers"
+  (close)="toggleSendMessageModal()">
+</app-send-message-modal>
 <app-filter-panel (applyFilters)="applyFilters($event)" (close)="toggleFilterPanel()" (resetFilters)="resetFilters()"
                   [isOpen]="isFilterPanelOpen"></app-filter-panel>
 <app-confirm-delete-modal

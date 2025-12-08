@@ -13,10 +13,18 @@
       <div class="modal-body">
         <div class="search-bar-container">
           <i class="bi bi-search"></i>
-          <input class="form-control" placeholder="Rechercher un template..." type="text">
+          <input class="form-control" placeholder="Rechercher un template..." type="text" disabled>
         </div>
 
-        <div class="template-list">
+        <div *ngIf="loading" class="template-loading text-center py-3">
+          Chargement des templates...
+        </div>
+
+        <div *ngIf="!loading && templates.length === 0" class="template-empty text-center py-3">
+          Aucun template de message disponible.
+        </div>
+
+        <div *ngIf="!loading && templates.length > 0" class="template-list">
           <div *ngFor="let template of templates" class="template-item">
             <div class="template-details">
               <h6 class="template-title">{{ template.name }}</h6>

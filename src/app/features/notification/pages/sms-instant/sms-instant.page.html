@@ -1,0 +1,75 @@
+<div class="sms-page-container">
+  <div class="sms-header">
+    <h2>Envoi immédiat de SMS</h2>
+    <p class="text-muted">Envoyez un message groupé à vos membres.</p>
+  </div>
+
+  <form [formGroup]="form" class="sms-form" (ngSubmit)="send()">
+    <!-- Destinataires -->
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Destinataires</h5>
+        <button type="button" class="btn btn-outline-primary btn-sm" (click)="goToMemberSelection()">
+          <i class="bi bi-people"></i> Sélectionner depuis les membres
+        </button>
+      </div>
+      <div class="card-body">
+        <label class="form-label" for="recipients">Numéros de téléphone</label>
+        <textarea
+          id="recipients"
+          class="form-control"
+          rows="3"
+          formControlName="recipients"
+          placeholder="Ex : 0612345678, 0698765432 ou un numéro par ligne"></textarea>
+        <small class="text-muted d-block mt-1">
+          Séparez les numéros par des virgules, des points-virgules ou des retours à la ligne.
+        </small>
+        <div class="mt-2">
+          <strong>{{ recipientCount }}</strong> destinataire{{ recipientCount > 1 ? 's' : '' }} détecté{{ recipientCount > 1 ? 's' : '' }}.
+        </div>
+      </div>
+    </div>
+
+    <!-- Message -->
+    <div class="card mb-3">
+      <div class="card-header d-flex justify-content-between align-items-center">
+        <h5 class="mb-0">Message</h5>
+        <button type="button" class="btn btn-outline-secondary btn-sm" (click)="openTemplateModal()">
+          <i class="bi bi-file-text"></i> Utiliser un template
+        </button>
+      </div>
+      <div class="card-body">
+        <textarea
+          id="message"
+          class="form-control"
+          rows="5"
+          formControlName="message"
+          placeholder="Saisissez votre message..."></textarea>
+        <div class="d-flex justify-content-between align-items-center mt-2">
+          <small class="text-muted">{{ charCount }}/160 ({{ smsCount }} SMS)</small>
+        </div>
+      </div>
+    </div>
+
+    <!-- Actions -->
+    <div class="d-flex justify-content-end gap-2">
+      <button type="button" class="btn btn-outline-secondary" [disabled]="isSubmitting" (click)="form.reset()">
+        Annuler
+      </button>
+      <button
+        type="submit"
+        class="btn btn-primary"
+        [disabled]="form.invalid || isSubmitting || recipientCount === 0">
+        <i class="bi bi-send"></i>
+        Envoyer maintenant
+      </button>
+    </div>
+  </form>
+</div>
+
+<!-- Modal de sélection de template -->
+<app-template-select-modal
+  *ngIf="isTemplateModalOpen"
+  (close)="closeTemplateModal()"
+  (templateSelected)="onTemplateSelected($event)">
+</app-template-select-modal>

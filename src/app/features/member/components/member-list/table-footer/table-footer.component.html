@@ -6,8 +6,11 @@
       <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
     </div>
     <div class="actions">
-      <button (click)="sendMessageTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
+      <button *ngIf="!isSmsSelectMode" (click)="sendMessageTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
         <i class="bi bi-send"></i> Envoyer message
+      </button>
+      <button *ngIf="isSmsSelectMode" (click)="useSelectionForSms.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
+        <i class="bi bi-people"></i> Utiliser cette sélection pour un SMS
       </button>
       <button (click)="exportTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
         <i class="bi bi-upload"></i> Exporter

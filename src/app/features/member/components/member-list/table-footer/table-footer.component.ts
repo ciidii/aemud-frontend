@@ -1,4 +1,4 @@
-import {Component, EventEmitter, inject, Output} from '@angular/core';
+import {Component, EventEmitter, Input, Output, inject} from '@angular/core';
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MemberStateService, PaginationInfo} from "../../../services/member.state.service";
 import {Observable} from "rxjs";
@@ -18,6 +18,8 @@ export class TableFooterComponent {
   @Output() exportTriggered = new EventEmitter<void>();
   @Output() sendMessageTriggered = new EventEmitter<void>();
   @Output() deleteTriggered = new EventEmitter<void>();
+  @Output() useSelectionForSms = new EventEmitter<void>();
+  @Input() isSmsSelectMode = false;
   private memberStateService = inject(MemberStateService);
 
   hasSelection$: Observable<boolean> = this.memberStateService.hasSelection$;
