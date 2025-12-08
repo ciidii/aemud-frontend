@@ -20,7 +20,7 @@ import {
   PersonalInfo,
   ReligiousKnowledge,
 } from "../../../../core/models/member-data.model";
-import {combineLatest, filter, map, Observable, of, take} from "rxjs";
+import {combineLatest, filter, map, Observable, of, shareReplay, take} from "rxjs";
 import {MandatDto} from "../../../mandat/models/mandat.model";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
@@ -59,8 +59,7 @@ import {
   ContributionMonth,
   ContributionYear
 } from "../../../../core/models/contribution-data.model";
-// @ts-ignore
-import * as contributionData from '../../../../../../contribution_data_response.json';
+import {RegistrationModel} from "../../../../core/models/RegistrationModel";
 
 
 @Component({
@@ -290,12 +289,18 @@ export class MemberDetailComponent implements OnInit {
   loadContributionData(phaseId: string): void {
     if (!this.memberId) return;
 
-    // TODO: Replace with a real service call
-    // Mocking service call with imported JSON data
-    of(contributionData).pipe(map(res => res.data)).subscribe(data => {
-      this.contributionData = data;
-      this.calculateSummary(data);
-    });
+    this.contributionService.getContributionCalendar(this.memberId, phaseId)
+      .pipe(map(response => response.data))
+      .subscribe({
+        next: (data) => {
+          this.contributionData = data;
+          this.calculateSummary(data);
+        },
+        error: (err) => {
+          console.error('Failed to load contribution data', err);
+          this.notificationService.showError("Échec du chargement des cotisations.");
+        }
+      });
   }
 
   handleMonthClick(month: ContributionMonth): void {
@@ -412,8 +417,7 @@ export class MemberDetailComponent implements OnInit {
       this.activeMandat = activeMandat;
       this.currentMember = member;
       this.member$ = of(member);
-      this.registrationOverview = member.registrationOverview;
-      this.loadTimeline();
+      this.loadTimelineAndOverview();
 
       const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
 
@@ -430,9 +434,15 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
-  private loadTimeline(): void {
+  private loadTimelineAndOverview(): void {
     if (!this.memberId) return;
-    this.timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId);
+
+    const timeline$ = this.memberHttpService.getMemberRegistrationTimeline(this.memberId).pipe(shareReplay(1));
+    this.timeline$ = timeline$;
+
+    timeline$.pipe(take(1)).subscribe(timeline => {
+      this.registrationOverview = this.buildRegistrationOverview(timeline);
+    });
   }
 
   private calculateSummary(data: ContributionData): void {
@@ -448,6 +458,30 @@ export class MemberDetailComponent implements OnInit {
       totalPaid,
       totalDue,
       completionRate: `${paidCount}/${totalCount} mois`
+    };
+  }
+
+  private buildRegistrationOverview(timeline: MandateTimelineItem[]): RegistrationOverview {
+    let latest: RegistrationModel | null = null;
+    let nextPhase: PhaseModel | null = null;
+
+    for (const item of timeline) {
+      for (const phaseItem of item.phases) {
+        if (phaseItem.registration) {
+          if (!latest || new Date(phaseItem.registration.dateInscription) > new Date(latest.dateInscription)) {
+            latest = phaseItem.registration;
+          }
+        }
+
+        if (!nextPhase && phaseItem.isRegistrable) {
+          nextPhase = phaseItem.phase;
+        }
+      }
+    }
+
+    return {
+      latestRegistration: latest,
+      nextRegistrablePhase: nextPhase,
     };
   }
 
