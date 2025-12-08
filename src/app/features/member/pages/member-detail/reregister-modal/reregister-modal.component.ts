@@ -28,7 +28,7 @@ export class ReregisterModalComponent implements OnInit {
     this.reregisterForm = this.formBuilder.group({
       phaseId: [null, Validators.required],
       statusPayment: [false, Validators.required],
-      registrationType: [TypeInscription.REINSCRIPTION, Validators.required]
+      registrationType: [TypeInscription.INITIAL, Validators.required]
     });
   }
 

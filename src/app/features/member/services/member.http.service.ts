@@ -40,7 +40,7 @@ export class MemberHttpService {
   }
 
   register(registrationData: any): Observable<RegistrationResponse> {
-    return this._http.post<RegistrationResponse>(`${this._url}/register`, registrationData);
+    return this._http.post<RegistrationResponse>(`${environment.API_URL}/registration`, registrationData);
   }
 
   updateRegister(registrationData: RegistrationModel): Observable<ResponseEntityApi<RegistrationModel>> {

@@ -121,7 +121,8 @@ export enum RegistrationStatus {
 }
 
 export enum TypeInscription {
-  REINSCRIPTION = 'REINSCRIPTION'
+  REINSCRIPTION = 'REINSCRIPTION',
+  INITIAL = 'INITIAL',
 }
 
 export enum CORAN_LEVEL {
