@@ -1,0 +1,93 @@
+<div class="sms-templates-page container-fluid py-3">
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+      <h2 class="mb-0">Modèles de SMS</h2>
+      <p class="text-muted mb-0">Gérez les messages types utilisés pour vos envois groupés.</p>
+    </div>
+    <button type="button" class="btn btn-primary" (click)="openCreateForm()">
+      <i class="bi bi-plus-circle"></i> Nouveau template
+    </button>
+  </div>
+
+  <div class="row g-3">
+    <div class="col-lg-7">
+      <div class="card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <span>Liste des templates</span>
+        </div>
+        <div class="card-body p-0">
+          <div *ngIf="loading" class="p-3 text-center text-muted">
+            Chargement des templates...
+          </div>
+
+          <div *ngIf="!loading && templates.length === 0" class="p-3 text-center text-muted">
+            Aucun template de SMS pour le moment.
+          </div>
+
+          <div *ngIf="!loading && templates.length > 0" class="table-responsive">
+            <table class="table mb-0 align-middle">
+              <thead class="table-light">
+              <tr>
+                <th>Nom</th>
+                <th>Contenu</th>
+                <th class="text-end">Actions</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr *ngFor="let tpl of templates">
+                <td class="fw-semibold">{{ tpl.modelName }}</td>
+                <td>
+                  <div class="text-truncate" style="max-width: 320px;" [title]="tpl.smsModel">
+                    {{ tpl.smsModel }}
+                  </div>
+                </td>
+                <td class="text-end">
+                  <button type="button" class="btn btn-sm btn-outline-secondary me-2" (click)="openEditForm(tpl)">
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button type="button" class="btn btn-sm btn-outline-danger" (click)="deleteTemplate(tpl)">
+                    <i class="bi bi-trash"></i>
+                  </button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-5" *ngIf="isFormVisible">
+      <div class="card">
+        <div class="card-header">
+          {{ isEditMode ? 'Modifier un template' : 'Nouveau template' }}
+        </div>
+        <div class="card-body">
+          <form [formGroup]="form" (ngSubmit)="submitForm()">
+            <div class="mb-3">
+              <label for="modelName" class="form-label">Nom du template</label>
+              <input id="modelName" type="text" class="form-control" formControlName="modelName">
+            </div>
+
+            <div class="mb-3">
+              <label for="smsModel" class="form-label">Contenu du SMS</label>
+              <textarea id="smsModel" rows="5" class="form-control" formControlName="smsModel"></textarea>
+              <small class="text-muted d-block mt-1">
+                {{ form.get('smsModel')?.value?.length || 0 }}/160 caractères (approx.)
+              </small>
+            </div>
+
+            <div class="d-flex justify-content-end gap-2">
+              <button type="button" class="btn btn-outline-secondary" (click)="cancelForm()">
+                Annuler
+              </button>
+              <button type="submit" class="btn btn-primary" [disabled]="form.invalid">
+                Enregistrer
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
