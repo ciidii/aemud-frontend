@@ -1,15 +1,13 @@
 import {inject, Injectable} from '@angular/core';
-import {Observable,} from 'rxjs';
+import {Observable, tap} from 'rxjs';
 import {UserCredential} from "../../../core/models/user-credential.model";
 import {SessionService} from "../../../core/services/session.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {ResponseEntityApi} from "../../../core/models/response-entity-api";
-import {jwtDecode} from "jwt-decode";
 import {Router} from "@angular/router";
 import {Role, UserModel} from "../../../core/models/user.model";
 import {ChangePasswordRequest} from "../../../core/models/ChangePasswordRequest";
-import {tap} from "rxjs/operators";
 
 @Injectable({
   providedIn: 'root'
@@ -18,20 +16,16 @@ export class AuthService {
 
   private apiUrl = environment.API_URL;
 
-  private username = '';
   private sessionService = inject(SessionService);
   private http = inject(HttpClient);
   private router = inject(Router);
-  private jwt_token = "";
   private currentUser: UserModel | null = null;
 
   constructor() {
-    const token = localStorage.getItem('aemud_auth_token');
-    if (token) {
-      const user = localStorage.getItem('user');
-      if (user) {
-        this.currentUser = JSON.parse(user);
-      }
+    // Re-hydrate user state on application load
+    const user = localStorage.getItem('user');
+    if (user) {
+      this.currentUser = JSON.parse(user);
     }
   }
 
@@ -39,24 +33,35 @@ export class AuthService {
     return this.currentUser;
   }
 
-  login(credentials: UserCredential): Observable<ResponseEntityApi<any>> {
-    return this.http.post<any>(`${this.apiUrl}/auth/authenticate`, {
+  login(credentials: UserCredential): Observable<ResponseEntityApi<UserModel>> {
+    return this.http.post<ResponseEntityApi<UserModel>>(`${this.apiUrl}/auth/authenticate`, {
       username: credentials.username,
       password: credentials.password
     }).pipe(
       tap(response => {
-        this.sessionService.startSession(response.data.jwt);
-        this.fetchJwt(response.data.jwt);
+        // The backend now sets an HttpOnly cookie.
+        // We receive the user object in the response.
+        const user = response.data;
+        this.sessionService.create(user);
+        this.currentUser = user;
+        this.redirectToTheRightPage(user);
+      })
+    );
+  }
+
+  logout(): Observable<any> {
+    // Call the dedicated logout endpoint to clear the HttpOnly cookie
+    return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
+      tap(() => {
+        // Clear session state on the client-side
+        this.currentUser = null;
+        this.sessionService.clearSession();
       })
     );
   }
 
   firstConnectionPasswordChange(credentials: ChangePasswordRequest): Observable<ResponseEntityApi<any>> {
-    return this.http.post<any>(`${this.apiUrl}/users/change-password-first-connection`, {
-      password: credentials.password,
-      confirmPassword: credentials.confirmPassword,
-      username: credentials.username
-    });
+    return this.http.post<any>(`${this.apiUrl}/users/change-password-first-connection`, credentials);
   }
 
   getUserByUsername(username: string): Observable<ResponseEntityApi<UserModel>> {
@@ -68,48 +73,10 @@ export class AuthService {
     const passwordChange: ChangePasswordRequest = {
       password: password,
       confirmPassword: confirmPassword,
-      username: this.username
+      username: this.currentUser?.username || ''
     };
-    return this.firstConnectionPasswordChange(passwordChange).pipe(
-      tap(result => {
-        if (result.result === "Succeeded") {
-          this.sessionService.startSession(this.jwt_token);
-        }
-      })
-    );
+    return this.firstConnectionPasswordChange(passwordChange);
   }
-
-  logout(): void {
-    this.sessionService.clearSession();
-  }
-
-
-  fetchJwt(jwt: string) {
-    this.jwt_token = jwt;
-    const decodedJwt: any = jwtDecode(jwt);
-    this.username = decodedJwt.sub;
-
-    this.getUserByUsername(decodedJwt.sub).subscribe({
-      next: resApi => {
-        if (resApi.status === "OK") {
-          const rawUser = resApi.data;
-          const mappedRoles: Role[] = rawUser.roles.map((roleName: any) => roleName as Role);
-          const user: UserModel = {
-            id: rawUser.id,
-            username: rawUser.username,
-            locked: rawUser.locked,
-            forcePasswordChange: rawUser.forcePasswordChange,
-            memberId: rawUser.memberId,
-            roles: mappedRoles
-          };
-          this.currentUser = user;
-          localStorage.setItem('user', JSON.stringify(user));
-          this.redirectToTheRightPage(user);
-        }
-      }
-    });
-  }
-
 
   signup(credentials: any): Observable<ResponseEntityApi<any>> {
     return this.http.post<any>(`${this.apiUrl}/auth/register`, credentials);
@@ -117,13 +84,11 @@ export class AuthService {
 
   redirectToTheRightPage(userFromApi: UserModel): void {
     if (userFromApi.forcePasswordChange) {
-      console.log("La redirection ne fonction pas")
       this.router.navigateByUrl('auth/first-connection-password');
     } else if (userFromApi.locked) {
+      // Should not happen if login is successful, but as a safeguard
       this.router.navigateByUrl('auth/login');
-    } else if (!userFromApi.forcePasswordChange && !userFromApi.locked) {
-      this.sessionService.startSession(this.jwt_token);
-      console.log("la redirection ne fonction pas")
+    } else {
       this.router.navigateByUrl('members/list-members');
     }
   }
@@ -143,3 +108,4 @@ export class AuthService {
     );
   }
 }
+
