@@ -1,59 +1,35 @@
-<div class="login-container">
-  <!-- Image Panel (Left) -->
-  <div class="login-image-panel">
-    <div class="image-panel-top-content">
-      <h2 class="mission-title">CENTRE ISLAMIQUE FIABLE POUR SUIVRE LE CORAN ET LA SOUNA</h2>
-      <p class="location-text">Grande mosquée UCAD, Université Cheikh Anta Diop de Dakar</p>
-    </div>
+<div class="login-form-content">
+  <img alt="AEMUD Logo" class="logo" src="assets/background/logo_aemud_Plan_de_travail_1.png">
+  <h2 class="form-title">Content de vous revoir !</h2>
+  <p class="form-subtitle">Connectez-vous pour accéder à votre espace.</p>
 
-    <div class="icon-showcase">
-      <i class="bi bi-people-fill"></i>
-      <i class="bi bi-graph-up"></i>
-      <i class="bi bi-megaphone-fill"></i>
-    </div>
-
-    <div class="image-panel-bottom-content">
-      <h1 class="benefit-title">Votre gestion de membres, simplifiée et centralisée.</h1>
-      <p class="benefit-subtitle">Accédez aux informations, communiquez avec les membres et suivez les cotisations en un seul endroit.</p>
-    </div>
-  </div>
-
-  <!-- Form Panel (Right) -->
-  <div class="login-form-panel">
-    <div class="login-form-content">
-      <img alt="AEMUD Logo" class="logo" src="assets/background/logo_aemud_Plan_de_travail_1.png">
-      <h2 class="form-title">Content de vous revoir !</h2>
-      <p class="form-subtitle">Connectez-vous pour accéder à votre espace.</p>
-
-      <div class="card shadow-lg">
-        <div class="card-body p-4">
-          <form (ngSubmit)="handleLogin()" [formGroup]="formGroup">
-            <div>
-              <label class="form-label">Nom d'utilisateur</label>
-              <input class="form-control" formControlName="username">
-            </div>
-            <div class="mt-3">
-              <label class="form-label">Mot de passe</label>
-              <input class="form-control" formControlName="password" type="password">
-            </div>
-            <div class="mt-2 text-end">
-              <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
-            </div>
-            <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-              {{ errorMessage }}
-            </div>
-            <div>
-              <button [disabled]="formGroup.invalid || (loading$ | async)"
-                      class="btn-connexion mt-3 w-100 btn btn-primary btn-lg"
-                      type="submit">
-                <span *ngIf="loading$ | async" aria-hidden="true" class="spinner-border spinner-border-sm"
-                      role="status"></span>
-                Connexion
-              </button>
-            </div>
-          </form>
+  <div class="card shadow-lg">
+    <div class="card-body p-4">
+      <form (ngSubmit)="handleLogin()" [formGroup]="formGroup">
+        <div>
+          <label class="form-label">Nom d'utilisateur</label>
+          <input class="form-control" formControlName="username">
         </div>
-      </div>
+        <div class="mt-3">
+          <label class="form-label">Mot de passe</label>
+          <input class="form-control" formControlName="password" type="password">
+        </div>
+        <div class="mt-2 text-end">
+          <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+          {{ errorMessage }}
+        </div>
+        <div>
+          <button [disabled]="formGroup.invalid || (loading$ | async)"
+                  class="btn-connexion mt-3 w-100 btn btn-primary btn-lg"
+                  type="submit">
+            <span *ngIf="loading$ | async" aria-hidden="true" class="spinner-border spinner-border-sm"
+                  role="status"></span>
+            Connexion
+          </button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

@@ -1,0 +1,22 @@
+@import 'variables';
+
+:host {
+  display: block;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.login-container {
+  display: flex;
+  height: 100%;
+}
+
+.login-form-panel {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $space-4;
+  background-color: $gray-100;
+  overflow-y: auto;
+}

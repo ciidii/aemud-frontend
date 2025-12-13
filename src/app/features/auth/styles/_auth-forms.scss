@@ -1,0 +1,50 @@
+// This file contains shared styles for the content within the auth form panel.
+@import 'variables';
+
+:host {
+  max-width: 550px;
+  width: 100%;
+}
+
+.login-form-content {
+  width: 100%;
+  text-align: center;
+
+  .logo {
+    max-width: 120px;
+    margin-bottom: $space-6;
+  }
+
+  .form-title {
+    font-size: 2.2rem;
+    font-weight: 700;
+    margin-bottom: $space-2;
+    color: $color-text-primary;
+  }
+
+  .form-subtitle {
+    font-size: 1.2rem;
+    color: $color-text-secondary;
+    margin-bottom: $space-6;
+  }
+}
+
+.card {
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+  text-align: left;
+
+  .card-header {
+    display: none;
+  }
+}
+
+.btn-connexion {
+  background-color: $primary-500;
+  color: $white;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+}
