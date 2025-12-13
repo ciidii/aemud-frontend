@@ -1,11 +1,11 @@
 import {Routes} from "@angular/router";
-import {LoginComponent} from "./components/login/login.component";
-import {PasswordForgottenComponent} from "./components/password-forgotten/password-forgotten.component";
+import {LoginComponent} from "./pages/login/login.component";
+import {PasswordForgottenComponent} from "./pages/password-forgotten/password-forgotten.component";
 import {
   FirstConnectionPasswordComponent
-} from "./components/first-connection-password/first-connection-password.component";
-import {SignupComponent} from "./components/signup/signup.component";
-import {ChangePasswordComponent} from "./components/change-password/change-password.component";
+} from "./pages/first-connection-password/first-connection-password.component";
+import {SignupComponent} from "./pages/signup/signup.component";
+import {ChangePasswordComponent} from "./pages/change-password/change-password.component";
 import {UnauthorizedComponent} from "./pages/unauthorized/unauthorized.component";
 
 export const APP_ROUTES: Routes = [

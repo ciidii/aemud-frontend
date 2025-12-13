@@ -1,0 +1,54 @@
+<div class="login-container">
+
+  <!-- Branding Panel (Left) -->
+  <div class="login-branding-panel">
+    <div class="login-branding-content">
+      <img alt="AEMUD Logo" class="logo" src="assets/background/logo_aemud_Plan_de_travail_1.png">
+      <div class="taglines">
+        <h2 class="h2">CENTRE ISLAMIQUE FIABLE POUR SUIVRE LE CORAN ET LA SOUNA</h2>
+        <h2 class="h2">Bienvenue dans le formulaire d'<span class="text-black">adhesion</span> de l'AEMUD</h2>
+        <p class="location"><i class="bi bi-geo-alt"></i> Grande mosquée UCAD, Université Cheikh Anta Diop de Dakar</p>
+      </div>
+      <div class="footer-text">
+        <p>Sécretariat général</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form Panel (Right) -->
+  <div class="login-form-panel">
+    <div class="col-md-10 col-lg-8 col-xl-6">
+      <div class="card shadow-lg">
+        <div class="card-header text-center">Veuillez entrer vos coordonnées</div>
+        <div class="card-body p-4">
+          <form (ngSubmit)="handleLogin()" [formGroup]="formGroup">
+            <div>
+              <label class="form-label">Nom d'utilisateur</label>
+              <input class="form-control" formControlName="username">
+            </div>
+            <div class="mt-3">
+              <label class="form-label">Mot de passe</label>
+              <input class="form-control" formControlName="password" type="password">
+            </div>
+            <div class="mt-2 text-end">
+              <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
+            </div>
+            <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+              {{ errorMessage }}
+            </div>
+            <div>
+              <button [disabled]="formGroup.invalid || (loading$ | async)"
+                      class="btn-connexion mt-3 w-100 btn btn-primary btn-lg"
+                      type="submit">
+                <span *ngIf="loading$ | async" aria-hidden="true" class="spinner-border spinner-border-sm"
+                      role="status"></span>
+                Connexion
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>

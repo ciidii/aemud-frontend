@@ -1,0 +1,100 @@
+@import 'variables';
+
+:host {
+  // Ensures the component host takes up the full viewport height.
+  display: block;
+  height: 100vh;
+  overflow: hidden; // Prevents scrollbars on the main page.
+}
+
+.login-container {
+  display: flex;
+  height: 100%;
+}
+
+.login-branding-panel {
+  flex: 0 0 50%; // Takes up 50% of the width, doesn't grow or shrink.
+  background-color: $primary-500;
+  color: $white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: $space-12;
+  text-align: center;
+
+  .login-branding-content {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-around; // Better distribution
+    height: 100%;
+    max-width: 450px;
+  }
+
+  .logo {
+    max-width: 150px; // A more controlled size.
+    align-self: center;
+  }
+
+  .taglines {
+    h2 {
+      // Typography is inherited from global styles, but can be fine-tuned.
+      font-size: 2.1rem;
+      font-weight: 700;
+      margin-bottom: $space-4;
+      line-height: 1.4;
+    }
+    .location {
+      font-size: 1.4rem;
+      margin-top: $space-4;
+      opacity: 0.8;
+    }
+  }
+
+  .footer-text {
+    p {
+      font-weight: 600;
+      opacity: 0.9;
+    }
+  }
+
+  // Hide on medium screens and down
+  @media (max-width: 992px) {
+    display: none;
+  }
+}
+
+.login-form-panel {
+  flex: 1; // Takes up the remaining space.
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: $space-4;
+  background-color: $gray-100;
+  overflow-y: auto; // Allow scrolling on this panel if content overflows.
+}
+
+// Overrides for form elements within the new layout
+.card {
+  border: 1px solid $color-border-default;
+  border-radius: $radius-lg;
+  box-shadow: $shadow-lg;
+
+  .card-header {
+    background-color: transparent;
+    border-bottom: none;
+    color: $color-text-primary;
+    font-weight: 700;
+    font-size: 1.8rem;
+    padding: $space-4 $space-2 0;
+  }
+}
+
+.btn-connexion {
+  background-color: $primary-500;
+  color: $white;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+}
