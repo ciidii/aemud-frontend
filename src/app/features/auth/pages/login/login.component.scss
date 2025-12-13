@@ -12,50 +12,55 @@
   height: 100%;
 }
 
-.login-branding-panel {
+.login-image-panel {
   flex: 0 0 50%; // Takes up 50% of the width, doesn't grow or shrink.
-  background-color: $primary-500;
-  color: $white;
+  background: url('../../../../../assets/background/fond.png') no-repeat center center;
+  background-size: cover;
+  position: relative;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: center; // Center the three content blocks vertically
   align-items: center;
-  padding: $space-12;
+  padding: $space-8 $space-12;
   text-align: center;
 
-  .login-branding-content {
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: $primary-500;
+    opacity: 0.85;
+  }
+
+  .image-panel-top-content {
+    position: relative;
+    color: $white;
+    max-width: 80%;
+    margin-bottom: $space-8;
+  }
+
+  .icon-showcase {
+    position: relative;
     display: flex;
-    flex-direction: column;
-    justify-content: space-around; // Better distribution
-    height: 100%;
-    max-width: 450px;
-  }
+    justify-content: center;
+    gap: $space-12; // Space between icons
+    width: 100%;
+    margin-bottom: $space-8;
 
-  .logo {
-    max-width: 150px; // A more controlled size.
-    align-self: center;
-  }
-
-  .taglines {
-    h2 {
-      // Typography is inherited from global styles, but can be fine-tuned.
-      font-size: 2.1rem;
-      font-weight: 700;
-      margin-bottom: $space-4;
-      line-height: 1.4;
-    }
-    .location {
-      font-size: 1.4rem;
-      margin-top: $space-4;
+    i {
+      font-size: 2.8rem; // Icon size
+      color: $white;
       opacity: 0.8;
     }
   }
 
-  .footer-text {
-    p {
-      font-weight: 600;
-      opacity: 0.9;
-    }
+  .image-panel-bottom-content {
+    position: relative;
+    color: $white;
+    max-width: 70%;
   }
 
   // Hide on medium screens and down
@@ -72,6 +77,30 @@
   padding: $space-4;
   background-color: $gray-100;
   overflow-y: auto; // Allow scrolling on this panel if content overflows.
+
+  .login-form-content {
+    max-width: 450px;
+    width: 100%;
+    text-align: center;
+
+    .logo {
+      max-width: 120px;
+      margin-bottom: $space-6;
+    }
+
+    .form-title {
+      font-size: 2.2rem;
+      font-weight: 700;
+      margin-bottom: $space-2;
+      color: $color-text-primary;
+    }
+
+    .form-subtitle {
+      font-size: 1.2rem;
+      color: $color-text-secondary;
+      margin-bottom: $space-6;
+    }
+  }
 }
 
 // Overrides for form elements within the new layout
@@ -79,14 +108,10 @@
   border: 1px solid $color-border-default;
   border-radius: $radius-lg;
   box-shadow: $shadow-lg;
+  text-align: left;
 
   .card-header {
-    background-color: transparent;
-    border-bottom: none;
-    color: $color-text-primary;
-    font-weight: 700;
-    font-size: 1.8rem;
-    padding: $space-4 $space-2 0;
+    display: none; // Header is no longer used in the new design.
   }
 }
 
@@ -98,3 +123,4 @@
     background-color: $primary-600;
   }
 }
+
