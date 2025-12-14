@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {Observable, tap} from 'rxjs';
+import {map, Observable, tap} from 'rxjs';
 import {UserCredential} from "../../../core/models/user-credential.model";
 import {SessionService} from "../../../core/services/session.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -12,7 +12,7 @@ import {ChangePasswordRequest} from "../../../core/models/ChangePasswordRequest"
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthHttpService {
 
   private apiUrl = environment.API_URL;
 
@@ -33,19 +33,22 @@ export class AuthService {
     return this.currentUser;
   }
 
-  login(credentials: UserCredential): Observable<ResponseEntityApi<UserModel>> {
-    return this.http.post<ResponseEntityApi<UserModel>>(`${this.apiUrl}/auth/authenticate`, {
+  login(credentials: UserCredential): Observable<ResponseEntityApi<any>> {
+    // This call only sets the HttpOnly cookie. User data must be fetched separately.
+    return this.http.post<ResponseEntityApi<any>>(`${this.apiUrl}/auth/authenticate`, {
       username: credentials.username,
       password: credentials.password
-    }).pipe(
+    });
+  }
+
+  getMe(): Observable<UserModel> {
+    return this.http.get<ResponseEntityApi<UserModel>>(`${this.apiUrl}/users/me`).pipe(
       tap(response => {
-        // The backend now sets an HttpOnly cookie.
-        // We receive the user object in the response.
         const user = response.data;
         this.sessionService.create(user);
         this.currentUser = user;
-        this.redirectToTheRightPage(user);
-      })
+      }),
+      map(response => response.data) // Return only the user object to the subscriber
     );
   }
 
@@ -80,17 +83,6 @@ export class AuthService {
 
   signup(credentials: any): Observable<ResponseEntityApi<any>> {
     return this.http.post<any>(`${this.apiUrl}/auth/register`, credentials);
-  }
-
-  redirectToTheRightPage(userFromApi: UserModel): void {
-    if (userFromApi.forcePasswordChange) {
-      this.router.navigateByUrl('auth/first-connection-password');
-    } else if (userFromApi.locked) {
-      // Should not happen if login is successful, but as a safeguard
-      this.router.navigateByUrl('auth/login');
-    } else {
-      this.router.navigateByUrl('members/list-members');
-    }
   }
 
   hasRole(requiredRoles: Role[]): boolean {

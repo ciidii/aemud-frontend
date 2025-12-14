@@ -8,9 +8,9 @@ Ce document détaille les étapes à suivre pour adapter l'application frontend 
 
 *Cette phase est critique et doit être testée rigoureusement.*
 
-### **Étape 1.1 : Refactor `AuthService` (Login)**
+### **Étape 1.1 : Refactor `AuthHttpService` (Login)**
 
-*   **Fichier(s) concerné(s) :** `src/app/features/auth/services/auth.service.ts`
+*   **Fichier(s) concerné(s) :** `src/app/features/auth/services/auth-http.service.ts`
 *   **Action :**
     *   Dans la méthode `login()`, supprimer toute la logique de récupération du token (`jwt`) depuis le corps de la réponse de l'endpoint `POST /auth/authenticate`.
     *   Supprimer toute instruction de stockage du token dans `localStorage` ou `sessionStorage`.
@@ -25,11 +25,11 @@ Ce document détaille les étapes à suivre pour adapter l'application frontend 
     *   Supprimer la ligne de code qui ajoute l'en-tête `Authorization: Bearer <token>` aux requêtes sortantes.
 *   **Vérification :** Aucune requête API ne doit contenir l'en-tête `Authorization` pour les endpoints authentifiés.
 
-### **Étape 1.3 : Refactor `AuthService` (Logout)**
+### **Étape 1.3 : Refactor `AuthHttpService` (Logout)**
 
-*   **Fichier(s) concerné(s) :** `src/app/features/auth/services/auth.service.ts`
+*   **Fichier(s) concerné(s) :** `src/app/features/auth/services/auth-http.service.ts`
 *   **Action :**
-    *   Créer une nouvelle méthode `logout()` dans `AuthService`.
+    *   Créer une nouvelle méthode `logout()` dans `AuthHttpService`.
     *   Cette méthode doit effectuer une requête `POST` vers le nouvel endpoint `/auth/logout`.
     *   Après le succès de cette requête, effacer toute information utilisateur côté client (ex: dans `SessionService` ou `AppStateService`).
     *   Rediriger l'utilisateur vers la page de login (`/auth/login`).

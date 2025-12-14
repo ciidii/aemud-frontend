@@ -1,7 +1,7 @@
 import {Component, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {Router, RouterLink} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {AuthHttpService} from "../../services/auth-http.service";
 import {finalize} from "rxjs";
 import {NgIf} from "@angular/common";
 
@@ -20,7 +20,7 @@ export class SignupComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private router: Router,
-    private authService: AuthService
+    private authService: AuthHttpService
   ) {
   }
 

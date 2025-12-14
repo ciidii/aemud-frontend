@@ -1,7 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgIf} from "@angular/common";
-import {AuthService} from "../../services/auth.service";
+import {AuthHttpService} from "../../services/auth-http.service";
 import {finalize} from "rxjs";
 import {Router} from "@angular/router";
 
@@ -17,7 +17,7 @@ export class FirstConnectionPasswordComponent implements OnInit {
   isLoading = false;
   errorMessage: string | null = null;
   private formBuilder = inject(FormBuilder);
-  private authService = inject(AuthService);
+  private authService = inject(AuthHttpService);
   private router = inject(Router);
 
 

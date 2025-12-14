@@ -1,4 +1,4 @@
-// src/app/core/services/auth.service.ts
+// src/app/core/services/auth-http.service.ts
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable, of} from 'rxjs'; // 'map' n'est pas strictement nécessaire ici si on émet directement un booléen, mais peut être gardé.
 import {delay, tap} from 'rxjs/operators';
@@ -31,10 +31,10 @@ export class AuthService {
           localStorage.setItem('access_token', fakeToken);
           this.isAuthenticatedSubject.next(true);
           this.router.navigate(['/orders']);
-          console.log('Login successful in AuthService');
+          console.log('Login successful in AuthHttpService');
         } else {
           this.isAuthenticatedSubject.next(false);
-          console.error('Invalid credentials in AuthService: Provided email/password do not match expected values.');
+          console.error('Invalid credentials in AuthHttpService: Provided email/password do not match expected values.');
           // Si l'authentification échoue, il est préférable de lancer une erreur ici
           // pour que le 'error' callback de subscribe soit déclenché.
           throw new Error('Invalid credentials');

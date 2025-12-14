@@ -17,9 +17,6 @@
         <div class="mt-2 text-end">
           <a [routerLink]="['/auth', 'password-forgotten']">Mot de passe oublié ?</a>
         </div>
-        <div *ngIf="errorMessage" class="alert alert-danger mt-3">
-          {{ errorMessage }}
-        </div>
         <div>
           <button [disabled]="formGroup.invalid || (loading$ | async)"
                   class="btn-connexion mt-3 w-100 btn btn-primary btn-lg"

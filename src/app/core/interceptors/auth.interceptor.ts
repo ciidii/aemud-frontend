@@ -1,18 +1,20 @@
 import {inject} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
-import {AuthService} from "../../features/auth/services/auth.service";
+import {AuthHttpService} from "../../features/auth/services/auth-http.service";
 import {NotificationService} from "../services/notification.service";
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
-  const authService = inject(AuthService);
+  const authService = inject(AuthHttpService);
   const notificationService = inject(NotificationService);
 
-  // The browser now automatically sends the HttpOnly cookie,
-  // so we no longer need to add the Authorization header manually.
-  // The original request is passed through unmodified.
+  // Clone the request to add the withCredentials flag.
+  // This is necessary for the browser to send the HttpOnly auth cookie.
+  const authReq = req.clone({
+    withCredentials: true,
+  });
 
-  return next(req).pipe(
+  return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // If the cookie is expired or invalid, the API will return a 401 Unauthorized status.
       if (error.status === 401) {

@@ -102,7 +102,7 @@ export class SessionService {
 ```typescript
 // ... imports
 export const authInterceptor: HttpInterceptorFn = (req, next) => {
-  const authService = inject(AuthService);
+  const authService = inject(AuthHttpService);
   const toaster = inject(ToastrService);
   const authToken = localStorage.getItem('aemud_auth_token');
   
@@ -134,11 +134,11 @@ La logique d'ajout de header est supprimée. La gestion d'erreur est mise à jou
 import {inject} from '@angular/core';
 import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
 import {catchError, Observable, throwError} from 'rxjs';
-import {AuthService} from "../../features/auth/services/auth.service";
+import {AuthHttpService} from "../../features/auth/services/auth.service";
 import {ToastrService} from "ngx-toastr"; // Ou NotificationService
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
-  const authService = inject(AuthService);
+  const authService = inject(AuthHttpService);
   const toaster = inject(ToastrService); // Remplacer par NotificationService si standardisé
 
   // Le header 'Authorization' n'est plus nécessaire.
@@ -161,11 +161,11 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
 
 ---
 
-## 3. Refactoring de `auth.service.ts`
+## 3. Refactoring de `auth-http.service.ts`
 
 **Objectif :** Adapter le service à la nouvelle API : le `login` ne reçoit plus de token et le `logout` doit appeler un nouvel endpoint.
 
-### Fichier : `src/app/features/auth/services/auth.service.ts`
+### Fichier : `src/app/features/auth/services/auth-http.service.ts`
 
 #### Logique Actuelle (extraits) :
 ```typescript
@@ -195,7 +195,7 @@ import {Observable, tap} from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
-export class AuthService {
+export class AuthHttpService {
   private apiUrl = environment.API_URL;
   private sessionService = inject(SessionService);
   private http = inject(HttpClient);
@@ -272,7 +272,7 @@ export class LoginComponent implements OnInit {
   globalError: string | null = null;
 
   private formBuilder = inject(FormBuilder);
-  private authService = inject(AuthService);
+  private authService = inject(AuthHttpService);
   private _loading = new BehaviorSubject<boolean>(false);
   loading$ = this._loading.asObservable();
 

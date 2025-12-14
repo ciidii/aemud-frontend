@@ -1,9 +1,11 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {RouterLink} from "@angular/router";
-import {AuthService} from "../../services/auth.service";
+import {Router, RouterLink} from "@angular/router";
+import {AuthHttpService} from "../../services/auth-http.service";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {BehaviorSubject, finalize} from "rxjs";
+import {BehaviorSubject, finalize, switchMap} from "rxjs";
+import {NotificationService} from "../../../../core/services/notification.service";
+import {UserModel} from "../../../../core/models/user.model";
 
 @Component({
   selector: 'app-login',
@@ -14,9 +16,10 @@ import {BehaviorSubject, finalize} from "rxjs";
 })
 export class LoginComponent implements OnInit {
   formGroup!: FormGroup;
-  errorMessage: string | null = null;
   private formBuilder = inject(FormBuilder);
-  private authService = inject(AuthService);
+  private authService = inject(AuthHttpService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
   private _loading = new BehaviorSubject<boolean>(false);
   loading$ = this._loading.asObservable();
 
@@ -28,18 +31,28 @@ export class LoginComponent implements OnInit {
   }
 
   handleLogin(): void {
-
     if (this.formGroup.invalid) {
+      this.notificationService.showError("Veuillez remplir tous les champs.");
       return;
     }
-    this.errorMessage = null;
     this._loading.next(true);
-    this.authService.login(this.formGroup.value)
-      .pipe(finalize(() => this._loading.next(false)))
-      .subscribe({
-        error: (err) => {
-          this.errorMessage = err.error.error.message
+    this.authService.login(this.formGroup.value).pipe(
+      switchMap(() => this.authService.getMe()),
+      finalize(() => this._loading.next(false))
+    ).subscribe({
+      next: (user) => {
+        if (user.forcePasswordChange) {
+          this.router.navigateByUrl('auth/first-connection-password');
+        } else if (user.locked) {
+          this.notificationService.showError("Votre compte est verrouillé.");
+        } else {
+          this.router.navigateByUrl('members/list-members');
         }
-      });
+      },
+      error: (err) => {
+        const errorMessage = err?.error?.message || "Une erreur inconnue est survenue.";
+        this.notificationService.showError(errorMessage);
+      }
+    });
   }
 }

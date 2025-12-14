@@ -104,5 +104,5 @@ Cette page est vide. C'est une opportunité pour compléter le parcours de gesti
 
 ## 5. Notes sur l'Intégration Backend
 
--   **Nomenclature des Services**: Il est recommandé de clarifier la nomenclature dans `AuthService`. Avoir une méthode `changePassword` qui appelle `firstConnectionPasswordChange` est source de confusion. Les noms de méthodes doivent refléter précisément leur fonction.
+-   **Nomenclature des Services**: Il est recommandé de clarifier la nomenclature dans `AuthHttpService`. Avoir une méthode `changePassword` qui appelle `firstConnectionPasswordChange` est source de confusion. Les noms de méthodes doivent refléter précisément leur fonction.
 -   **Validation des DTOs**: Sans le guide de migration, il est difficile de valider que les interfaces TypeScript (par ex. `CreateUserRequest`) correspondent parfaitement aux DTOs attendus par le backend. Une vérification est recommandée.
