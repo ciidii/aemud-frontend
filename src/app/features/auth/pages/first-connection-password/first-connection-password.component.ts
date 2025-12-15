@@ -1,54 +1,76 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators} from "@angular/forms";
-import {NgIf} from "@angular/common";
+import {AbstractControl, FormBuilder, FormGroup, ReactiveFormsModule, ValidationErrors, ValidatorFn, Validators} from "@angular/forms";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {AuthHttpService} from "../../services/auth-http.service";
 import {finalize} from "rxjs";
 import {Router} from "@angular/router";
+import {FormErrorService} from "../../../../core/services/form-error.service";
+import {ValidationMessageComponent} from "../../../../shared/components/validation-message/validation-message.component";
+
+// Custom Validator
+export function passwordMatchValidator(controlName: string, matchingControlName: string): ValidatorFn {
+  return (formGroup: AbstractControl): ValidationErrors | null => {
+    const control = formGroup.get(controlName);
+    const matchingControl = formGroup.get(matchingControlName);
+
+    if (matchingControl?.errors && !matchingControl.errors['passwordMismatch']) {
+      // Return if another validator has already found an error on the matchingControl
+      return null;
+    }
+
+    if (control?.value !== matchingControl?.value) {
+      matchingControl?.setErrors({ passwordMismatch: true });
+      return { passwordMismatch: true };
+    } else {
+      matchingControl?.setErrors(null);
+      return null;
+    }
+  };
+}
+
 
 @Component({
   selector: 'app-first-connection-password',
   templateUrl: './first-connection-password.component.html',
   styleUrls: ['./first-connection-password.component.scss'],
   standalone: true,
-  imports: [FormsModule, ReactiveFormsModule, NgIf]
+  imports: [ReactiveFormsModule, NgIf, AsyncPipe, ValidationMessageComponent]
 })
 export class FirstConnectionPasswordComponent implements OnInit {
   formGroup!: FormGroup;
   isLoading = false;
-  errorMessage: string | null = null;
   private formBuilder = inject(FormBuilder);
   private authService = inject(AuthHttpService);
   private router = inject(Router);
-
+  private formErrorService = inject(FormErrorService);
 
   ngOnInit(): void {
     this.formGroup = this.formBuilder.group({
-      password: ['', [Validators.required]],
+      password: ['', [Validators.required, Validators.minLength(8)]],
       confirmPassword: ['', [Validators.required]]
-    });
+    }, { validators: passwordMatchValidator('password', 'confirmPassword') });
   }
 
   handlePasswordChange(): void {
     if (this.formGroup.invalid) {
+      this.formGroup.markAllAsTouched();
       return;
     }
-    if (this.formGroup.value.password !== this.formGroup.value.confirmPassword) {
-      this.errorMessage = "Les mots de passe ne correspondent pas.";
-      return;
-    }
-    this.authService.changePassword(this.formGroup.get("password")?.value, this.formGroup.get("confirmPassword")?.value).pipe(
+
+    this.isLoading = true;
+    const { password, confirmPassword } = this.formGroup.value;
+
+    this.authService.changePassword(password, confirmPassword).pipe(
       finalize(() => {
-        this.isLoading = true;
-        this.errorMessage = null;
+        this.isLoading = false;
       })
     ).subscribe({
       next: () => {
-        this.router.navigateByUrl("members/member-list")
+        this.router.navigateByUrl("/members/list-members");
       },
       error: (err) => {
-        this.errorMessage = err.message;
+        this.formErrorService.handleServerErrors(err, this.formGroup);
       }
-    })
-
+    });
   }
 }

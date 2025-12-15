@@ -18,6 +18,7 @@ export class ValidationMessageComponent {
     'email': () => `L\'adresse e-mail est invalide`,
     'minlength': (params) => `Ce champ doit contenir au moins ${params.requiredLength} caractères`,
     'maxlength': (params) => `Ce champ ne peut pas dépasser ${params.requiredLength} caractères`,
+    'passwordMismatch': () => `Les mots de passe ne correspondent pas`,
   };
 
   shouldShowErrors(): boolean {
