@@ -30,8 +30,17 @@ export class ValidationMessageComponent {
       return [];
     }
 
-    return Object.keys(errors).map(err =>
-      this.errorMessages[err] ? this.errorMessages[err](errors[err]) : 'Erreur inconnue'
-    );
+    return Object.keys(errors).map(key => {
+      if (key === 'serverError') {
+        // For server errors, the message is the value of the error object.
+        return errors[key];
+      }
+      // For standard client-side errors, look up the message in the map.
+      if (this.errorMessages[key]) {
+        return this.errorMessages[key](errors[key]);
+      }
+      // Fallback for any other unknown error.
+      return 'Erreur de validation inconnue.';
+    });
   }
 }

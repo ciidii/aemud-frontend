@@ -17,7 +17,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
   return next(authReq).pipe(
     catchError((error: HttpErrorResponse) => {
       // If the cookie is expired or invalid, the API will return a 401 Unauthorized status.
-      if (error.status === 401) {
+      if (error.status === 401 && !error.url?.includes("auth/authenticate")) {
         notificationService.showWarning("Votre session a expiré, veuillez vous reconnecter !");
         authService.logout().subscribe(); // Call logout and subscribe to trigger the request
       }
