@@ -36,7 +36,7 @@ export class UserDetailsComponent implements OnInit {
   ngOnInit(): void {
     const id = this.route.snapshot.paramMap.get('id');
     if (id) {
-      this.loadUser(+id);
+      this.loadUser(id);
     } else {
       this.error = 'Identifiant utilisateur manquant.';
     }
@@ -54,7 +54,7 @@ export class UserDetailsComponent implements OnInit {
       ? null : {mismatch: true};
   }
 
-  loadUser(id: number): void {
+  loadUser(id: string): void {
     this.loading = true;
     this.error = null;
     this.userService.getUserById(id).subscribe({
