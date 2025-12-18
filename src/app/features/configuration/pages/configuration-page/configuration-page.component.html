@@ -1,0 +1,36 @@
+<div class="container-fluid p-4">
+  <h2 class="mb-4">Paramétrage de l'application</h2>
+
+  <ul class="nav nav-tabs" id="configTab" role="tablist">
+    <li class="nav-item" role="presentation">
+      <button class="nav-link active" id="clubs-tab" data-bs-toggle="tab" data-bs-target="#clubs-tab-pane" type="button" role="tab" aria-controls="clubs-tab-pane" aria-selected="true">
+        Clubs
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="commissions-tab" data-bs-toggle="tab" data-bs-target="#commissions-tab-pane" type="button" role="tab" aria-controls="commissions-tab-pane" aria-selected="false">
+        Commissions
+      </button>
+    </li>
+    <li class="nav-item" role="presentation">
+      <button class="nav-link" id="bourses-tab" data-bs-toggle="tab" data-bs-target="#bourses-tab-pane" type="button" role="tab" aria-controls="bourses-tab-pane" aria-selected="false">
+        Bourses
+      </button>
+    </li>
+  </ul>
+
+  <div class="tab-content bg-white p-4 border border-top-0" id="configTabContent">
+    <div class="tab-pane fade show active" id="clubs-tab-pane" role="tabpanel" aria-labelledby="clubs-tab" tabindex="0">
+      <!-- Le contenu du composant app-club-admin sera ici -->
+      <app-club-admin></app-club-admin>
+    </div>
+    <div class="tab-pane fade" id="commissions-tab-pane" role="tabpanel" aria-labelledby="commissions-tab" tabindex="0">
+      <!-- Le contenu du composant app-commission-admin sera ici -->
+      <app-commission-admin></app-commission-admin>
+    </div>
+    <div class="tab-pane fade" id="bourses-tab-pane" role="tabpanel" aria-labelledby="bourses-tab" tabindex="0">
+      <!-- Le contenu du composant app-bourse-admin sera ici -->
+      <app-bourse-admin></app-bourse-admin>
+    </div>
+  </div>
+</div>

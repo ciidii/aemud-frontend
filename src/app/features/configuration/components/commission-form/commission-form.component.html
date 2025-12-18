@@ -1,0 +1,22 @@
+<form [formGroup]="commissionForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <p class="text-muted fst-italic">Les champs marqués d'un <span class="required-asterisk">*</span> sont obligatoires.</p>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="name" placeholder="Nom de la commission" formControlName="name">
+      <label for="name">Nom de la commission <span class="required-asterisk">*</span></label>
+      <app-validation-message [control]="commissionForm.controls.name"></app-validation-message>
+    </div>
+    <div class="form-floating">
+      <textarea class="form-control" id="description" placeholder="Description" formControlName="description" style="height: 100px"></textarea>
+      <label for="description">Description</label>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">Annuler</button>
+    <button type="submit" class="btn btn-primary" [disabled]="commissionForm.invalid">
+      <span *ngIf="isSaving" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status" *ngIf="isSaving"> Enregistrement...</span>
+      <span *ngIf="!isSaving">Enregistrer</span>
+    </button>
+  </div>
+</form>

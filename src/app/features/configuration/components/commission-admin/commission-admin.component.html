@@ -1,1 +1,63 @@
-<p>commission-admin works!</p>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Liste des commissions</h5>
+    <button class="btn btn-primary btn-sm" (click)="openCommissionModal()">
+      <i class="bi bi-plus-lg me-2"></i>
+      Ajouter une commission
+    </button>
+  </div>
+  <div class="card-body">
+    <div *ngIf="commissions$ | async as commissions; else loading">
+      <div *ngIf="commissions.length > 0; else emptyState" class="table-responsive">
+        <table class="table table-striped table-hover">
+          <thead>
+            <tr>
+              <th scope="col">Nom</th>
+              <th scope="col">Description</th>
+              <th scope="col" class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let commission of commissions">
+              <td>{{ commission.name }}</td>
+              <td>{{ commission.description }}</td>
+              <td class="text-end">
+                <button class="btn btn-link btn-sm text-primary" (click)="openCommissionModal(commission)">
+                  <i class="bi bi-pencil-fill"></i>
+                </button>
+                <button class="btn btn-link btn-sm text-danger" (click)="openDeleteConfirm(commission)">
+                  <i class="bi bi-trash-fill"></i>
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <ng-template #emptyState>
+        <div class="text-center p-5">
+          <p class="text-muted">Aucune commission n'a été ajoutée pour le moment.</p>
+        </div>
+      </ng-template>
+    </div>
+    <ng-template #loading>
+      <app-skeleton-loader [isLoading]="true"></app-skeleton-loader>
+    </ng-template>
+  </div>
+</div>
+
+<!-- Modale pour Ajouter/Modifier une commission -->
+<app-modal [isOpen]="isModalOpen" (closeModal)="closeCommissionModal()" [title]="selectedCommission ? 'Modifier la commission' : 'Ajouter une commission'">
+  <app-commission-form
+    [commission]="selectedCommission"
+    [isSaving]="isSaving"
+    (save)="onSaveCommission($event)"
+    (closeModal)="closeCommissionModal()">
+  </app-commission-form>
+</app-modal>
+
+<!-- Modale de confirmation de suppression -->
+<app-confirm-delete-modal
+  [isOpen]="isConfirmOpen"
+  (closeModal)="closeDeleteConfirm()"
+  (confirmDelete)="onDeleteCommission()">
+</app-confirm-delete-modal>
