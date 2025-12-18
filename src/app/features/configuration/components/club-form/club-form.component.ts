@@ -25,8 +25,7 @@ export class ClubFormComponent implements OnInit {
   ngOnInit(): void {
     this.clubForm = this.fb.group({
       id: [this.club?.id],
-      name: [this.club?.name || '', [Validators.required, Validators.minLength(3)]],
-      description: [this.club?.description || '']
+      name: [this.club?.name || '', [Validators.required, Validators.minLength(3)]]
     });
   }
 

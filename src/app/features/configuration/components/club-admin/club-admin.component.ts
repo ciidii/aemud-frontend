@@ -52,7 +52,7 @@ export class ClubAdminComponent implements OnInit {
     this.isSaving = true;
     const saveOperation = clubData.id
       ? this.clubService.updateClub(clubData)
-      : this.clubService.createClub(clubData);
+      : this.clubService.createClub({name: clubData.name});
 
     saveOperation.subscribe({
       next: () => {

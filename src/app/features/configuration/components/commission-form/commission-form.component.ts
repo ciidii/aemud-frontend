@@ -25,8 +25,7 @@ export class CommissionFormComponent implements OnInit {
   ngOnInit(): void {
     this.commissionForm = this.fb.group({
       id: [this.commission?.id],
-      name: [this.commission?.name || '', [Validators.required, Validators.minLength(3)]],
-      description: [this.commission?.description || '']
+      name: [this.commission?.name || '', [Validators.required, Validators.minLength(3)]]
     });
   }
 

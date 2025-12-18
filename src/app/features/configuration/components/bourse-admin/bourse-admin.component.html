@@ -19,8 +19,8 @@
           </thead>
           <tbody>
             <tr *ngFor="let bourse of bourses">
-              <td>{{ bourse.type }}</td>
-              <td>{{ bourse.amount | currency:'XAF':'symbol':'1.0-0' }}</td>
+              <td>{{ bourse.lebelle }}</td>
+              <td>{{ bourse.montant | currency:'XAF':'symbol':'1.0-0' }}</td>
               <td class="text-end">
                 <button class="btn btn-link btn-sm text-primary" (click)="openBourseModal(bourse)">
                   <i class="bi bi-pencil-fill"></i>

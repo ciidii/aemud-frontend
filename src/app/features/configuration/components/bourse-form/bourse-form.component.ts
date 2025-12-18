@@ -25,8 +25,8 @@ export class BourseFormComponent implements OnInit {
   ngOnInit(): void {
     this.bourseForm = this.fb.group({
       id: [this.bourse?.id],
-      type: [this.bourse?.type || '', [Validators.required, Validators.minLength(3)]],
-      amount: [this.bourse?.amount || null, [Validators.required, Validators.min(1)]]
+      type: [this.bourse?.lebelle || '', [Validators.required, Validators.minLength(3)]],
+      amount: [this.bourse?.montant || null, [Validators.required, Validators.min(1)]]
     });
   }
 

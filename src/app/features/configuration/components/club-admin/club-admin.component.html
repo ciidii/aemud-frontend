@@ -12,15 +12,12 @@
         <table class="table table-striped table-hover">
           <thead>
           <tr>
-            <th scope="col">Nom</th>
-            <th scope="col">Description</th>
-            <th scope="col" class="text-end">Actions</th>
-          </tr>
+                          <th scope="col">Nom</th>
+                          <th scope="col" class="text-end">Actions</th>          </tr>
           </thead>
           <tbody>
           <tr *ngFor="let club of clubs">
             <td>{{ club.name }}</td>
-            <td>{{ club.description }}</td>
             <td class="text-end">
               <button class="btn btn-link btn-sm text-primary" (click)="openClubModal(club)">
                 <i class="bi bi-pencil-fill"></i>

@@ -52,7 +52,7 @@ export class BourseAdminComponent implements OnInit {
     this.isSaving = true;
     const saveOperation = bourseData.id
       ? this.bourseService.updateBourse(bourseData)
-      : this.bourseService.createBourse(bourseData);
+      : this.bourseService.createBourse({type: bourseData.lebelle, amount: bourseData.montant});
 
     saveOperation.subscribe({
       next: () => {
@@ -78,7 +78,7 @@ export class BourseAdminComponent implements OnInit {
   onDeleteBourse(): void {
     if (!this.selectedBourse || !this.selectedBourse.id) return;
 
-    this.bourseService.deleteBourse(this.selectedBourse.id).subscribe({
+    this.bourseService.deleteBourse(this.selectedBourse.id.toString()).subscribe({
       next: () => {
         this.notificationService.showSuccess('Bourse supprimée avec succès.');
         this.refresh$.next();

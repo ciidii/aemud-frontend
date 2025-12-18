@@ -52,7 +52,7 @@ export class CommissionAdminComponent implements OnInit {
     this.isSaving = true;
     const saveOperation = commissionData.id
       ? this.commissionService.updateCommission(commissionData)
-      : this.commissionService.createCommission(commissionData);
+      : this.commissionService.createCommission({name: commissionData.name});
 
     saveOperation.subscribe({
       next: () => {

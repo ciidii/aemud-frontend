@@ -13,14 +13,12 @@
           <thead>
             <tr>
               <th scope="col">Nom</th>
-              <th scope="col">Description</th>
               <th scope="col" class="text-end">Actions</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let commission of commissions">
               <td>{{ commission.name }}</td>
-              <td>{{ commission.description }}</td>
               <td class="text-end">
                 <button class="btn btn-link btn-sm text-primary" (click)="openCommissionModal(commission)">
                   <i class="bi bi-pencil-fill"></i>

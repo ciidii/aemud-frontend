@@ -4,12 +4,9 @@
     <div class="form-floating mb-3">
       <input type="text" class="form-control" id="name" placeholder="Nom de la commission" formControlName="name">
       <label for="name">Nom de la commission <span class="required-asterisk">*</span></label>
-      <app-validation-message [control]="commissionForm.controls.name"></app-validation-message>
+      <app-validation-message [control]="commissionForm.get('name')!"></app-validation-message>
     </div>
-    <div class="form-floating">
-      <textarea class="form-control" id="description" placeholder="Description" formControlName="description" style="height: 100px"></textarea>
-      <label for="description">Description</label>
-    </div>
+
   </div>
   <div class="modal-footer">
     <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">Annuler</button>

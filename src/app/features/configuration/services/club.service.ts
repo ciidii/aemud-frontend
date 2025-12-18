@@ -8,7 +8,7 @@ import {ResponseEntityApi} from '../../../core/models/response-entity-api';
 
 export interface ClubDto {
   name: string;
-  description: string;
+  description?: string;
 }
 
 @Injectable({
