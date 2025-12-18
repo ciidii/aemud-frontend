@@ -20,7 +20,7 @@ export interface UserSearchParams {
 }
 
 export interface UserResponseDto {
-  id: number;
+  id: string;
   username: string;
   roles: string[];
   locked: boolean;
@@ -42,10 +42,7 @@ export class UserService {
   private http = inject(HttpClient);
 
   checkForgottenPasswordEmail(email: string): Observable<ResponseEntityApi<void>> {
-    return this.http.post<ResponseEntityApi<void>>(
-      `${this.apiUrl}/users/forgotten-password-email`,
-      {email: email},
-    );
+    return this.http.post<ResponseEntityApi<void>>(`${this.apiUrl}/users/forgotten-password-email/${email}`, {});
 
   }
 
@@ -90,21 +87,21 @@ export class UserService {
     );
   }
 
-  lockUser(userId: number): Observable<ResponseEntityApi<void>> {
+  lockUser(userId: string): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/lock`,
       {}
     );
   }
 
-  unlockUser(userId: number): Observable<ResponseEntityApi<void>> {
+  unlockUser(userId: string): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/unlock`,
       {}
     );
   }
 
-  forcePasswordChange(userId: number, value: boolean): Observable<ResponseEntityApi<void>> {
+  forcePasswordChange(userId: string, value: boolean): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/force-password-change`,
       null,
@@ -112,7 +109,7 @@ export class UserService {
     );
   }
 
-  updateRoles(userId: number, roles: string[]): Observable<ResponseEntityApi<void>> {
+  updateRoles(userId: string, roles: string[]): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/roles`,
       {roles}
@@ -126,11 +123,11 @@ export class UserService {
     );
   }
 
-  getUserById(id: number): Observable<ResponseEntityApi<UserResponseDto>> {
+  getUserById(id: string): Observable<ResponseEntityApi<UserResponseDto>> {
     return this.http.get<ResponseEntityApi<UserResponseDto>>(`${this.apiUrl}/users/${id}`);
   }
 
-  changePassword(userId: number, password: string): Observable<ResponseEntityApi<void>> {
+  changePassword(userId: string, password: string): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/change-password`,
       {password}

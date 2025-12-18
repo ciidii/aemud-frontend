@@ -113,8 +113,8 @@ The `Dockerfile` uses a two-stage build:
 Project root of the app is `src/app/` and is structured into three main areas:
 
 - `core/`
-  - Guards: `auth.guard.ts` checks login state via `SessionService` and redirects to `/login`; `role.guard.ts` enforces role-based access using `AuthService.hasRole(...)` and redirects to `/auth/unauthorized` on failure.
-  - HTTP interceptors: `auth.interceptor.ts` injects the `Authorization: Bearer <token>` header for authenticated API calls (excluding a small set of public auth/user endpoints) and logs out on JWT expiration; `error.interceptor.ts` logs 401 errors and routes through `AuthService.logout()`.
+  - Guards: `auth.guard.ts` checks login state via `SessionService` and redirects to `/login`; `role.guard.ts` enforces role-based access using `AuthHttpService.hasRole(...)` and redirects to `/auth/unauthorized` on failure.
+  - HTTP interceptors: `auth.interceptor.ts` injects the `Authorization: Bearer <token>` header for authenticated API calls (excluding a small set of public auth/user endpoints) and logs out on JWT expiration; `error.interceptor.ts` logs 401 errors and routes through `AuthHttpService.logout()`.
   - Models: strongly typed DTOs and response wrappers (e.g. `response-entity-api.ts`, `response-pageable-api.ts`, `member-data.model.ts`, `contribution-data.model.ts`, etc.) mirroring backend domain structures.
   - Services: shared application-level services such as `AppStateService` for global mandat state (see below).
 

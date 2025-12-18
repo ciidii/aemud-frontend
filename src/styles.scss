@@ -209,3 +209,24 @@ div[formArrayName="personToCalls"] .card-header {
   color: $color-text-primary;
   font-weight: $font-weight-regular;
 }
+
+/* ========================================================================= */
+/* STYLES GLOBAUX POUR LES FORMULAIRES (AJOUTÉ)                              */
+/* ========================================================================= */
+
+// Assure que les champs de saisie, les labels et les boutons ont une taille de police lisible.
+.form-control,
+.form-label,
+.form-select {
+  font-size: $font-size-body; // Utilise la variable centrale (1.6rem = 16px)
+}
+
+// Spécifique pour les "floating labels", le label est plus petit, ce qui est normal.
+// On s'assure juste que le texte saisi dans l'input est à la bonne taille.
+.form-floating > .form-control {
+  font-size: $font-size-body;
+}
+
+.btn {
+  font-size: $button-font-size; // Utilise la variable pour les boutons (1.6rem par défaut)
+}
