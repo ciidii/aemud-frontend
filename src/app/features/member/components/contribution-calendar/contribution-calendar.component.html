@@ -1,0 +1,33 @@
+<div *ngFor="let yearData of calendar" class="year-container">
+  <h6 class="year-title">{{ yearData.annee }}</h6>
+  <div class="months-grid">
+    <div *ngFor="let month of yearData.mois"
+         (click)="onMonthClick(month)"
+         [class.selected]="isSelected(month)"
+         [ngClass]="getStatusClass(month)"
+         class="month-card">
+
+      <div class="card-header">
+        <span class="month-name">{{ getMonthName(month.month) }}</span>
+        <input *ngIf="isSelected(month)" [checked]="true" class="selection-checkbox" readonly type="checkbox">
+      </div>
+
+      <div class="card-body">
+        <span class="amount">{{ month.montantDu | currency:'XOF':'symbol':'1.0-0' }}</span>
+      </div>
+
+      <div class="card-footer">
+        <span class="status-dot"></span>
+        <span class="status-text">{{ getStatusText(month.status) }}</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="cotisation-legend">
+  <div *ngFor="let item of legend" class="legend-item">
+    <span class="legend-color" [ngClass]="item.status"></span>
+    <span>{{ item.text }}</span>
+  </div>
+</div>

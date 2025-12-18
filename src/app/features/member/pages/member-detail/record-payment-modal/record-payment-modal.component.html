@@ -1,10 +1,10 @@
-<div class="modal-overlay" (click)="onClose()">
-  <div class="modal-container" (click)="$event.stopPropagation()">
+<div (click)="onClose()" class="modal-overlay">
+  <div (click)="$event.stopPropagation()" class="modal-container">
 
     <!-- Modal Header -->
     <div class="modal-header">
       <h4 class="modal-title">Enregistrer un Paiement Multiple</h4>
-      <button class="btn-close" (click)="onClose()"><i class="bi bi-x-lg"></i></button>
+      <button (click)="onClose()" class="btn-close"><i class="bi bi-x-lg"></i></button>
     </div>
 
     <!-- Modal Body -->
@@ -19,11 +19,12 @@
         <span class="total-value">{{ totalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
       </div>
 
-      <form [formGroup]="paymentForm" (ngSubmit)="onSave()">
+      <form (ngSubmit)="onSave()" [formGroup]="paymentForm">
         <div class="form-group">
           <label for="payementMethode">Méthode de Paiement</label>
-          <select id="payementMethode" class="form-control" formControlName="payementMethode">
-            <option *ngFor="let method of paymentMethods" [value]="method">{{ method.replace('_', ' ') | titlecase }}</option>
+          <select class="form-control" formControlName="payementMethode" id="payementMethode">
+            <option *ngFor="let method of paymentMethods" [value]="method">{{ method.replace('_', ' ') | titlecase }}
+            </option>
           </select>
         </div>
       </form>
@@ -31,8 +32,10 @@
 
     <!-- Modal Footer -->
     <div class="modal-footer">
-      <button class="btn btn-secondary" (click)="onClose()">Annuler</button>
-      <button class="btn btn-primary" (click)="onSave()" [disabled]="paymentForm.invalid">Payer {{ contributions.length }} mois</button>
+      <button (click)="onClose()" class="btn btn-secondary">Annuler</button>
+      <button (click)="onSave()" [disabled]="paymentForm.invalid" class="btn btn-primary">
+        Payer {{ contributions.length }} mois
+      </button>
     </div>
 
   </div>

@@ -1,0 +1,176 @@
+<div *ngIf="user; else loadingOrError" class="user-details-container">
+
+  <!-- Header -->
+  <div class="page-header">
+    <button class="btn-back" routerLink="/users">
+      <i class="bi bi-arrow-left"></i>
+    </button>
+    <div class="header-content">
+      <h1 class="page-title">Détails de l'utilisateur</h1>
+      <p class="page-subtitle">Gérez les informations et les accès de {{ user.username }}</p>
+    </div>
+  </div>
+
+  <div class="details-layout">
+    <!-- Left Sidebar: Profile Card -->
+    <aside class="sidebar">
+      <div class="profile-card">
+        <div class="profile-header">
+          <div class="avatar-large">
+            {{ user.username.charAt(0).toUpperCase() }}
+          </div>
+          <h2 class="profile-name">{{ user.username }}</h2>
+          <span class="profile-id">ID: {{ user.id }}</span>
+        </div>
+
+        <div class="profile-status">
+          <div [class.active]="!user.locked" [class.locked]="user.locked" class="status-item">
+            <i [class.bi-check-circle-fill]="!user.locked" [class.bi-lock-fill]="user.locked"
+               class="bi"></i>
+            {{ user.locked ? 'Compte Verrouillé' : 'Compte Actif' }}
+          </div>
+          <div *ngIf="user.forcePasswordChange" class="status-item warning">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            Changement MDP requis
+          </div>
+        </div>
+
+        <div class="profile-actions">
+          <button (click)="toggleLock()" [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
+                  class="btn-action">
+            <i [class.bi-lock-fill]="!user.locked" [class.bi-unlock-fill]="user.locked" class="bi"></i>
+            {{ user.locked ? 'Déverrouiller le compte' : 'Verrouiller le compte' }}
+          </button>
+          <button (click)="openPasswordModal()" class="btn-action btn-password">
+            <i class="bi bi-key-fill"></i>
+            Changer le mot de passe
+          </button>
+        </div>
+      </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="main-content">
+
+      <!-- Member Link Section -->
+      <section class="info-section">
+        <div class="section-title">
+          <i class="bi bi-person-badge"></i>
+          Membre Associé
+        </div>
+
+        <div class="member-link-card">
+          <div class="card-header">Fiche Membre Liée</div>
+          <div class="member-preview">
+            <div class="member-info">
+              <span class="member-name">Membre #{{ user.username }}</span>
+              <span class="member-email">ID: {{ user.memberId }}</span>
+            </div>
+            <!-- Link to member details if available -->
+            <a (click)="redirectToMemberDetail(user.memberId)" class="btn-icon-link" title="Voir la fiche membre">
+              <i class="bi bi-box-arrow-up-right"></i>
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <!-- Roles Section -->
+      <section class="info-section">
+        <div class="section-title">
+          <i class="bi bi-shield-check"></i>
+          Rôles & Permissions
+        </div>
+
+        <div class="roles-list">
+          <div *ngFor="let role of user.roles" [ngClass]="role" class="role-card">
+            <div class="role-icon">
+              <i [ngClass]="getRoleIcon(role)" class="bi"></i>
+            </div>
+            <div class="role-details">
+              <span class="role-name">{{ getRoleLabel(role) }}</span>
+              <span class="role-desc">{{ getRoleDescription(role) }}</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- System Info Section -->
+      <section class="info-section">
+        <div class="section-title">
+          <i class="bi bi-cpu"></i>
+          Informations Système
+        </div>
+
+        <div class="info-grid">
+          <div class="info-item">
+            <label>Dernière Connexion</label>
+            <span>--</span>
+          </div>
+          <div class="info-item">
+            <label>Date de Création</label>
+            <span>--</span>
+          </div>
+          <div class="info-item">
+            <label>IP Enregistrée</label>
+            <span>--</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</div>
+
+<!-- Loading & Error States -->
+<ng-template #loadingOrError>
+  <div *ngIf="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Chargement du profil...</p>
+  </div>
+
+  <div *ngIf="error && !loading" class="error-container">
+    <i class="bi bi-emoji-frown"></i>
+    <p>{{ error }}</p>
+    <button class="btn-retry" routerLink="/users">Retour à la liste</button>
+  </div>
+</ng-template>
+
+<!-- Password Change Modal -->
+<div (click)="closePasswordModal()" *ngIf="showPasswordModal" class="modal-overlay">
+  <div (click)="$event.stopPropagation()" class="modal-container">
+    <div class="modal-header">
+      <h3>Changer le mot de passe</h3>
+      <button (click)="closePasswordModal()" class="btn-close"><i class="bi bi-x-lg"></i></button>
+    </div>
+
+    <div [formGroup]="passwordForm" class="modal-body">
+      <div class="form-group">
+        <label>Nouveau mot de passe</label>
+        <input [class.has-error]="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched" class="form-input" formControlName="password"
+               type="password">
+        <span *ngIf="passwordForm.get('password')?.hasError('minlength')" class="error-text">
+                    6 caractères minimum requis.
+                </span>
+      </div>
+
+      <div class="form-group">
+        <label>Confirmer le mot de passe</label>
+        <input [class.has-error]="passwordForm.hasError('mismatch') && passwordForm.get('confirmPassword')?.touched" class="form-input" formControlName="confirmPassword"
+               type="password">
+        <span *ngIf="passwordForm.hasError('mismatch')" class="error-text">
+                    Les mots de passe ne correspondent pas.
+                </span>
+      </div>
+    </div>
+
+    <div class="modal-footer">
+      <button (click)="closePasswordModal()" class="btn-cancel">Annuler</button>
+      <button (click)="submitPasswordChange()" [disabled]="passwordForm.invalid || passwordLoading"
+              class="btn-submit">
+        <span *ngIf="passwordLoading" class="spin"></span>
+        {{ passwordLoading ? 'Enregistrement...' : 'Enregistrer' }}
+      </button>
+    </div>
+  </div>
+</div>

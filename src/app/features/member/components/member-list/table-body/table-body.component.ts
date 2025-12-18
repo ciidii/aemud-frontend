@@ -34,6 +34,10 @@ export class TableBodyComponent implements OnInit {
 
   private router = inject(Router);
 
+  get hasMembers(): boolean {
+    return this.members !== null && this.members.length > 0;
+  }
+
   ngOnInit(): void {
     this.selectedMemberIds$ = this.memberStateService.selectedMemberIds$;
     this.sortColumn$ = this.memberStateService.sortColumn$;
@@ -49,10 +53,6 @@ export class TableBodyComponent implements OnInit {
         return currentPageMemberIds.every(id => selectedIds.includes(id));
       })
     );
-  }
-
-  get hasMembers(): boolean {
-    return this.members !== null && this.members.length > 0;
   }
 
   navigateToMember(memberId: any) {

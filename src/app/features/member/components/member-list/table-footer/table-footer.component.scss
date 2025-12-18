@@ -1,8 +1,9 @@
 @import 'variables';
-:host{
-  position: sticky;
-  bottom: 0;
+
+:host {
+  display: block; // Ensure it takes block-level space
 }
+
 .footer-bar {
   display: flex;
   justify-content: space-between;
@@ -10,7 +11,7 @@
   padding: $space-1 $space-6; // Further reduced padding
   background: $white;
   border-top: 1px solid $color-border-default;
-  box-shadow: 0 -2px 5px rgba(0,0,0,0.05);
+  box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.05);
   width: 100%;
 }
 
@@ -70,8 +71,8 @@
     border-color: $danger-500;
 
     &:hover:not(:disabled) {
-      background: $danger-500;
-      border-color: $danger-500;
+      background: $danger-900;
+      border-color: $danger-900;
     }
   }
 

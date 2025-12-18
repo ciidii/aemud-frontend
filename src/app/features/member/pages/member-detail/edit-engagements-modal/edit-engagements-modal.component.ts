@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, OnInit, Output, inject} from '@angular/core';
+import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/core';
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {
@@ -8,8 +8,6 @@ import {ClubService} from "../../../../configuration/services/club.service";
 import {CommissionService} from "../../../../configuration/services/commission.service";
 import {forkJoin} from "rxjs";
 import {Club, Commission} from "../../../../../core/models/member-data.model";
-import {ClubModel} from "../../../../../core/models/club.model";
-import {CommissionModel} from "../../../../../core/models/commission.model";
 
 export interface EngagementsData {
   clubIds: string[];
@@ -28,20 +26,17 @@ export class EditEngagementsModalComponent implements OnInit {
   @Input() memberClubs: Club[] = [];
   @Input() memberCommissions: Commission[] = [];
 
-  // Outputs to parent
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<EngagementsData>();
-
-  // Services
-  private fb = inject(FormBuilder);
-  private clubService = inject(ClubService);
-  private commissionService = inject(CommissionService);
-
   // Properties
   engagementsForm!: FormGroup;
   allClubs: Club[] = [];
   allCommissions: Commission[] = [];
   isLoading = true;
+  // Services
+  private fb = inject(FormBuilder);
+  private clubService = inject(ClubService);
+  private commissionService = inject(CommissionService);
 
   ngOnInit(): void {
     this.engagementsForm = this.fb.group({

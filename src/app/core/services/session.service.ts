@@ -1,34 +1,25 @@
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject} from 'rxjs';
 import {Router} from "@angular/router";
+import {UserModel} from "../models/user.model";
 
 @Injectable({
   providedIn: 'root'
 })
 export class SessionService {
-  private readonly TOKEN_KEY = 'aemud_auth_token';
+  private readonly USER_KEY = 'user';
 
-  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasToken());
+  private isLoggedInSubject = new BehaviorSubject<boolean>(this.hasUser());
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private router = inject(Router);
 
-  constructor() {
-  }
-
   /**
-   * Checks if a session token exists.
-   */
-  private hasToken(): boolean {
-    return !!localStorage.getItem(this.TOKEN_KEY);
-  }
-
-  /**
-   * Starts a new session by storing the token.
+   * Creates a new session by storing the user object.
    *
-   * @param token The session token to store.
+   * @param user The user object to store.
    */
-  startSession(token: string): void {
-    localStorage.setItem(this.TOKEN_KEY, token);
+  create(user: UserModel): void {
+    localStorage.setItem(this.USER_KEY, JSON.stringify(user));
     this.isLoggedInSubject.next(true);
   }
 
@@ -36,18 +27,16 @@ export class SessionService {
    * Clears the current session.
    */
   clearSession(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem("user");
+    localStorage.removeItem(this.USER_KEY);
     this.isLoggedInSubject.next(false);
     this.router.navigateByUrl("auth/login");
   }
 
   /**
-   * Retrieves the current session token.
-   *
-   * @returns The token or null if it doesn't exist.
+   * Checks if a user object exists in storage.
    */
-  getToken(): string | null {
-    return localStorage.getItem(this.TOKEN_KEY);
+  private hasUser(): boolean {
+    return !!localStorage.getItem(this.USER_KEY);
   }
 }
+

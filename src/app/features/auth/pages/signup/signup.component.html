@@ -1,0 +1,40 @@
+<div class="container-fluid vh-100 d-flex justify-content-center align-items-center">
+  <div class="col-md-6 col-12">
+    <div class="card">
+      <div class="card-header text-center">Veuillez créer votre compte</div>
+      <div class="card-body">
+        <form (ngSubmit)="handleSignup()" [formGroup]="formGroup">
+          <div>
+            <label class="form-label">Nom d'utilisateur</label>
+            <input class="form-control" formControlName="username">
+          </div>
+          <div>
+            <label class="form-label">Email</label>
+            <input class="form-control" formControlName="email" type="email">
+          </div>
+          <div>
+            <label class="form-label">Mot de passe</label>
+            <input class="form-control" formControlName="password" type="password">
+          </div>
+          <div>
+            <label class="form-label">Confirmer le mot de passe</label>
+            <input class="form-control" formControlName="confirmPassword" type="password">
+          </div>
+          <div *ngIf="errorMessage" class="alert alert-danger mt-3">
+            {{ errorMessage }}
+          </div>
+          <div>
+            <button [disabled]="formGroup.invalid || isLoading" class="btn-connexion mt-3 form-control btn btn-primary"
+                    type="submit">
+              <span *ngIf="isLoading" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+              S'inscrire
+            </button>
+          </div>
+          <div class="mt-2 text-center">
+            <a [routerLink]="['/auth', 'login']">Déjà un compte? Se connecter</a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

@@ -16,22 +16,6 @@ export class RecipientTemplateService {
   constructor(private http: HttpClient) {
   }
 
-  private handleError(error: HttpErrorResponse): Observable<never> {
-    let errorMessage = 'Une erreur inconnue est survenue !';
-    if (error.error instanceof ErrorEvent) {
-      // Erreur côté client ou réseau
-      errorMessage = `Erreur: ${error.error.message}`;
-    } else {
-      // Erreur côté serveur
-      errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
-      if (error.error && error.error.message) {
-        errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.error.message}`;
-      }
-    }
-    console.error(errorMessage);
-    return throwError(() => new Error(errorMessage));
-  }
-
   getTemplates(): Observable<ResponseEntityApi<RecipientsTemplateModel[]>> {
     return this.http.get<ResponseEntityApi<RecipientsTemplateModel[]>>(`${this.apiUrl}/sender-template-sms`).pipe(
       tap(templates => console.log('Templates récupérés:', templates)),
@@ -54,7 +38,7 @@ export class RecipientTemplateService {
    * Met à jour un template de message existant.
    */
   updateTemplate(template: MessageTemplateModel): Observable<ResponseEntityApi<MessageTemplateModel>> {
-    let params = new HttpParams().set("id", template.id)
+    const params = new HttpParams().set("id", template.id)
     return this.http.put<ResponseEntityApi<MessageTemplateModel>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
       tap(updatedTemplate => console.log('Template mis à jour:', updatedTemplate)),
       catchError(this.handleError)
@@ -65,10 +49,26 @@ export class RecipientTemplateService {
    * Supprime un template de message.
    */
   deleteTemplate(id: string): Observable<ResponseEntityApi<MessageTemplateModel>> {
-    let params = new HttpParams().set("id", id)
+    const params = new HttpParams().set("id", id)
     return this.http.delete<ResponseEntityApi<MessageTemplateModel>>(`${this.apiUrl}/smsmodel`, {params}).pipe(
       tap(() => console.log(`Template ${id} supprimé`)),
       catchError(this.handleError)
     );
+  }
+
+  private handleError(error: HttpErrorResponse): Observable<never> {
+    let errorMessage = 'Une erreur inconnue est survenue !';
+    if (error.error instanceof ErrorEvent) {
+      // Erreur côté client ou réseau
+      errorMessage = `Erreur: ${error.error.message}`;
+    } else {
+      // Erreur côté serveur
+      errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.message}`;
+      if (error.error && error.error.message) {
+        errorMessage = `Code d'erreur: ${error.status}\nMessage: ${error.error.message}`;
+      }
+    }
+    console.error(errorMessage);
+    return throwError(() => new Error(errorMessage));
   }
 }

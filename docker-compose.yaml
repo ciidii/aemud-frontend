@@ -6,7 +6,7 @@ services:
     ports:
       - 80:80
     expose:
-        - 80
+      - 80
     networks:
       - aemudnet
     restart: always

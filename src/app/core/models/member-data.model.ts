@@ -1,4 +1,5 @@
 import {BourseModel} from "./bourse.model";
+import {RegistrationOverview} from "./timeline.model";
 
 export interface MemberDataResponse {
   id: string;
@@ -10,7 +11,7 @@ export interface MemberDataResponse {
   bourse: BourseModel;
   clubs: Club[];
   commissions: Commission[];
-  registration: RegistrationResponse[];
+  registrationOverview: RegistrationOverview;
   religiousKnowledge: ReligiousKnowledge;
 }
 
@@ -80,7 +81,7 @@ export interface Commission {
 
 export interface RegistrationResponse {
   member: string;
-  sessionId: string;
+  phaseId: string;
   dateInscription: number[];
   registrationType: TypeInscription;
   statusPayment: boolean;
@@ -120,7 +121,8 @@ export enum RegistrationStatus {
 }
 
 export enum TypeInscription {
-  REINSCRIPTION = 'REINSCRIPTION'
+  REINSCRIPTION = 'REINSCRIPTION',
+  INITIAL = 'INITIAL',
 }
 
 export enum CORAN_LEVEL {

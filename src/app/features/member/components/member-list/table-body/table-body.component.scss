@@ -1,8 +1,9 @@
 @import 'variables';
 
 .table-container {
-
   background-color: $white;
+  height: 100%;
+  overflow-y: auto;
 }
 
 .table {
@@ -15,11 +16,9 @@
     tr {
       background-color: $gray-100;
       border-bottom: 1px solid $color-border-default;
-      position: sticky;
-      top: 8rem;
-      z-index: 1000;
       box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       border-bottom: none;
+
       th {
         padding: $space-3 $space-4;
         text-align: left;
@@ -70,6 +69,11 @@
       th { // For the checkbox
         padding: $space-4;
         vertical-align: middle;
+
+        input[type="checkbox"]:checked {
+          background-color: $primary-500;
+          border-color: $primary-500;
+        }
       }
     }
   }

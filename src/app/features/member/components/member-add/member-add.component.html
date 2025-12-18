@@ -4,10 +4,10 @@
 
   <!-- Barre de progression -->
   <div class="progress-bar">
-    <div class="progress-bar-fill" [style.width.%]="(currentStep - 1) * 25"></div>
+    <div [style.width.%]="(currentStep - 1) * 25" class="progress-bar-fill"></div>
   </div>
 
-  <form [formGroup]="mainForm" (ngSubmit)="onSubmit()">
+  <form (ngSubmit)="onSubmit()" [formGroup]="mainForm">
 
     <div class="wizard-content">
       <!-- Étape 1 -->
@@ -38,20 +38,21 @@
       <div *ngIf="currentStep === 5" class="step">
         <h3 class="step-title">Étape 5: Engagements</h3>
         <app-engagements-form
-          formControlName="engagements"
           [bourses]="bourses"
           [clubs]="clubs"
           [commissions]="commissions"
+          formControlName="engagements"
         ></app-engagements-form>
       </div>
     </div>
 
     <div class="form-actions">
-      <button type="button" class="button-secondary" (click)="previousStep()" [disabled]="currentStep === 1">Précédent</button>
+      <button (click)="previousStep()" [disabled]="currentStep === 1" class="button-secondary" type="button">Précédent
+      </button>
 
-      <button *ngIf="currentStep < 5" type="button" class="button-primary" (click)="nextStep()">Suivant</button>
+      <button (click)="nextStep()" *ngIf="currentStep < 5" class="button-primary" type="button">Suivant</button>
 
-      <button *ngIf="currentStep === 5" type="submit" class="button-primary">Soumettre l'inscription</button>
+      <button *ngIf="currentStep === 5" class="button-primary" type="submit">Soumettre l'inscription</button>
     </div>
   </form>
 </div>

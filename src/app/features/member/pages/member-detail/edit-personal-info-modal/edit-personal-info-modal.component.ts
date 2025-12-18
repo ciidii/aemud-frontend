@@ -1,7 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { PersonalInfo } from "../../../../../core/models/member-data.model";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {PersonalInfo} from "../../../../../core/models/member-data.model";
 import {
   PersonalInfoFormComponent
 } from "../../../components/member-add/personal-info-form/personal-info-form.component";
@@ -21,7 +21,8 @@ export class EditPersonalInfoModalComponent implements OnInit {
 
   editForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({

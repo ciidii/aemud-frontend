@@ -1,0 +1,37 @@
+<div [formGroup]="phaseForm" class="phase-item-card">
+  <div class="form-group">
+    <label [for]="'phaseName' + index">Nom de la phase</label>
+    <input [id]="'phaseName' + index" formControlName="nom" type="text">
+    <div *ngIf="phaseForm.get('nom')?.invalid && phaseForm.get('nom')?.touched" class="error-message">
+      Le nom de la phase est requis.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label [for]="'phaseStartDate' + index">Date de début</label>
+    <input [id]="'phaseStartDate' + index" formControlName="dateDebut" type="date">
+    <div *ngIf="phaseForm.get('dateDebut')?.invalid && phaseForm.get('dateDebut')?.touched" class="error-message">
+      La date de début est requise.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label [for]="'phaseEndDate' + index">Date de fin</label>
+    <input [id]="'phaseEndDate' + index" formControlName="dateFin" type="date">
+    <div *ngIf="phaseForm.get('dateFin')?.invalid && phaseForm.get('dateFin')?.touched" class="error-message">
+      La date de fin est requise.
+    </div>
+  </div>
+
+  <div class="form-group">
+    <label [for]="'inscriptionStartDate' + index">Date de début d'inscription (optionnel)</label>
+    <input [id]="'inscriptionStartDate' + index" formControlName="dateDebutInscription" type="date">
+  </div>
+
+  <div class="form-group">
+    <label [for]="'inscriptionEndDate' + index">Date de fin d'inscription (optionnel)</label>
+    <input [id]="'inscriptionEndDate' + index" formControlName="dateFinInscription" type="date">
+  </div>
+
+  <button (click)="onDelete()" class="delete-button" type="button">Supprimer</button>
+</div>

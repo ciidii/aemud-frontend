@@ -1,0 +1,83 @@
+@import 'variables';
+@import 'typography';
+
+.phase-timeline-container {
+  width: 100%;
+  margin-top: $space-4;
+  margin-bottom: $space-4;
+  font-family: $font-family-base;
+}
+
+.timeline-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-2;
+
+  .timeline-status {
+    @include text-body-small;
+    font-weight: $font-weight-bold;
+
+    &.valid {
+      color: $success-500;
+    }
+
+    &.invalid {
+      color: $danger-500;
+    }
+  }
+}
+
+.timeline-bar {
+  display: flex;
+  width: 100%;
+  height: $space-4; // Height of the timeline bar
+  border-radius: $radius-sm;
+  overflow: hidden;
+  background-color: $gray-300; // Background for uncovered parts initially
+  box-shadow: inset $shadow-sm;
+}
+
+.timeline-segment {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  border-right: 1px solid rgba($white, 0.3); // Separator between segments
+
+  &.phase {
+    background-color: $primary-500;
+    color: $color-text-on-primary;
+    @include text-body-small;
+    font-weight: $font-weight-bold;
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &.gap {
+    background-image: linear-gradient(45deg, $gray-300 25%, transparent 25%, transparent 50%, $gray-300 50%, $gray-300 75%, transparent 75%, transparent);
+    background-size: 10px 10px;
+    background-color: $gray-200;
+  }
+
+  &.invalid-phase {
+    background-color: $danger-500; // For phases with validation issues
+  }
+
+  .phase-name {
+    padding: 0 $space-1;
+  }
+}
+
+.timeline-labels {
+  display: flex;
+  justify-content: space-between;
+  margin-top: $space-1;
+  @include text-body-small;
+  color: $color-text-secondary;
+}

@@ -1,11 +1,11 @@
-import { Pipe, PipeTransform } from '@angular/core';
+import {Pipe, PipeTransform} from '@angular/core';
 
 @Pipe({
   name: 'formatKey',
   standalone: true
 })
 export class FormatKeyPipe implements PipeTransform {
-  private keyMap: { [key: string]: string } = {
+  private keyMap: Record<string, string> = {
     // Personal Info
     name: 'Nom',
     firstname: 'Prénom',

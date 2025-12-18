@@ -1,8 +1,24 @@
+import {PhaseModel} from "../../features/mandat/models/phase.model";
+
+
+export enum RegistrationStatus {
+  EXPIRED = "EXPIRED",
+  COMPLETED = "COMPLETED",
+  UNCOMPLETED = "UNCOMPLETED"
+}
+
+export enum TypeInscription {
+  INITIAL = "INITIAL",
+  REINSCRIPTION = "REINSCRIPTION"
+}
+
 export interface RegistrationModel {
+  id: string;
   member: string;
-  session: number;
-  dateInscription: number[];
-  registrationType: string;
+  mandatName: string;
+  phase: PhaseModel;
+  dateInscription: string;
+  registrationType: TypeInscription;
   statusPayment: boolean;
-  registrationStatus: string;
+  registrationStatus: RegistrationStatus;
 }

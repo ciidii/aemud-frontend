@@ -1,0 +1,7 @@
+export enum PhaseStatus {
+  PASSED = 'PASSED',
+  CURRENT = 'CURRENT',
+  FUTURE = 'FUTURE',
+  TERMINATED = "TERMINATED",
+  NOT_STARTED = "NOT_STARTED",
+}

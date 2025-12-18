@@ -5,7 +5,7 @@ export enum Role {
 }
 
 export interface UserModel {
-  id: number;
+  id: string;
   username: string;
   locked: boolean;
   forcePasswordChange: boolean;

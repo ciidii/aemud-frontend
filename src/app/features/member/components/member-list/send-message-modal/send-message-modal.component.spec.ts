@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { SendMessageModalComponent } from './send-message-modal.component';
+import {SendMessageModalComponent} from './send-message-modal.component';
 
 describe('SendMessageModalComponent', () => {
   let component: SendMessageModalComponent;
@@ -10,8 +10,8 @@ describe('SendMessageModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [SendMessageModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(SendMessageModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

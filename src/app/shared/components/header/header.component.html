@@ -1,21 +1,55 @@
-<nav class="navbar navbar-expand-lg navbar-dark">
-  <div class="container-fluid">
-    <a class="navbar-brand" [routerLink]="['/shared/shell']">
-      AEMUD</a>
-    <div class="collapse navbar-collapse" id="navbarSupportedContent">
-      <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        <li class="nav-item">
-          <a class="nav-link" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: false }"
-             routerLink="/shared/home">Acceil</a>
-        </li>
-        <li *ngFor="let hc of headerContent"  class="nav-item">
-          <a class="nav-link {{hc.disabled}}" aria-current="page" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }"
-             routerLink="{{hc.retourLinh}}">{{hc.title}}</a>
+<nav class="app-header">
+  <!-- Left Section: Brand -->
+  <div class="header-left">
+    <a [routerLink]="['/shared/shell']" class="navbar-brand">AEMUD</a>
+  </div>
+
+  <!-- Right Section: Controls -->
+  <div class="header-right">
+    <!-- Mandat Selector -->
+    <div *ngIf="(activeMandat$ | async) as selectedMandat" class="dropdown">
+      <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
+              id="mandatDropdown" type="button">
+        {{ selectedMandat.nom }}
+      </button>
+      <ul aria-labelledby="mandatDropdown" class="dropdown-menu">
+        <li *ngFor="let mandat of (mandats$ | async)">
+          <a (click)="onMandatChange(mandat)" class="dropdown-item">{{ mandat.nom }}</a>
         </li>
       </ul>
-      <div *ngIf="isLoggedIn$ | async">
-        <button class="btn btn-outline-success" (click)="logout()">Déconnexion</button>
+    </div>
+
+    <!-- Notification Bell -->
+    <div class="dropdown">
+      <div aria-expanded="false" class="notification-container " data-bs-toggle="dropdown">
+        <div class="notification-icon">
+          <i class="bi bi-bell"></i>
+          <span class="badge">10</span>
+        </div>
+
       </div>
+      <div aria-labelledby="notificationDropdown" class="dropdown-menu dropdown-menu-end p-0">
+        <app-notification-popover></app-notification-popover>
+      </div>
+    </div>
+
+    <!-- User Profile -->
+    <div class="dropdown">
+      <button aria-expanded="false" class="btn btn-icon profile-button" data-bs-toggle="dropdown" id="profileDropdown"
+              type="button">
+        <span class="profile-avatar">U</span>
+      </button>
+      <ul aria-labelledby="profileDropdown" class="dropdown-menu dropdown-menu-end">
+        <li>
+          <button (click)="viewMyProfile()" class="dropdown-item">Mon Profil</button>
+        </li>
+        <li>
+          <hr class="dropdown-divider">
+        </li>
+        <li>
+          <button (click)="logout()" class="dropdown-item">Déconnexion</button>
+        </li>
+      </ul>
     </div>
   </div>
 </nav>

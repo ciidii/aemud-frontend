@@ -1,0 +1,207 @@
+<div class="user-list-container">
+
+  <!-- Header Section -->
+  <div class="page-header">
+    <div class="header-content">
+      <div class="breadcrumbs">
+        <span>Tableau de bord</span>
+        <i class="bi bi-chevron-right"></i>
+        <span class="active">Utilisateurs</span>
+      </div>
+      <h1 class="page-title">Gestion des Utilisateurs</h1>
+      <p class="page-subtitle">Administrez les comptes, les accès et la sécurité de la plateforme.</p>
+    </div>
+
+    <button class="btn-create" routerLink="/users/add">
+      <i class="bi bi-plus-lg"></i>
+      <span>Nouvel Utilisateur</span>
+    </button>
+  </div>
+
+  <!-- Quick Stats (Mocked for visual impact) -->
+  <div class="stats-grid">
+    <div class="stat-card">
+      <div class="stat-icon primary">
+        <i class="bi bi-people-fill"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">{{ totalRecords }}</span>
+        <span class="stat-label">Total Utilisateurs</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon success">
+        <i class="bi bi-shield-check"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">--</span>
+        <span class="stat-label">Actifs</span>
+      </div>
+    </div>
+    <div class="stat-card">
+      <div class="stat-icon warning">
+        <i class="bi bi-lock-fill"></i>
+      </div>
+      <div class="stat-info">
+        <span class="stat-value">--</span>
+        <span class="stat-label">Verrouillés</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Filters Section -->
+  <div [formGroup]="filterForm" class="filters-section">
+    <div class="search-box">
+      <i class="bi bi-search search-icon"></i>
+      <input class="search-input" formControlName="keyword" placeholder="Rechercher par email, nom..." type="text"/>
+    </div>
+
+    <div class="filters-row">
+      <div class="role-filters">
+        <span class="filter-label">Rôles :</span>
+        <div class="role-chips">
+          <div (click)="toggleRole(role.value)" *ngFor="let role of roleOptions" [class.active]="isRoleSelected(role.value)"
+               class="chip">
+            {{ role.label }}
+            <i *ngIf="isRoleSelected(role.value)" class="bi bi-check-lg"></i>
+          </div>
+        </div>
+      </div>
+
+      <div class="secondary-filters">
+        <div class="select-wrapper">
+          <select class="custom-select" formControlName="locked">
+            <option value="all">Statut (Tous)</option>
+            <option value="true">Verrouillé</option>
+            <option value="false">Actif</option>
+          </select>
+          <i class="bi bi-chevron-down select-icon"></i>
+        </div>
+
+        <div class="select-wrapper">
+          <select class="custom-select" formControlName="forcePasswordChange">
+            <option value="all">MDP (Tous)</option>
+            <option value="true">Doit changer</option>
+            <option value="false">À jour</option>
+          </select>
+          <i class="bi bi-chevron-down select-icon"></i>
+        </div>
+
+        <button (click)="resetFilters()" class="btn-reset" title="Réinitialiser les filtres">
+          <i class="bi bi-arrow-counterclockwise"></i>
+        </button>
+
+        <button (click)="applyFilters()" class="btn-filter-apply">
+          Filtrer
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading State -->
+  <div *ngIf="loading" class="loading-state">
+    <div class="spinner-border text-primary" role="status"></div>
+    <span class="loading-text">Chargement des utilisateurs...</span>
+  </div>
+
+  <!-- Error State -->
+  <div *ngIf="errorMessage && !loading" class="alert-box error">
+    <i class="bi bi-exclamation-triangle-fill"></i>
+    <span>{{ errorMessage }}</span>
+  </div>
+
+  <!-- Data Table -->
+  <div *ngIf="!loading && users.length > 0" class="table-wrapper">
+    <table class="modern-table">
+      <thead>
+      <tr>
+        <th>Utilisateur</th>
+        <th>Rôles</th>
+        <th>Statut</th>
+        <th>Sécurité</th>
+        <th>Membre ID</th>
+        <th class="text-end">Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr (click)="goToUserDetails(user)" *ngFor="let user of users" class="table-row">
+        <td>
+          <div class="user-profile">
+            <div class="avatar-circle">
+              {{ user.username.charAt(0).toUpperCase() }}
+              <div [class.offline]="user.locked" [class.online]="!user.locked" class="status-dot"></div>
+            </div>
+            <div class="user-details">
+              <span class="user-email">{{ user.username }}</span>
+              <span class="user-id">ID: {{ user.id }}</span>
+            </div>
+          </div>
+        </td>
+        <td>
+          <div class="roles-list">
+              <span *ngFor="let role of user.roles" [ngClass]="role" class="role-badge">
+                {{ role }}
+              </span>
+          </div>
+        </td>
+        <td>
+            <span [ngClass]="user.locked ? 'locked' : 'active'" class="status-badge">
+              <i [ngClass]="user.locked ? 'bi-lock-fill' : 'bi-check-circle-fill'" class="bi"></i>
+              {{ user.locked ? 'Verrouillé' : 'Actif' }}
+            </span>
+        </td>
+        <td>
+            <span [ngClass]="{'warning': user.forcePasswordChange, 'safe': !user.forcePasswordChange}"
+                  class="security-badge">
+              {{ user.forcePasswordChange ? 'Changement Requis' : 'Sécurisé' }}
+            </span>
+        </td>
+        <td class="text-muted">{{ user.memberId || '-' }}</td>
+        <td>
+          <div (click)="$event.stopPropagation()" class="actions-cell">
+            <button (click)="goToUserDetails(user)" class="btn-icon" title="Voir détails">
+              <i class="bi bi-eye"></i>
+            </button>
+            <button (click)="toggleLock(user)" [ngClass]="user.locked ? 'unlock' : 'lock'" [title]="user.locked ? 'Déverrouiller' : 'Verrouiller'"
+                    class="btn-icon">
+              <i [ngClass]="user.locked ? 'bi-unlock-fill' : 'bi-lock-fill'" class="bi"></i>
+            </button>
+            <button (click)="toggleForcePasswordChange(user)" class="btn-icon warning" title="Forcer changement MDP">
+              <i class="bi bi-key-fill"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+
+    <!-- Pagination -->
+    <div class="pagination-bar">
+      <span class="pagination-info">
+        Affichage de <strong>{{ users.length }}</strong> sur <strong>{{ totalRecords }}</strong> utilisateurs
+      </span>
+      <div class="pagination-controls">
+        <button (click)="goToPage(page - 1)" [disabled]="page === 1" class="btn-page">
+          <i class="bi bi-chevron-left"></i>
+        </button>
+        <span class="page-indicator">Page {{ page }} / {{ totalPages }}</span>
+        <button (click)="goToPage(page + 1)" [disabled]="page === totalPages" class="btn-page">
+          <i class="bi bi-chevron-right"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Empty State -->
+  <div *ngIf="!loading && users.length === 0 && !errorMessage" class="empty-state">
+    <div class="empty-illustration">
+      <i class="bi bi-people"></i>
+    </div>
+    <h3>Aucun utilisateur trouvé</h3>
+    <p>Essayez de modifier vos filtres ou créez un nouvel utilisateur.</p>
+    <button class="btn-create-sm" routerLink="/users/add">
+      Ajouter un utilisateur
+    </button>
+  </div>
+
+</div>

@@ -1,37 +1,37 @@
-<div class="form-grid" [formGroup]="personalInfoForm">
+<div [formGroup]="personalInfoForm" class="form-grid">
   <!-- Prénom -->
   <div class="form-field">
-    <label for="firstname" class="form-label">Prénom</label>
-    <input id="firstname" type="text" formControlName="firstname" class="form-input">
+    <label class="form-label" for="firstname">Prénom</label>
+    <input class="form-input" formControlName="firstname" id="firstname" type="text">
     <app-validation-message [control]="firstname"></app-validation-message>
   </div>
 
   <!-- Nom -->
   <div class="form-field">
-    <label for="name" class="form-label">Nom de famille</label>
-    <input id="name" type="text" formControlName="name" class="form-input">
+    <label class="form-label" for="name">Nom de famille</label>
+    <input class="form-input" formControlName="name" id="name" type="text">
     <app-validation-message [control]="name"></app-validation-message>
   </div>
 
   <!-- Nationalité -->
   <div class="form-field">
-    <label for="nationality" class="form-label">Nationalité</label>
-    <input id="nationality" type="text" formControlName="nationality" class="form-input">
+    <label class="form-label" for="nationality">Nationalité</label>
+    <input class="form-input" formControlName="nationality" id="nationality" type="text">
     <app-validation-message [control]="nationality"></app-validation-message>
   </div>
 
   <!-- Date de naissance -->
   <div class="form-field">
-    <label for="birthday" class="form-label">Date de naissance</label>
-    <input id="birthday" type="date" formControlName="birthday" class="form-input">
+    <label class="form-label" for="birthday">Date de naissance</label>
+    <input class="form-input" formControlName="birthday" id="birthday" type="date">
     <app-validation-message [control]="birthday"></app-validation-message>
   </div>
 
   <!-- Genre -->
   <div class="form-field">
-    <label for="gender" class="form-label">Genre</label>
-    <select id="gender" formControlName="gender" class="form-select">
-      <option value="" disabled>Sélectionner...</option>
+    <label class="form-label" for="gender">Genre</label>
+    <select class="form-select" formControlName="gender" id="gender">
+      <option disabled value="">Sélectionner...</option>
       <option value="MALE">Homme</option>
       <option value="FEMALE">Femme</option>
     </select>
@@ -40,9 +40,9 @@
 
   <!-- Statut marital -->
   <div class="form-field">
-    <label for="maritalStatus" class="form-label">Statut social</label>
-    <select id="maritalStatus" formControlName="maritalStatus" class="form-select">
-      <option value="" disabled>Sélectionner...</option>
+    <label class="form-label" for="maritalStatus">Statut social</label>
+    <select class="form-select" formControlName="maritalStatus" id="maritalStatus">
+      <option disabled value="">Sélectionner...</option>
       <option value="SINGLE">Célibataire</option>
       <option value="MARRIED">Marié(e)</option>
       <option value="DIVORCED">Divorcé(e)</option>

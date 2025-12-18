@@ -1,9 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 import {SidebarService} from "../../services/sidebar.service";
-import {Observable} from "rxjs";
+import {Observable, switchMap} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
+import {HeaderComponent} from "../header/header.component";
+import {MandatHttpService} from "../../../features/mandat/services/mandat-http.service";
+import {AppStateService} from "../../../core/services/app-state.service";
 
 @Component({
   selector: 'app-layout',
@@ -13,16 +16,38 @@ import {AsideBareComponent} from "../aside-bare/aside-bare.component";
   imports: [
     RouterOutlet,
     AsyncPipe,
-    AsideBareComponent
+    AsideBareComponent,
+    HeaderComponent
   ]
 })
-export class LayoutComponent {
+export class LayoutComponent implements OnInit {
 
-  private sidebarService = inject(SidebarService);
   isSidebarOpen$: Observable<boolean>;
+  mandatHttpService = inject(MandatHttpService);
+  appStateService = inject(AppStateService);
+  private sidebarService = inject(SidebarService);
 
   constructor() {
     this.isSidebarOpen$ = this.sidebarService.isOpen$;
+  }
+
+  ngOnInit(): void {
+    this.mandatHttpService.getAllMandats().pipe(
+      switchMap(response => {
+        if (response.data) {
+          this.appStateService.setMandats(response.data);
+          const activeMandat = response.data.find(m => m.estActif);
+          if (activeMandat) {
+            return this.mandatHttpService.getMandatById(activeMandat.id);
+          }
+        }
+        return [];
+      })
+    ).subscribe(activeMandatWithPhases => {
+      if (activeMandatWithPhases && activeMandatWithPhases.data) {
+        this.appStateService.setSelectedMandat(activeMandatWithPhases.data);
+      }
+    });
   }
 
 }

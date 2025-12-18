@@ -2,18 +2,18 @@
   <!-- Zone recherche -->
   <div class="filters">
     <div class="search-input-group">
-      <input type="text" [(ngModel)]="searchTerm" placeholder="Search orders..." (keyup.enter)="applySearchTerm()">
-      <button class="search-icon-btn" (click)="applySearchTerm()">
+      <input (keyup.enter)="applySearchTerm()" [(ngModel)]="searchTerm" placeholder="Search orders..." type="text">
+      <button (click)="applySearchTerm()" class="search-icon-btn">
         <i class="bi bi-search"></i>
       </button>
-      <i class="bi bi-x-circle-fill clear-search-icon" *ngIf="searchTerm" (click)="clearSearchTerm()"></i>
+      <i (click)="clearSearchTerm()" *ngIf="searchTerm" class="bi bi-x-circle-fill clear-search-icon"></i>
     </div>
   </div>
 
   <!-- Bouton filtres -->
-  <button class="filter-btn" [class.active]="filtersActive" (click)="openFilterPanel.emit()">
-    <i class="bi bi-funnel"></i> Filters <span *ngIf="filtersActive">({{activeFilterCount}})</span>
+  <button (click)="openFilterPanel.emit()" [class.active]="filtersActive" class="filter-btn">
+    <i class="bi bi-funnel"></i> Filters <span *ngIf="filtersActive">({{ activeFilterCount }})</span>
   </button>
 
-  
+
 </div>

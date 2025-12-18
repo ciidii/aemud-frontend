@@ -1,0 +1,127 @@
+@import "src/assets/scss/variables";
+@import "src/assets/scss/typography";
+
+:host {
+  display: block;
+  width: 100%;
+  height: $header-height;
+  background-color: $color-background-panel;
+  border-bottom: 1px solid $color-border-default;
+  z-index: 5000;
+}
+
+.app-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 $space-6;
+}
+
+.header-left {
+  .navbar-brand {
+    @include text-heading-4;
+    color: $color-text-primary;
+    font-weight: $font-weight-bold;
+  }
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  gap: $space-4;
+
+  .dropdown-toggle {
+    @include text-body-regular;
+    background-color: $color-background-panel;
+    color: $color-text-secondary;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+
+    &:hover, &:focus {
+      background-color: $color-background-hover;
+      border-color: $color-border-strong;
+    }
+  }
+
+  .dropdown-menu {
+    border-radius: $radius-md;
+    border-color: $color-border-default;
+    box-shadow: $shadow-lg;
+    cursor: pointer;
+  }
+
+  .btn-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: none;
+    color: $color-text-secondary;
+    cursor: pointer;
+    position: relative;
+    width: 4rem;
+    height: 4rem;
+    border-radius: $radius-full;
+
+    &:hover {
+      background-color: $color-background-hover;
+    }
+
+    svg {
+      width: $icon-md;
+      height: $icon-md;
+    }
+  }
+
+  .notification-icon {
+    position: relative;
+    cursor: pointer;
+    padding: $space-2;
+    border-radius: 50%;
+    transition: background-color 0.2s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    i {
+      font-size: $icon-md;
+      color: $color-text-secondary;
+    }
+
+    &:hover {
+      background-color: $gray-100;
+    }
+
+    .badge {
+      position: absolute;
+      top: 4px;
+      right: 4px;
+      background-color: $danger-500;
+      color: $white;
+      font-size: 1rem;
+      width: 1.8rem;
+      height: 1.8rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      border: 2px solid $white;
+    }
+  }
+
+  .profile-button {
+    .profile-avatar {
+      width: 3.6rem;
+      height: 3.6rem;
+      border-radius: $radius-full;
+      background-color: $primary-500;
+      color: $color-text-on-primary;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      @include text-body-bold;
+      text-transform: uppercase;
+    }
+  }
+}

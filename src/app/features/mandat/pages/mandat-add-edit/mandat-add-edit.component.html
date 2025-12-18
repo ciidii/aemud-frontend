@@ -1,0 +1,89 @@
+<div class="mandat-form-container">
+  <h2>{{ (mandatId ? 'Modifier' : 'Ajouter') + ' un mandat' }}</h2>
+
+  <form (ngSubmit)="onSubmit()" [formGroup]="mandatForm">
+    <div class="form-section">
+      <h3>Informations Générales du Mandat</h3>
+      <div class="form-group">
+        <label for="nom">Nom du mandat</label>
+        <input formControlName="nom" id="nom" type="text">
+        <div *ngIf="mandatForm.get('nom')?.invalid && mandatForm.get('nom')?.touched" class="error-message">
+          Le nom du mandat est requis.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dateDebut">Date de début</label>
+        <input formControlName="dateDebut" id="dateDebut" type="date">
+        <div *ngIf="mandatForm.get('dateDebut')?.invalid && mandatForm.get('dateDebut')?.touched" class="error-message">
+          La date de début est requise.
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="dateFin">Date de fin</label>
+        <input formControlName="dateFin" id="dateFin" type="date">
+        <div *ngIf="mandatForm.get('dateFin')?.invalid && mandatForm.get('dateFin')?.touched" class="error-message">
+          La date de fin est requise.
+        </div>
+      </div>
+
+      <div class="form-group form-check">
+        <input formControlName="estActive" id="estActive" type="checkbox">
+        <label for="estActive">Mandat actif</label>
+      </div>
+    </div>
+
+    <div class="form-section">
+      <h3>Gestion des Phases</h3>
+      <div class="phase-mode-selector">
+        <label class="mode-option">
+          <input [value]="true" formControlName="calculatePhasesAutomatically" type="radio">
+          <span>Génération Automatique</span>
+        </label>
+        <label class="mode-option">
+          <input [value]="false" formControlName="calculatePhasesAutomatically" type="radio">
+          <span>Gestion Manuelle</span>
+        </label>
+      </div>
+
+      <div *ngIf="mandatForm.get('calculatePhasesAutomatically')?.value === true" class="automatic-phase-options">
+        <div class="form-group">
+          <label for="numberOfPhases">Nombre de phases souhaité</label>
+          <input formControlName="numberOfPhases" id="numberOfPhases" min="1" type="number">
+          <small class="form-text">Laissez vide pour générer 2 phases de durée égale. Le système couvrira 100% de la
+            période du mandat.</small>
+        </div>
+      </div>
+
+      <div *ngIf="mandatForm.get('calculatePhasesAutomatically')?.value === false" class="manual-phase-options">
+        <ng-container *ngIf="mandatForm.get('dateDebut')?.value && mandatForm.get('dateFin')?.value">
+          <app-phase-timeline
+            [mandateEndDate]="mandatForm.get('dateFin')?.value!"
+            [mandateStartDate]="mandatForm.get('dateDebut')?.value!"
+            [phases]="timelinePhases">
+          </app-phase-timeline>
+        </ng-container>
+        <ng-container *ngIf="!mandatForm.get('dateDebut')?.value || !mandatForm.get('dateFin')?.value">
+          <p class="info-message">Veuillez définir les dates de début et de fin du mandat pour gérer les phases
+            manuellement.</p>
+        </ng-container>
+
+
+        <div formArrayName="phases">
+          <div *ngFor="let phaseControl of phasesFormArray.controls; let i = index">
+            <app-phase-form-item
+              (delete)="removePhase(i)"
+              [index]="i"
+              [phaseForm]="phaseControl">
+            </app-phase-form-item>
+          </div>
+        </div>
+
+        <button (click)="addPhase()" class="add-phase-button" type="button">+ Ajouter une phase</button>
+      </div>
+    </div>
+
+    <button [disabled]="mandatForm.invalid" type="submit">Enregistrer</button>
+  </form>
+</div>

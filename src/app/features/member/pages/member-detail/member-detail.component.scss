@@ -1,6 +1,7 @@
 @import 'variables';
 @import 'typography';
 
+
 // --- Main Page Layout ---
 .detail-page-container {
   display: flex;
@@ -238,19 +239,40 @@
   padding: $space-4;
   overflow-y: auto;
   flex-grow: 1;
-
-  h5 {
-    font-size: $font-size-body;
-    font-weight: 600;
-    margin-bottom: $space-3;
-    color: $color-text-primary;
-  }
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
 }
 
 .sidebar-divider {
-  margin: $space-6 0;
   border: 0;
   border-top: 1px solid $color-border-default;
+}
+
+.sidebar-section h5 {
+  font-size: $font-size-body;
+  font-weight: 600;
+  margin-bottom: $space-3;
+  color: $color-text-primary;
+}
+.year-selector-group {
+  display: flex;
+  flex-direction: column;    // label au-dessus
+  width: 100%;               // occupe toute la largeur
+  gap: 4px;                  // petit espace entre label et select
+}
+
+.year-selector-group label {
+  font-weight: 600;
+  color: $color-text-primary;
+}
+
+.year-selector-group select {
+  width: 100%;               // select à 100% du container
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid $color-border-default;
+  background-color: #fff;
 }
 
 // --- Year Selector (Right Column) ---
@@ -675,7 +697,6 @@
   grid-template-columns: repeat(3, 1fr);
   gap: $space-4;
   padding: $space-4;
-  margin-bottom: $space-5;
   background-color: $gray-100; // Changed from gray-50 to gray-100 for better contrast with panel
   border-radius: $radius-md;
   border: 1px solid $color-border-default;
@@ -811,105 +832,164 @@
   overflow-x: auto;
 }
 
-// --- Unified Registration Card ---
-.registration-card {
+// --- NEW STYLES FOR TIMELINE ---
+
+.sidebar-section {
+  display: flex;
+  flex-direction: column;
+  gap: $space-4;
+}
+
+.registration-status-card {
   background-color: $color-background-panel;
   border: 1px solid $color-border-default;
   border-radius: $radius-md;
-  box-shadow: $shadow-sm;
 
   .card-header {
-    padding: $space-4;
+    padding: $space-3 $space-4;
     border-bottom: 1px solid $color-border-default;
 
     h5 {
-      @include text-heading-6;
       margin: 0;
+      font-size: $font-size-body;
+      font-weight: 600;
     }
   }
 
   .card-body {
     padding: $space-4;
-    display: flex;
-    flex-direction: column;
-    gap: $space-5;
   }
 
-  .current-registration-status {
-    padding: $space-4;
-    border-radius: $radius-md;
-    border-width: 1px;
-    border-style: solid;
+  .status-section {
     display: flex;
-    justify-content: space-between;
+    flex-direction: column;
+    gap: $space-4; // Séparation entre texte et bouton
+  }
+
+  .status-text {
+    display: flex;
     align-items: center;
-    gap: $space-4;
+    gap: $space-3;
 
-    .status-main {
-      display: flex;
-      align-items: center;
-      gap: $space-4;
-    }
-
-    .status-icon {
+    i {
       font-size: $icon-lg;
-      display: flex;
-      align-items: center;
     }
 
-    .status-title {
-      @include text-body-bold;
-      margin: 0 0 $space-1 0;
+    strong {
+      font-weight: 600;
+      color: $color-text-primary;
     }
 
-    .status-description {
+    span {
       font-size: $font-size-small;
       color: $color-text-secondary;
-      margin: 0;
-      max-width: 45ch;
-    }
-
-    // Status Colors
-    &.status-completed {
-      background-color: $success-100;
-      border-color: darken($success-100, 15%);
-      .status-icon { color: $success-500; }
-      .status-title { color: $success-900; }
-    }
-
-    &.status-uncompleted {
-      background-color: $warning-100;
-      border-color: darken($warning-100, 15%);
-      .status-icon { color: $warning-500; }
-      .status-title { color: $warning-900; }
-    }
-
-    &.status-not-registered {
-      background-color: $gray-100;
-      border-color: $color-border-default;
-      border-style: dashed;
-      .status-icon { color: $color-text-secondary; }
-    }
-
-    &.status-expired {
-      background-color: $gray-100;
-      border-color: $color-border-default;
-      .status-icon { color: $color-text-secondary; }
     }
   }
 
-  .registration-history {
-    display: flex;
-    flex-direction: column;
-    gap: $space-4;
+  .full-btn {
+    width: 100%; // Le bouton prend toute la ligne
+    padding: $space-3 $space-4;
+    font-weight: 600;
   }
+}
 
-  .history-title {
-    @include text-body-bold;
+.registration-timeline {
+  display: flex;
+  flex-direction: column;
+  gap: $space-5;
+}
+
+.timeline-mandate-group {
+  .mandate-title {
+    font-size: $font-size-small;
+    font-weight: 600;
     color: $color-text-secondary;
     text-transform: uppercase;
-    font-size: 1.1rem; // Slightly smaller for a sub-header
     letter-spacing: 0.5px;
-    margin-bottom: $space-2;
+    margin-bottom: $space-3;
+    padding-bottom: $space-2;
+    border-bottom: 1px solid $color-border-default;
+  }
+}
+
+.timeline-phase-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: $space-2;
+}
+
+.timeline-phase-item {
+  display: grid;
+  grid-template-columns: 1fr auto auto;
+  align-items: center;
+  gap: $space-4;
+  padding: $space-2 $space-3;
+  border-radius: $radius-sm;
+  background-color: $gray-100;
+  transition: background-color 0.2s ease;
+
+  &:hover {
+    background-color: $gray-200;
+  }
+}
+
+.phase-info {
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+}
+
+.phase-icon {
+  font-size: $icon-md;
+}
+
+.phase-name {
+  font-weight: 500;
+  color: $color-text-primary;
+}
+
+.phase-status {
+  .badge {
+    font-weight: 500;
+  }
+}
+
+.phase-actions {
+  min-width: 80px; // Reserve space for button
+  text-align: right;
+}
+
+// Light-colored badges
+.bg-success-light {
+  background-color: $success-100;
+  color: $success-900;
+}
+
+.bg-warning-light {
+  background-color: $warning-100;
+  color: $warning-900;
+}
+
+.bg-secondary-light {
+  background-color: $gray-200;
+  color: $gray-700;
+}
+
+.bg-info-light {
+  background-color: $info-100;
+  color: $info-900;
+}
+
+.btn-outline-primary {
+  color: $primary-700;
+  border-color: $primary-500;
+  background-color: transparent;
+
+  &:hover {
+    background-color: $primary-500;
+    color: $white;
   }
 }

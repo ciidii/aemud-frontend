@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { TemplateSelectModalComponent } from './template-select-modal.component';
+import {TemplateSelectModalComponent} from './template-select-modal.component';
 
 describe('TemplateSelectModalComponent', () => {
   let component: TemplateSelectModalComponent;
@@ -10,8 +10,8 @@ describe('TemplateSelectModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [TemplateSelectModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(TemplateSelectModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

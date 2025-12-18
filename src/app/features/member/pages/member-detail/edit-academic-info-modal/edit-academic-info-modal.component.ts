@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { AcademicInfoRequest, MembershipInfo } from "../../../../../core/models/member-data.model";
-import { AcademicInfoFormComponent } from "../../../components/member-add/academic-info-form/academic-info-form.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {AcademicInfoRequest, MembershipInfo} from "../../../../../core/models/member-data.model";
+import {
+  AcademicInfoFormComponent
+} from "../../../components/member-add/academic-info-form/academic-info-form.component";
 
 // The data this modal works with is a combination of two interfaces
 export type AcademicAndMembershipData = AcademicInfoRequest & MembershipInfo;
@@ -22,7 +24,8 @@ export class EditAcademicInfoModalComponent implements OnInit {
 
   editForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({

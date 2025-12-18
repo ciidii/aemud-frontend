@@ -1,4 +1,4 @@
-import { Component, forwardRef, OnInit } from '@angular/core';
+import {Component, forwardRef, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
@@ -11,7 +11,7 @@ import {
   Validator,
   Validators
 } from "@angular/forms";
-import { CommonModule } from "@angular/common";
+import {CommonModule} from "@angular/common";
 import {
   ValidationMessageComponent
 } from "../../../../../shared/components/validation-message/validation-message.component";
@@ -37,47 +37,8 @@ import {
 })
 export class AcademicInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
   academicInfoForm!: FormGroup;
-  onTouched: () => void = () => {};
 
-  constructor(private fb: FormBuilder) {}
-
-  ngOnInit(): void {
-    this.academicInfoForm = this.fb.group({
-      // Infos Académiques Actuelles
-      institutionName: ['', [Validators.required, Validators.minLength(3)]],
-      studiesDomain: ['', [Validators.required, Validators.minLength(3)]],
-      studiesLevel: ['', [Validators.required, Validators.minLength(3)]],
-      // Infos BAC
-      bacSeries: ['', [Validators.required, Validators.minLength(3)]],
-      bacMention: ['', [Validators.required, Validators.minLength(3)]],
-      yearOfBac: ['', Validators.required],
-      // Infos AEMUD et autres
-      legacyInstitution: ['', Validators.minLength(3)],
-      aemudCourses: ['', Validators.minLength(3)],
-      otherCourses: ['', Validators.minLength(3)],
-      participatedActivity: ['', Validators.minLength(3)],
-      politicOrganisation: ['', Validators.minLength(3)]
-    });
-  }
-
-  writeValue(val: any): void {
-    val && this.academicInfoForm.patchValue(val, { emitEvent: false });
-  }
-
-  registerOnChange(fn: any): void {
-    this.academicInfoForm.valueChanges.subscribe(fn);
-  }
-
-  registerOnTouched(fn: any): void {
-    this.onTouched = fn;
-  }
-
-  setDisabledState?(isDisabled: boolean): void {
-    isDisabled ? this.academicInfoForm.disable() : this.academicInfoForm.enable();
-  }
-
-  validate(control: AbstractControl): ValidationErrors | null {
-    return this.academicInfoForm.valid ? null : { invalid: true };
+  constructor(private fb: FormBuilder) {
   }
 
   get institutionName() {
@@ -122,5 +83,47 @@ export class AcademicInfoFormComponent implements ControlValueAccessor, OnInit, 
 
   get politicOrganisation() {
     return this.academicInfoForm.get('politicOrganisation');
+  }
+
+  onTouched: () => void = () => {
+  };
+
+  ngOnInit(): void {
+    this.academicInfoForm = this.fb.group({
+      // Infos Académiques Actuelles
+      institutionName: ['', [Validators.required, Validators.minLength(3)]],
+      studiesDomain: ['', [Validators.required, Validators.minLength(3)]],
+      studiesLevel: ['', [Validators.required, Validators.minLength(3)]],
+      // Infos BAC
+      bacSeries: ['', [Validators.required, Validators.minLength(3)]],
+      bacMention: ['', [Validators.required, Validators.minLength(3)]],
+      yearOfBac: ['', Validators.required],
+      // Infos AEMUD et autres
+      legacyInstitution: ['', Validators.minLength(3)],
+      aemudCourses: ['', Validators.minLength(3)],
+      otherCourses: ['', Validators.minLength(3)],
+      participatedActivity: ['', Validators.minLength(3)],
+      politicOrganisation: ['', Validators.minLength(3)]
+    });
+  }
+
+  writeValue(val: any): void {
+    val && this.academicInfoForm.patchValue(val, {emitEvent: false});
+  }
+
+  registerOnChange(fn: any): void {
+    this.academicInfoForm.valueChanges.subscribe(fn);
+  }
+
+  registerOnTouched(fn: any): void {
+    this.onTouched = fn;
+  }
+
+  setDisabledState?(isDisabled: boolean): void {
+    isDisabled ? this.academicInfoForm.disable() : this.academicInfoForm.enable();
+  }
+
+  validate(control: AbstractControl): ValidationErrors | null {
+    return this.academicInfoForm.valid ? null : {invalid: true};
   }
 }

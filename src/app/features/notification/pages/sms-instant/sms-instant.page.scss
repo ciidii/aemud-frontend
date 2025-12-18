@@ -1,0 +1,17 @@
+.sms-page-container {
+  max-width: 900px;
+  margin: 0 auto;
+  padding: 1.5rem;
+}
+
+.sms-header {
+  margin-bottom: 1.5rem;
+}
+
+.sms-form .card {
+  box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+}
+
+.sms-form textarea {
+  resize: vertical;
+}

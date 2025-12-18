@@ -1,42 +1,25 @@
-import { inject } from '@angular/core';
-import { HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest } from '@angular/common/http';
-import { catchError, Observable, throwError } from 'rxjs';
-import { AuthService } from "../../features/auth/services/auth.service";
-import { tap } from "rxjs/operators";
-import { ToastrService } from "ngx-toastr";
+import {inject} from '@angular/core';
+import {HttpErrorResponse, HttpEvent, HttpHandlerFn, HttpInterceptorFn, HttpRequest} from '@angular/common/http';
+import {catchError, Observable, throwError} from 'rxjs';
+import {AuthHttpService} from "../../features/auth/services/auth-http.service";
+import {NotificationService} from "../services/notification.service";
 
 export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, next: HttpHandlerFn): Observable<HttpEvent<unknown>> => {
-  const authService = inject(AuthService);
-  const toaster = inject(ToastrService);
+  const authService = inject(AuthHttpService);
+  const notificationService = inject(NotificationService);
 
-  const authToken = localStorage.getItem('aemud_auth_token');
-
-  // Liste des endpoints publics, version regex
-  const publicEndpointsRegex: RegExp[] = [
-    /\/auth\/authenticate$/,
-    /\/users\/reset-password-email$/,
-    /\/users\/check-valide-token$/,
-    /\/users\/forgotten-password-email$/,
-    /\/users\/change-password-forgotten$/
-  ];
-
-  // Vérifie si l'URL correspond exactement à l'un des endpoints publics
-  const isPublic = publicEndpointsRegex.some(regex => regex.test(req.url));
-
-  // Si l'endpoint n'est pas public et qu'on a un token, on ajoute le Bearer
-  const authReq = authToken && req.url.includes('api/') && !isPublic
-    ? req.clone({
-      headers: req.headers.set('Authorization', 'Bearer ' + authToken)
-    })
-    : req;
+  // Clone the request to add the withCredentials flag.
+  // This is necessary for the browser to send the HttpOnly auth cookie.
+  const authReq = req.clone({
+    withCredentials: true,
+  });
 
   return next(authReq).pipe(
-    tap(() => {}),
     catchError((error: HttpErrorResponse) => {
-      console.log(error?.error?.error?.code);
-      if (error?.error?.error?.code === "JWT_TOKEN_EXPIRED") {
-        toaster.warning("Votre session a expiré, veuillez vous reconnecter !");
-        authService.logout();
+      // If the cookie is expired or invalid, the API will return a 401 Unauthorized status.
+      if (error.status === 401 && !error.url?.includes("auth/authenticate")) {
+        notificationService.showWarning("Votre session a expiré, veuillez vous reconnecter !");
+        authService.logout().subscribe(); // Call logout and subscribe to trigger the request
       }
       return throwError(() => error);
     })

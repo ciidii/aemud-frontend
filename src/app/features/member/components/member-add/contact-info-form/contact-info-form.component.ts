@@ -2,6 +2,7 @@ import {Component, forwardRef, OnInit} from '@angular/core';
 import {
   AbstractControl,
   ControlValueAccessor,
+  FormArray,
   FormBuilder,
   FormGroup,
   NG_VALIDATORS,
@@ -9,7 +10,7 @@ import {
   ReactiveFormsModule,
   ValidationErrors,
   Validator,
-  Validators, FormArray
+  Validators
 } from "@angular/forms";
 import {CommonModule} from "@angular/common";
 import {
@@ -38,20 +39,8 @@ import {
 export class ContactInfoFormComponent implements ControlValueAccessor, OnInit, Validator {
 
   contactInfoForm!: FormGroup;
-  onTouched: () => void = () => {
-  };
 
   constructor(private fb: FormBuilder) {
-  }
-
-  ngOnInit(): void {
-    this.contactInfoForm = this.fb.group({
-      numberPhone: ['', Validators.required],
-      email: ['', [Validators.required, Validators.email]],
-      addressInDakar: ['', Validators.required],
-      addressOnCampus: [''],
-      personToCalls: this.fb.array([])
-    });
   }
 
   // --- Getters pour les champs simples ---
@@ -72,18 +61,21 @@ export class ContactInfoFormComponent implements ControlValueAccessor, OnInit, V
     return this.contactInfoForm.get('personToCalls') as FormArray;
   }
 
-  getPersonControl(index: number, controlName: string) {
-    return this.personToCalls.at(index).get(controlName);
+  onTouched: () => void = () => {
+  };
+
+  ngOnInit(): void {
+    this.contactInfoForm = this.fb.group({
+      numberPhone: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      addressInDakar: ['', Validators.required],
+      addressOnCampus: [''],
+      personToCalls: this.fb.array([])
+    });
   }
 
-  private newPersonToCall(): FormGroup {
-    return this.fb.group({
-      lastname: ['', [Validators.required, Validators.minLength(3)]],
-      firstname: ['', [Validators.required, Validators.minLength(3)]],
-      requiredNumberPhone: ['', [Validators.required, Validators.minLength(3)]],
-      optionalNumberPhone: [''],
-      relationship: ['', [Validators.required, Validators.minLength(3)]]
-    });
+  getPersonControl(index: number, controlName: string) {
+    return this.personToCalls.at(index).get(controlName);
   }
 
   addPersonToCall(): void {
@@ -118,6 +110,16 @@ export class ContactInfoFormComponent implements ControlValueAccessor, OnInit, V
   }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    return this.contactInfoForm.valid ? null : { invalid: true };
+    return this.contactInfoForm.valid ? null : {invalid: true};
+  }
+
+  private newPersonToCall(): FormGroup {
+    return this.fb.group({
+      lastname: ['', [Validators.required, Validators.minLength(3)]],
+      firstname: ['', [Validators.required, Validators.minLength(3)]],
+      requiredNumberPhone: ['', [Validators.required, Validators.minLength(3)]],
+      optionalNumberPhone: [''],
+      relationship: ['', [Validators.required, Validators.minLength(3)]]
+    });
   }
 }

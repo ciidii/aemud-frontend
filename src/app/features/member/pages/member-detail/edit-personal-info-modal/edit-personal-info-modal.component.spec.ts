@@ -1,6 +1,6 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+import {ComponentFixture, TestBed} from '@angular/core/testing';
 
-import { EditPersonalInfoModalComponent } from './edit-personal-info-modal.component';
+import {EditPersonalInfoModalComponent} from './edit-personal-info-modal.component';
 
 describe('EditPersonalInfoModalComponent', () => {
   let component: EditPersonalInfoModalComponent;
@@ -10,8 +10,8 @@ describe('EditPersonalInfoModalComponent', () => {
     await TestBed.configureTestingModule({
       imports: [EditPersonalInfoModalComponent]
     })
-    .compileComponents();
-    
+      .compileComponents();
+
     fixture = TestBed.createComponent(EditPersonalInfoModalComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();

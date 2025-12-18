@@ -1,0 +1,65 @@
+@import '../../assets/scss/variables';
+@import '../../assets/scss/typography';
+
+.phase-item-card {
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  padding: $space-4;
+  margin-bottom: $space-4;
+  background-color: $color-background-panel;
+  box-shadow: $shadow-sm;
+  position: relative;
+
+  .form-group {
+    margin-bottom: $space-3;
+
+    label {
+      @include text-label;
+      display: block;
+      margin-bottom: $space-1;
+      color: $color-text-secondary;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: $form-input-padding-y $form-input-padding-x;
+      border: 1px solid $form-input-border-color;
+      border-radius: $form-input-border-radius;
+      background-color: $form-input-background;
+      @include text-body-regular;
+      color: $color-text-primary;
+
+      &:focus {
+        outline: none;
+        border-color: $color-border-focus;
+        box-shadow: 0 0 0 0.2rem rgba($color-border-focus, 0.25);
+      }
+    }
+  }
+
+  .error-message {
+    @include text-body-small;
+    color: $danger-500;
+    margin-top: $space-1;
+  }
+
+  .delete-button {
+    position: absolute;
+    top: $space-3;
+    right: $space-3;
+    background-color: $danger-500;
+    color: $white;
+    border: none;
+    border-radius: $radius-sm;
+    padding: $space-1 $space-2;
+    cursor: pointer;
+    @include text-body-small;
+    font-weight: $font-weight-bold;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+      background-color: $danger-500
+    }
+  }
+}

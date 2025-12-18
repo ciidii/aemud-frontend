@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule } from "@angular/forms";
-import { CommonModule } from "@angular/common";
-import { ContactInfoRequest } from "../../../../../core/models/member-data.model";
-import { ContactInfoFormComponent } from "../../../components/member-add/contact-info-form/contact-info-form.component";
+import {Component, EventEmitter, Input, OnInit, Output} from '@angular/core';
+import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
+import {CommonModule} from "@angular/common";
+import {ContactInfoRequest} from "../../../../../core/models/member-data.model";
+import {ContactInfoFormComponent} from "../../../components/member-add/contact-info-form/contact-info-form.component";
 
 @Component({
   selector: 'app-edit-contact-info-modal',
@@ -19,7 +19,8 @@ export class EditContactInfoModalComponent implements OnInit {
 
   editForm!: FormGroup;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(private fb: FormBuilder) {
+  }
 
   ngOnInit(): void {
     this.editForm = this.fb.group({

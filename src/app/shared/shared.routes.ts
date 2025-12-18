@@ -1,6 +1,6 @@
-import { Routes } from '@angular/router';
-import { LayoutComponent } from './components/layout/layout.component';
-import { NotFoundComponent } from "./pages/not-found/not-found.component";
+import {Routes} from '@angular/router';
+import {LayoutComponent} from './components/layout/layout.component';
+import {NotFoundComponent} from "./pages/not-found/not-found.component";
 
 export const SHARED_ROUTES: Routes = [
   {

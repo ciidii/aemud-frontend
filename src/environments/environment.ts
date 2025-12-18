@@ -1,8 +1,8 @@
-import { Environment } from './environment.interface';
+import {Environment} from './environment.interface';
 
 export const environment: Environment = {
   name: 'stage',
-  production: false ,
+  production: false,
   apiKey: 'http://apiaemudcontainer:8081',
   identity_API_URL: 'https://identity.com',
   storage_API_URL: 'https://storage.com',

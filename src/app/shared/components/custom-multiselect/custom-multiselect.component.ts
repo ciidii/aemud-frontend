@@ -1,4 +1,4 @@
-import {Component, Input, forwardRef, HostListener, ElementRef} from '@angular/core';
+import {Component, ElementRef, forwardRef, HostListener, Input} from '@angular/core';
 import {ControlValueAccessor, FormsModule, NG_VALUE_ACCESSOR} from '@angular/forms';
 import {NgForOf, NgIf} from "@angular/common";
 
@@ -23,33 +23,32 @@ import {NgForOf, NgIf} from "@angular/common";
 export class CustomMultiselectComponent implements ControlValueAccessor {
 
   // --- Inputs ---
-  @Input() displayField: string = 'name';
-  @Input() valueField: string = 'id';
-  @Input() placeholder: string = 'Sélectionner...';
+  @Input() displayField = 'name';
+  @Input() valueField = 'id';
+  @Input() placeholder = 'Sélectionner...';
 
-  // --- State ---
   public selectedItems: any[] = [];
-  public filteredItems: any[] = [];
-  public searchTerm: string = '';
-  public isOpen: boolean = false;
-  public isDisabled: boolean = false;
-
-  // --- Private properties for robust initialization ---
-  private _items: any[] = [];
+  public filteredItems: any[] | null = [];
+  public searchTerm = '';
+  public isOpen = false;
+  public isDisabled = false;
   private _value: string[] = [];
 
+
+  constructor(private eRef: ElementRef) {
+  }
+
+  // --- Private properties for robust initialization ---
+  private _items: any[] | null = [];
+
   @Input()
-  get items(): any[] {
+  get items(): any[] | null {
     return this._items;
   }
 
-  set items(val: any[]) {
+  set items(val: any[] | null) {
     this._items = val;
     this.updateSelectedItemsFromValue();
-  }
-
-  // --- Lifecycle & Event Handlers ---
-  constructor(private eRef: ElementRef) {
   }
 
   @HostListener('document:click', ['$event'])
@@ -59,12 +58,6 @@ export class CustomMultiselectComponent implements ControlValueAccessor {
       this.onTouched();
     }
   }
-
-  // --- ControlValueAccessor Implementation ---
-  private onChange = (value: any) => {
-  };
-  private onTouched = () => {
-  };
 
   writeValue(value: string[]): void {
     this._value = value || [];
@@ -132,6 +125,13 @@ export class CustomMultiselectComponent implements ControlValueAccessor {
     event.stopPropagation();
     this.onItemSelect(item);
   }
+
+  // --- ControlValueAccessor Implementation ---
+  private onChange = (value: any) => {
+  };
+
+  private onTouched = () => {
+  };
 
   private updateSelectedItemsFromValue(): void {
     if (this._items && this._value) {

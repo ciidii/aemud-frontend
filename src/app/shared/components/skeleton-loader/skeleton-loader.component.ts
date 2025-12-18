@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import {Component} from '@angular/core';
 
 @Component({
   selector: 'tr[app-skeleton-loader]', // Use attribute selector to be a valid tr
@@ -6,4 +6,5 @@ import { Component } from '@angular/core';
   styleUrls: ['./skeleton-loader.component.scss'],
   standalone: true,
 })
-export class SkeletonLoaderComponent {}
+export class SkeletonLoaderComponent {
+}

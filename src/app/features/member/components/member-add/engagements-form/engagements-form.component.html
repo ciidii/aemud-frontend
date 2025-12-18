@@ -2,10 +2,10 @@
 
   <!-- Section Bourse -->
   <div class="form-field">
-    <label for="bourse" class="form-label">Bourse / Allocation</label>
-    <select id="bourse" formControlName="bourse" class="form-select">
+    <label class="form-label" for="bourse">Bourse / Allocation</label>
+    <select class="form-select" formControlName="bourse" id="bourse">
       <option [ngValue]="null">Sélectionner...</option>
-      <option *ngFor="let bourse of bourses" [ngValue]="bourse.bourseId">{{ bourse.lebelle }}</option>
+      <option *ngFor="let bourse of bourses" [ngValue]="bourse.id">{{ bourse.lebelle }}</option>
     </select>
     <app-validation-message [control]="bourse"></app-validation-message>
   </div>
@@ -14,11 +14,11 @@
   <div class="form-field">
     <label class="form-label">Clubs</label>
     <app-custom-multiselect
-      formControlName="clubs"
       [items]="clubs"
       displayField="name"
-      valueField="id"
-      placeholder="Sélectionner un ou plusieurs clubs">
+      formControlName="clubs"
+      placeholder="Sélectionner un ou plusieurs clubs"
+      valueField="id">
     </app-custom-multiselect>
     <app-validation-message [control]="clubs_"></app-validation-message>
   </div>
@@ -27,11 +27,11 @@
   <div class="form-field">
     <label class="form-label">Commissions</label>
     <app-custom-multiselect
-      formControlName="commissions"
       [items]="commissions"
       displayField="name"
-      valueField="id"
-      placeholder="Sélectionner une ou plusieurs commissions">
+      formControlName="commissions"
+      placeholder="Sélectionner une ou plusieurs commissions"
+      valueField="id">
     </app-custom-multiselect>
     <app-validation-message [control]="commissions_"></app-validation-message>
   </div>

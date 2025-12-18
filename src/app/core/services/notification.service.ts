@@ -1,14 +1,15 @@
-import { Injectable } from '@angular/core';
-import { ToastrService } from 'ngx-toastr';
+import {Injectable} from '@angular/core';
+import {ToastrService} from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root'
 })
 export class NotificationService {
 
-  constructor(private toastr: ToastrService) { }
+  constructor(private toastr: ToastrService) {
+  }
 
-  showSuccess(message: string, title: string = 'Succès'): void {
+  showSuccess(message: string, title = 'Succès'): void {
     this.toastr.success(message, title, {
       closeButton: true,
       progressBar: true,
@@ -17,7 +18,7 @@ export class NotificationService {
     });
   }
 
-  showError(message: string, title: string = 'Erreur'): void {
+  showError(message: string, title = 'Erreur'): void {
     this.toastr.error(message, title, {
       closeButton: true,
       progressBar: true,
@@ -26,7 +27,7 @@ export class NotificationService {
     });
   }
 
-  showInfo(message: string, title: string = 'Information'): void {
+  showInfo(message: string, title = 'Information'): void {
     this.toastr.info(message, title, {
       closeButton: true,
       progressBar: true,
@@ -35,7 +36,7 @@ export class NotificationService {
     });
   }
 
-  showWarning(message: string, title: string = 'Avertissement'): void {
+  showWarning(message: string, title = 'Avertissement'): void {
     this.toastr.warning(message, title, {
       closeButton: true,
       progressBar: true,

@@ -1,4 +1,4 @@
-import { Environment } from './environment.interface';
+import {Environment} from './environment.interface';
 
 export const environment: Environment = {
   name: 'stage',
@@ -7,7 +7,7 @@ export const environment: Environment = {
   identity_API_URL: 'https://stage.identity.com',
   storage_API_URL: 'https://stage.storage.com',
   users_API_URL: 'https://stage.user.com',
-  API_URL:"/aemud/api/v1",
+  API_URL: "/aemud/api/v1",
   features: [
     {
       name: 'loggingSystem',
