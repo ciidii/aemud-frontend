@@ -9,7 +9,7 @@ import {ValidationMessageComponent} from '../../../../shared/components/validati
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
   templateUrl: './club-form.component.html',
-  styleUrls: ['./club-form.component.css']
+  styleUrls: ['./club-form.component.scss']
 })
 export class ClubFormComponent implements OnInit {
   @Input() club: Club | null = null;

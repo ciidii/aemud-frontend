@@ -9,7 +9,7 @@ import {Commission} from "../../../../core/models/member-data.model";
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
   templateUrl: './commission-form.component.html',
-  styleUrls: ['./commission-form.component.css']
+  styleUrls: ['./commission-form.component.scss']
 })
 export class CommissionFormComponent implements OnInit {
   @Input() commission: Commission | null = null;

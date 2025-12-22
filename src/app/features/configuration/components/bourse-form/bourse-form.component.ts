@@ -9,7 +9,7 @@ import {BourseModel} from "../../../../core/models/bourse.model";
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, ValidationMessageComponent],
   templateUrl: './bourse-form.component.html',
-  styleUrls: ['./bourse-form.component.css']
+  styleUrls: ['./bourse-form.component.scss']
 })
 export class BourseFormComponent implements OnInit {
   @Input() bourse: BourseModel | null = null;

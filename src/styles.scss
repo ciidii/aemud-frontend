@@ -103,6 +103,14 @@ small {
     border-color: $primary-600;
     transform: translateY(-1px);
   }
+
+  &:disabled {
+    background-color: $primary-500;
+    border-color: $primary-500;
+    opacity: 0.6;
+    pointer-events: none;
+    transform: none;
+  }
 }
 
 .btn-secondary {
