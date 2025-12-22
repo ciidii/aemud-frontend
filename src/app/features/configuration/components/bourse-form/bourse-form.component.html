@@ -2,14 +2,14 @@
   <div class="modal-body">
     <p class="text-muted fst-italic">Les champs marqués d'un <span class="required-asterisk">*</span> sont obligatoires.</p>
     <div class="form-floating mb-3">
-      <input type="text" class="form-control" id="lebelle" placeholder="Type de bourse" formControlName="type">
+      <input type="text" class="form-control" id="lebelle" placeholder="Type de bourse" formControlName="lebelle">
       <label for="lebelle">Type de bourse <span class="required-asterisk">*</span></label>
-      <app-validation-message [control]="bourseForm.get('type')!"></app-validation-message>
+      <app-validation-message [control]="bourseForm.get('lebelle')!"></app-validation-message>
     </div>
     <div class="form-floating">
-      <input type="number" class="form-control" id="montant" placeholder="Montant" formControlName="amount">
+      <input type="number" class="form-control" id="montant" placeholder="Montant" formControlName="montant">
       <label for="montant">Montant (XAF) <span class="required-asterisk">*</span></label>
-      <app-validation-message [control]="bourseForm.get('amount')!"></app-validation-message>
+      <app-validation-message [control]="bourseForm.get('montant')!"></app-validation-message>
     </div>
   </div>
   <div class="modal-footer">

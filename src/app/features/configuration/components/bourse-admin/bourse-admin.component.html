@@ -7,46 +7,48 @@
     </button>
   </div>
   <div class="card-body">
-    <div *ngIf="bourses$ | async as bourses; else loading">
-      <div *ngIf="bourses.length > 0; else emptyState" class="table-responsive">
-        <table class="table table-striped table-hover">
-          <thead>
-            <tr>
-              <th scope="col">Type</th>
-              <th scope="col">Montant</th>
-              <th scope="col" class="text-end">Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr *ngFor="let bourse of bourses">
-              <td>{{ bourse.lebelle }}</td>
-              <td>{{ bourse.montant | currency:'XAF':'symbol':'1.0-0' }}</td>
-              <td class="text-end">
-                <button class="btn btn-link btn-sm text-primary" (click)="openBourseModal(bourse)">
-                  <i class="bi bi-pencil-fill"></i>
-                </button>
-                <button class="btn btn-link btn-sm text-danger" (click)="openDeleteConfirm(bourse)">
-                  <i class="bi bi-trash-fill"></i>
-                </button>
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <ng-template #emptyState>
-        <div class="text-center p-5">
-          <p class="text-muted">Aucune bourse n'a été ajoutée pour le moment.</p>
-        </div>
-      </ng-template>
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Type</th>
+          <th scope="col">Montant</th>
+          <th scope="col" class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="bourses$ | async as bourses; else loading">
+          <tr *ngFor="let bourse of bourses">
+            <td>{{ bourse.lebelle }}</td>
+            <td>{{ bourse.montant | currency:'XAF':'symbol':'1.0-0' }}</td>
+            <td class="text-end">
+              <button class="btn btn-link btn-sm text-primary" (click)="openBourseModal(bourse)">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-link btn-sm text-danger" (click)="openDeleteConfirm(bourse)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="bourses.length === 0">
+            <td colspan="3" class="text-center p-5 text-muted">
+              Aucune bourse n'a été ajoutée pour le moment.
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #loading>
+          <tr app-skeleton-loader></tr>
+          <tr app-skeleton-loader></tr>
+          <tr app-skeleton-loader></tr>
+        </ng-template>
+        </tbody>
+      </table>
     </div>
-    <ng-template #loading>
-      <app-skeleton-loader [isLoading]="true"></app-skeleton-loader>
-    </ng-template>
   </div>
 </div>
 
 <!-- Modale pour Ajouter/Modifier une bourse -->
-<app-modal [isOpen]="isModalOpen" (closeModal)="closeBourseModal()" [title]="selectedBourse ? 'Modifier la bourse' : 'Ajouter une bourse'">
+<app-modal *ngIf="isModalOpen" (closeModal)="closeBourseModal()" [title]="selectedBourse ? 'Modifier la bourse' : 'Ajouter une bourse'">
   <app-bourse-form
     [bourse]="selectedBourse"
     [isSaving]="isSaving"
@@ -57,7 +59,7 @@
 
 <!-- Modale de confirmation de suppression -->
 <app-confirm-delete-modal
-  [isOpen]="isConfirmOpen"
+  *ngIf="isConfirmOpen"
   (closeModal)="closeDeleteConfirm()"
   (confirmDelete)="onDeleteBourse()">
 </app-confirm-delete-modal>
