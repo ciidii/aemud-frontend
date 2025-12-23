@@ -1,0 +1,23 @@
+<form [formGroup]="bourseForm" (ngSubmit)="onSubmit()">
+  <div class="modal-body">
+    <p class="text-muted fst-italic">Les champs marqués d'un <span class="required-asterisk">*</span> sont obligatoires.</p>
+    <div class="form-floating mb-3">
+      <input type="text" class="form-control" id="libelle" placeholder="Type de bourse" formControlName="libelle">
+      <label for="libelle">Type de bourse <span class="required-asterisk">*</span></label>
+      <app-validation-message [control]="bourseForm.get('libelle')!"></app-validation-message>
+    </div>
+    <div class="form-floating">
+      <input type="number" class="form-control" id="montant" placeholder="Montant" formControlName="montant">
+      <label for="montant">Montant (XAF) <span class="required-asterisk">*</span></label>
+      <app-validation-message [control]="bourseForm.get('montant')!"></app-validation-message>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" (click)="closeModal.emit()">Annuler</button>
+    <button type="submit" class="btn btn-primary" [disabled]="bourseForm.invalid">
+      <span *ngIf="isSaving" class="spinner-border spinner-border-sm" aria-hidden="true"></span>
+      <span role="status" *ngIf="isSaving"> Enregistrement...</span>
+      <span *ngIf="!isSaving">Enregistrer</span>
+    </button>
+  </div>
+</form>

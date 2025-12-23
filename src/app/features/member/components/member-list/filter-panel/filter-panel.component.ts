@@ -68,7 +68,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
     this.clubs$ = this.clubService.getAllClubs();
     this.commissions$ = this.commissionService.getAllCommissions();
     this.bourses$ = this.bourseService.getAllBourses().pipe(
-      map(bourses => bourses.map(b => ({id: b.id, name: b.lebelle})))
+      map(bourses => bourses.map(b => ({id: b.id, name: b.libelle})))
     );
     this.phases$ = this.appStateService.activeMandat$.pipe(
       filter((mandat): mandat is NonNullable<typeof mandat> => mandat !== null),

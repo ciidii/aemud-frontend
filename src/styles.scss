@@ -33,6 +33,16 @@
 @import "bootstrap-icons/font/bootstrap-icons.css";
 
 /* ------------------------------------------------------------- */
+/* Fix pour les labels flottants qui masquent le texte saisi */
+.form-floating > .form-control:focus ~ label,
+.form-floating > .form-control:not(:placeholder-shown) ~ label {
+  opacity: 0.65;
+  transform: scale(0.85) translateY(-0.8rem) translateX(0.15rem);
+  height: auto;
+  background-color: $white;
+  padding: 0 $space-1;
+}
+
 /* Styles Généraux de l'Application (utilisant le Design System) */
 /* ------------------------------------------------------------- */
 
@@ -102,6 +112,14 @@ small {
     background-color: $primary-600;
     border-color: $primary-600;
     transform: translateY(-1px);
+  }
+
+  &:disabled {
+    background-color: $primary-500;
+    border-color: $primary-500;
+    opacity: 0.6;
+    pointer-events: none;
+    transform: none;
   }
 }
 
