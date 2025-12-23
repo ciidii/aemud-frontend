@@ -52,7 +52,7 @@ export class BourseAdminComponent implements OnInit {
     this.isSaving = true;
     const saveOperation = bourseData.id
       ? this.bourseService.updateBourse(bourseData)
-      : this.bourseService.createBourse({type: bourseData.lebelle, amount: bourseData.montant});
+      : this.bourseService.createBourse({libelle: bourseData.libelle, montant: bourseData.montant,id:0});
 
     saveOperation.subscribe({
       next: () => {

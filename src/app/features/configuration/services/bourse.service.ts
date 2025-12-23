@@ -26,7 +26,7 @@ export class BourseService {
     );
   }
 
-  createBourse(bourse: BourseDto): Observable<BourseModel> {
+  createBourse(bourse: BourseModel): Observable<BourseModel> {
     return this.http.post<ResponseEntityApi<BourseModel>>(this.apiUrl, bourse).pipe(
       map(response => response.data)
     );
