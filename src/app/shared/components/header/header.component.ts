@@ -5,8 +5,8 @@ import {AuthHttpService} from "../../../features/auth/services/auth-http.service
 import {Observable} from "rxjs";
 import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {MandatDto} from "../../../features/mandat/models/mandat.model";
-import {MandatHttpService} from "../../../features/mandat/services/mandat-http.service";
+import {PeriodeMandatDto} from "../../../features/periode-mandat/models/periode-mandat.model";
+import {PeriodeMandatHttpService} from "../../../features/periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-nav-bar',
@@ -17,12 +17,12 @@ import {MandatHttpService} from "../../../features/mandat/services/mandat-http.s
 })
 export class HeaderComponent implements OnInit {
   isPopoverOpen = false;
-  mandats$!: Observable<MandatDto[]>;
-  activeMandat$!: Observable<MandatDto | null>;
+  mandats$!: Observable<PeriodeMandatDto[]>;
+  activeMandat$!: Observable<PeriodeMandatDto | null>;
   appStateService = inject(AppStateService);
   authService = inject(AuthHttpService);
   router = inject(Router);
-  mandatHttpService = inject(MandatHttpService);
+  mandatHttpService = inject(PeriodeMandatHttpService);
   private elementRef = inject(ElementRef);
 
   ngOnInit(): void {
@@ -31,8 +31,8 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  onMandatChange(mandat: MandatDto): void {
-    this.mandatHttpService.getMandatById(mandat.id).subscribe(response => {
+  onMandatChange(mandat: PeriodeMandatDto): void {
+    this.mandatHttpService.getPeriodeMandatById(mandat.id).subscribe(response => {
       if (response.data) {
         this.appStateService.setSelectedMandat(response.data);
       }

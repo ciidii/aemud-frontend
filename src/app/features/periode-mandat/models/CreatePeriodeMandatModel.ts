@@ -1,6 +1,6 @@
 import {CreatePhaseModel} from "./CreatePhaseModel";
 
-export interface CreateMandatModel {
+export interface CreatePeriodeMandatModel {
   nom: string;
   dateDebut: string;  // format: "yyyy-MM-dd"
   dateFin: string;    // format: "yyyy-MM-dd"

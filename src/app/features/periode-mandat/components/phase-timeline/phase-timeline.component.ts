@@ -12,16 +12,6 @@ export interface TimelinePhase {
   isDateOrderInvalid?: boolean; // New: indicates if phase start date is after end date
 }
 
-export interface TimelinePhase {
-  nom: string;
-  dateDebut: string; // YYYY-MM-DD
-  dateFin: string;   // YYYY-MM-DD
-  isValid: boolean; // Indicates if this phase is valid (e.g., no overlap, within mandate dates)
-  isOverlapping?: boolean; // New: indicates if this phase overlaps with another
-  isOutsideMandate?: boolean; // New: indicates if this phase is outside mandate dates
-  isDateOrderInvalid?: boolean; // New: indicates if phase start date is after end date
-}
-
 @Component({
   selector: 'app-phase-timeline',
   standalone: true,
@@ -30,12 +20,12 @@ export interface TimelinePhase {
   styleUrls: ['./phase-timeline.component.scss']
 })
 export class PhaseTimelineComponent implements OnInit, OnChanges {
-  @Input() mandateStartDate!: string; // Overall mandate start date
-  @Input() mandateEndDate!: string;   // Overall mandate end date
+  @Input() periodeMandatStartDate!: string; // Overall mandate start date
+  @Input() periodeMandatEndDate!: string;   // Overall mandate end date
   @Input() phases: TimelinePhase[] = []; // List of phases to display
 
   timelineSegments: any[] = []; // Calculated segments for the timeline display
-  totalMandateDurationDays: number = 0;
+  totalPeriodeMandatDurationDays: number = 0;
   timelineMessage: string = '';
   isTimelineValid: boolean = true;
 
@@ -44,34 +34,34 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['mandateStartDate'] || changes['mandateEndDate'] || changes['phases']) {
+    if (changes['periodeMandatStartDate'] || changes['periodeMandatEndDate'] || changes['phases']) {
       this.calculateTimeline();
     }
   }
 
   private calculateTimeline(): void {
-    if (!this.mandateStartDate || !this.mandateEndDate) {
+    if (!this.periodeMandatStartDate || !this.periodeMandatEndDate) {
       this.timelineSegments = [];
-      this.timelineMessage = 'Veuillez définir les dates de début et de fin du mandat.';
+      this.timelineMessage = 'Veuillez définir les dates de début et de fin de la période de mandat.';
       this.isTimelineValid = false;
       return;
     }
 
-    const mandateStart = new Date(this.mandateStartDate);
-    const mandateEnd = new Date(this.mandateEndDate);
+    const periodeMandatStart = new Date(this.periodeMandatStartDate);
+    const periodeMandatEnd = new Date(this.periodeMandatEndDate);
 
-    if (mandateStart > mandateEnd) {
+    if (periodeMandatStart > periodeMandatEnd) {
       this.timelineSegments = [];
-      this.timelineMessage = 'La date de début du mandat doit être antérieure à la date de fin.';
+      this.timelineMessage = 'La date de début de la période de mandat doit être antérieure à la date de fin.';
       this.isTimelineValid = false;
       return;
     }
 
-    this.totalMandateDurationDays = (mandateEnd.getTime() - mandateStart.getTime()) / (1000 * 3600 * 24);
+    this.totalPeriodeMandatDurationDays = (periodeMandatEnd.getTime() - periodeMandatStart.getTime()) / (1000 * 3600 * 24);
 
-    if (this.totalMandateDurationDays <= 0) {
+    if (this.totalPeriodeMandatDurationDays <= 0) {
       this.timelineSegments = [];
-      this.timelineMessage = 'La durée du mandat doit être positive.';
+      this.timelineMessage = 'La durée de la période de mandat doit être positive.';
       this.isTimelineValid = false;
       return;
     }
@@ -80,7 +70,7 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
     const sortedPhases = [...this.phases].sort((a, b) => new Date(a.dateDebut).getTime() - new Date(b.dateDebut).getTime());
 
     this.timelineSegments = [];
-    let currentPosition = 0; // Represents days from mandateStart
+    let currentPosition = 0; // Represents days from periodeMandatStart
     let coverageDays = 0;
     this.isTimelineValid = true; // Assume valid until proven otherwise
 
@@ -96,8 +86,8 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
       const phaseStart = new Date(phase.dateDebut);
       const phaseEnd = new Date(phase.dateFin);
 
-      const phaseStartDays = (phaseStart.getTime() - mandateStart.getTime()) / (1000 * 3600 * 24);
-      const phaseEndDays = (phaseEnd.getTime() - mandateStart.getTime()) / (1000 * 3600 * 24);
+      const phaseStartDays = (phaseStart.getTime() - periodeMandatStart.getTime()) / (1000 * 3600 * 24);
+      const phaseEndDays = (phaseEnd.getTime() - periodeMandatStart.getTime()) / (1000 * 3600 * 24);
       const phaseDuration = phaseEndDays - phaseStartDays;
 
       // Update global validation flags from individual phase flags
@@ -111,7 +101,7 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
         this.timelineSegments.push({
           type: 'gap',
           duration: gapDuration,
-          width: (gapDuration / this.totalMandateDurationDays) * 100
+          width: (gapDuration / this.totalPeriodeMandatDurationDays) * 100
         });
         hasGap = true;
       }
@@ -122,7 +112,7 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
           type: 'phase',
           name: phase.nom,
           duration: phaseDuration,
-          width: (phaseDuration / this.totalMandateDurationDays) * 100,
+          width: (phaseDuration / this.totalPeriodeMandatDurationDays) * 100,
           isValid: phase.isValid && !phase.isOverlapping && !phase.isOutsideMandate && !phase.isDateOrderInvalid,
           isOverlapping: phase.isOverlapping,
           isOutsideMandate: phase.isOutsideMandate,
@@ -138,12 +128,12 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
     }
 
     // Add remaining gap after last phase if any
-    if (currentPosition < this.totalMandateDurationDays) {
-      const remainingGap = this.totalMandateDurationDays - currentPosition;
+    if (currentPosition < this.totalPeriodeMandatDurationDays) {
+      const remainingGap = this.totalPeriodeMandatDurationDays - currentPosition;
       this.timelineSegments.push({
         type: 'gap',
         duration: remainingGap,
-        width: (remainingGap / this.totalMandateDurationDays) * 100
+        width: (remainingGap / this.totalPeriodeMandatDurationDays) * 100
       });
       hasGap = true;
     }
@@ -152,11 +142,11 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
     if (hasPhaseDateOrderInvalid) {
       this.timelineMessage = 'Certaines phases ont une date de début postérieure à leur date de fin.';
       this.isTimelineValid = false;
-    } else if (mandateStart > mandateEnd) {
-      this.timelineMessage = 'La date de début du mandat doit être antérieure à la date de fin.';
+    } else if (periodeMandatStart > periodeMandatEnd) {
+      this.timelineMessage = 'La date de début de la période de mandat doit être antérieure à la date de fin.';
       this.isTimelineValid = false;
     } else if (hasPhaseOutsideMandate) {
-      this.timelineMessage = 'Certaines phases dépassent les limites du mandat.';
+      this.timelineMessage = 'Certaines phases dépassent les limites de la période de mandat.';
       this.isTimelineValid = false;
     } else if (hasOverlap) {
       this.timelineMessage = 'Des phases se chevauchent.';

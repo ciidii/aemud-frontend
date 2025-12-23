@@ -1,21 +1,21 @@
 <div class="mandat-form-container">
-  <h2>{{ (mandatId ? 'Modifier' : 'Ajouter') + ' un mandat' }}</h2>
+  <h2>{{ (periodeMandatId ? 'Modifier' : 'Ajouter') + ' une période de mandat' }}</h2>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="mandatForm">
+  <form (ngSubmit)="onSubmit()" [formGroup]="periodeMandatForm">
     <div class="form-section">
-      <h3>Informations Générales du Mandat</h3>
+      <h3>Informations Générales de la Période de Mandat</h3>
       <div class="form-group">
-        <label for="nom">Nom du mandat</label>
+        <label for="nom">Nom de la période de mandat</label>
         <input formControlName="nom" id="nom" type="text">
-        <div *ngIf="mandatForm.get('nom')?.invalid && mandatForm.get('nom')?.touched" class="error-message">
-          Le nom du mandat est requis.
+        <div *ngIf="periodeMandatForm.get('nom')?.invalid && periodeMandatForm.get('nom')?.touched" class="error-message">
+          Le nom de la période de mandat est requis.
         </div>
       </div>
 
       <div class="form-group">
         <label for="dateDebut">Date de début</label>
         <input formControlName="dateDebut" id="dateDebut" type="date">
-        <div *ngIf="mandatForm.get('dateDebut')?.invalid && mandatForm.get('dateDebut')?.touched" class="error-message">
+        <div *ngIf="periodeMandatForm.get('dateDebut')?.invalid && periodeMandatForm.get('dateDebut')?.touched" class="error-message">
           La date de début est requise.
         </div>
       </div>
@@ -23,14 +23,14 @@
       <div class="form-group">
         <label for="dateFin">Date de fin</label>
         <input formControlName="dateFin" id="dateFin" type="date">
-        <div *ngIf="mandatForm.get('dateFin')?.invalid && mandatForm.get('dateFin')?.touched" class="error-message">
+        <div *ngIf="periodeMandatForm.get('dateFin')?.invalid && periodeMandatForm.get('dateFin')?.touched" class="error-message">
           La date de fin est requise.
         </div>
       </div>
 
       <div class="form-group form-check">
         <input formControlName="estActive" id="estActive" type="checkbox">
-        <label for="estActive">Mandat actif</label>
+        <label for="estActive">Période de mandat active</label>
       </div>
     </div>
 
@@ -47,25 +47,25 @@
         </label>
       </div>
 
-      <div *ngIf="mandatForm.get('calculatePhasesAutomatically')?.value === true" class="automatic-phase-options">
+      <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === true" class="automatic-phase-options">
         <div class="form-group">
           <label for="numberOfPhases">Nombre de phases souhaité</label>
           <input formControlName="numberOfPhases" id="numberOfPhases" min="1" type="number">
           <small class="form-text">Laissez vide pour générer 2 phases de durée égale. Le système couvrira 100% de la
-            période du mandat.</small>
+            période de mandat.</small>
         </div>
       </div>
 
-      <div *ngIf="mandatForm.get('calculatePhasesAutomatically')?.value === false" class="manual-phase-options">
-        <ng-container *ngIf="mandatForm.get('dateDebut')?.value && mandatForm.get('dateFin')?.value">
+      <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === false" class="manual-phase-options">
+        <ng-container *ngIf="periodeMandatForm.get('dateDebut')?.value && periodeMandatForm.get('dateFin')?.value">
           <app-phase-timeline
-            [mandateEndDate]="mandatForm.get('dateFin')?.value!"
-            [mandateStartDate]="mandatForm.get('dateDebut')?.value!"
+            [periodeMandatEndDate]="periodeMandatForm.get('dateFin')?.value!"
+            [periodeMandatStartDate]="periodeMandatForm.get('dateDebut')?.value!"
             [phases]="timelinePhases">
           </app-phase-timeline>
         </ng-container>
-        <ng-container *ngIf="!mandatForm.get('dateDebut')?.value || !mandatForm.get('dateFin')?.value">
-          <p class="info-message">Veuillez définir les dates de début et de fin du mandat pour gérer les phases
+        <ng-container *ngIf="!periodeMandatForm.get('dateDebut')?.value || !periodeMandatForm.get('dateFin')?.value">
+          <p class="info-message">Veuillez définir les dates de début et de fin de la période de mandat pour gérer les phases
             manuellement.</p>
         </ng-container>
 
@@ -84,6 +84,6 @@
       </div>
     </div>
 
-    <button [disabled]="mandatForm.invalid" type="submit">Enregistrer</button>
+    <button [disabled]="periodeMandatForm.invalid" type="submit">Enregistrer</button>
   </form>
 </div>

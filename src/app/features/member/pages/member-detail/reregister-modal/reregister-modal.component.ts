@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {TypeInscription} from "../../../../../core/models/member-data.model";
-import {MandatDto} from "../../../../mandat/models/mandat.model";
+import {PeriodeMandatDto} from "../../../../periode-mandat/models/periode-mandat.model";
 
 @Component({
   selector: 'app-reregister-modal',
@@ -15,7 +15,7 @@ import {MandatDto} from "../../../../mandat/models/mandat.model";
   styleUrl: './reregister-modal.component.scss'
 })
 export class ReregisterModalComponent implements OnInit {
-  @Input() availableMandats: MandatDto[] = [];
+  @Input() availableMandats: PeriodeMandatDto[] = [];
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 

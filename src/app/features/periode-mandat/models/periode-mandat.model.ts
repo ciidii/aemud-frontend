@@ -1,7 +1,7 @@
 import {PhaseModel} from "./phase.model";
 
 
-export interface MandatDto {
+export interface PeriodeMandatDto {
   id: string;
   nom: string;
   dateDebut: string;

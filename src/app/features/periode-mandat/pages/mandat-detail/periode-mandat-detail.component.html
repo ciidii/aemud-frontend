@@ -1,44 +1,44 @@
 <div class="mandat-detail-page">
   <div *ngIf="isLoading" class="loading-container">
-    <p>Chargement du mandat...</p>
+    <p>Chargement de la période de mandat...</p>
     <!-- Add more sophisticated skeleton loader here if needed -->
   </div>
 
   <div *ngIf="hasError && !isLoading" class="error-container">
-    <p>Le mandat n'a pas pu être chargé. Veuillez retourner à la liste.</p>
-    <a routerLink="/mandats/list">Retour à la liste</a>
+    <p>La période de mandat n'a pas pu être chargée. Veuillez retourner à la liste.</p>
+    <a routerLink="/periode-mandats/list">Retour à la liste</a>
   </div>
 
-  <ng-container *ngIf="mandat$ | async as mandat">
-    <div *ngIf="mandat" class="mandat-content">
+  <ng-container *ngIf="periodeMandat$ | async as periodeMandat">
+    <div *ngIf="periodeMandat" class="mandat-content">
       <header class="page-header">
         <div class="header-content">
-          <h1>{{ mandat.nom }}</h1>
+          <h1>{{ periodeMandat.nom }}</h1>
           <div class="header-meta">
-            <span [class.active]="mandat.estActif" [class.inactive]="!mandat.estActif" class="status-badge">
-              {{ mandat.estActif ? 'Actif' : 'Inactif' }}
+            <span [class.active]="periodeMandat.estActif" [class.inactive]="!periodeMandat.estActif" class="status-badge">
+              {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
             </span>
             <span class="mandate-period">
-              {{ mandat.dateDebut | date: 'dd/MM/yyyy' }} → {{ mandat.dateFin | date: 'dd/MM/yyyy' }}
+              {{ periodeMandat.dateDebut | date: 'dd/MM/yyyy' }} → {{ periodeMandat.dateFin | date: 'dd/MM/yyyy' }}
             </span>
           </div>
         </div>
-        <button (click)="goToEdit(mandat.id)" class="btn-primary">Modifier le mandat</button>
+        <button (click)="goToEdit(periodeMandat.id)" class="btn-primary">Modifier la période de mandat</button>
       </header>
 
       <section class="timeline-section">
         <h2>Chronologie des phases</h2>
         <app-phase-timeline
-          [mandateEndDate]="mandat.dateFin"
-          [mandateStartDate]="mandat.dateDebut"
+          [periodeMandatEndDate]="periodeMandat.dateFin"
+          [periodeMandatStartDate]="periodeMandat.dateDebut"
         >
         </app-phase-timeline>
       </section>
 
       <section class="phases-list-section">
-        <h2>Détail des phases ({{ mandat.phases.length }})</h2>
+        <h2>Détail des phases ({{ periodeMandat.phases.length }})</h2>
         <div class="phases-grid">
-          <div *ngFor="let phase of mandat.phases" [class.current-phase]="phase.id === currentPhaseId"
+          <div *ngFor="let phase of periodeMandat.phases" [class.current-phase]="phase.id === currentPhaseId"
                class="phase-card">
             <div class="phase-card-header">
               <h3>{{ phase.nom }}</h3>

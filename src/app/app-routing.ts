@@ -17,9 +17,9 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
-        path: 'mandats',
-        loadChildren: () => import('./features/mandat/mandat.routes').then(m => m.MANDAT_ROUTES),
-        title: 'Mandats',
+        path: 'periode-mandats',
+        loadChildren: () => import('./features/periode-mandat/periode-mandat.routes').then(m => m.PERIODE_MANDAT_ROUTES),
+        title: 'Périodes de Mandat',
       },
       {
         path: 'shared',

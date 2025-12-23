@@ -3,65 +3,65 @@ import {AsyncPipe, CommonModule} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map, switchMap} from 'rxjs/operators';
-import {MandatHttpService} from '../../services/mandat-http.service';
-import {MandatDto} from '../../models/mandat.model';
+import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
+import {PeriodeMandatDto} from '../../models/periode-mandat.model';
 import {PhaseModel} from '../../models/phase.model';
 import {PhaseTimelineComponent} from '../../components/phase-timeline/phase-timeline.component';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {ArrayDatePipe} from "../../../../core/pipes/array-data.pipe";
 
 @Component({
-  selector: 'app-mandat-detail',
+  selector: 'app-periode-mandat-detail',
   standalone: true,
   imports: [CommonModule, RouterLink, AsyncPipe, PhaseTimelineComponent, ArrayDatePipe],
-  templateUrl: './mandat-detail.component.html',
-  styleUrls: ['./mandat-detail.component.scss']
+  templateUrl: './periode-mandat-detail.component.html',
+  styleUrls: ['./periode-mandat-detail.component.scss']
 })
-export class MandatDetailComponent implements OnInit {
-  mandat$: Observable<MandatDto | null> | undefined;
+export class PeriodeMandatDetailComponent implements OnInit {
+  periodeMandat$: Observable<PeriodeMandatDto | null> | undefined;
   currentPhaseId: string | null = null;
   isLoading = true;
   hasError = false;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private mandatHttpService = inject(MandatHttpService);
+  private periodeMandatHttpService = inject(PeriodeMandatHttpService);
   private notificationService = inject(NotificationService);
 
   ngOnInit(): void {
-    this.mandat$ = this.route.paramMap.pipe(
+    this.periodeMandat$ = this.route.paramMap.pipe(
       switchMap(params => {
         const id = params.get('id');
         if (id) {
           this.isLoading = true;
           this.hasError = false;
-          return this.mandatHttpService.getMandatById(id).pipe(
+          return this.periodeMandatHttpService.getPeriodeMandatById(id).pipe(
             map(response => response.data),
             finalize(() => this.isLoading = false),
             catchError(err => {
-              console.error('Error fetching mandat details:', err);
-              this.notificationService.showError('Erreur lors de la récupération du détail du mandat.');
+              console.error('Error fetching periode mandat details:', err);
+              this.notificationService.showError('Erreur lors de la récupération du détail de la période de mandat.');
               this.hasError = true;
               return of(null);
             })
           );
         } else {
           this.hasError = true;
-          this.notificationService.showError('ID de mandat non fourni.');
+          this.notificationService.showError('ID de période de mandat non fourni.');
           return of(null);
         }
       })
     );
 
-    this.mandat$.subscribe(mandat => {
-      if (mandat) {
-        this.currentPhaseId = this.findCurrentPhase(mandat.phases);
+    this.periodeMandat$.subscribe(periodeMandat => {
+      if (periodeMandat) {
+        this.currentPhaseId = this.findCurrentPhase(periodeMandat.phases);
       }
     });
   }
 
-  goToEdit(mandatId: string): void {
-    this.router.navigate(['/mandats', 'edit', mandatId]);
+  goToEdit(periodeMandatId: string): void {
+    this.router.navigate(['/periode-mandats', 'edit', periodeMandatId]);
   }
 
   private findCurrentPhase(phases: PhaseModel[]): string | null {

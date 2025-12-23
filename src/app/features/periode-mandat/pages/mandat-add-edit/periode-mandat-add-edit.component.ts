@@ -15,9 +15,9 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {finalize, Subscription} from "rxjs";
 import {PhaseTimelineComponent, TimelinePhase} from '../../components/phase-timeline/phase-timeline.component';
 import {PhaseFormItemComponent} from '../../components/phase-form-item/phase-form-item.component';
-import {MandatHttpService} from '../../services/mandat-http.service';
+import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
 import {NotificationService} from '../../../../core/services/notification.service';
-import {CreateMandatModel} from '../../models/CreateMandatModel';
+import {CreatePeriodeMandatModel} from '../../models/CreatePeriodeMandatModel';
 import {CreatePhaseModel} from '../../models/CreatePhaseModel';
 
 
@@ -34,9 +34,9 @@ export interface PhaseFormGroup {
 
 
 // ----------------------------------------------------
-// ✔ MANDAT FORM INTERFACE (CORRECT)
+// ✔ PERIODE MANDAT FORM INTERFACE
 // ----------------------------------------------------
-export interface MandatForm {
+export interface PeriodeMandatForm {
   nom: FormControl<string | null>;
   dateDebut: FormControl<string | null>;
   dateFin: FormControl<string | null>;
@@ -49,7 +49,7 @@ export interface MandatForm {
 
 // ----------------------------------------------------
 const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationErrors | null => {
-  const formGroup = control as FormGroup<MandatForm>;
+  const formGroup = control as FormGroup<PeriodeMandatForm>;
 
   const dateDebutMandat = formGroup.controls.dateDebut.value;
   const dateFinMandat = formGroup.controls.dateFin.value;
@@ -105,22 +105,22 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
 
 
 @Component({
-  selector: 'app-mandat-add-edit',
-  templateUrl: './mandat-add-edit.component.html',
-  styleUrl: './mandat-add-edit.component.scss',
+  selector: 'app-periode-mandat-add-edit',
+  templateUrl: './periode-mandat-add-edit.component.html',
+  styleUrl: './periode-mandat-add-edit.component.scss',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule, PhaseTimelineComponent, PhaseFormItemComponent]
 })
-export class MandatAddEditComponent implements OnInit, OnDestroy {
+export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
 
-  mandatForm!: FormGroup<MandatForm>;
-  mandatId: string | null = null;
+  periodeMandatForm!: FormGroup<PeriodeMandatForm>;
+  periodeMandatId: string | null = null;
   isLoading = false;
 
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private mandatHttpService = inject(MandatHttpService);
+  private periodeMandatHttpService = inject(PeriodeMandatHttpService);
   private notificationService = inject(NotificationService);
 
   private routeSubscription!: Subscription;
@@ -130,7 +130,7 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
   }
 
   get phasesFormArray(): FormArray<FormGroup<PhaseFormGroup>> {
-    return this.mandatForm.controls.phases;
+    return this.periodeMandatForm.controls.phases;
   }
 
   get timelinePhases(): TimelinePhase[] {
@@ -152,7 +152,7 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
 
-    this.mandatForm = this.fb.group<MandatForm>({
+    this.periodeMandatForm = this.fb.group<PeriodeMandatForm>({
       nom: this.fb.control<string | null>(null, Validators.required),
       dateDebut: this.fb.control<string | null>(null, Validators.required),
       dateFin: this.fb.control<string | null>(null, Validators.required),
@@ -164,10 +164,10 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
 
 
     this.routeSubscription = this.route.paramMap.subscribe(params => {
-      this.mandatId = params.get('id');
-      if (this.mandatId) {
-        console.log("Editing Mandat:", this.mandatId);
-        // TODO: Fetch existing mandate data
+      this.periodeMandatId = params.get('id');
+      if (this.periodeMandatId) {
+        console.log("Editing Periode de Mandat:", this.periodeMandatId);
+        // TODO: Fetch existing periode de mandat data
       }
     });
   }
@@ -188,17 +188,17 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
   }
 
   onSubmit(): void {
-    if (this.mandatForm.invalid) {
-      this.mandatForm.markAllAsTouched();
+    if (this.periodeMandatForm.invalid) {
+      this.periodeMandatForm.markAllAsTouched();
       this.notificationService.showError('Veuillez corriger les erreurs dans le formulaire.');
-      console.log("INVALID FORM", this.mandatForm.errors);
+      console.log("INVALID FORM", this.periodeMandatForm.errors);
       return;
     }
 
     this.isLoading = true;
-    const formValue = this.mandatForm.getRawValue();
+    const formValue = this.periodeMandatForm.getRawValue();
 
-    const mandatPayload: CreateMandatModel = {
+    const periodeMandatPayload: CreatePeriodeMandatModel = {
       nom: formValue.nom!,
       dateDebut: formValue.dateDebut!,
       dateFin: formValue.dateFin!,
@@ -208,21 +208,21 @@ export class MandatAddEditComponent implements OnInit, OnDestroy {
       phases: !formValue.calculatePhasesAutomatically ? formValue.phases as CreatePhaseModel[] : undefined
     };
 
-    const action$ = this.mandatId
-      ? this.mandatHttpService.updateMandat(this.mandatId, mandatPayload)
-      : this.mandatHttpService.createMandat(mandatPayload);
+    const action$ = this.periodeMandatId
+      ? this.periodeMandatHttpService.updatePeriodeMandat(this.periodeMandatId, periodeMandatPayload)
+      : this.periodeMandatHttpService.createPeriodeMandat(periodeMandatPayload);
 
     action$.pipe(
       finalize(() => this.isLoading = false)
     ).subscribe({
       next: () => {
-        const action = this.mandatId ? 'mis à jour' : 'créé';
-        this.notificationService.showSuccess(`Le mandat a été ${action} avec succès.`);
-        this.router.navigate(['/mandats', 'list']); // Corrected navigation
+        const action = this.periodeMandatId ? 'mise à jour' : 'créée';
+        this.notificationService.showSuccess(`La période de mandat a été ${action} avec succès.`);
+        this.router.navigate(['/periode-mandats', 'list']); // Corrected navigation
       },
       error: (err) => {
         console.error(err);
-        this.notificationService.showError('Une erreur est survenue lors de la sauvegarde du mandat.');
+        this.notificationService.showError('Une erreur est survenue lors de la sauvegarde de la période de mandat.');
       }
     });
   }
