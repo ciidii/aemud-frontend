@@ -19,7 +19,7 @@
               {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
             </span>
             <span class="mandate-period">
-              {{ periodeMandat.dateDebut | date: 'dd/MM/yyyy' }} → {{ periodeMandat.dateFin | date: 'dd/MM/yyyy' }}
+              {{ dateArrayToString(periodeMandat.dateDebut) | date: 'longDate' }} → {{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}
             </span>
           </div>
         </div>
@@ -29,8 +29,8 @@
       <section class="timeline-section">
         <h2>Chronologie des phases</h2>
         <app-phase-timeline
-          [periodeMandatEndDate]="periodeMandat.dateFin"
-          [periodeMandatStartDate]="periodeMandat.dateDebut"
+          [periodeMandatEndDate]="dateArrayToString(periodeMandat.dateFin)"
+          [periodeMandatStartDate]="dateArrayToString(periodeMandat.dateDebut)"
         >
         </app-phase-timeline>
       </section>

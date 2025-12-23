@@ -153,4 +153,9 @@ export class PhaseTimelineComponent implements OnInit, OnChanges {
       this.isTimelineValid = false;
     }
   }
+  public dateArrayToString(dateArray: [number, number, number]): string {
+    const [year, month, day] = dateArray;
+    const pad = (num: number) => num < 10 ? '0' + num : '' + num;
+    return `${year}-${pad(month)}-${pad(day)}`;
+  }
 }

@@ -77,10 +77,14 @@ export class PeriodeMandatDetailComponent implements OnInit {
   }
 
 
-  private toDate(dateArray: [number, number, number]): Date {
+  protected toDate(dateArray: [number, number, number]): Date {
     if (!dateArray) return new Date(NaN);
     const [year, month, day] = dateArray;
     return new Date(year, month - 1, day);
   }
-
+  public dateArrayToString(dateArray: [number, number, number]): string {
+    const [year, month, day] = dateArray;
+    const pad = (num: number) => num < 10 ? '0' + num : '' + num;
+    return `${year}-${pad(month)}-${pad(day)}`;
+  }
 }

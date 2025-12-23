@@ -40,9 +40,9 @@
           <div (click)="goToDetail(periodeMandat.id)" class="card-body clickable">
             <div class="mandate-period">
               <!-- Add calendar icon if available -->
-              <span>{{ periodeMandat.dateDebut | date: 'dd/MM/yyyy' }}</span>
+              <span>{{ dateArrayToString(periodeMandat.dateDebut) | date: 'longDate' }}</span>
               <span>→</span>
-              <span>{{ periodeMandat.dateFin | date: 'dd/MM/yyyy' }}</span>
+              <span>{{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}</span>
             </div>
             <div class="phase-summary">
               <!-- Add phases icon if available -->

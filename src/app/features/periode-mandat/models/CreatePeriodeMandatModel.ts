@@ -5,7 +5,7 @@ export interface CreatePeriodeMandatModel {
   dateDebut: string;  // format: "yyyy-MM-dd"
   dateFin: string;    // format: "yyyy-MM-dd"
 
-  estActive: boolean;
+  estActif: boolean;
   calculatePhasesAutomatically: boolean;
 
   numberOfPhases: number | undefined | null; // optionnel (backend accepte null)
