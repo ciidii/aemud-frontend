@@ -6,6 +6,7 @@ import {catchError, finalize, of, Subscription, switchMap} from 'rxjs';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {PhaseHttpService} from '../../periode-mandat/services/phase-http.service';
 import {UpdatePhaseModel} from "../../periode-mandat/models/UpdatePhaseModel";
+import {PhaseModel} from "../../periode-mandat/models/phase.model";
 
 @Component({
   selector: 'app-phase-edit',
@@ -52,14 +53,16 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
       })
     ).subscribe(response => {
       if (response && response.data) {
-        const phase = response.data;
+        const phase = response.data as any; // Treat as any to handle potential date format differences
         this.initialPhaseName = phase.nom;
+
+        // The /phases/{id} endpoint returns dates as strings "YYYY-MM-DD"
         this.phaseForm.patchValue({
           nom: phase.nom,
-          dateDebut: this.dateArrayToString(phase.dateDebut),
-          dateFin: this.dateArrayToString(phase.dateFin),
-          dateDebutInscription: this.dateArrayToString(phase.dateDebutInscription),
-          dateFinInscription: this.dateArrayToString(phase.dateFinInscription)
+          dateDebut: phase.dateDebut,
+          dateFin: phase.dateFin,
+          dateDebutInscription: phase.dateDebutInscription,
+          dateFinInscription: phase.dateFinInscription
         });
       }
       this.isLoading = false;
@@ -103,15 +106,9 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     if (this.periodeMandatId) {
       this.router.navigate(['/periode-mandats', this.periodeMandatId]);
     } else {
+      // Fallback if the original mandat ID is not available
       this.router.navigate(['/periode-mandats', 'list']);
     }
-  }
-
-  private dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
-    if (!dateArray) return '';
-    const [year, month, day] = dateArray;
-    const pad = (num: number) => num < 10 ? '0' + num : '' + num;
-    return `${year}-${pad(month)}-${pad(day)}`;
   }
 
   ngOnDestroy(): void {

@@ -1,0 +1,80 @@
+@import '../../../../../assets/scss/variables';
+@import '../../../../../assets/scss/typography';
+
+.form-container {
+  padding: $space-6;
+  background-color: $color-background-panel;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  max-width: 700px;
+  margin: $space-8 auto;
+
+  h2 {
+    @include text-heading-3;
+    color: $color-text-primary;
+    margin-bottom: $space-6;
+    text-align: center;
+  }
+
+  .form-section {
+    margin-bottom: $space-6;
+  }
+
+  .form-group {
+    margin-bottom: $space-4;
+
+    label {
+      @include text-label;
+      display: block;
+      margin-bottom: $space-1;
+      color: $color-text-secondary;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: $form-input-padding-y $form-input-padding-x;
+      border: 1px solid $form-input-border-color;
+      border-radius: $form-input-border-radius;
+      background-color: $form-input-background;
+      @include text-body-regular;
+      color: $color-text-primary;
+
+      &:focus {
+        outline: none;
+        border-color: $color-border-focus;
+        box-shadow: 0 0 0 0.2rem rgba($color-border-focus, 0.25);
+      }
+    }
+  }
+
+  .error-message {
+    @include text-body-small;
+    color: $danger-500;
+    margin-top: $space-1;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    margin-top: $space-8;
+    padding-top: $space-4;
+    border-top: 1px solid $color-border-default;
+  }
+
+  // Button styles are assumed to be global, but can be customized here if needed.
+  // Example for spinner alignment
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+  }
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: $space-12;
+  @include text-body-regular;
+  color: $color-text-secondary;
+}
