@@ -38,4 +38,28 @@ export class ReregisterModalComponent implements OnInit {
       this.close.emit();
     }
   }
+
+  onClose(): void {
+    this.close.emit();
+  }
+
+  private toDate(dateArray: [number, number, number]): Date {
+    if (!dateArray) return new Date(NaN);
+    const [year, month, day] = dateArray;
+    return new Date(year, month - 1, day);
+  }
+
+  getPeriodeStatus(mandat: PeriodeMandatDto): 'PASSED' | 'CURRENT' | 'FUTURE' {
+    if (mandat.estActif) {
+      return 'CURRENT';
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = this.toDate(mandat.dateFin);
+
+    if (endDate < today) {
+      return 'PASSED';
+    }
+    return 'FUTURE';
+  }
 }
