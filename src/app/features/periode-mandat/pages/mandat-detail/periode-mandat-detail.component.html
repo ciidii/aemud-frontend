@@ -18,9 +18,16 @@
             <span [class.active]="periodeMandat.estActif" [class.inactive]="!periodeMandat.estActif" class="status-badge">
               {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
             </span>
-            <span class="mandate-period">
-              {{ dateArrayToString(periodeMandat.dateDebut) | date: 'longDate' }} → {{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}
-            </span>
+            <div class="mandate-period">
+              <div class="date-item">
+                <small class="date-label date-label-debut">Début</small>
+                <span class="date-value">{{ dateArrayToString(periodeMandat.dateDebut) | date: 'longDate' }}</span>
+              </div>
+              <div class="date-item">
+                <small class="date-label date-label-fin">Fin</small>
+                <span class="date-value">{{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}</span>
+              </div>
+            </div>
           </div>
         </div>
         <button (click)="goToEdit(periodeMandat.id)" class="btn-primary">Modifier la période de mandat</button>

@@ -40,8 +40,31 @@
   }
 
   .mandate-period {
-    font-size: $font-size-body;
-    color: $color-text-secondary;
+    display: flex;
+    gap: $space-5;
+    align-items: baseline;
+
+    .date-item {
+      .date-label {
+        @include text-body-small;
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      .date-label-debut {
+        color: $primary-500;
+      }
+
+      .date-label-fin {
+        color: $secondary-500;
+      }
+
+      .date-value {
+        @include text-body-regular;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+      }
+    }
   }
 }
 

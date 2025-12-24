@@ -20,9 +20,13 @@ import {NotificationService} from '../../../../core/services/notification.servic
 import {CreatePeriodeMandatModel} from '../../models/CreatePeriodeMandatModel';
 import {CreatePhaseModel} from '../../models/CreatePhaseModel';
 import {PeriodeMandatDto} from '../../models/periode-mandat.model';
-import {PhaseModel} from '../../models/phase.model';
+import {UpdatePhaseModel} from "../../models/UpdatePhaseModel";
 
+// ----------------------------------------------------
+// ✔ PHASE FORM GROUP INTERFACE
+// ----------------------------------------------------
 export interface PhaseFormGroup {
+  id: FormControl<string | null>; // Can be null for new phases
   nom: FormControl<string | null>;
   dateDebut: FormControl<string | null>;
   dateFin: FormControl<string | null>;
@@ -121,6 +125,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
   periodeMandatId: string | null = null;
   isLoading = false;
 
+  private deletedPhaseIds: string[] = [];
   private fb = inject(FormBuilder);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -170,7 +175,6 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
     this.routeSubscription = this.route.paramMap.subscribe(params => {
       this.periodeMandatId = params.get('id');
       if (this.periodeMandatId) {
-        console.log("Editing Periode de Mandat:", this.periodeMandatId);
         this.loadPeriodeMandatForEdit(this.periodeMandatId);
       }
     });
@@ -178,6 +182,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
 
   addPhase(): void {
     const phase = this.fb.group<PhaseFormGroup>({
+      id: this.fb.control<string | null>(null), // New phases have null id
       nom: this.fb.control<string | null>(null, Validators.required),
       dateDebut: this.fb.control<string | null>(null, Validators.required),
       dateFin: this.fb.control<string | null>(null, Validators.required),
@@ -188,6 +193,13 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
   }
 
   removePhase(index: number): void {
+    const phaseControl = this.phasesFormArray.at(index);
+    const phaseId = phaseControl.get('id')?.value;
+
+    if (phaseId) {
+      this.deletedPhaseIds.push(phaseId);
+    }
+
     this.phasesFormArray.removeAt(index);
   }
 
@@ -202,6 +214,35 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     const formValue = this.periodeMandatForm.getRawValue();
 
+    // Differentiate between create, update, and delete for phases
+    const createPhases: CreatePhaseModel[] = [];
+    const updatePhases: UpdatePhaseModel[] = [];
+
+    if (!formValue.calculatePhasesAutomatically) {
+      formValue.phases.forEach(phase => {
+        if (phase.id) {
+          // It's an existing phase, so it's an update
+          updatePhases.push({
+            id: phase.id,
+            nom: phase.nom!,
+            dateDebut: phase.dateDebut!,
+            dateFin: phase.dateFin!,
+            dateDebutInscription: phase.dateDebutInscription || undefined,
+            dateFinInscription: phase.dateFinInscription || undefined,
+          });
+        } else {
+          // No ID, so it's a new phase
+          createPhases.push({
+            nom: phase.nom!,
+            dateDebut: phase.dateDebut!,
+            dateFin: phase.dateFin!,
+            dateDebutInscription: phase.dateDebutInscription || undefined,
+            dateFinInscription: phase.dateFinInscription || undefined,
+          });
+        }
+      });
+    }
+
     const periodeMandatPayload: CreatePeriodeMandatModel = {
       nom: formValue.nom!,
       dateDebut: formValue.dateDebut!,
@@ -209,7 +250,9 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
       estActif: formValue.estActif!,
       calculatePhasesAutomatically: formValue.calculatePhasesAutomatically!,
       numberOfPhases: formValue.calculatePhasesAutomatically ? formValue.numberOfPhases : undefined,
-      phases: !formValue.calculatePhasesAutomatically ? formValue.phases as CreatePhaseModel[] : undefined
+      createPhases: createPhases.length > 0 ? createPhases : undefined,
+      updatePhases: updatePhases.length > 0 ? updatePhases : undefined,
+      deletePhaseIds: this.deletedPhaseIds.length > 0 ? this.deletedPhaseIds : undefined,
     };
 
     const action$ = this.periodeMandatId
@@ -245,17 +288,21 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
       if (response && response.data) {
         const periodeMandat = response.data;
         this.periodeMandatForm.patchValue({
-                  nom: periodeMandat.nom,
-                  dateDebut: this.dateArrayToString(periodeMandat.dateDebut),
-                  dateFin: this.dateArrayToString(periodeMandat.dateFin),
-                  estActif: periodeMandat.estActif,
-                  calculatePhasesAutomatically: false, // Force manual mode for editing phases
-                  numberOfPhases: null // Not applicable in manual mode
-                });
+          nom: periodeMandat.nom,
+          dateDebut: this.dateArrayToString(periodeMandat.dateDebut),
+          dateFin: this.dateArrayToString(periodeMandat.dateFin),
+          estActif: periodeMandat.estActif,
+          calculatePhasesAutomatically: false, // Force manual mode for editing phases
+          numberOfPhases: null
+        });
 
+        // Clear existing phases before populating
         this.phasesFormArray.clear();
+        this.deletedPhaseIds = []; // Reset deleted IDs on load
+
         periodeMandat.phases.forEach(phase => {
           this.phasesFormArray.push(this.fb.group<PhaseFormGroup>({
+            id: this.fb.control<string | null>(phase.id), // Populate the ID
             nom: this.fb.control<string | null>(phase.nom, Validators.required),
             dateDebut: this.fb.control<string | null>(this.dateArrayToString(phase.dateDebut), Validators.required),
             dateFin: this.fb.control<string | null>(this.dateArrayToString(phase.dateFin), Validators.required),
@@ -267,11 +314,13 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
     });
   }
 
-  public dateArrayToString(dateArray: [number, number, number]): string {
+  private dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
+    if (!dateArray) return '';
     const [year, month, day] = dateArray;
     const pad = (num: number) => num < 10 ? '0' + num : '' + num;
     return `${year}-${pad(month)}-${pad(day)}`;
   }
+
 
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
