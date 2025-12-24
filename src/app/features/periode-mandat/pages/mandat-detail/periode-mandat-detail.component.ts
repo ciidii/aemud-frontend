@@ -19,7 +19,6 @@ import {ArrayDatePipe} from "../../../../core/pipes/array-data.pipe";
 })
 export class PeriodeMandatDetailComponent implements OnInit {
   periodeMandat$: Observable<PeriodeMandatDto | null> | undefined;
-  currentPhaseId: string | null = null;
   isLoading = true;
   hasError = false;
 
@@ -52,37 +51,14 @@ export class PeriodeMandatDetailComponent implements OnInit {
         }
       })
     );
-
-    this.periodeMandat$.subscribe(periodeMandat => {
-      if (periodeMandat) {
-        this.currentPhaseId = this.findCurrentPhase(periodeMandat.phases);
-      }
-    });
   }
 
   goToEdit(periodeMandatId: string): void {
     this.router.navigate(['/periode-mandats', 'edit', periodeMandatId]);
   }
 
-  private findCurrentPhase(phases: PhaseModel[]): string | null {
-    const now = new Date();
-
-    const currentPhase = phases.find(phase => {
-      const startDate = this.toDate(phase.dateDebut);
-      const endDate = this.toDate(phase.dateFin);
-      return now >= startDate && now <= endDate;
-    });
-
-    return currentPhase?.id || null;
-  }
-
-
-  protected toDate(dateArray: [number, number, number]): Date {
-    if (!dateArray) return new Date(NaN);
-    const [year, month, day] = dateArray;
-    return new Date(year, month - 1, day);
-  }
-  public dateArrayToString(dateArray: [number, number, number]): string {
+  protected dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
+    if (!dateArray) return '';
     const [year, month, day] = dateArray;
     const pad = (num: number) => num < 10 ? '0' + num : '' + num;
     return `${year}-${pad(month)}-${pad(day)}`;

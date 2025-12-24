@@ -45,22 +45,26 @@
       <section class="phases-list-section">
         <h2>Détail des phases ({{ periodeMandat.phases.length }})</h2>
         <div class="phases-grid">
-          <div *ngFor="let phase of periodeMandat.phases" [class.current-phase]="phase.id === currentPhaseId"
-               class="phase-card">
+          <div *ngFor="let phase of periodeMandat.phases" class="phase-card" [class.current-phase]="phase.status === 'CURRENT'">
             <div class="phase-card-header">
               <h3>{{ phase.nom }}</h3>
-              <span *ngIf="phase.id === currentPhaseId" class="current-badge">En cours</span>
+              <span class="status-badge" [ngClass]="'status-' + phase.status.toLowerCase()">{{ phase.status }}</span>
             </div>
             <div class="phase-card-body">
-              <p class="phase-dates">
-                {{ phase.dateDebut | arrayDate }} → {{ phase.dateFin | arrayDate }}
-              </p>
-
-              <p *ngIf="phase.dateDebutInscription">
-                Inscriptions: {{ phase.dateDebutInscription | arrayDate }}
-                → {{ phase.dateFinInscription | arrayDate }}
-              </p>
-
+              <div class="detail-item">
+                <i class="bi bi-calendar-range"></i>
+                <div>
+                  <span class="detail-label">Période de la phase</span>
+                  <span class="detail-value">{{ phase.dateDebut | arrayDate }} au {{ phase.dateFin | arrayDate }}</span>
+                </div>
+              </div>
+              <div class="detail-item" *ngIf="phase.dateDebutInscription">
+                <i class="bi bi-person-plus-fill"></i>
+                <div>
+                  <span class="detail-label">Période d'inscription</span>
+                  <span class="detail-value">{{ phase.dateDebutInscription | arrayDate }} au {{ phase.dateFinInscription | arrayDate }}</span>
+                </div>
+              </div>
             </div>
             <div class="phase-card-footer">
               <button class="btn-secondary" [routerLink]="['/phases', 'edit', phase.id]" [queryParams]="{ periodeMandatId: periodeMandat.id }">

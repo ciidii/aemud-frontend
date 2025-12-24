@@ -35,8 +35,8 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.phaseForm = this.fb.group({
       nom: ['', Validators.required],
-      dateDebut: ['', Validators.required],
-      dateFin: ['', Validators.required],
+      dateDebut: [{value: '', disabled: true}, Validators.required],
+      dateFin: [{value: '', disabled: true}, Validators.required],
       dateDebutInscription: [''],
       dateFinInscription: ['']
     });
@@ -65,14 +65,13 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     if (enable && this.phaseData) {
       // The API for a single phase returns dates as strings
       const phase = this.phaseData as any;
-      this.phaseForm.patchValue({
-        nom: phase.nom,
-        dateDebut: phase.dateDebut,
-        dateFin: phase.dateFin,
-        dateDebutInscription: phase.dateDebutInscription,
-        dateFinInscription: phase.dateFinInscription
-      });
-    }
+              this.phaseForm.patchValue({
+                nom: phase.nom,
+                dateDebut: this.dateArrayToString(phase.dateDebut),
+                dateFin: this.dateArrayToString(phase.dateFin),
+                dateDebutInscription: this.dateArrayToString(phase.dateDebutInscription),
+                dateFinInscription: this.dateArrayToString(phase.dateFinInscription)
+              });    }
   }
 
   onSubmit(): void {
@@ -121,15 +120,16 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     }
   }
 
-  ngOnDestroy(): void {
-    if (this.routeSub) {
-      this.routeSub.unsubscribe();
-    }
-  }
-  dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
+  public dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
     if (!dateArray) return '';
     const [year, month, day] = dateArray;
     const pad = (num: number) => num < 10 ? '0' + num : '' + num;
     return `${year}-${pad(month)}-${pad(day)}`;
+  }
+
+  ngOnDestroy(): void {
+    if (this.routeSub) {
+      this.routeSub.unsubscribe();
+    }
   }
 }
