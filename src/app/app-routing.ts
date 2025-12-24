@@ -22,6 +22,12 @@ export const routes: Routes = [
         title: 'Périodes de Mandat',
       },
       {
+        path: 'phases',
+        loadChildren: () => import('./features/phase/phase.routes').then(m => m.PHASE_ROUTES),
+        canActivate: [authGuard],
+        title: 'Gestion des Phases'
+      },
+      {
         path: 'shared',
         loadChildren: () => import('./shared/shared.routes').then(m => m.SHARED_ROUTES),
         canActivate: [authGuard],

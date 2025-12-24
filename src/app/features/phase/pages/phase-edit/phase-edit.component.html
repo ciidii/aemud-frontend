@@ -1,56 +1,101 @@
-<div class="form-container">
-  <div *ngIf="isLoading" class="loading-indicator">
-    <p>Chargement de la phase...</p>
-    <!-- A more sophisticated spinner or skeleton could go here -->
+<div class="container">
+  <div class="page-header">
+    <button type="button" class="btn-back" (click)="navigateBack()">
+      <i class="bi bi-arrow-left"></i> Retour aux détails
+    </button>
   </div>
 
-  <ng-container *ngIf="!isLoading">
-    <h2>Modifier la Phase: <strong>{{ initialPhaseName }}</strong></h2>
+  <div class="content-card">
+    <div *ngIf="isLoading" class="loading-indicator">
+      <p>Chargement de la phase...</p>
+    </div>
 
-    <form [formGroup]="phaseForm" (ngSubmit)="onSubmit()">
-      <div class="form-section">
-        <div class="form-group">
-          <label for="nom">Nom de la phase</label>
-          <input id="nom" type="text" formControlName="nom" required>
-          <!-- Basic validation message example -->
-          <div *ngIf="phaseForm.get('nom')?.invalid && phaseForm.get('nom')?.touched" class="error-message">
-            Le nom est requis.
+    <ng-container *ngIf="!isLoading && phaseData">
+      <!-- Display Mode -->
+      <ng-container *ngIf="!isEditMode">
+        <div class="display-view">
+          <div class="display-header">
+            <h2>Détails de la Phase</h2>
+            <button class="btn-primary" (click)="toggleEditMode(true)">
+              <i class="bi bi-pencil-fill"></i> Modifier
+            </button>
+          </div>
+          <div class="details-grid">
+            <div class="detail-item">
+              <span class="detail-label">Nom</span>
+              <span class="detail-value">{{ phaseData.nom }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Statut</span>
+              <span class="detail-value">{{ phaseData.status }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Date de début</span>
+              <span class="detail-value">{{ dateArrayToString(phaseData.dateDebut) | date:'longDate' }}</span>
+            </div>
+            <div class="detail-item">
+              <span class="detail-label">Date de fin</span>
+              <span class="detail-value">{{ dateArrayToString(phaseData.dateFin )| date:'longDate' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="phaseData.dateDebutInscription">
+              <span class="detail-label">Début des inscriptions</span>
+              <span class="detail-value">{{dateArrayToString(phaseData.dateDebutInscription) | date:'longDate' }}</span>
+            </div>
+            <div class="detail-item" *ngIf="phaseData.dateFinInscription">
+              <span class="detail-label">Fin des inscriptions</span>
+              <span class="detail-value">{{dateArrayToString(phaseData.dateFinInscription) | date:'longDate' }}</span>
+            </div>
           </div>
         </div>
-      </div>
+      </ng-container>
 
-      <div class="form-section">
-        <div class="form-group">
-          <label for="dateDebut">Date de début</label>
-          <input id="dateDebut" type="date" formControlName="dateDebut" required>
+      <!-- Edit Mode -->
+      <ng-container *ngIf="isEditMode">
+        <div class="edit-view">
+          <h2>Modifier la Phase</h2>
+          <form [formGroup]="phaseForm" (ngSubmit)="onSubmit()">
+            <div class="form-section">
+              <div class="form-group">
+                <label for="nom">Nom de la phase</label>
+                <input id="nom" type="text" formControlName="nom" required>
+                <div *ngIf="phaseForm.get('nom')?.invalid && phaseForm.get('nom')?.touched" class="error-message">
+                  Le nom est requis.
+                </div>
+              </div>
+            </div>
+            <div class="form-section">
+              <div class="form-group">
+                <label for="dateDebut">Date de début</label>
+                <input id="dateDebut" type="date" formControlName="dateDebut" required>
+              </div>
+              <div class="form-group">
+                <label for="dateFin">Date de fin</label>
+                <input id="dateFin" type="date" formControlName="dateFin" required>
+              </div>
+            </div>
+            <div class="form-section">
+              <div class="form-group">
+                <label for="dateDebutInscription">Date de début d'inscription (optionnel)</label>
+                <input id="dateDebutInscription" type="date" formControlName="dateDebutInscription">
+              </div>
+              <div class="form-group">
+                <label for="dateFinInscription">Date de fin d'inscription (optionnel)</label>
+                <input id="dateFinInscription" type="date" formControlName="dateFinInscription">
+              </div>
+            </div>
+            <div class="form-actions">
+              <button type="button" class="btn-secondary" (click)="cancelEdit()">Annuler</button>
+              <button type="submit" class="btn-primary" [disabled]="phaseForm.invalid || isSaving">
+                <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                <span *ngIf="isSaving">Enregistrement...</span>
+                <ng-container *ngIf="!isSaving">
+                  <i class="bi bi-save-fill"></i> Enregistrer
+                </ng-container>
+              </button>
+            </div>
+          </form>
         </div>
-
-        <div class="form-group">
-          <label for="dateFin">Date de fin</label>
-          <input id="dateFin" type="date" formControlName="dateFin" required>
-        </div>
-      </div>
-
-      <div class="form-section">
-        <div class="form-group">
-          <label for="dateDebutInscription">Date de début d'inscription (optionnel)</label>
-          <input id="dateDebutInscription" type="date" formControlName="dateDebutInscription">
-        </div>
-
-        <div class="form-group">
-          <label for="dateFinInscription">Date de fin d'inscription (optionnel)</label>
-          <input id="dateFinInscription" type="date" formControlName="dateFinInscription">
-        </div>
-      </div>
-
-      <div class="form-actions">
-        <button type="button" class="btn-secondary" (click)="navigateBack()">Annuler</button>
-        <button type="submit" class="btn-primary" [disabled]="phaseForm.invalid || isSaving">
-          <span *ngIf="isSaving" class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-          <span *ngIf="isSaving">Enregistrement...</span>
-          <span *ngIf="!isSaving">Enregistrer les modifications</span>
-        </button>
-      </div>
-    </form>
-  </ng-container>
+      </ng-container>
+    </ng-container>
+  </div>
 </div>

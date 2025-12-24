@@ -1,26 +1,27 @@
 import {Component, inject, OnDestroy, OnInit} from '@angular/core';
-import {AsyncPipe, CommonModule} from '@angular/common';
+import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
-import {catchError, finalize, of, Subscription, switchMap} from 'rxjs';
+import {finalize, of, Subscription, switchMap} from 'rxjs';
 import {NotificationService} from '../../../../core/services/notification.service';
-import {PhaseHttpService} from '../../periode-mandat/services/phase-http.service';
-import {UpdatePhaseModel} from "../../periode-mandat/models/UpdatePhaseModel";
-import {PhaseModel} from "../../periode-mandat/models/phase.model";
+import {PhaseHttpService} from "../../../periode-mandat/services/phase-http.service";
+import {UpdatePhaseModel} from "../../../periode-mandat/models/UpdatePhaseModel";
+import {PhaseModel} from "../../../periode-mandat/models/phase.model";
 
 @Component({
   selector: 'app-phase-edit',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, AsyncPipe],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './phase-edit.component.html',
   styleUrls: ['./phase-edit.component.scss']
 })
 export class PhaseEditComponent implements OnInit, OnDestroy {
   phaseForm!: FormGroup;
   phaseId: string | null = null;
-  periodeMandatId: string | null = null; // To navigate back
-  initialPhaseName: string = '';
+  periodeMandatId: string | null = null;
+  phaseData: PhaseModel | null = null;
 
+  isEditMode = false;
   isLoading = true;
   isSaving = false;
 
@@ -53,20 +54,25 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
       })
     ).subscribe(response => {
       if (response && response.data) {
-        const phase = response.data as any; // Treat as any to handle potential date format differences
-        this.initialPhaseName = phase.nom;
-
-        // The /phases/{id} endpoint returns dates as strings "YYYY-MM-DD"
-        this.phaseForm.patchValue({
-          nom: phase.nom,
-          dateDebut: phase.dateDebut,
-          dateFin: phase.dateFin,
-          dateDebutInscription: phase.dateDebutInscription,
-          dateFinInscription: phase.dateFinInscription
-        });
+        this.phaseData = response.data;
       }
       this.isLoading = false;
     });
+  }
+
+  toggleEditMode(enable: boolean): void {
+    this.isEditMode = enable;
+    if (enable && this.phaseData) {
+      // The API for a single phase returns dates as strings
+      const phase = this.phaseData as any;
+      this.phaseForm.patchValue({
+        nom: phase.nom,
+        dateDebut: phase.dateDebut,
+        dateFin: phase.dateFin,
+        dateDebutInscription: phase.dateDebutInscription,
+        dateFinInscription: phase.dateFinInscription
+      });
+    }
   }
 
   onSubmit(): void {
@@ -91,9 +97,10 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     this.phaseHttpService.updatePhase(this.phaseId, payload).pipe(
       finalize(() => this.isSaving = false)
     ).subscribe({
-      next: () => {
+      next: (updatedPhase) => {
         this.notificationService.showSuccess("La phase a été mise à jour avec succès.");
-        this.navigateBack();
+        this.phaseData = updatedPhase; // Refresh data with the updated version
+        this.toggleEditMode(false); // Switch back to display mode
       },
       error: (err) => {
         console.error("Error updating phase:", err);
@@ -102,11 +109,14 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     });
   }
 
+  cancelEdit(): void {
+    this.toggleEditMode(false);
+  }
+
   navigateBack(): void {
     if (this.periodeMandatId) {
       this.router.navigate(['/periode-mandats', this.periodeMandatId]);
     } else {
-      // Fallback if the original mandat ID is not available
       this.router.navigate(['/periode-mandats', 'list']);
     }
   }
@@ -115,5 +125,11 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
     if (this.routeSub) {
       this.routeSub.unsubscribe();
     }
+  }
+  dateArrayToString(dateArray: [number, number, number] | null | undefined): string {
+    if (!dateArray) return '';
+    const [year, month, day] = dateArray;
+    const pad = (num: number) => num < 10 ? '0' + num : '' + num;
+    return `${year}-${pad(month)}-${pad(day)}`;
   }
 }

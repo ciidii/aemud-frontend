@@ -92,6 +92,8 @@
   box-shadow: $shadow-md;
   transition: all 0.2s ease-in-out;
   position: relative; // For badge positioning
+  display: flex;
+  flex-direction: column;
 
   &.current-phase {
     border-left: 5px solid $primary-500;
@@ -121,6 +123,7 @@
 
   .phase-card-body {
     padding: $space-4;
+    flex-grow: 1;
 
     p {
       margin: 0 0 $space-2 0;
@@ -158,6 +161,35 @@
         background-color: $danger-500;
       }
     }
+  }
+
+  .phase-card-footer {
+    padding: $space-3 $space-4;
+    border-top: 1px solid $color-border-default;
+    background-color: $gray-100;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto; // Pushes footer to the bottom
+  }
+}
+
+.btn-secondary {
+  padding: $space-1 $space-3;
+  font-size: 1.4rem;
+  background-color: $gray-200;
+  color: $color-text-primary;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  cursor: pointer;
+  @include text-button;
+  transition: background-color 0.2s ease-in-out;
+  text-decoration: none; // For routerLink buttons
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+
+  &:hover {
+    background-color: $gray-300;
   }
 }
 

@@ -1,14 +1,73 @@
 @import '../../../../../assets/scss/variables';
 @import '../../../../../assets/scss/typography';
 
-.form-container {
+.container {
+  max-width: 900px;
+  margin: $space-8 auto;
+  padding: 0 $space-4;
+}
+
+.page-header {
+  margin-bottom: $space-4;
+  .btn-back {
+    background: none;
+    border: none;
+    color: $color-text-secondary;
+    @include text-body-regular;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    cursor: pointer;
+    padding: $space-2 0;
+    &:hover {
+      color: $color-text-primary;
+    }
+  }
+}
+
+.content-card {
   padding: $space-6;
   background-color: $color-background-panel;
   border-radius: $radius-md;
   box-shadow: $shadow-md;
-  max-width: 700px;
-  margin: $space-8 auto;
+}
 
+// Display Mode Styles
+.display-view {
+  .display-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-6;
+    padding-bottom: $space-4;
+    border-bottom: 1px solid $color-border-default;
+    h2 {
+      @include text-heading-3;
+      margin: 0;
+    }
+  }
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: $space-6;
+  }
+  .detail-item {
+    .detail-label {
+      @include text-label;
+      color: $color-text-secondary;
+      margin-bottom: $space-1;
+      display: block;
+    }
+    .detail-value {
+      @include text-body-regular;
+      font-weight: $font-weight-bold;
+      word-break: break-word;
+    }
+  }
+}
+
+// Edit Mode Styles
+.edit-view {
   h2 {
     @include text-heading-3;
     color: $color-text-primary;
@@ -39,7 +98,6 @@
       background-color: $form-input-background;
       @include text-body-regular;
       color: $color-text-primary;
-
       &:focus {
         outline: none;
         border-color: $color-border-focus;
@@ -62,13 +120,42 @@
     padding-top: $space-4;
     border-top: 1px solid $color-border-default;
   }
+}
 
-  // Button styles are assumed to be global, but can be customized here if needed.
-  // Example for spinner alignment
-  .btn-primary {
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
+// Shared Button Styles
+.btn-primary, .btn-secondary {
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+  @include text-button;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+  &:hover {
+    background-color: $primary-600;
+  }
+  &:disabled {
+    background-color: $primary-500;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: $color-text-secondary;
+  border-color: $color-border-default;
+  &:hover {
+    background-color: $gray-200;
+    color: $color-text-primary;
   }
 }
 
