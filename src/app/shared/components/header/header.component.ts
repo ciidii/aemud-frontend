@@ -1,5 +1,5 @@
 import {Component, ElementRef, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgFor, NgIf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {AuthHttpService} from "../../../features/auth/services/auth-http.service";
 import {Observable} from "rxjs";
@@ -13,7 +13,7 @@ import {PeriodeMandatHttpService} from "../../../features/periode-mandat/service
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [RouterLink, NgFor, AsyncPipe, NotificationPopoverComponent, NgIf]
+  imports: [RouterLink, NgFor, AsyncPipe, NotificationPopoverComponent, NgIf, NgClass]
 })
 export class HeaderComponent implements OnInit {
   isPopoverOpen = false;
@@ -37,6 +37,26 @@ export class HeaderComponent implements OnInit {
         this.appStateService.setSelectedMandat(response.data);
       }
     });
+  }
+
+  private toDate(dateArray: [number, number, number]): Date {
+    if (!dateArray) return new Date(NaN);
+    const [year, month, day] = dateArray;
+    return new Date(year, month - 1, day);
+  }
+
+  getPeriodeStatus(mandat: PeriodeMandatDto): 'PASSED' | 'CURRENT' | 'FUTURE' {
+    if (mandat.estActif) {
+      return 'CURRENT';
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = this.toDate(mandat.dateFin);
+
+    if (endDate < today) {
+      return 'PASSED';
+    }
+    return 'FUTURE';
   }
 
   logout(): void {
