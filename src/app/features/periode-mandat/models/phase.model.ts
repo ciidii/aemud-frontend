@@ -6,7 +6,7 @@ export interface PhaseModel {
   nom: string;
   dateDebut: [number, number, number];
   dateFin: [number, number, number];
-  status: PhaseStatus;
+  status: string;
 
   dateDebutInscription: [number, number, number];
   dateFinInscription: [number, number, number];
