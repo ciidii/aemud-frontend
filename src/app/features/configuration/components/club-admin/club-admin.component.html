@@ -1,1 +1,64 @@
-<p>club-admin works!</p>
+<div class="card">
+  <div class="card-header d-flex justify-content-between align-items-center">
+    <h5 class="mb-0">Liste des clubs</h5>
+    <button class="btn btn-primary btn-sm" (click)="openClubModal()">
+      <i class="bi bi-plus-lg me-2"></i>
+      Ajouter un club
+    </button>
+  </div>
+  <div class="card-body">
+    <div class="table-responsive">
+      <table class="table table-striped table-hover">
+        <thead>
+        <tr>
+          <th scope="col">Nom</th>
+          <th scope="col" class="text-end">Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngIf="clubs$ | async as clubs; else loading">
+          <tr *ngFor="let club of clubs">
+            <td>{{ club.name }}</td>
+            <td class="text-end">
+              <button class="btn btn-link btn-sm text-primary" (click)="openClubModal(club)">
+                <i class="bi bi-pencil-fill"></i>
+              </button>
+              <button class="btn btn-link btn-sm text-danger" (click)="openDeleteConfirm(club)">
+                <i class="bi bi-trash-fill"></i>
+              </button>
+            </td>
+          </tr>
+          <tr *ngIf="clubs.length === 0">
+            <td colspan="2" class="text-center p-5 text-muted">
+              Aucun club n'a été ajouté pour le moment.
+            </td>
+          </tr>
+        </ng-container>
+        <ng-template #loading>
+          <tr app-skeleton-loader></tr>
+          <tr app-skeleton-loader></tr>
+          <tr app-skeleton-loader></tr>
+        </ng-template>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modale pour Ajouter/Modifier un club -->
+<app-modal *ngIf="isModalOpen" (closeModal)="closeClubModal()" [title]="selectedClub ? 'Modifier le club' : 'Ajouter un club'">
+  <app-club-form
+    [club]="selectedClub"
+    [isSaving]="isSaving"
+    (save)="onSaveClub($event)"
+    (closeModal)="closeClubModal()">
+  </app-club-form>
+</app-modal>
+
+<!-- Modale de confirmation de suppression -->
+<app-confirm-delete-modal
+  *ngIf="isConfirmOpen"
+  (closeModal)="closeDeleteConfirm()"
+  (confirmDelete)="onDeleteClub()">
+</app-confirm-delete-modal>
+

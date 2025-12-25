@@ -1,0 +1,15 @@
+@import 'variables';
+
+:host {
+  .modal-body {
+    padding: $space-5 $space-6;
+  }
+
+  .form-floating {
+    margin-bottom: $space-4;
+  }
+
+  .text-muted {
+    margin-bottom: $space-5;
+  }
+}

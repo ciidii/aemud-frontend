@@ -9,11 +9,11 @@ import {AsyncPipe} from "@angular/common";
 import {ClubService} from "../../../../configuration/services/club.service";
 import {CommissionService} from "../../../../configuration/services/commission.service";
 import {BourseService} from "../../../../configuration/services/bourse.service";
-import {PhaseHttpService} from "../../../../mandat/services/phase-http.service";
 import {Club, Commission} from "../../../../../core/models/member-data.model";
 import {AppStateService} from "../../../../../core/services/app-state.service";
 import {RegistrationStatus} from "../../../../../core/models/RegistrationModel";
-import {MandatHttpService} from "../../../../mandat/services/mandat-http.service";
+import {PhaseHttpService} from "../../../../periode-mandat/services/phase-http.service";
+import {PeriodeMandatHttpService} from "../../../../periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-filter-panel',
@@ -45,7 +45,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
   private bourseService = inject(BourseService);
   private phaseService = inject(PhaseHttpService);
   private appStateService = inject(AppStateService);
-  private mandatService = inject(MandatHttpService);
+  private mandatService = inject(PeriodeMandatHttpService);
   private destroy$ = new Subject<void>();
 
   ngOnInit(): void {
@@ -68,14 +68,14 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
     this.clubs$ = this.clubService.getAllClubs();
     this.commissions$ = this.commissionService.getAllCommissions();
     this.bourses$ = this.bourseService.getAllBourses().pipe(
-      map(bourses => bourses.map(b => ({id: b.id, name: b.lebelle})))
+      map(bourses => bourses.map(b => ({id: b.id, name: b.libelle})))
     );
     this.phases$ = this.appStateService.activeMandat$.pipe(
       filter((mandat): mandat is NonNullable<typeof mandat> => mandat !== null),
       switchMap(mandat => this.phaseService.getMandatPhases(mandat.id)),
       map(phases => phases.map(p => ({id: p.id, name: p.nom})))
     );
-    this.mandats$ = this.mandatService.getAllMandats().pipe(
+    this.mandats$ = this.mandatService.getAllPeriodeMandats().pipe(
       map(response => response.data.map(m => ({id: m.id, name: m.nom})))
     );
   }

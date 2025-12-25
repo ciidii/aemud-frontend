@@ -14,7 +14,17 @@
       </button>
       <ul aria-labelledby="mandatDropdown" class="dropdown-menu">
         <li *ngFor="let mandat of (mandats$ | async)">
-          <a (click)="onMandatChange(mandat)" class="dropdown-item">{{ mandat.nom }}</a>
+          <button class="dropdown-item" type="button"
+                  (click)="onMandatChange(mandat)"
+                  [disabled]="getPeriodeStatus(mandat) === 'FUTURE'">
+            <i class="bi status-icon" [ngClass]="{
+              'bi-check-circle-fill status-current': mandat.id === selectedMandat.id,
+              'bi-play-circle-fill status-active': mandat.id !== selectedMandat.id && getPeriodeStatus(mandat) === 'CURRENT',
+              'bi-pause-circle-fill status-passed': getPeriodeStatus(mandat) === 'PASSED',
+              'bi-clock-fill status-future': getPeriodeStatus(mandat) === 'FUTURE'
+            }"></i>
+            <span>{{ mandat.nom }}</span>
+          </button>
         </li>
       </ul>
     </div>

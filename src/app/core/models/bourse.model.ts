@@ -1,6 +1,5 @@
 export class BourseModel {
   id!: number
-  lebelle!: string
+  libelle!: string
   montant!: number
-  members!: []
 }

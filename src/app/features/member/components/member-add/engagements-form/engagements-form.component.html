@@ -5,7 +5,7 @@
     <label class="form-label" for="bourse">Bourse / Allocation</label>
     <select class="form-select" formControlName="bourse" id="bourse">
       <option [ngValue]="null">Sélectionner...</option>
-      <option *ngFor="let bourse of bourses" [ngValue]="bourse.id">{{ bourse.lebelle }}</option>
+      <option *ngFor="let bourse of bourses" [ngValue]="bourse.id">{{ bourse.libelle }}</option>
     </select>
     <app-validation-message [control]="bourse"></app-validation-message>
   </div>

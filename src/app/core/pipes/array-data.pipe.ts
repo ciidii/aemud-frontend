@@ -13,8 +13,8 @@ export class ArrayDatePipe implements PipeTransform {
     const date = new Date(y, m - 1, d);
 
     return new Intl.DateTimeFormat('fr-FR', {
-      day: '2-digit',
-      month: '2-digit',
+      day: 'numeric',
+      month: 'long',
       year: 'numeric'
     }).format(date);
   }

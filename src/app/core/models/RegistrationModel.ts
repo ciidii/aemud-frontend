@@ -1,4 +1,4 @@
-import {PhaseModel} from "../../features/mandat/models/phase.model";
+import {PhaseModel} from "../../features/periode-mandat/models/phase.model";
 
 
 export enum RegistrationStatus {

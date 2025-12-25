@@ -19,7 +19,7 @@ export class EditBourseInfoModalComponent implements OnInit {
 
   ngOnInit(): void {
     this.bourseForm = this.fb.group({
-      lebelle: [this.initialData?.lebelle || '', Validators.required],
+      lebelle: [this.initialData?.libelle || '', Validators.required],
       montant: [this.initialData?.montant || null, [Validators.required, Validators.min(0)]]
     });
   }

@@ -1,28 +1,28 @@
 import {Component, ElementRef, HostListener, inject, OnInit} from '@angular/core';
-import {AsyncPipe, NgFor, NgIf} from '@angular/common';
+import {AsyncPipe, NgClass, NgFor, NgIf} from '@angular/common';
 import {Router, RouterLink} from '@angular/router';
 import {AuthHttpService} from "../../../features/auth/services/auth-http.service";
 import {Observable} from "rxjs";
 import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {MandatDto} from "../../../features/mandat/models/mandat.model";
-import {MandatHttpService} from "../../../features/mandat/services/mandat-http.service";
+import {PeriodeMandatDto} from "../../../features/periode-mandat/models/periode-mandat.model";
+import {PeriodeMandatHttpService} from "../../../features/periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],
   standalone: true,
-  imports: [RouterLink, NgFor, AsyncPipe, NotificationPopoverComponent, NgIf]
+  imports: [RouterLink, NgFor, AsyncPipe, NotificationPopoverComponent, NgIf, NgClass]
 })
 export class HeaderComponent implements OnInit {
   isPopoverOpen = false;
-  mandats$!: Observable<MandatDto[]>;
-  activeMandat$!: Observable<MandatDto | null>;
+  mandats$!: Observable<PeriodeMandatDto[]>;
+  activeMandat$!: Observable<PeriodeMandatDto | null>;
   appStateService = inject(AppStateService);
   authService = inject(AuthHttpService);
   router = inject(Router);
-  mandatHttpService = inject(MandatHttpService);
+  mandatHttpService = inject(PeriodeMandatHttpService);
   private elementRef = inject(ElementRef);
 
   ngOnInit(): void {
@@ -31,12 +31,32 @@ export class HeaderComponent implements OnInit {
 
   }
 
-  onMandatChange(mandat: MandatDto): void {
-    this.mandatHttpService.getMandatById(mandat.id).subscribe(response => {
+  onMandatChange(mandat: PeriodeMandatDto): void {
+    this.mandatHttpService.getPeriodeMandatById(mandat.id).subscribe(response => {
       if (response.data) {
         this.appStateService.setSelectedMandat(response.data);
       }
     });
+  }
+
+  private toDate(dateArray: [number, number, number]): Date {
+    if (!dateArray) return new Date(NaN);
+    const [year, month, day] = dateArray;
+    return new Date(year, month - 1, day);
+  }
+
+  getPeriodeStatus(mandat: PeriodeMandatDto): 'PASSED' | 'CURRENT' | 'FUTURE' {
+    if (mandat.estActif) {
+      return 'CURRENT';
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = this.toDate(mandat.dateFin);
+
+    if (endDate < today) {
+      return 'PASSED';
+    }
+    return 'FUTURE';
   }
 
   logout(): void {

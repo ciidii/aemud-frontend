@@ -14,9 +14,9 @@ import {
 } from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 import {MemberDataResponse} from "../../../../core/models/member-data.model";
 import {AppStateService} from "../../../../core/services/app-state.service";
-import {PhaseHttpService} from "../../../mandat/services/phase-http.service";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PhaseHttpService} from "../../../periode-mandat/services/phase-http.service";
 
 @Component({
   selector: 'app-member-list',
