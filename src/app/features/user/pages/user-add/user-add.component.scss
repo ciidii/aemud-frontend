@@ -476,6 +476,44 @@
   gap: 0.5rem;
 }
 
+.form-check-group {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  background-color: $gray-100;
+  padding: 1.2rem;
+  border-radius: 12px;
+  margin-top: 2rem;
+
+  .form-check-input {
+    width: 1.8rem;
+    height: 1.8rem;
+    border: 2px solid $gray-300;
+    cursor: pointer;
+    margin-top: 0; // Reset default margin
+    transition: all 0.2s;
+
+
+    &:checked {
+      background-color: $primary-600;
+      border-color: $primary-600;
+    }
+
+    &:focus {
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.2);
+    }
+  }
+
+  .form-check-label {
+    font-size: 1.4rem;
+    color: $color-text-secondary;
+    font-weight: 500;
+    cursor: pointer;
+    margin-bottom: 0; // Override Bootstrap label margin
+  }
+}
+
 @keyframes slideDown {
   from {
     opacity: 0;
