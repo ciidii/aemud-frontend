@@ -38,6 +38,7 @@ export class UserDetailsComponent implements OnInit {
     private fb: FormBuilder,
     private sessionService: SessionService,
   ) {
+
     this.initPasswordForm();
     this.currentUser = this.sessionService.getCurrentUser();
     this.isSuperAdmin = this.sessionService.isSuperAdmin();

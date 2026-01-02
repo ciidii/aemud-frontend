@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {map, Observable, tap} from 'rxjs';
+import {catchError, finalize, map, Observable, of, tap} from 'rxjs';
 import {UserCredential} from "../../../core/models/user-credential.model";
 import {SessionService} from "../../../core/services/session.service";
 import {HttpClient, HttpParams} from "@angular/common/http";
@@ -53,10 +53,15 @@ export class AuthHttpService {
   }
 
   logout(): Observable<any> {
-    // Call the dedicated logout endpoint to clear the HttpOnly cookie
+    // Call the dedicated logout endpoint to clear the HttpOnly cookie.
     return this.http.post(`${this.apiUrl}/auth/logout`, {}).pipe(
-      tap(() => {
-        // Clear session state on the client-side
+      catchError(error => {
+        // Even if the backend logout fails, we proceed to clear the client session.
+        console.error("Backend logout failed, continuing with client-side cleanup.", error);
+        return of(null); // Continue the stream so finalize is called.
+      }),
+      finalize(() => {
+        // This block is guaranteed to run, breaking the redirect loop.
         this.currentUser = null;
         this.sessionService.clearSession();
       })
