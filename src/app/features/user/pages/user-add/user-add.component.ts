@@ -67,6 +67,7 @@ export class UserAddComponent implements OnInit {
       memberId: [null, Validators.required],
       roles: [[], Validators.required],
       memberSearch: [''],
+      forcePasswordChange: [true],
     });
   }
 
@@ -122,6 +123,7 @@ export class UserAddComponent implements OnInit {
     const payload: CreateUserRequest = {
       memberId: this.form.value.memberId,
       roles: this.form.value.roles,
+      forcePasswordChange: this.form.value.forcePasswordChange,
     };
 
     this.loading = true;

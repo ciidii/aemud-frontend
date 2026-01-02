@@ -8,6 +8,7 @@ import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 export interface CreateUserRequest {
   memberId: string;
   roles: string[];
+  forcePasswordChange?: boolean;
 }
 
 export interface UserSearchParams {
