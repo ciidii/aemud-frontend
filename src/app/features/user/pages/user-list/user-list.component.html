@@ -25,7 +25,7 @@
         <i class="bi bi-people-fill"></i>
       </div>
       <div class="stat-info">
-        <span class="stat-value">{{ totalRecords }}</span>
+        <span class="stat-value">{{ userStats?.totalUsers ?? '--' }}</span>
         <span class="stat-label">Total Utilisateurs</span>
       </div>
     </div>
@@ -34,7 +34,7 @@
         <i class="bi bi-shield-check"></i>
       </div>
       <div class="stat-info">
-        <span class="stat-value">--</span>
+        <span class="stat-value">{{ userStats?.activeUsers ?? '--' }}</span>
         <span class="stat-label">Actifs</span>
       </div>
     </div>
@@ -43,7 +43,7 @@
         <i class="bi bi-lock-fill"></i>
       </div>
       <div class="stat-info">
-        <span class="stat-value">--</span>
+        <span class="stat-value">{{ userStats?.lockedUsers ?? '--' }}</span>
         <span class="stat-label">Verrouillés</span>
       </div>
     </div>
@@ -162,7 +162,8 @@
             <button (click)="goToUserDetails(user)" class="btn-icon" title="Voir détails">
               <i class="bi bi-eye"></i>
             </button>
-            <button (click)="toggleLock(user)" [ngClass]="user.locked ? 'unlock' : 'lock'" [title]="user.locked ? 'Déverrouiller' : 'Verrouiller'"
+            <button (click)="toggleLock(user)" [disabled]="!canLockOrUnlock(user)" [ngClass]="user.locked ? 'unlock' : 'lock'"
+                    [title]="user.locked ? 'Déverrouiller' : 'Verrouiller'"
                     class="btn-icon">
               <i [ngClass]="user.locked ? 'bi-unlock-fill' : 'bi-lock-fill'" class="bi"></i>
             </button>

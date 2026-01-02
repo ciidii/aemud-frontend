@@ -4,6 +4,8 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserResponseDto, UserService} from '../../services/user.service';
 import {NotificationService} from '../../../../core/services/notification.service';
+import {SessionService} from "../../../../core/services/session.service";
+import {UserModel} from "../../../../core/models/user.model";
 
 @Component({
   selector: 'app-user-details',
@@ -22,15 +24,45 @@ export class UserDetailsComponent implements OnInit {
   showPasswordModal = false;
   passwordForm!: FormGroup;
   passwordLoading = false;
+  currentUser: UserModel | null = null;
 
   constructor(
     private route: ActivatedRoute,
     private router: Router,
     private userService: UserService,
     private notificationService: NotificationService,
-    private fb: FormBuilder
+    private fb: FormBuilder,
+    private sessionService: SessionService,
   ) {
     this.initPasswordForm();
+    this.currentUser = this.sessionService.getCurrentUser();
+  }
+
+  canLockOrUnlock(): boolean {
+    if (!this.currentUser || !this.user) {
+      return false;
+    }
+    if (this.user.id === this.currentUser.id) {
+      return false; // Can't lock yourself
+    }
+
+    const targetIsSuperAdmin = this.user.roles.includes('SUPER_ADMIN');
+    if (targetIsSuperAdmin) {
+      return false; // No one can lock a SUPER_ADMIN
+    }
+
+    const currentUserIsSuperAdmin = this.sessionService.isSuperAdmin();
+    if (currentUserIsSuperAdmin) {
+      return true; // SUPER_ADMIN can lock anyone (except other SUPER_ADMINs, handled above)
+    }
+
+    const targetIsAdmin = this.user.roles.includes('ADMIN');
+    const currentUserIsAdminOnly = this.sessionService.isAdmin() && !this.sessionService.isSuperAdmin();
+    if (targetIsAdmin && currentUserIsAdminOnly) {
+      return false; // ADMIN can't lock another ADMIN
+    }
+
+    return true;
   }
 
   ngOnInit(): void {

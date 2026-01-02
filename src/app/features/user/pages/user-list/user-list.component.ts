@@ -2,8 +2,10 @@ import {Component, OnInit} from "@angular/core";
 import {CommonModule} from "@angular/common";
 import {FormBuilder, FormGroup, ReactiveFormsModule} from "@angular/forms";
 import {Router, RouterLink} from "@angular/router";
-import {UserResponseDto, UserSearchParams, UserService} from "../../services/user.service";
+import {UserResponseDto, UserSearchParams, UserService, UserStats} from "../../services/user.service";
 import {NotificationService} from "../../../../core/services/notification.service";
+import {SessionService} from "../../../../core/services/session.service";
+import {UserModel} from "../../../../core/models/user.model";
 
 
 @Component({
@@ -20,6 +22,7 @@ export class UserListComponent implements OnInit {
   users: UserResponseDto[] = [];
   loading = false;
   errorMessage: string | null = null;
+  userStats: UserStats | null = null;
 
   // Pagination
   page = 1;
@@ -40,12 +43,43 @@ export class UserListComponent implements OnInit {
     {value: 'false', label: 'Non'},
   ];
 
+  currentUser: UserModel | null = null;
+
   constructor(
     private fb: FormBuilder,
     private userService: UserService,
     private notificationService: NotificationService,
     private router: Router,
+    private sessionService: SessionService,
   ) {
+    this.currentUser = this.sessionService.getCurrentUser();
+  }
+
+  canLockOrUnlock(user: UserResponseDto): boolean {
+    if (!this.currentUser) {
+      return false;
+    }
+    if (user.id === this.currentUser.id) {
+      return false; // Can't lock yourself
+    }
+
+    const targetIsSuperAdmin = user.roles.includes('SUPER_ADMIN');
+    if (targetIsSuperAdmin) {
+      return false; // No one can lock a SUPER_ADMIN
+    }
+
+    const currentUserIsSuperAdmin = this.sessionService.isSuperAdmin();
+    if (currentUserIsSuperAdmin) {
+      return true; // SUPER_ADMIN can lock anyone (except other SUPER_ADMINs, handled above)
+    }
+
+    const targetIsAdmin = user.roles.includes('ADMIN');
+    const currentUserIsAdminOnly = this.sessionService.isAdmin() && !this.sessionService.isSuperAdmin();
+    if (targetIsAdmin && currentUserIsAdminOnly) {
+      return false; // ADMIN can't lock another ADMIN
+    }
+
+    return true;
   }
 
   ngOnInit(): void {
@@ -57,6 +91,21 @@ export class UserListComponent implements OnInit {
     });
 
     this.loadUsers();
+    this.loadStats();
+  }
+
+  loadStats(): void {
+    this.userService.getUserStats().subscribe({
+      next: (response) => {
+        if (response.data) {
+          this.userStats = response.data;
+        }
+      },
+      error: (err) => {
+        console.error("Erreur lors du chargement des statistiques: ", err);
+        // On peut choisir de notifier l'utilisateur ou simplement de ne pas afficher les stats
+      }
+    });
   }
 
   loadUsers(): void {
@@ -72,6 +121,7 @@ export class UserListComponent implements OnInit {
         this.totalRecords = response.records;
         this.page = response.page;
         this.totalPages = response.pages;
+        this.loadStats(); // Refresh stats when users list changes
       },
       error: (err) => {
         this.loading = false;

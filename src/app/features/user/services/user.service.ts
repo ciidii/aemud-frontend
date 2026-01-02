@@ -28,10 +28,12 @@ export interface UserResponseDto {
   memberId: string;
 }
 
-export interface CreateUserRequest {
-  memberId: string;
-  roles: string[];
+export interface UserStats {
+  totalUsers: number;
+  activeUsers: number;
+  lockedUsers: number;
 }
+
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +42,10 @@ export class UserService {
 
   private apiUrl = environment.API_URL;
   private http = inject(HttpClient);
+
+  getUserStats(): Observable<ResponseEntityApi<UserStats>> {
+    return this.http.get<ResponseEntityApi<UserStats>>(`${this.apiUrl}/users/stats`);
+  }
 
   checkForgottenPasswordEmail(email: string): Observable<ResponseEntityApi<void>> {
     return this.http.post<ResponseEntityApi<void>>(`${this.apiUrl}/users/forgotten-password-email/${email}`, {});

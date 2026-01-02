@@ -527,6 +527,16 @@
     cursor: pointer;
     transition: all 0.2s;
 
+    &:disabled {
+      cursor: not-allowed;
+      opacity: 0.4;
+      &, &:hover, &.lock:hover, &.unlock:hover, &.warning:hover {
+        background: transparent;
+        color: $gray-500;
+        transform: none;
+      }
+    }
+
     &:hover {
       background: $gray-100;
       color: $primary-600;

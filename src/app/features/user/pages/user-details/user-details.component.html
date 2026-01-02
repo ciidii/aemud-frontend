@@ -37,7 +37,7 @@
 
         <div class="profile-actions">
           <button (click)="toggleLock()" [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
-                  class="btn-action">
+                  [disabled]="!canLockOrUnlock()" class="btn-action">
             <i [class.bi-lock-fill]="!user.locked" [class.bi-unlock-fill]="user.locked" class="bi"></i>
             {{ user.locked ? 'Déverrouiller le compte' : 'Verrouiller le compte' }}
           </button>

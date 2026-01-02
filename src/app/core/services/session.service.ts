@@ -13,6 +13,26 @@ export class SessionService {
   public isLoggedIn$ = this.isLoggedInSubject.asObservable();
   private router = inject(Router);
 
+
+  getCurrentUser(): UserModel | null {
+    const user = localStorage.getItem(this.USER_KEY);
+    return user ? JSON.parse(user) : null;
+  }
+
+  getRoles(): string[] {
+    const user = this.getCurrentUser();
+    return user ? user.roles : [];
+  }
+
+  isSuperAdmin(): boolean {
+    return this.getRoles().includes('SUPER_ADMIN');
+  }
+
+  isAdmin(): boolean {
+    const roles = this.getRoles();
+    return roles.includes('ADMIN') || roles.includes('SUPER_ADMIN');
+  }
+
   /**
    * Creates a new session by storing the user object.
    *
