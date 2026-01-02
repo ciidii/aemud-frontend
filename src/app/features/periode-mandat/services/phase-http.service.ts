@@ -32,4 +32,7 @@ export class PhaseHttpService {
       map(response => response.data)
     );
   }
+  public deletePhaseById(id: string): Observable<ResponseEntityApi<void>> {
+    return this.http.get<ResponseEntityApi<void>>(`${this.url}/${id}`);
+  }
 }
