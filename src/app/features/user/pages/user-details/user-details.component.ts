@@ -6,11 +6,12 @@ import {UserResponseDto, UserService} from '../../services/user.service';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {SessionService} from "../../../../core/services/session.service";
 import {UserModel} from "../../../../core/models/user.model";
+import {ConfirmDeleteModalComponent} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 
 @Component({
   selector: 'app-user-details',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule, RouterLink],
+  imports: [CommonModule, ReactiveFormsModule, RouterLink, ConfirmDeleteModalComponent],
   templateUrl: './user-details.component.html',
   styleUrls: ['./user-details.component.scss']
 })
@@ -20,11 +21,14 @@ export class UserDetailsComponent implements OnInit {
   loading = false;
   error: string | null = null;
 
-  // Password Modal
+  // Modals
   showPasswordModal = false;
+  showDeleteModal = false;
+
   passwordForm!: FormGroup;
   passwordLoading = false;
   currentUser: UserModel | null = null;
+  isSuperAdmin = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -36,6 +40,52 @@ export class UserDetailsComponent implements OnInit {
   ) {
     this.initPasswordForm();
     this.currentUser = this.sessionService.getCurrentUser();
+    this.isSuperAdmin = this.sessionService.isSuperAdmin();
+  }
+
+  ngOnInit(): void {
+    const id = this.route.snapshot.paramMap.get('id');
+    if (id) {
+      this.loadUser(id);
+    } else {
+      this.error = 'Identifiant utilisateur manquant.';
+    }
+  }
+
+  loadUser(id: string): void {
+    this.loading = true;
+    this.error = null;
+    this.userService.getUserById(id).subscribe({
+      next: (response) => {
+        this.user = response.data;
+        this.loading = false;
+      },
+      error: (err) => {
+        console.error(err);
+        this.error = 'Impossible de charger les détails de l\'utilisateur.';
+        this.loading = false;
+      }
+    });
+  }
+
+  // --- Actions ---
+
+  toggleLock(): void {
+    if (!this.user) return;
+
+    const action$ = this.user.locked ?
+      this.userService.unlockUser(this.user.id) :
+      this.userService.lockUser(this.user.id);
+
+    action$.subscribe({
+      next: () => {
+        this.notificationService.showSuccess(this.user!.locked ? 'Utilisateur déverrouillé.' : 'Utilisateur verrouillé.');
+        this.loadUser(this.user!.id); // Reload to get fresh state
+      },
+      error: () => {
+        this.notificationService.showError('Erreur lors de la mise à jour du statut.');
+      }
+    });
   }
 
   canLockOrUnlock(): boolean {
@@ -65,14 +115,7 @@ export class UserDetailsComponent implements OnInit {
     return true;
   }
 
-  ngOnInit(): void {
-    const id = this.route.snapshot.paramMap.get('id');
-    if (id) {
-      this.loadUser(id);
-    } else {
-      this.error = 'Identifiant utilisateur manquant.';
-    }
-  }
+  // --- Password Modal ---
 
   initPasswordForm(): void {
     this.passwordForm = this.fb.group({
@@ -84,40 +127,6 @@ export class UserDetailsComponent implements OnInit {
   passwordMatchValidator(g: FormGroup) {
     return g.get('password')?.value === g.get('confirmPassword')?.value
       ? null : {mismatch: true};
-  }
-
-  loadUser(id: string): void {
-    this.loading = true;
-    this.error = null;
-    this.userService.getUserById(id).subscribe({
-      next: (response) => {
-        this.user = response.data;
-        this.loading = false;
-      },
-      error: (err) => {
-        console.error(err);
-        this.error = 'Impossible de charger les détails de l\'utilisateur.';
-        this.loading = false;
-      }
-    });
-  }
-
-  toggleLock(): void {
-    if (!this.user) return;
-
-    const action$ = this.user.locked ?
-      this.userService.unlockUser(this.user.id) :
-      this.userService.lockUser(this.user.id);
-
-    action$.subscribe({
-      next: () => {
-        this.notificationService.showSuccess(this.user!.locked ? 'Utilisateur déverrouillé.' : 'Utilisateur verrouillé.');
-        this.loadUser(this.user!.id); // Reload to get fresh state
-      },
-      error: () => {
-        this.notificationService.showError('Erreur lors de la mise à jour du statut.');
-      }
-    });
   }
 
   openPasswordModal(): void {
@@ -148,6 +157,36 @@ export class UserDetailsComponent implements OnInit {
       }
     });
   }
+
+  // --- Delete Modal ---
+
+  openDeleteModal(): void {
+    this.showDeleteModal = true;
+  }
+
+  closeDeleteModal(): void {
+    this.showDeleteModal = false;
+  }
+
+  confirmDelete(): void {
+    if (!this.user) return;
+
+    this.userService.deleteUser(this.user.id).subscribe({
+      next: () => {
+        this.notificationService.showSuccess('Utilisateur supprimé avec succès.');
+        this.closeDeleteModal();
+        this.router.navigate(['/users']);
+      },
+      error: (err) => {
+        console.error(err);
+        this.notificationService.showError('Erreur lors de la suppression de l\'utilisateur.');
+        this.closeDeleteModal();
+      }
+    });
+  }
+
+
+  // --- UI Helpers ---
 
   getRoleLabel(role: string): string {
     const roles: { [key: string]: string } = {

@@ -140,4 +140,8 @@ export class UserService {
       {password}
     );
   }
+
+  deleteUser(userId: string): Observable<ResponseEntityApi<void>> {
+    return this.http.delete<ResponseEntityApi<void>>(`${this.apiUrl}/users/${userId}`);
+  }
 }

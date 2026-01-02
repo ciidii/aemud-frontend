@@ -45,6 +45,10 @@
             <i class="bi bi-key-fill"></i>
             Changer le mot de passe
           </button>
+          <button *ngIf="isSuperAdmin" (click)="openDeleteModal()" class="btn-action btn-danger">
+            <i class="bi bi-trash-fill"></i>
+            Supprimer l'utilisateur
+          </button>
         </div>
       </div>
     </aside>
@@ -174,3 +178,11 @@
     </div>
   </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<app-confirm-delete-modal
+  *ngIf="showDeleteModal"
+  (close)="closeDeleteModal()"
+  (confirm)="confirmDelete()"
+  [itemCount]="1">
+</app-confirm-delete-modal>
