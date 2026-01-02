@@ -18,7 +18,7 @@ export const authInterceptor: HttpInterceptorFn = (req: HttpRequest<unknown>, ne
     catchError((error: HttpErrorResponse) => {
       // If the cookie is expired or invalid, the API will return a 401 Unauthorized status.
       // If the user is locked or unauthorized, the API might return a 403 Forbidden status.
-      if ((error.status === 401 || error.status === 403) && !error.url?.includes("auth/authenticate")) {
+      if ((error.status === 401 || error.status === 403) && !error.url?.includes("auth/authenticate") && !error.url?.includes("auth/logout")) {
         notificationService.showWarning("Votre session a expiré ou vous n'êtes pas autorisé. Veuillez vous reconnecter !");
         authService.logout().subscribe(); // Call logout and subscribe to trigger the request
       }
