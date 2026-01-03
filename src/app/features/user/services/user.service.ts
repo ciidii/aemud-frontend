@@ -27,6 +27,14 @@ export interface UserResponseDto {
   locked: boolean;
   forcePasswordChange: boolean;
   memberId: string;
+  userLoginHistoryDTO?: UserLoginHistoryDTO;
+}
+
+export interface UserLoginHistoryDTO {
+  username: string;
+  ipAddress: string;
+  userAgent: string;
+  loginTime: number[]; // e.g., [2026, 1, 3, 22, 37, 38, 13470000]
 }
 
 export interface UserStats {

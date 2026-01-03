@@ -108,15 +108,15 @@
         <div class="info-grid">
           <div class="info-item">
             <label>Dernière Connexion</label>
-            <span>--</span>
-          </div>
-          <div class="info-item">
-            <label>Date de Création</label>
-            <span>--</span>
+            <span>{{ formatLoginTime(user.userLoginHistoryDTO?.loginTime) }}</span>
           </div>
           <div class="info-item">
             <label>IP Enregistrée</label>
-            <span>--</span>
+            <span>{{ user.userLoginHistoryDTO?.ipAddress ?? '--' }}</span>
+          </div>
+          <div class="info-item">
+            <label>User Agent</label>
+            <span>{{ user.userLoginHistoryDTO?.userAgent ?? '--' }}</span>
           </div>
         </div>
       </section>

@@ -1,5 +1,5 @@
 import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, DatePipe} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {UserResponseDto, UserService} from '../../services/user.service';
@@ -13,7 +13,8 @@ import {ConfirmDeleteModalComponent} from "../../../../shared/components/confirm
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink, ConfirmDeleteModalComponent],
   templateUrl: './user-details.component.html',
-  styleUrls: ['./user-details.component.scss']
+  styleUrls: ['./user-details.component.scss'],
+  providers: [DatePipe]
 })
 export class UserDetailsComponent implements OnInit {
 
@@ -37,11 +38,30 @@ export class UserDetailsComponent implements OnInit {
     private notificationService: NotificationService,
     private fb: FormBuilder,
     private sessionService: SessionService,
+    private datePipe: DatePipe,
   ) {
 
     this.initPasswordForm();
     this.currentUser = this.sessionService.getCurrentUser();
     this.isSuperAdmin = this.sessionService.isSuperAdmin();
+  }
+
+  // Helper to format loginTime array from backend
+  formatLoginTime(loginTimeArray: number[] | undefined): string {
+    if (!loginTimeArray || loginTimeArray.length < 5) {
+      return '--';
+    }
+    // loginTime: [year, month, day, hour, minute, second, nanosecond]
+    // Month is 1-indexed in the array, Date object expects 0-indexed month
+    const year = loginTimeArray[0];
+    const month = loginTimeArray[1] - 1; // Adjust month to be 0-indexed
+    const day = loginTimeArray[2];
+    const hour = loginTimeArray[3];
+    const minute = loginTimeArray[4];
+    const second = loginTimeArray[5] || 0;
+
+    const date = new Date(year, month, day, hour, minute, second);
+    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss') || '--';
   }
 
   ngOnInit(): void {
