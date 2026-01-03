@@ -116,7 +116,7 @@
           </div>
           <div class="info-item">
             <label>User Agent</label>
-            <span>{{ user.userLoginHistoryDTO?.userAgent ?? '--' }}</span>
+            <span>{{ simplifyUserAgent(user.userLoginHistoryDTO?.userAgent) }}</span>
           </div>
         </div>
       </section>

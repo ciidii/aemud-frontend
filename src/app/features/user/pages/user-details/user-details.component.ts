@@ -7,6 +7,7 @@ import {NotificationService} from '../../../../core/services/notification.servic
 import {SessionService} from "../../../../core/services/session.service";
 import {UserModel} from "../../../../core/models/user.model";
 import {ConfirmDeleteModalComponent} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {UAParser} from 'ua-parser-js';
 
 @Component({
   selector: 'app-user-details',
@@ -44,24 +45,6 @@ export class UserDetailsComponent implements OnInit {
     this.initPasswordForm();
     this.currentUser = this.sessionService.getCurrentUser();
     this.isSuperAdmin = this.sessionService.isSuperAdmin();
-  }
-
-  // Helper to format loginTime array from backend
-  formatLoginTime(loginTimeArray: number[] | undefined): string {
-    if (!loginTimeArray || loginTimeArray.length < 5) {
-      return '--';
-    }
-    // loginTime: [year, month, day, hour, minute, second, nanosecond]
-    // Month is 1-indexed in the array, Date object expects 0-indexed month
-    const year = loginTimeArray[0];
-    const month = loginTimeArray[1] - 1; // Adjust month to be 0-indexed
-    const day = loginTimeArray[2];
-    const hour = loginTimeArray[3];
-    const minute = loginTimeArray[4];
-    const second = loginTimeArray[5] || 0;
-
-    const date = new Date(year, month, day, hour, minute, second);
-    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss') || '--';
   }
 
   ngOnInit(): void {
@@ -208,6 +191,61 @@ export class UserDetailsComponent implements OnInit {
 
 
   // --- UI Helpers ---
+
+  // Helper to format loginTime array from backend
+  formatLoginTime(loginTimeArray: number[] | undefined): string {
+    if (!loginTimeArray || loginTimeArray.length < 5) {
+      return '--';
+    }
+    // loginTime: [year, month, day, hour, minute, second, nanosecond]
+    // Month is 1-indexed in the array, Date object expects 0-indexed month
+    const year = loginTimeArray[0];
+    const month = loginTimeArray[1] - 1; // Adjust month to be 0-indexed
+    const day = loginTimeArray[2];
+    const hour = loginTimeArray[3];
+    const minute = loginTimeArray[4];
+    const second = loginTimeArray[5] || 0;
+
+    const date = new Date(year, month, day, hour, minute, second);
+    return this.datePipe.transform(date, 'dd/MM/yyyy HH:mm:ss') || '--';
+  }
+
+  // Helper to simplify User Agent string
+  simplifyUserAgent(uaString: string | undefined): string {
+    if (!uaString) {
+      return '--';
+    }
+
+    const parser = new UAParser(uaString);
+    const result = parser.getResult();
+
+    let browserInfo = 'Unknown Browser';
+    if (result.browser.name) {
+      browserInfo = `${result.browser.name}`;
+      if (result.browser.version) {
+        browserInfo += ` ${result.browser.version}`;
+      }
+    }
+
+    let osInfo = 'Unknown OS';
+    if (result.os.name) {
+      osInfo = `${result.os.name}`;
+      if (result.os.version) {
+        osInfo += ` ${result.os.version}`;
+      }
+    }
+
+    // Combine browser and OS info, or just show OS if browser is generic
+    if (browserInfo === 'Unknown Browser' && osInfo === 'Unknown OS') {
+      return uaString; // Fallback to original if nothing parsed
+    } else if (browserInfo === 'Unknown Browser') {
+      return osInfo;
+    } else if (osInfo === 'Unknown OS') {
+      return browserInfo;
+    }
+    return `${browserInfo} on ${osInfo}`;
+  }
+
 
   getRoleLabel(role: string): string {
     const roles: { [key: string]: string } = {
