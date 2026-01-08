@@ -1,5 +1,5 @@
 import {inject, Injectable} from '@angular/core';
-import {HttpClient, HttpHeaders} from "@angular/common/http";
+import {HttpClient, HttpHeaders, HttpResponse} from "@angular/common/http";
 import {environment} from "../../../../environments/environment";
 import {MemberDataResponse, RegistrationResponse} from "../../../core/models/member-data.model";
 import {map, Observable} from "rxjs";
@@ -9,6 +9,7 @@ import {RegistrationModel} from "../../../core/models/RegistrationModel";
 import {MandateTimelineItem} from "../../../core/models/timeline.model";
 import {SearchParams} from "../../../core/models/SearchParams";
 import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
+import {MemberExportRequestDto} from "../../../core/models/member-export-request.model";
 
 @Injectable({
   providedIn: 'root'
@@ -20,6 +21,13 @@ export class MemberHttpService {
 
   searchMember(searchParams: SearchParams): Observable<ResponsePageableApi<MemberDataResponse[]>> {
     return this.httpClient.post<ResponsePageableApi<MemberDataResponse[]>>(`${environment.API_URL}/members/search`, searchParams);
+  }
+
+  exportMembers(request: MemberExportRequestDto): Observable<HttpResponse<Blob>> {
+    return this._http.post(`${this._url}/export`, request, {
+      responseType: 'blob',
+      observe: 'response'
+    });
   }
 
   addMember(member: any) {

@@ -1,7 +1,5 @@
-<app-modal (closeModal)="close.emit()">
-  <h2 modal-title>Exporter les Membres</h2>
-
-  <div class="export-options" modal-body>
+<app-modal title="Exporter les Membres" (closeModal)="close.emit()">
+  <div class="modal-body">
     <section class="option-section">
       <h3 class="section-title">1. Choisir les colonnes à inclure</h3>
       <div class="section-actions">
@@ -42,8 +40,12 @@
     </section>
   </div>
 
-  <div modal-footer>
+  <div class="modal-footer">
     <button (click)="close.emit()" class="btn btn-secondary">Annuler</button>
-    <button (click)="onExport()" class="btn btn-primary">Exporter les données</button>
+    <button (click)="onExport()" [disabled]="isExporting" class="btn btn-primary">
+      <span *ngIf="isExporting" aria-hidden="true" class="spinner-border spinner-border-sm" role="status"></span>
+      <span *ngIf="isExporting">Exportation en cours...</span>
+      <span *ngIf="!isExporting">Exporter les données</span>
+    </button>
   </div>
 </app-modal>

@@ -5,9 +5,10 @@ import {AuthHttpService} from "../../../features/auth/services/auth-http.service
 import {Observable} from "rxjs";
 import {NotificationPopoverComponent} from "../notification-popover/notification-popover.component";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {PeriodeMandatDto} from "../../../features/periode-mandat/models/periode-mandat.model";
-import {PeriodeMandatHttpService} from "../../../features/periode-mandat/services/periode-mandat-http.service";
-
+import {PeriodeMandatDto} from "../../../features/configuration/periode-mandat/models/periode-mandat.model";
+import {
+  PeriodeMandatHttpService
+} from "../../../features/configuration/periode-mandat/services/periode-mandat-http.service";
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './header.component.html',

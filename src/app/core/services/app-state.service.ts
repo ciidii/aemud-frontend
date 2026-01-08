@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {PeriodeMandatDto} from "../../features/periode-mandat/models/periode-mandat.model";
+import {PeriodeMandatDto} from "../../features/configuration/periode-mandat/models/periode-mandat.model";
 
 
 @Injectable({

@@ -1,7 +1,8 @@
 
 import {RegistrationModel} from './RegistrationModel';
-import {PhaseModel} from "../../features/periode-mandat/models/phase.model";
-import {PeriodeMandatDto} from "../../features/periode-mandat/models/periode-mandat.model";
+import {PhaseModel} from "../../features/configuration/periode-mandat/models/phase.model";
+import {PeriodeMandatDto} from "../../features/configuration/periode-mandat/models/periode-mandat.model";
+
 
 export interface RegistrationOverview {
   latestRegistration: RegistrationModel | null;
