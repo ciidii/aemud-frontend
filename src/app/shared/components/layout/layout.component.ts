@@ -6,7 +6,9 @@ import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 import {HeaderComponent} from "../header/header.component";
 import {AppStateService} from "../../../core/services/app-state.service";
-import {PeriodeMandatHttpService} from "../../../features/periode-mandat/services/periode-mandat-http.service";
+import {
+  PeriodeMandatHttpService
+} from "../../../features/configuration/periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-layout',

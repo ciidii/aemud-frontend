@@ -58,8 +58,9 @@ import {
   ContributionYear
 } from "../../../../core/models/contribution-data.model";
 import {RegistrationModel} from "../../../../core/models/RegistrationModel";
-import {PeriodeMandatDto} from "../../../periode-mandat/models/periode-mandat.model";
-import {PhaseModel} from "../../../periode-mandat/models/phase.model";
+import {PeriodeMandatDto} from "../../../configuration/periode-mandat/models/periode-mandat.model";
+import {PhaseModel} from "../../../configuration/periode-mandat/models/phase.model";
+import {SearchParams} from "../../../../core/models/SearchParams";
 
 
 @Component({
@@ -97,6 +98,7 @@ export class MemberDetailComponent implements OnInit {
   selectedPhaseId: string | null = null;
   availableMandats: PeriodeMandatDto[] = [];
   activeMandat: PeriodeMandatDto | null = null;
+  searchParamsForExport: Partial<SearchParams> = {}; // Initialize here
   appStateService = inject(AppStateService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -114,6 +116,7 @@ export class MemberDetailComponent implements OnInit {
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
     if (this.memberId) {
+      this.searchParamsForExport = { keyword: this.memberId }; // Set it here
       this.loadData();
     } else {
       this.notificationService.showError("ID de membre manquant.");
@@ -253,14 +256,11 @@ export class MemberDetailComponent implements OnInit {
 
   openExportModal(): void {
     if (!this.memberId) return;
-    this.memberStateService.clearSelection();
-    this.memberStateService.toggleMemberSelection(this.memberId);
     this.isExportModalOpen = true;
   }
 
   closeExportModal(): void {
     this.isExportModalOpen = false;
-    this.memberStateService.clearSelection();
   }
 
   toggleActionsDropdown(event: Event): void {
@@ -497,3 +497,4 @@ export class MemberDetailComponent implements OnInit {
   }
 
 }
+

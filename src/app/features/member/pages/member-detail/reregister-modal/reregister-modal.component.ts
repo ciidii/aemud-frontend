@@ -2,8 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {TypeInscription} from "../../../../../core/models/member-data.model";
-import {PeriodeMandatDto} from "../../../../periode-mandat/models/periode-mandat.model";
-
+import {PeriodeMandatDto} from "../../../../configuration/periode-mandat/models/periode-mandat.model";
 @Component({
   selector: 'app-reregister-modal',
   standalone: true,

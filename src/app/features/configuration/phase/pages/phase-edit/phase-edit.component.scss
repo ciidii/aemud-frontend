@@ -1,0 +1,167 @@
+@import 'variables';
+@import 'typography';
+
+.container {
+  max-width: 900px;
+  margin: $space-8 auto;
+  padding: 0 $space-4;
+}
+
+.page-header {
+  margin-bottom: $space-4;
+  .btn-back {
+    background: none;
+    border: none;
+    color: $color-text-secondary;
+    @include text-body-regular;
+    display: inline-flex;
+    align-items: center;
+    gap: $space-2;
+    cursor: pointer;
+    padding: $space-2 0;
+    &:hover {
+      color: $color-text-primary;
+    }
+  }
+}
+
+.content-card {
+  padding: $space-6;
+  background-color: $color-background-panel;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+}
+
+// Display Mode Styles
+.display-view {
+  .display-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: $space-6;
+    padding-bottom: $space-4;
+    border-bottom: 1px solid $color-border-default;
+    h2 {
+      @include text-heading-3;
+      margin: 0;
+    }
+  }
+  .details-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: $space-6;
+  }
+  .detail-item {
+    .detail-label {
+      @include text-label;
+      color: $color-text-secondary;
+      margin-bottom: $space-1;
+      display: block;
+    }
+    .detail-value {
+      @include text-body-regular;
+      font-weight: $font-weight-bold;
+      word-break: break-word;
+    }
+  }
+}
+
+// Edit Mode Styles
+.edit-view {
+  h2 {
+    @include text-heading-3;
+    color: $color-text-primary;
+    margin-bottom: $space-6;
+    text-align: center;
+  }
+
+  .form-section {
+    margin-bottom: $space-6;
+  }
+
+  .form-group {
+    margin-bottom: $space-4;
+
+    label {
+      @include text-label;
+      display: block;
+      margin-bottom: $space-1;
+      color: $color-text-secondary;
+    }
+
+    input[type="text"],
+    input[type="date"] {
+      width: 100%;
+      padding: $form-input-padding-y $form-input-padding-x;
+      border: 1px solid $form-input-border-color;
+      border-radius: $form-input-border-radius;
+      background-color: $form-input-background;
+      @include text-body-regular;
+      color: $color-text-primary;
+      &:focus {
+        outline: none;
+        border-color: $color-border-focus;
+        box-shadow: 0 0 0 0.2rem rgba($color-border-focus, 0.25);
+      }
+    }
+  }
+
+  .error-message {
+    @include text-body-small;
+    color: $danger-500;
+    margin-top: $space-1;
+  }
+
+  .form-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: $space-3;
+    margin-top: $space-8;
+    padding-top: $space-4;
+    border-top: 1px solid $color-border-default;
+  }
+}
+
+// Shared Button Styles
+.btn-primary, .btn-secondary {
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+  @include text-button;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+  &:hover {
+    background-color: $primary-600;
+  }
+  &:disabled {
+    background-color: $primary-500;
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: $color-text-secondary;
+  border-color: $color-border-default;
+  &:hover {
+    background-color: $gray-200;
+    color: $color-text-primary;
+  }
+}
+
+.loading-indicator {
+  text-align: center;
+  padding: $space-12;
+  @include text-body-regular;
+  color: $color-text-secondary;
+}

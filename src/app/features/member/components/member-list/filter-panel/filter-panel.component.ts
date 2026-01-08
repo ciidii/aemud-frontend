@@ -12,8 +12,8 @@ import {BourseService} from "../../../../configuration/services/bourse.service";
 import {Club, Commission} from "../../../../../core/models/member-data.model";
 import {AppStateService} from "../../../../../core/services/app-state.service";
 import {RegistrationStatus} from "../../../../../core/models/RegistrationModel";
-import {PhaseHttpService} from "../../../../periode-mandat/services/phase-http.service";
-import {PeriodeMandatHttpService} from "../../../../periode-mandat/services/periode-mandat-http.service";
+import {PhaseHttpService} from "../../../../configuration/periode-mandat/services/phase-http.service";
+import {PeriodeMandatHttpService} from "../../../../configuration/periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-filter-panel',

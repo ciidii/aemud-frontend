@@ -1,11 +1,33 @@
 @import 'variables';
 
+// ==========================================================================
+// Layout Fix for Scrolling
+// ==========================================================================
+// This is the key to fixing the scroll issue. By making the host a flex
+// container that grows and shrinks, it correctly fits into the parent
+// app-modal's layout, allowing the .modal-body to scroll.
 :host {
-  z-index: 3000;
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  min-height: 0; // Crucial for flex children to prevent overflow
 }
 
+.modal-body {
+  overflow-y: auto; // Enables scrolling on the body content
+  padding: $space-5 $space-6 $space-8;
+}
+
+.modal-footer {
+  flex-shrink: 0; // Ensures the footer never shrinks
+}
+
+// ==========================================================================
+// Component-Specific Styles (Based on Mockup)
+// ==========================================================================
+
 .option-section {
-  margin-bottom: $space-6;
+  margin-bottom: $space-8;
 
   &:last-of-type {
     margin-bottom: 0;
@@ -16,10 +38,11 @@
   font-size: $font-size-h6;
   font-weight: 600;
   margin-bottom: $space-3;
+  color: $color-text-primary;
 }
 
 .section-actions {
-  margin-bottom: $space-4;
+  margin-bottom: $space-5;
   display: flex;
   gap: $space-4;
 
@@ -29,6 +52,7 @@
     color: $primary-500;
     cursor: pointer;
     font-size: $font-size-small;
+    font-weight: 500;
     padding: 0;
 
     &:hover {
@@ -37,37 +61,47 @@
   }
 }
 
+// Card container for column selection
 .columns-container {
-  column-count: 3;
-  column-gap: $space-8;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: $space-5;
 }
 
 .column-group {
-  margin-bottom: $space-4;
-  break-inside: avoid; // Prevents groups from breaking across columns
+  padding: $space-5;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  background-color: $white;
+  box-shadow: $shadow-xs;
+  display: flex;
+  flex-direction: column;
 }
 
 .group-title {
   font-weight: 600;
-  color: $color-text-secondary;
-  margin-bottom: $space-3;
+  color: $color-text-primary;
+  margin-bottom: $space-4;
   font-size: $font-size-body;
+  padding-bottom: $space-3;
+  border-bottom: 1px solid $color-border-default;
 }
 
 .columns-grid {
   display: grid;
-  gap: $space-3;
+  gap: $space-4;
 }
 
 .checkbox-wrapper {
   display: flex;
   align-items: center;
-  gap: $space-2;
+  gap: $space-3;
 
   input[type="checkbox"] {
-    width: 1.6rem;
-    height: 1.6rem;
+    width: 1.8rem;
+    height: 1.8rem;
     cursor: pointer;
+    accent-color: $primary-500;
   }
 
   label {
@@ -77,74 +111,53 @@
   }
 }
 
+// Card-like buttons for format chooser
 .format-chooser {
-  display: flex;
-  gap: $space-3;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: $space-5;
 }
 
 .format-btn {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: $space-2;
-  padding: $space-2 $space-4;
-  border: 2px solid $color-border-default;
-  border-radius: $radius-sm;
+  padding: $space-5 0;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
   background-color: $white;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
+  text-align: center;
+  box-shadow: $shadow-xs;
 
   i {
-    font-size: $icon-md; // Reduced icon size
+    font-size: 2.8rem;
     color: $color-text-secondary;
   }
 
   span {
-    font-weight: 500;
-    font-size: $font-size-small;
+    font-weight: 600;
+    font-size: $font-size-body;
+    color: $color-text-primary;
   }
 
   &:hover {
-    border-color: $primary-600;
-    background-color: $primary-100;
+    border-color: $primary-400;
+    transform: translateY(-2px);
+    box-shadow: $shadow-md;
   }
 
+  // Active state from the mockup
   &.active {
     border-color: $primary-500;
-    background-color: $primary-100;
-    color: $primary-500;
-
-    i {
-      color: $primary-500;
-    }
-  }
-}
-
-.btn {
-  padding: $space-2 $space-4;
-  border-radius: $radius-sm;
-  font-size: $font-size-body;
-  font-weight: 500;
-  border: 1px solid transparent;
-  cursor: pointer;
-  transition: all 0.2s ease;
-
-  &.btn-primary {
     background-color: $primary-500;
-    color: $white;
+    box-shadow: none;
 
-    &:hover {
-      background-color: $primary-600;
-    }
-  }
-
-  &.btn-secondary {
-    background-color: $gray-100;
-    color: $color-text-primary;
-    border-color: $color-border-default;
-
-    &:hover {
-      background-color: $gray-200;
+    i, span {
+      color: $white;
     }
   }
 }

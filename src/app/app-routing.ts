@@ -18,12 +18,12 @@ export const routes: Routes = [
     children: [
       {
         path: 'periode-mandats',
-        loadChildren: () => import('./features/periode-mandat/periode-mandat.routes').then(m => m.PERIODE_MANDAT_ROUTES),
+        loadChildren: () => import('./features/configuration/periode-mandat/periode-mandat.routes').then(m => m.PERIODE_MANDAT_ROUTES),
         title: 'Périodes de Mandat',
       },
       {
         path: 'phases',
-        loadChildren: () => import('./features/phase/phase.routes').then(m => m.PHASE_ROUTES),
+        loadChildren: () => import('./features/configuration/phase/phase.routes').then(m => m.PHASE_ROUTES),
         canActivate: [authGuard],
         title: 'Gestion des Phases'
       },
