@@ -35,8 +35,8 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.phaseForm = this.fb.group({
       nom: ['', Validators.required],
-      dateDebut: [{value: '', disabled: true}, Validators.required],
-      dateFin: [{value: '', disabled: true}, Validators.required],
+      dateDebut: [{value: '', }, Validators.required],
+      dateFin: [{value: '', }, Validators.required],
       dateDebutInscription: [''],
       dateFinInscription: ['']
     });
@@ -92,7 +92,9 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
       dateDebutInscription: formValue.dateDebutInscription || undefined,
       dateFinInscription: formValue.dateFinInscription || undefined
     };
-
+    console.log("###############")
+    console.log(payload);
+    console.log("###############")
     this.phaseHttpService.updatePhase(this.phaseId, payload).pipe(
       finalize(() => this.isSaving = false)
     ).subscribe({
