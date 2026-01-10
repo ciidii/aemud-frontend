@@ -123,15 +123,14 @@ small {
   }
 }
 
+
 .btn-secondary {
-  background-color: $gray-600;
-  border-color: $gray-600;
-  color: $white;
+  background-color: $gray-200;
+  color: $color-text-primary;
+  border: 1px solid $color-border-default;
 
   &:hover {
-    background-color: $gray-700;
-    border-color: $gray-700;
-    color: $white;
+    background-color: $gray-300;
   }
 }
 

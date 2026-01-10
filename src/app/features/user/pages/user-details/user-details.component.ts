@@ -287,4 +287,8 @@ export class UserDetailsComponent implements OnInit {
   redirectToMemberDetail(memberId: string) {
     this.router.navigateByUrl(`members/details/${memberId}`)
   }
+
+  protected onRoleModify(userId:string) {
+    this.router.navigateByUrl(`users/add/${userId}`);
+  }
 }
