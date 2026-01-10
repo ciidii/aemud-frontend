@@ -1,7 +1,7 @@
 <div class="campaigns-list-container">
   <div class="header">
     <h2>Vos Campagnes de Communication</h2>
-    <button class="btn btn-primary">
+    <button class="btn btn-primary" (click)="openWizard()">
       <i class="bi bi-plus-circle me-2"></i> Créer une campagne
     </button>
   </div>
@@ -22,3 +22,5 @@
     </div>
   </div>
 </div>
+
+<app-campaign-creation-wizard></app-campaign-creation-wizard>

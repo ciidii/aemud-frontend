@@ -1,0 +1,123 @@
+<div *ngIf="isVisible" class="wizard-overlay" (click)="close()">
+  <div class="wizard-container" (click)="$event.stopPropagation()">
+
+    <!-- Header -->
+    <div class="wizard-header">
+      <h2 class="wizard-title">Créer une nouvelle campagne</h2>
+      <button class="btn-close" (click)="close()">
+        <i class="bi bi-x-lg"></i>
+      </button>
+    </div>
+
+    <!-- Progress Bar -->
+    <div class="wizard-progress">
+      <div class="step" [ngClass]="getStepClass(1)" (click)="goToStep(1)">
+        <div class="step-icon">1</div>
+        <span class="step-label">Configuration</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" [ngClass]="getStepClass(2)" (click)="goToStep(2)">
+        <div class="step-icon">2</div>
+        <span class="step-label">Audience</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" [ngClass]="getStepClass(3)" (click)="goToStep(3)">
+        <div class="step-icon">3</div>
+        <span class="step-label">Message</span>
+      </div>
+      <div class="step-connector"></div>
+      <div class="step" [ngClass]="getStepClass(4)" (click)="goToStep(4)">
+        <div class="step-icon">4</div>
+        <span class="step-label">Révision</span>
+      </div>
+    </div>
+
+    <!-- Content -->
+    <div class="wizard-content" [formGroup]="wizardForm">
+      <!-- Step 1: Campaign Name -->
+      <div *ngIf="currentStep === 1">
+        <h3 class="step-title">Donnez un nom à votre campagne</h3>
+        <p class="step-description">Ce nom vous permettra de la retrouver facilement dans votre historique.</p>
+        
+        <div class="form-group">
+          <label for="campaignName">Nom de la campagne</label>
+          <input type="text" id="campaignName" class="form-input" formControlName="campaignName" placeholder="Ex: Voeux du nouvel an">
+          <div *ngIf="wizardForm.get('campaignName')?.invalid && wizardForm.get('campaignName')?.touched" class="error-message">
+            Le nom de la campagne est requis.
+          </div>
+        </div>
+      </div>
+      
+      <!-- Step 2: Audience -->
+      <div *ngIf="currentStep === 2">
+        <h3 class="step-title">À qui souhaitez-vous envoyer ce message ?</h3>
+        <p class="step-description">Sélectionnez un groupe de destinataires prédéfini.</p>
+
+        <!-- Search Input for Recipient Groups -->
+        <div class="form-group search-group">
+          <input type="text" id="groupSearch" class="form-input" formControlName="searchKeyword" placeholder="Rechercher un groupe...">
+          <i class="bi bi-search search-icon"></i>
+        </div>
+
+        <!-- Loading State -->
+        <div *ngIf="isLoadingGroups" class="loading-state">
+          <div class="spinner-border text-primary" role="status"></div>
+          <span>Chargement des groupes...</span>
+        </div>
+
+        <!-- Error State -->
+        <div *ngIf="loadGroupsError" class="error-state">
+          <i class="bi bi-exclamation-triangle-fill"></i>
+          <p>{{ loadGroupsError }}</p>
+          <button class="btn-secondary" (click)="loadRecipientGroups()">Réessayer</button>
+        </div>
+
+        <!-- Group Cards -->
+        <div *ngIf="!isLoadingGroups && !loadGroupsError && filteredRecipientGroups.length > 0" class="audience-grid">
+          <div 
+            *ngFor="let group of filteredRecipientGroups" 
+            class="audience-card"
+            [class.selected]="wizardForm.get('recipientGroupId')?.value === group.id"
+            (click)="selectGroup(group.id)">
+            <i class="bi bi-people-fill card-icon"></i>
+            <div class="card-content">
+              <h4 class="card-title">{{ group.name }}</h4>
+              <p class="card-description">{{ group.description }}</p>
+            </div>
+            <i *ngIf="wizardForm.get('recipientGroupId')?.value === group.id" class="bi bi-check-circle-fill check-icon"></i>
+          </div>
+        </div>
+
+        <!-- No Results State -->
+        <div *ngIf="!isLoadingGroups && !loadGroupsError && filteredRecipientGroups.length === 0" class="no-results-state">
+          <i class="bi bi-info-circle"></i>
+          <p>Aucun groupe trouvé pour votre recherche.</p>
+        </div>
+
+        <div *ngIf="wizardForm.get('recipientGroupId')?.invalid && wizardForm.get('recipientGroupId')?.touched" class="error-message mt-3">
+          Veuillez sélectionner un groupe de destinataires.
+        </div>
+      </div>
+
+      <!-- Placeholder for other steps -->
+      <div *ngIf="currentStep > 2" class="placeholder-step">
+        <p>Étape {{ currentStep }} en cours de construction...</p>
+      </div>
+
+    </div>
+
+    <!-- Footer -->
+    <div class="wizard-footer">
+      <button class="btn-secondary" *ngIf="currentStep > 1" (click)="previousStep()">Précédent</button>
+      <div class="spacer"></div>
+      <button class="btn-tertiary" (click)="close()">Annuler</button>
+      <button 
+        class="btn-primary" 
+        [disabled]="(currentStep === 1 && wizardForm.get('campaignName')?.invalid) || (currentStep === 2 && wizardForm.get('recipientGroupId')?.invalid)"
+        (click)="nextStep()">
+        {{ currentStep === 4 ? 'Lancer la campagne' : 'Suivant' }}
+      </button>
+    </div>
+
+  </div>
+</div>
