@@ -6,7 +6,9 @@ import {UserResponseDto, UserService} from '../../services/user.service';
 import {NotificationService} from '../../../../core/services/notification.service';
 import {SessionService} from "../../../../core/services/session.service";
 import {UserModel} from "../../../../core/models/user.model";
-import {ConfirmDeleteModalComponent} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {
+  ConfirmDeleteModalComponent
+} from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 import {UAParser} from 'ua-parser-js';
 
 @Component({
@@ -123,8 +125,9 @@ export class UserDetailsComponent implements OnInit {
 
   initPasswordForm(): void {
     this.passwordForm = this.fb.group({
+      oldPassword: ['', [Validators.required, Validators.minLength(6)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', Validators.required]
+      confirmPassword: ['', Validators.required],
     }, {validators: this.passwordMatchValidator});
   }
 
@@ -146,9 +149,13 @@ export class UserDetailsComponent implements OnInit {
     if (this.passwordForm.invalid || !this.user) return;
 
     this.passwordLoading = true;
-    const newPassword = this.passwordForm.get('password')?.value;
+    const changedPassword = {
+      password: this.passwordForm.get('password')?.value,
+      confirmPassword: this.passwordForm.get('confirmPassword')?.value,
+      oldPassword: this.passwordForm.get('oldPassword')?.value
+    };
 
-    this.userService.changePassword(this.user.id, newPassword).subscribe({
+    this.userService.changePassword(this.user.id, changedPassword).subscribe({
       next: () => {
         this.passwordLoading = false;
         this.closePasswordModal();
