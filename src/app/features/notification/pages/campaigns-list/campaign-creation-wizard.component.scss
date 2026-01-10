@@ -288,6 +288,161 @@
     color: $danger-500;
     margin-top: $space-2;
   }
+
+  // --- Step 3: Message Styles ---
+  .message-type-tabs {
+    display: flex;
+    margin-bottom: $space-6;
+    border-bottom: 1px solid $color-border-default;
+
+    .tab-button {
+      @include text-button;
+      background: transparent;
+      border: none;
+      padding: $space-3 $space-4;
+      color: $color-text-secondary;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.2s ease;
+
+      &:hover {
+        color: $color-text-primary;
+      }
+
+      &.active {
+        color: $primary-600;
+        border-bottom: 2px solid $primary-600;
+        font-weight: $font-weight-bold;
+        margin-bottom: -1px; // Overlay the border
+      }
+    }
+  }
+
+  .template-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: $space-4;
+    margin-top: $space-6;
+  }
+
+  .template-card {
+    display: flex;
+    flex-direction: column;
+    padding: $space-4;
+    background-color: $white;
+    border: 2px solid $color-border-default;
+    border-radius: $radius-lg;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    position: relative;
+    
+    .card-title {
+      @include text-heading-6;
+      color: $color-text-primary;
+      margin-bottom: $space-1;
+    }
+    .card-description {
+      font-size: $font-size-small;
+      color: $color-text-secondary;
+      line-height: 1.4;
+      overflow: hidden;
+      display: -webkit-box;
+      -webkit-line-clamp: 3; // Limit to 3 lines
+      -webkit-box-orient: vertical;
+    }
+
+    .check-icon {
+      position: absolute;
+      top: $space-3;
+      right: $space-3;
+      font-size: $icon-sm;
+      color: $primary-500;
+      opacity: 0;
+      transform: scale(0.8);
+      transition: all 0.2s ease;
+    }
+
+    &:hover {
+      border-color: $primary-200;
+      transform: translateY(-2px);
+      box-shadow: $shadow-md;
+    }
+
+    &.selected {
+      border-color: $primary-500;
+      box-shadow: $shadow-sm;
+      background-color: lighten($primary-100, 15%);
+
+      .check-icon {
+        opacity: 1;
+        transform: scale(1);
+      }
+    }
+  }
+
+  .char-counter {
+    font-size: $font-size-small;
+    color: $color-text-muted;
+    text-align: right;
+    margin-top: $space-2;
+  }
+
+  // --- Step 4: Review Styles ---
+  .summary-list {
+    display: flex;
+    flex-direction: column;
+    gap: $space-5;
+    background-color: $white;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-lg;
+    padding: $space-6;
+    margin-bottom: $space-6;
+  }
+
+  .summary-item {
+    display: flex;
+    flex-direction: column;
+    gap: $space-1;
+    .summary-label {
+      font-size: $font-size-small;
+      color: $color-text-muted;
+      font-weight: $font-weight-bold;
+      text-transform: uppercase;
+    }
+    .summary-value {
+      font-size: $font-size-body;
+      color: $color-text-primary;
+    }
+    .summary-message {
+      background-color: $gray-100;
+      padding: $space-3;
+      border-radius: $radius-md;
+      font-size: $font-size-body;
+      color: $color-text-secondary;
+      white-space: pre-wrap; // Preserve line breaks
+      max-height: 150px;
+      overflow-y: auto;
+    }
+  }
+
+  .info-box.warning {
+    display: flex;
+    gap: $space-3;
+    background: $warning-100;
+    padding: $space-4;
+    border-radius: $radius-md;
+    color: $warning-900;
+    
+    i {
+      font-size: $icon-sm;
+      margin-top: 2px;
+    }
+    p {
+      margin: 0;
+      font-size: $font-size-small;
+      line-height: $line-height-base;
+    }
+  }
 }
 
 .wizard-footer {

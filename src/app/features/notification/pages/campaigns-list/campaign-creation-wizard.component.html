@@ -38,7 +38,7 @@
       <div *ngIf="currentStep === 1">
         <h3 class="step-title">Donnez un nom à votre campagne</h3>
         <p class="step-description">Ce nom vous permettra de la retrouver facilement dans votre historique.</p>
-        
+
         <div class="form-group">
           <label for="campaignName">Nom de la campagne</label>
           <input type="text" id="campaignName" class="form-input" formControlName="campaignName" placeholder="Ex: Voeux du nouvel an">
@@ -47,7 +47,7 @@
           </div>
         </div>
       </div>
-      
+
       <!-- Step 2: Audience -->
       <div *ngIf="currentStep === 2">
         <h3 class="step-title">À qui souhaitez-vous envoyer ce message ?</h3>
@@ -74,8 +74,8 @@
 
         <!-- Group Cards -->
         <div *ngIf="!isLoadingGroups && !loadGroupsError && filteredRecipientGroups.length > 0" class="audience-grid">
-          <div 
-            *ngFor="let group of filteredRecipientGroups" 
+          <div
+            *ngFor="let group of filteredRecipientGroups"
             class="audience-card"
             [class.selected]="wizardForm.get('recipientGroupId')?.value === group.id"
             (click)="selectGroup(group.id)">
@@ -99,25 +99,135 @@
         </div>
       </div>
 
-      <!-- Placeholder for other steps -->
-      <div *ngIf="currentStep > 2" class="placeholder-step">
-        <p>Étape {{ currentStep }} en cours de construction...</p>
+      <!-- Step 3: Message -->
+      <div *ngIf="currentStep === 3">
+        <h3 class="step-title">Quel message voulez-vous envoyer ?</h3>
+
+        <div class="message-type-tabs">
+          <button
+            type="button"
+            class="tab-button"
+            [class.active]="messageType === 'template'"
+            (click)="setMessageType('template')"
+            >Utiliser un modèle</button>
+          <button
+            type="button"
+            class="tab-button"
+            [class.active]="messageType === 'custom'"
+            (click)="setMessageType('custom')"
+            >Écrire un message personnalisé</button>
+        </div>
+
+        <!-- Template Selection Tab -->
+        <div *ngIf="messageType === 'template'">
+          <div class="form-group search-group">
+            <input type="text" id="templateSearch" class="form-input" placeholder="Rechercher un modèle..." formControlName="templateSearchKeyword">
+            <i class="bi bi-search search-icon"></i>
+          </div>
+
+          <!-- Loading State -->
+          <div *ngIf="isLoadingTemplates" class="loading-state">
+            <div class="spinner-border text-primary" role="status"></div>
+            <span>Chargement des modèles...</span>
+          </div>
+
+          <!-- Error State -->
+          <div *ngIf="loadTemplatesError" class="error-state">
+            <i class="bi bi-exclamation-triangle-fill"></i>
+            <p>{{ loadTemplatesError }}</p>
+            <button class="btn-secondary" (click)="loadSmsTemplates()">Réessayer</button>
+          </div>
+
+          <!-- Template Cards -->
+          <div *ngIf="!isLoadingTemplates && !loadTemplatesError && filteredMessageTemplates.length > 0" class="template-grid">
+            <div
+              *ngFor="let tpl of filteredMessageTemplates"
+              class="template-card"
+              [class.selected]="wizardForm.get('smsTemplateId')?.value === tpl.id"
+              (click)="selectTemplate(tpl.id)">
+              <div class="card-content">
+                <h4 class="card-title">{{ tpl.modelName }}</h4>
+                <p class="card-description">{{ tpl.smsModel }}</p>
+              </div>
+              <i *ngIf="wizardForm.get('smsTemplateId')?.value === tpl.id" class="bi bi-check-circle-fill check-icon"></i>
+            </div>
+          </div>
+
+          <!-- No Results State -->
+          <div *ngIf="!isLoadingTemplates && !loadTemplatesError && filteredMessageTemplates.length === 0" class="no-results-state">
+            <i class="bi bi-info-circle"></i>
+            <p>Aucun modèle trouvé pour votre recherche.</p>
+          </div>
+        </div>
+
+        <!-- Custom Message Input Tab -->
+        <div *ngIf="messageType === 'custom'">
+          <div class="form-group">
+            <label for="customMessage">Contenu du message</label>
+            <textarea id="customMessage" class="form-input" rows="5" formControlName="customMessage" placeholder="Saisissez votre message..."></textarea>
+            <small class="text-muted d-block mt-1">
+              Placeholders disponibles : &#123;name&#125;, &#123;firstname&#125;
+            </small>
+
+            <div class="char-counter">
+              {{ charCount }}/160 ({{ smsCount }} SMS)
+            </div>
+          </div>
+        </div>
+
+        <!-- General message content validation errors -->
+        <div *ngIf="wizardForm.hasError('bothMessageContentsProvided') && wizardForm.get('smsTemplateId')?.touched" class="error-message mt-3">
+          Veuillez choisir un modèle OU écrire un message personnalisé, pas les deux.
+        </div>
+        <div *ngIf="wizardForm.hasError('noMessageContentProvided') && wizardForm.get('customMessage')?.touched" class="error-message mt-3">
+          Veuillez choisir un modèle ou écrire un message.
+        </div>
       </div>
 
-    </div>
-
-    <!-- Footer -->
-    <div class="wizard-footer">
-      <button class="btn-secondary" *ngIf="currentStep > 1" (click)="previousStep()">Précédent</button>
-      <div class="spacer"></div>
-      <button class="btn-tertiary" (click)="close()">Annuler</button>
-      <button 
-        class="btn-primary" 
-        [disabled]="(currentStep === 1 && wizardForm.get('campaignName')?.invalid) || (currentStep === 2 && wizardForm.get('recipientGroupId')?.invalid)"
-        (click)="nextStep()">
-        {{ currentStep === 4 ? 'Lancer la campagne' : 'Suivant' }}
-      </button>
-    </div>
-
-  </div>
-</div>
+            <!-- Step 4: Review -->
+            <div *ngIf="currentStep === 4">
+              <h3 class="step-title">Révision de la campagne</h3>
+              <p class="step-description">Vérifiez les détails ci-dessous avant de lancer votre campagne SMS.</p>
+      
+              <div class="summary-list">
+                <div class="summary-item">
+                  <span class="summary-label">Nom de la campagne</span>
+                  <span class="summary-value">{{ wizardForm.get('campaignName')?.value }}</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Audience</span>
+                  <span class="summary-value">{{ selectedGroup?.name || '--' }}</span>
+                </div>
+                <div class="summary-item">
+                  <span class="summary-label">Message</span>
+                  <div class="summary-message">
+                    {{ wizardForm.get('customMessage')?.value || selectedTemplate?.smsModel || '--' }}
+                  </div>
+                </div>
+              </div>
+      
+              <div class="info-box warning">
+                <i class="bi bi-exclamation-triangle-fill"></i>
+                <p>Cette action est irréversible. La campagne sera mise en file d'attente pour un envoi immédiat.</p>
+              </div>
+            </div>
+      
+          </div>
+      
+          <!-- Footer -->
+          <div class="wizard-footer">
+            <button class="btn-secondary" *ngIf="currentStep > 1" (click)="previousStep()">Précédent</button>
+            <div class="spacer"></div>
+            <button class="btn-tertiary" (click)="close()">Annuler</button>
+            <button 
+              class="btn-primary" 
+              [disabled]="isNextButtonDisabled()"
+              (click)="nextStep()">
+              <span *ngIf="currentStep === 4 && isCreatingCampaign" class="spinner-border spinner-border-sm me-2"></span>
+              {{ currentStep === 4 ? (isCreatingCampaign ? 'Lancement...' : 'Lancer la campagne') : 'Suivant' }}
+            </button>
+          </div>
+      
+        </div>
+      </div>
+      

@@ -12,6 +12,33 @@ export interface RecipientGroupDto {
   description: string;
 }
 
+export interface SmsModelDTO {
+  id: string;
+  modelName: string;
+  smsModel: string;
+}
+
+export interface CampaignRequestDto {
+  campaignName: string;
+  recipientGroupId: string;
+  messageTemplateId?: string | null;
+  customMessage?: string | null;
+}
+
+export interface SmsCampaignDto {
+  id: string;
+  campaignName: string;
+  smsModelId: string | null;
+  recipientGroupId: string;
+  status: 'PENDING' | 'IN_PROGRESS' | 'COMPLETED' | 'FAILED';
+  startedAt: string; // ISO Date string
+  completedAt: string | null;
+  totalMessages: number;
+  successfulMessages: number;
+  failedMessages: number;
+}
+
+
 @Injectable({
   providedIn: 'root'
 })
@@ -25,5 +52,16 @@ export class CampaignService {
       .pipe(
         map(response => response.data)
       );
+  }
+
+  getSmsTemplates(): Observable<SmsModelDTO[]> {
+    return this.http.get<ResponseEntityApi<SmsModelDTO[]>>(`${this.apiUrl}/smsmodel/all`)
+      .pipe(
+        map(response => response.data)
+      );
+  }
+
+  createCampaign(payload: CampaignRequestDto): Observable<ResponseEntityApi<SmsCampaignDto>> {
+    return this.http.post<ResponseEntityApi<SmsCampaignDto>>(`${this.apiUrl}/sms-campaigns`, payload);
   }
 }

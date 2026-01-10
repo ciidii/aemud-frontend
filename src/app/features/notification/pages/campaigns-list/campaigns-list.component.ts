@@ -16,6 +16,12 @@ export class CampaignsListComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
+    this.loadCampaigns();
+  }
+
+  loadCampaigns() {
+    // Placeholder for fetching campaigns from a service
+    console.log('Reloading campaigns list...');
   }
 
   openWizard() {
