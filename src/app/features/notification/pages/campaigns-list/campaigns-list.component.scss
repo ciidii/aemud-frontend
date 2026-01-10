@@ -1,0 +1,48 @@
+.campaigns-list-container {
+  padding: 1.5rem;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1.5rem;
+
+    h2 {
+      margin: 0;
+      font-size: 2rem;
+      font-weight: 700;
+    }
+  }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+
+  p {
+    color: var(--color-text-secondary);
+    margin-bottom: 1rem;
+  }
+
+  .card {
+    border-radius: 0.75rem;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+  }
+
+  .placeholder-content {
+    text-align: center;
+    padding: 2rem;
+    color: var(--gray-500);
+
+    i {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--gray-400);
+    }
+    p {
+      font-size: 1.2rem;
+      color: var(--gray-600);
+    }
+  }
+}
