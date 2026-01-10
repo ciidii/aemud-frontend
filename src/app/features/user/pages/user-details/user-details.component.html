@@ -81,11 +81,21 @@
 
       <!-- Roles Section -->
       <section class="info-section">
-        <div class="section-title">
-          <i class="bi bi-shield-check"></i>
-          Rôles & Permissions
+
+        <!-- Header section -->
+        <div class="section-title d-flex align-items-center justify-content-between mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-shield-check"></i>
+            <span>Rôles & Permissions</span>
+          </div>
+
+          <button class="btn btn-sm btn-secondary d-flex align-items-center gap-1" (click)="onRoleModify(user.id)">
+            <i class="bi bi-pencil-fill"></i>
+            Modifier
+          </button>
         </div>
 
+        <!-- Content -->
         <div class="roles-list">
           <div *ngFor="let role of user.roles" [ngClass]="role" class="role-card">
             <div class="role-icon">
@@ -98,6 +108,7 @@
           </div>
         </div>
       </section>
+
 
       <!-- System Info Section -->
       <section class="info-section">
