@@ -94,7 +94,7 @@ export class UserDetailsComponent implements OnInit {
     });
   }
 
-  canLockOrUnlock(): boolean {
+  canLockOrUnlockOrChangePassword(): boolean {
     if (!this.currentUser || !this.user) {
       return false;
     }

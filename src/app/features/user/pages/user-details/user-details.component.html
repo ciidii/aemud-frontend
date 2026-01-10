@@ -37,11 +37,12 @@
 
         <div class="profile-actions">
           <button (click)="toggleLock()" [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
-                  [disabled]="!canLockOrUnlock()" class="btn-action">
+                  [disabled]="!canLockOrUnlockOrChangePassword()" class="btn-action">
             <i [class.bi-lock-fill]="!user.locked" [class.bi-unlock-fill]="user.locked" class="bi"></i>
             {{ user.locked ? 'Déverrouiller le compte' : 'Verrouiller le compte' }}
           </button>
-          <button (click)="openPasswordModal()" class="btn-action btn-password">
+          <button [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
+                  [disabled]="canLockOrUnlockOrChangePassword()"  (click)="openPasswordModal()" class="btn-action btn-password">
             <i class="bi bi-key-fill"></i>
             Changer le mot de passe
           </button>
