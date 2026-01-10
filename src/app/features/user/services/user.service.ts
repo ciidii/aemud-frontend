@@ -142,10 +142,10 @@ export class UserService {
     return this.http.get<ResponseEntityApi<UserResponseDto>>(`${this.apiUrl}/users/${id}`);
   }
 
-  changePassword(userId: string, password: string): Observable<ResponseEntityApi<void>> {
+  changePassword(userId: string,passwordData:{oldPassword:string,password:string,confirmPassword:string}): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/change-password`,
-      {password}
+      passwordData
     );
   }
 

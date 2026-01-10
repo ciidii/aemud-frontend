@@ -150,6 +150,13 @@
 
     <div [formGroup]="passwordForm" class="modal-body">
       <div class="form-group">
+        <label>Ancien mot de passe</label>
+        <input [class.has-error]="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched" class="form-input" formControlName="oldPassword"
+               type="password">
+        <span *ngIf="passwordForm.get('oldPassword')?.hasError('minlength')" class="error-text">
+                    6 caractères minimum requis.
+                </span>
+      </div><div class="form-group">
         <label>Nouveau mot de passe</label>
         <input [class.has-error]="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched" class="form-input" formControlName="password"
                type="password">
