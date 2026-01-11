@@ -6,7 +6,6 @@ import {MemberStateService} from "../../services/member.state.service";
 import {combineLatest, filter, map, Observable, switchMap, take} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {ExportModalComponent} from './export-modal/export-modal.component';
-import {SendMessageModalComponent} from "./send-message-modal/send-message-modal.component";
 import {TableFiltersComponent} from "./table-filters/table-filters.component";
 import {FilterPanelComponent} from "./filter-panel/filter-panel.component";
 import {
@@ -14,9 +13,11 @@ import {
 } from "../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 import {MemberDataResponse} from "../../../../core/models/member-data.model";
 import {AppStateService} from "../../../../core/services/app-state.service";
-import {PhaseHttpService} from "../../../mandat/services/phase-http.service";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ActivatedRoute, Router} from "@angular/router";
+import {PhaseHttpService} from "../../../configuration/periode-mandat/services/phase-http.service";
+import {SearchParams} from "../../../../core/models/SearchParams";
+import {SendMessageModalComponent} from "./send-message-modal/send-message-modal.component";
 
 @Component({
   selector: 'app-member-list',
@@ -47,6 +48,7 @@ export class MemberListComponent implements OnInit {
   isDeleteModalOpen = false;
   recipientNumbers: string[] = [];
   isSmsSelectMode = false;
+  searchParamsForExport$: Observable<Partial<SearchParams>>;
 
   private memberStateService = inject(MemberStateService);
   private appStateService = inject(AppStateService);
@@ -59,6 +61,21 @@ export class MemberListComponent implements OnInit {
     this.loading$ = this.memberStateService.loading$;
     this.selectedMembersCount$ = this.memberStateService.selectedMembersCount$;
     this.hasSelection$ = this.memberStateService.hasSelection$;
+
+    // This logic ensures the export modal gets the right context:
+    // 1. If members are selected via checkbox, export only those members.
+    // 2. If no members are selected, export based on the current filters.
+    this.searchParamsForExport$ = combineLatest([
+      this.memberStateService.selectedMemberIds$,
+      this.memberStateService.searchMemberParamsObject$
+    ]).pipe(
+      map(([selectedIds, currentFilters]) => {
+        if (selectedIds.length > 0) {
+          return { memberIds: selectedIds };
+        }
+        return currentFilters;
+      })
+    );
   }
 
   ngOnInit(): void {

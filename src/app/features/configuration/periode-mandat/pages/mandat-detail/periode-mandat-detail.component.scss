@@ -1,0 +1,216 @@
+@import 'variables';
+@import 'typography';
+
+.mandat-detail-page {
+  padding: $space-6;
+}
+
+.page-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: $space-8;
+
+  h1 {
+    @include text-heading-2;
+    margin: 0 0 $space-2 0;
+  }
+
+  .header-meta {
+    display: flex;
+    align-items: center;
+    gap: $space-4;
+  }
+
+  .status-badge {
+    @include text-label;
+    padding: $space-1 $space-3;
+    border-radius: $radius-full;
+    font-size: 1.4rem;
+
+    &.active {
+      background-color: lighten($success-base, 45%);
+      color: darken($success-base, 10%);
+    }
+
+    &.inactive {
+      background-color: $gray-200;
+      color: $gray-600;
+    }
+  }
+
+  .mandate-period {
+    display: flex;
+    gap: $space-5;
+    align-items: baseline;
+
+    .date-item {
+      .date-label {
+        @include text-body-small;
+        display: block;
+        margin-bottom: 2px;
+      }
+
+      .date-label-debut {
+        color: $primary-500;
+      }
+
+      .date-label-fin {
+        color: $secondary-500;
+      }
+
+      .date-value {
+        @include text-body-regular;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+      }
+    }
+  }
+}
+
+.timeline-section, .phases-list-section {
+  margin-bottom: $space-8;
+
+  h2 {
+    @include text-heading-4;
+    margin-bottom: $space-4;
+    padding-bottom: $space-2;
+    border-bottom: 2px solid $color-border-default;
+  }
+}
+
+.phases-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: $space-6;
+}
+
+.phase-card {
+  background-color: $color-background-panel;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  box-shadow: $shadow-md;
+  transition: all 0.2s ease-in-out;
+  display: flex;
+  flex-direction: column;
+
+  &.current-phase {
+    border-left: 5px solid $primary-500;
+    box-shadow: $shadow-lg;
+  }
+
+  .phase-card-header {
+    padding: $space-3 $space-4;
+    border-bottom: 1px solid $color-border-default;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+
+    h3 {
+      @include text-heading-5;
+      margin: 0;
+    }
+
+    .status-badge {
+      padding: $space-1 $space-3;
+      border-radius: $radius-sm;
+      font-weight: $font-weight-bold;
+      @include text-body-small;
+
+      &.status-current {
+        background-color: lighten($primary-500, 40%);
+        color: darken($primary-500, 10%);
+      }
+      &.status-future {
+        background-color: lighten($secondary-500, 35%);
+        color: darken($secondary-500, 10%);
+      }
+      &.status-passed {
+        background-color: $gray-200;
+        color: $gray-600;
+      }
+    }
+  }
+
+  .phase-card-body {
+    padding: $space-4;
+    flex-grow: 1;
+
+    .detail-item {
+      display: flex;
+      align-items: flex-start;
+      gap: $space-3;
+      &:not(:last-child) {
+        margin-bottom: $space-4;
+      }
+
+      i {
+        font-size: $icon-sm;
+        color: $color-text-secondary;
+        margin-top: 3px;
+      }
+
+      .detail-label {
+        display: block;
+        @include text-body-small;
+        color: $color-text-secondary;
+      }
+
+      .detail-value {
+        @include text-body-regular;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+      }
+    }
+  }
+
+  .phase-card-footer {
+    padding: $space-3 $space-4;
+    border-top: 1px solid $color-border-default;
+    background-color: $gray-100;
+    display: flex;
+    justify-content: flex-end;
+    margin-top: auto;
+  }
+}
+
+.btn-secondary {
+  padding: $space-1 $space-3;
+  font-size: 1.4rem;
+  background-color: $gray-200;
+  color: $color-text-primary;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  cursor: pointer;
+  @include text-button;
+  transition: background-color 0.2s ease-in-out;
+  text-decoration: none; // For routerLink buttons
+  display: inline-flex;
+  align-items: center;
+  gap: $space-2;
+
+  &:hover {
+    background-color: $gray-300;
+  }
+}
+
+// Reusing button styles from list page
+.btn-primary {
+  padding: $button-padding-y $button-padding-x;
+  border-radius: $button-border-radius;
+  border: none;
+  cursor: pointer;
+  @include text-button;
+  background-color: $primary-500;
+  color: $color-text-on-primary;
+  transition: background-color 0.2s ease-in-out;
+
+  &:hover {
+    background-color: $primary-600;
+  }
+}
+
+.loading-container, .error-container {
+  text-align: center;
+  padding: $space-16 $space-6;
+}

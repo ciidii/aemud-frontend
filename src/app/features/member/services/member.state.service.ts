@@ -45,7 +45,6 @@ export class MemberStateService {
   private memberHttpService = inject(MemberHttpService);
   private readonly _paginatedMemberSubject = new BehaviorSubject<MemberDataResponse[]>([]);
   readonly paginatedMembers$ = this._paginatedMemberSubject.asObservable();
-  private appSateService = inject(AppStateService)
   private readonly _paginationInfoSubject = new BehaviorSubject<PaginationInfo>({
     pageIndex: 1,
     pageSize: 10,

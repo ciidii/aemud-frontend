@@ -165,12 +165,25 @@
       gap: 0.8rem;
       transition: all 0.2s ease;
 
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+
+        &:hover {
+          // Keep the same appearance as disabled, no hover effect
+          background: $gray-100;
+          color: $gray-500;
+          border-color: $gray-200;
+          transform: none;
+        }
+      }
+
       &.btn-lock {
         background: $gray-100;
         color: $danger-500;
 
         &:hover {
-          background: $danger-500;
+          background: $danger-100;
         }
       }
 
@@ -191,6 +204,17 @@
         &:hover {
           border-color: $warning-500;
           color: $warning-500;
+        }
+      }
+
+      &.btn-danger {
+        background: transparent;
+        border: 1px solid $danger-100;
+        color: $danger-500;
+
+        &:hover:not(:disabled) {
+          background: $danger-500;
+          color: $white;
         }
       }
     }

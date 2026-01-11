@@ -426,7 +426,8 @@
 <app-confirm-delete-modal (close)="toggleDeleteModal()" (confirm)="onDeleteConfirmed()" *ngIf="isDeleteModalOpen"
                           [itemCount]="1"></app-confirm-delete-modal>
 <app-send-message-modal (close)="closeSendMessageModal()" *ngIf="isSendMessageModalOpen"></app-send-message-modal>
-<app-export-modal (close)="closeExportModal()" *ngIf="isExportModalOpen"></app-export-modal>
+<app-export-modal (close)="closeExportModal()" *ngIf="isExportModalOpen"
+                  [searchRequest]="searchParamsForExport"></app-export-modal>
 
 <!-- Record Payment Modal -->
 <app-record-payment-modal (close)="handleClosePaymentModal()"

@@ -48,7 +48,7 @@
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="mandats/list" routerLinkActive="active">
+          <a class="nav-link" routerLink="periode-mandats/list" routerLinkActive="active">
             <i class="bi bi-card-checklist"></i>
             <span class="nav-text">Mandats</span>
             <span class="tooltip-text">Mandats</span>
@@ -83,25 +83,39 @@
     <div class="nav-group">
       <span class="group-title">Communication</span>
       <ul class="nav-items">
+        <!-- NOUVEAU: Le tableau de bord des communications -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/sms" routerLinkActive="active">
-            <i class="bi bi-chat-dots"></i>
-            <span class="nav-text">SMS</span>
-            <span class="tooltip-text">Envoi immédiat de SMS</span>
+          <a class="nav-link" routerLink="/notifications/dashboard" routerLinkActive="active">
+            <i class="bi bi-graph-up"></i>
+            <span class="nav-text">Vue d'ensemble</span>
+            <span class="tooltip-text">Dashboard Communication</span>
           </a>
         </li>
+
+        <!-- NOUVEAU: Le point d'entrée central pour les campagnes -->
+        <li class="nav-item">
+          <a class="nav-link" routerLink="/notifications/campaigns" routerLinkActive="active">
+            <i class="bi bi-send"></i>
+            <span class="nav-text">Campagnes</span>
+            <span class="tooltip-text">Gérer les campagnes SMS & Email</span>
+          </a>
+        </li>
+
+        <!-- MIS À JOUR: Gestion centralisée des modèles -->
         <li class="nav-item">
           <a class="nav-link" routerLink="/notifications/templates" routerLinkActive="active">
             <i class="bi bi-files"></i>
-            <span class="nav-text">Modèles SMS</span>
-            <span class="tooltip-text">Gérer les modèles de SMS</span>
+            <span class="nav-text">Modèles</span>
+            <span class="tooltip-text">Modèles de messages</span>
           </a>
         </li>
+        
+        <!-- NOUVEAU: Gestion des audiences -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/emails" routerLinkActive="active">
-            <i class="bi bi-envelope"></i>
-            <span class="nav-text">Emails</span>
-            <span class="tooltip-text">Emails</span>
+          <a class="nav-link" routerLink="/notifications/audiences" routerLinkActive="active">
+            <i class="bi bi-people"></i>
+            <span class="nav-text">Audiences</span>
+            <span class="tooltip-text">Groupes de destinataires</span>
           </a>
         </li>
       </ul>

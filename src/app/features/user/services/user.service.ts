@@ -8,6 +8,7 @@ import {ResponsePageableApi} from "../../../core/models/response-pageable-api";
 export interface CreateUserRequest {
   memberId: string;
   roles: string[];
+  forcePasswordChange?: boolean;
 }
 
 export interface UserSearchParams {
@@ -26,12 +27,22 @@ export interface UserResponseDto {
   locked: boolean;
   forcePasswordChange: boolean;
   memberId: string;
+  userLoginHistoryDTO?: UserLoginHistoryDTO;
 }
 
-export interface CreateUserRequest {
-  memberId: string;
-  roles: string[];
+export interface UserLoginHistoryDTO {
+  username: string;
+  ipAddress: string;
+  userAgent: string;
+  loginTime: number[]; // e.g., [2026, 1, 3, 22, 37, 38, 13470000]
 }
+
+export interface UserStats {
+  totalUsers: number;
+  activeUsers: number;
+  lockedUsers: number;
+}
+
 
 @Injectable({
   providedIn: 'root'
@@ -40,6 +51,10 @@ export class UserService {
 
   private apiUrl = environment.API_URL;
   private http = inject(HttpClient);
+
+  getUserStats(): Observable<ResponseEntityApi<UserStats>> {
+    return this.http.get<ResponseEntityApi<UserStats>>(`${this.apiUrl}/users/stats`);
+  }
 
   checkForgottenPasswordEmail(email: string): Observable<ResponseEntityApi<void>> {
     return this.http.post<ResponseEntityApi<void>>(`${this.apiUrl}/users/forgotten-password-email/${email}`, {});
@@ -127,10 +142,14 @@ export class UserService {
     return this.http.get<ResponseEntityApi<UserResponseDto>>(`${this.apiUrl}/users/${id}`);
   }
 
-  changePassword(userId: string, password: string): Observable<ResponseEntityApi<void>> {
+  changePassword(userId: string,passwordData:{oldPassword:string,password:string,confirmPassword:string}): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(
       `${this.apiUrl}/users/${userId}/change-password`,
-      {password}
+      passwordData
     );
+  }
+
+  deleteUser(userId: string): Observable<ResponseEntityApi<void>> {
+    return this.http.delete<ResponseEntityApi<void>>(`${this.apiUrl}/users/${userId}`);
   }
 }

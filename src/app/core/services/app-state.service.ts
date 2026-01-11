@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject, Observable} from "rxjs";
-import {MandatDto} from "../../features/mandat/models/mandat.model";
+import {PeriodeMandatDto} from "../../features/configuration/periode-mandat/models/periode-mandat.model";
 
 
 @Injectable({
@@ -8,17 +8,17 @@ import {MandatDto} from "../../features/mandat/models/mandat.model";
 })
 export class AppStateService {
 
-  private readonly _activeMandat: BehaviorSubject<MandatDto | null> = new BehaviorSubject<MandatDto | null>(null);
-  public readonly activeMandat$: Observable<MandatDto | null> = this._activeMandat.asObservable();
+  private readonly _activeMandat: BehaviorSubject<PeriodeMandatDto | null> = new BehaviorSubject<PeriodeMandatDto | null>(null);
+  public readonly activeMandat$: Observable<PeriodeMandatDto | null> = this._activeMandat.asObservable();
 
-  private readonly _mandats$: BehaviorSubject<MandatDto[]> = new BehaviorSubject<MandatDto[]>([]);
-  public readonly mandats$: Observable<MandatDto[]> = this._mandats$.asObservable();
+  private readonly _mandats$: BehaviorSubject<PeriodeMandatDto[]> = new BehaviorSubject<PeriodeMandatDto[]>([]);
+  public readonly mandats$: Observable<PeriodeMandatDto[]> = this._mandats$.asObservable();
 
-  setSelectedMandat(mandat: MandatDto): void {
+  setSelectedMandat(mandat: PeriodeMandatDto): void {
     this._activeMandat.next(mandat);
   }
 
-  setMandats(mandats: MandatDto[]): void {
+  setMandats(mandats: PeriodeMandatDto[]): void {
     this._mandats$.next(mandats);
   }
 }

@@ -1,0 +1,79 @@
+<div class="mandat-detail-page">
+  <div *ngIf="isLoading" class="loading-container">
+    <p>Chargement de la période de mandat...</p>
+    <!-- Add more sophisticated skeleton loader here if needed -->
+  </div>
+
+  <div *ngIf="hasError && !isLoading" class="error-container">
+    <p>La période de mandat n'a pas pu être chargée. Veuillez retourner à la liste.</p>
+    <a routerLink="/periode-mandats/list">Retour à la liste</a>
+  </div>
+
+  <ng-container *ngIf="periodeMandat$ | async as periodeMandat">
+    <div *ngIf="periodeMandat" class="mandat-content">
+      <header class="page-header">
+        <div class="header-content">
+          <h1>{{ periodeMandat.nom }}</h1>
+          <div class="header-meta">
+            <span [class.active]="periodeMandat.estActif" [class.inactive]="!periodeMandat.estActif" class="status-badge">
+              {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
+            </span>
+            <div class="mandate-period">
+              <div class="date-item">
+                <small class="date-label date-label-debut">Début</small>
+                <span class="date-value">{{ dateArrayToString(periodeMandat.dateDebut) | date: 'longDate' }}</span>
+              </div>
+              <div class="date-item">
+                <small class="date-label date-label-fin">Fin</small>
+                <span class="date-value">{{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+        <button (click)="goToEdit(periodeMandat.id)" class="btn-primary">Modifier la période de mandat</button>
+      </header>
+
+      <section class="timeline-section">
+        <h2>Chronologie des phases</h2>
+        <app-phase-timeline
+          [periodeMandatEndDate]="dateArrayToString(periodeMandat.dateFin)"
+          [periodeMandatStartDate]="dateArrayToString(periodeMandat.dateDebut)"
+        >
+        </app-phase-timeline>
+      </section>
+
+      <section class="phases-list-section">
+        <h2>Détail des phases ({{ periodeMandat.phases.length }})</h2>
+        <div class="phases-grid">
+          <div *ngFor="let phase of periodeMandat.phases" class="phase-card" [class.current-phase]="phase.status === 'CURRENT'">
+            <div class="phase-card-header">
+              <h3>{{ phase.nom }}</h3>
+              <span class="status-badge" [ngClass]="'status-' + phase.status.toLowerCase()">{{ phase.status }}</span>
+            </div>
+            <div class="phase-card-body">
+              <div class="detail-item">
+                <i class="bi bi-calendar-range"></i>
+                <div>
+                  <span class="detail-label">Période de la phase</span>
+                  <span class="detail-value">{{ phase.dateDebut | arrayDate }} au {{ phase.dateFin | arrayDate }}</span>
+                </div>
+              </div>
+              <div class="detail-item" *ngIf="phase.dateDebutInscription">
+                <i class="bi bi-person-plus-fill"></i>
+                <div>
+                  <span class="detail-label">Période d'inscription</span>
+                  <span class="detail-value">{{ phase.dateDebutInscription | arrayDate }} au {{ phase.dateFinInscription | arrayDate }}</span>
+                </div>
+              </div>
+            </div>
+            <div class="phase-card-footer">
+              <button class="btn-secondary" [routerLink]="['/phases', 'edit', phase.id]" [queryParams]="{ periodeMandatId: periodeMandat.id }">
+                <i class="bi bi-pencil-fill"></i> Modifier
+              </button>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </ng-container>
+</div>

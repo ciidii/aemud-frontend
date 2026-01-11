@@ -21,7 +21,6 @@ import {
   ReligiousKnowledge,
 } from "../../../../core/models/member-data.model";
 import {combineLatest, filter, map, Observable, of, shareReplay, take} from "rxjs";
-import {MandatDto} from "../../../mandat/models/mandat.model";
 import {PhaseStatus} from "../../../../core/models/phaseStatus.enum";
 import {ReregisterModalComponent} from "./reregister-modal/reregister-modal.component";
 import {
@@ -52,7 +51,6 @@ import {EditBourseInfoModalComponent} from "./edit-bourse-info-modal/edit-bourse
 import {BourseModel} from "../../../../core/models/bourse.model";
 import {AppStateService} from "../../../../core/services/app-state.service";
 import {MandateTimelineItem, RegistrationOverview} from "../../../../core/models/timeline.model";
-import {PhaseModel} from "../../../mandat/models/phase.model";
 import {ContributionCalendarComponent} from "../../components/contribution-calendar/contribution-calendar.component";
 import {
   ContributionData,
@@ -60,6 +58,9 @@ import {
   ContributionYear
 } from "../../../../core/models/contribution-data.model";
 import {RegistrationModel} from "../../../../core/models/RegistrationModel";
+import {PeriodeMandatDto} from "../../../configuration/periode-mandat/models/periode-mandat.model";
+import {PhaseModel} from "../../../configuration/periode-mandat/models/phase.model";
+import {SearchParams} from "../../../../core/models/SearchParams";
 
 
 @Component({
@@ -95,8 +96,9 @@ export class MemberDetailComponent implements OnInit {
 
   currentMember: MemberDataResponse | null = null;
   selectedPhaseId: string | null = null;
-  availableMandats: MandatDto[] = [];
-  activeMandat: MandatDto | null = null;
+  availableMandats: PeriodeMandatDto[] = [];
+  activeMandat: PeriodeMandatDto | null = null;
+  searchParamsForExport: Partial<SearchParams> = {}; // Initialize here
   appStateService = inject(AppStateService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -114,6 +116,7 @@ export class MemberDetailComponent implements OnInit {
   ngOnInit(): void {
     this.memberId = this.route.snapshot.paramMap.get('id');
     if (this.memberId) {
+      this.searchParamsForExport = { keyword: this.memberId }; // Set it here
       this.loadData();
     } else {
       this.notificationService.showError("ID de membre manquant.");
@@ -253,14 +256,11 @@ export class MemberDetailComponent implements OnInit {
 
   openExportModal(): void {
     if (!this.memberId) return;
-    this.memberStateService.clearSelection();
-    this.memberStateService.toggleMemberSelection(this.memberId);
     this.isExportModalOpen = true;
   }
 
   closeExportModal(): void {
     this.isExportModalOpen = false;
-    this.memberStateService.clearSelection();
   }
 
   toggleActionsDropdown(event: Event): void {
@@ -404,7 +404,7 @@ export class MemberDetailComponent implements OnInit {
     });
 
     combineLatest([
-      this.appStateService.activeMandat$.pipe(filter((m): m is MandatDto => m !== null)),
+      this.appStateService.activeMandat$.pipe(filter((m): m is PeriodeMandatDto => m !== null)),
       this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data))
     ]).pipe(
       take(1)
@@ -497,3 +497,4 @@ export class MemberDetailComponent implements OnInit {
   }
 
 }
+

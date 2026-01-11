@@ -6,10 +6,10 @@
       <div class="breadcrumbs">
         <span>Utilisateurs</span>
         <i class="bi bi-chevron-right"></i>
-        <span class="active">Nouveau</span>
+        <span class="active">{{ breadcrumbActive }}</span>
       </div>
-      <h1 class="page-title">Créer un utilisateur</h1>
-      <p class="page-subtitle">Configurez l'accès et les permissions pour un nouveau membre.</p>
+      <h1 class="page-title">{{ pageTitle }}</h1>
+      <p class="page-subtitle">{{ pageSubtitle }}</p>
     </div>
   </div>
 
@@ -25,12 +25,13 @@
           </div>
 
           <div class="step-content">
-            <p class="step-description">Recherchez le membre à qui vous souhaitez donner accès.</p>
+            <p *ngIf="!isEditMode" class="step-description">Recherchez le membre à qui vous souhaitez donner accès.</p>
+            <p *ngIf="isEditMode" class="step-description">Le compte utilisateur est associé au membre suivant.</p>
 
             <!-- Search Input -->
-            <div [class.has-results]="memberResults.length > 0" class="search-hero">
+            <div *ngIf="!isEditMode" [class.has-results]="memberResults.length > 0" class="search-hero">
               <i class="bi bi-search search-icon"></i>
-              <input (input)="onSearchMember()" autocomplete="off" class="hero-input" formControlName="memberSearch"
+              <input (input)="onSearchMember()" [disabled]="isEditMode" autocomplete="off" class="hero-input" formControlName="memberSearch"
                      placeholder="Rechercher par nom, email..." type="text"/>
               <div *ngIf="false" class="spinner-border text-primary spinner-sm"></div> <!-- Placeholder for loading -->
 
@@ -66,13 +67,13 @@
                   <span class="member-id">ID: {{ selectedMember.contactInfo.numberPhone }}</span>
                 </div>
               </div>
-              <button (click)="selectedMember = null; form.get('memberSearch')?.setValue('')" class="btn-change"
+              <button *ngIf="!isEditMode" (click)="selectedMember = null; form.get('memberSearch')?.setValue('')" class="btn-change"
                       type="button">
                 Changer
               </button>
             </div>
 
-            <div *ngIf="form.get('memberId')?.invalid && form.get('memberId')?.touched" class="error-message">
+            <div *ngIf="form.get('memberId')?.invalid && form.get('memberId')?.touched && !isEditMode" class="error-message">
               <i class="bi bi-exclamation-circle"></i> Merci de sélectionner un membre.
             </div>
           </div>
@@ -110,6 +111,13 @@
               <i class="bi bi-exclamation-circle"></i> Sélectionnez au moins un rôle.
             </div>
 
+            <div class="form-check-group">
+              <input class="form-check-input" type="checkbox" id="forcePasswordChange" formControlName="forcePasswordChange">
+              <label class="form-check-label" for="forcePasswordChange">
+                Forcer le changement de mot de passe à la première connexion
+              </label>
+            </div>
+
             <div class="info-box">
               <i class="bi bi-info-circle-fill"></i>
               <p>Un email contenant les instructions de connexion sera envoyé automatiquement au membre.</p>
@@ -125,8 +133,8 @@
         Annuler
       </button>
       <button [disabled]="loading || form.invalid" class="btn-submit" type="submit">
-        <span *ngIf="!loading">Créer l'utilisateur</span>
-        <span *ngIf="loading"><span class="spinner-border spinner-border-sm me-2"></span>Création...</span>
+        <span *ngIf="!loading">{{ submitButtonText }}</span>
+        <span *ngIf="loading"><span class="spinner-border spinner-border-sm me-2"></span>{{ loadingText }}</span>
       </button>
     </div>
 

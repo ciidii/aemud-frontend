@@ -2,8 +2,7 @@ import {Component, EventEmitter, inject, Input, OnInit, Output} from '@angular/c
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from "@angular/forms";
 import {NgForOf} from "@angular/common";
 import {TypeInscription} from "../../../../../core/models/member-data.model";
-import {MandatDto} from "../../../../mandat/models/mandat.model";
-
+import {PeriodeMandatDto} from "../../../../configuration/periode-mandat/models/periode-mandat.model";
 @Component({
   selector: 'app-reregister-modal',
   standalone: true,
@@ -15,7 +14,7 @@ import {MandatDto} from "../../../../mandat/models/mandat.model";
   styleUrl: './reregister-modal.component.scss'
 })
 export class ReregisterModalComponent implements OnInit {
-  @Input() availableMandats: MandatDto[] = [];
+  @Input() availableMandats: PeriodeMandatDto[] = [];
   @Output() close = new EventEmitter<void>();
   @Output() save = new EventEmitter<any>();
 
@@ -37,5 +36,29 @@ export class ReregisterModalComponent implements OnInit {
       this.save.emit(this.reregisterForm.value);
       this.close.emit();
     }
+  }
+
+  onClose(): void {
+    this.close.emit();
+  }
+
+  private toDate(dateArray: [number, number, number]): Date {
+    if (!dateArray) return new Date(NaN);
+    const [year, month, day] = dateArray;
+    return new Date(year, month - 1, day);
+  }
+
+  getPeriodeStatus(mandat: PeriodeMandatDto): 'PASSED' | 'CURRENT' | 'FUTURE' {
+    if (mandat.estActif) {
+      return 'CURRENT';
+    }
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const endDate = this.toDate(mandat.dateFin);
+
+    if (endDate < today) {
+      return 'PASSED';
+    }
+    return 'FUTURE';
   }
 }

@@ -37,13 +37,18 @@
 
         <div class="profile-actions">
           <button (click)="toggleLock()" [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
-                  class="btn-action">
+                  [disabled]="!canLockOrUnlockOrChangePassword()" class="btn-action">
             <i [class.bi-lock-fill]="!user.locked" [class.bi-unlock-fill]="user.locked" class="bi"></i>
             {{ user.locked ? 'Déverrouiller le compte' : 'Verrouiller le compte' }}
           </button>
-          <button (click)="openPasswordModal()" class="btn-action btn-password">
+          <button [class.btn-lock]="!user.locked" [class.btn-unlock]="user.locked"
+                  [disabled]="canLockOrUnlockOrChangePassword()"  (click)="openPasswordModal()" class="btn-action btn-password">
             <i class="bi bi-key-fill"></i>
             Changer le mot de passe
+          </button>
+          <button *ngIf="isSuperAdmin" (click)="openDeleteModal()" class="btn-action btn-danger">
+            <i class="bi bi-trash-fill"></i>
+            Supprimer l'utilisateur
           </button>
         </div>
       </div>
@@ -76,11 +81,21 @@
 
       <!-- Roles Section -->
       <section class="info-section">
-        <div class="section-title">
-          <i class="bi bi-shield-check"></i>
-          Rôles & Permissions
+
+        <!-- Header section -->
+        <div class="section-title d-flex align-items-center justify-content-between mb-3">
+          <div class="d-flex align-items-center gap-2">
+            <i class="bi bi-shield-check"></i>
+            <span>Rôles & Permissions</span>
+          </div>
+
+          <button class="btn btn-sm btn-secondary d-flex align-items-center gap-1" (click)="onRoleModify(user.id)">
+            <i class="bi bi-pencil-fill"></i>
+            Modifier
+          </button>
         </div>
 
+        <!-- Content -->
         <div class="roles-list">
           <div *ngFor="let role of user.roles" [ngClass]="role" class="role-card">
             <div class="role-icon">
@@ -94,6 +109,7 @@
         </div>
       </section>
 
+
       <!-- System Info Section -->
       <section class="info-section">
         <div class="section-title">
@@ -104,15 +120,15 @@
         <div class="info-grid">
           <div class="info-item">
             <label>Dernière Connexion</label>
-            <span>--</span>
-          </div>
-          <div class="info-item">
-            <label>Date de Création</label>
-            <span>--</span>
+            <span>{{ formatLoginTime(user.userLoginHistoryDTO?.loginTime) }}</span>
           </div>
           <div class="info-item">
             <label>IP Enregistrée</label>
-            <span>--</span>
+            <span>{{ user.userLoginHistoryDTO?.ipAddress ?? '--' }}</span>
+          </div>
+          <div class="info-item">
+            <label>User Agent</label>
+            <span>{{ simplifyUserAgent(user.userLoginHistoryDTO?.userAgent) }}</span>
           </div>
         </div>
       </section>
@@ -146,6 +162,13 @@
 
     <div [formGroup]="passwordForm" class="modal-body">
       <div class="form-group">
+        <label>Ancien mot de passe</label>
+        <input [class.has-error]="passwordForm.get('oldPassword')?.invalid && passwordForm.get('oldPassword')?.touched" class="form-input" formControlName="oldPassword"
+               type="password">
+        <span *ngIf="passwordForm.get('oldPassword')?.hasError('minlength')" class="error-text">
+                    6 caractères minimum requis.
+                </span>
+      </div><div class="form-group">
         <label>Nouveau mot de passe</label>
         <input [class.has-error]="passwordForm.get('password')?.invalid && passwordForm.get('password')?.touched" class="form-input" formControlName="password"
                type="password">
@@ -174,3 +197,11 @@
     </div>
   </div>
 </div>
+
+<!-- Delete Confirmation Modal -->
+<app-confirm-delete-modal
+  *ngIf="showDeleteModal"
+  (close)="closeDeleteModal()"
+  (confirm)="confirmDelete()"
+  [itemCount]="1">
+</app-confirm-delete-modal>

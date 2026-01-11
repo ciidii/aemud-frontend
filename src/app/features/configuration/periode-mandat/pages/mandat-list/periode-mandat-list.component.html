@@ -1,0 +1,65 @@
+<div class="mandat-list-page">
+  <header class="page-header">
+    <h1>Gestion des Périodes de Mandat</h1>
+    <button (click)="goToAdd()" class="btn-primary">+ Créer une période de mandat</button>
+  </header>
+
+  <div class="page-content">
+    <div *ngIf="isLoading" class="loading-container">
+      <!-- Skeleton loader cards -->
+      <div *ngFor="let _ of [1, 2, 3]" class="mandate-card skeleton">
+        <div class="skeleton-line title"></div>
+        <div class="skeleton-line text"></div>
+        <div class="skeleton-line text short"></div>
+      </div>
+    </div>
+
+    <div *ngIf="!isLoading && hasError" class="error-container">
+      <p>Impossible de charger les périodes de mandat. Veuillez réessayer plus tard.</p>
+      <button (click)="loadPeriodeMandats()">Réessayer</button>
+    </div>
+
+    <ng-container *ngIf="periodeMandats$ | async as periodeMandats">
+      <div *ngIf="!isLoading && !hasError && periodeMandats.length === 0" class="empty-state">
+        <div class="empty-content">
+          <!-- Add an icon here if available, e.g., <i class="icon-folder-open"></i> -->
+          <h2>Aucune période de mandat trouvée</h2>
+          <p>Commencez par créer votre première période de mandat.</p>
+          <button (click)="goToAdd()" class="btn-primary">+ Créer une période de mandat</button>
+        </div>
+      </div>
+
+      <div *ngIf="!isLoading && periodeMandats.length > 0" class="mandate-grid">
+        <div *ngFor="let periodeMandat of periodeMandats" class="mandate-card">
+          <div class="card-header">
+            <h3 class="card-title">{{ periodeMandat.nom }}</h3>
+            <span [class.active]="periodeMandat.estActif" [class.inactive]="!periodeMandat.estActif" class="status-badge">
+              {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
+            </span>
+          </div>
+          <div (click)="goToDetail(periodeMandat.id)" class="card-body clickable">
+            <div class="mandate-period">
+              <div class="date-item">
+                <small class="date-label date-label-debut">Début</small>
+                <span class="date-value">{{ dateArrayToString (periodeMandat.dateDebut) | date: 'longDate' }}</span>
+              </div>
+              <div class="date-item">
+                <small class="date-label date-label-fin">Fin</small>
+                <span class="date-value">{{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}</span>
+              </div>
+            </div>
+            <div class="phase-summary">
+              <!-- Add phases icon if available -->
+              <span>{{ periodeMandat.phases.length }} {{ periodeMandat.phases.length > 1 ? 'phases' : 'phase' }}</span>
+            </div>
+          </div>
+          <div class="card-footer">
+            <button (click)="goToEdit(periodeMandat.id)" class="btn-secondary">Modifier</button>
+            <button (click)="deletePeriodeMandat(periodeMandat.id)" class="btn-danger">Supprimer</button>
+          </div>
+        </div>
+      </div>
+    </ng-container>
+
+  </div>
+</div>

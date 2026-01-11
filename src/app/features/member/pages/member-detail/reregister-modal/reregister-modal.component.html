@@ -13,14 +13,15 @@
           <label for="phase">Phase d'inscription</label>
           <select class="form-select" formControlName="phaseId" id="phase">
             <option [ngValue]="null" disabled>Sélectionner une phase</option>
-            <ng-container *ngFor="let mandat of availableMandats">
-              <optgroup [label]="mandat.nom">
-                <option *ngFor="let phase of mandat.phases" [value]="phase.id">
-                  {{ phase.nom }}
-                </option>
-              </optgroup>
-            </ng-container>
-          </select>
+                                <ng-container *ngFor="let mandat of availableMandats">
+                                  <optgroup [label]="mandat.nom + ' (' + getPeriodeStatus(mandat) + ')'">
+                                    <option *ngFor="let phase of mandat.phases"
+                                            [value]="phase.id"
+                                            [disabled]="getPeriodeStatus(mandat) === 'FUTURE' || phase.status === 'FUTURE'">
+                                      {{ phase.nom }}
+                                    </option>
+                                  </optgroup>
+                                </ng-container>          </select>
         </div>
 
         <!-- Registration Type -->

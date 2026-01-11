@@ -5,8 +5,10 @@ import {Observable, switchMap} from "rxjs";
 import {AsyncPipe} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 import {HeaderComponent} from "../header/header.component";
-import {MandatHttpService} from "../../../features/mandat/services/mandat-http.service";
 import {AppStateService} from "../../../core/services/app-state.service";
+import {
+  PeriodeMandatHttpService
+} from "../../../features/configuration/periode-mandat/services/periode-mandat-http.service";
 
 @Component({
   selector: 'app-layout',
@@ -23,7 +25,7 @@ import {AppStateService} from "../../../core/services/app-state.service";
 export class LayoutComponent implements OnInit {
 
   isSidebarOpen$: Observable<boolean>;
-  mandatHttpService = inject(MandatHttpService);
+  mandatHttpService = inject(PeriodeMandatHttpService);
   appStateService = inject(AppStateService);
   private sidebarService = inject(SidebarService);
 
@@ -32,13 +34,13 @@ export class LayoutComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.mandatHttpService.getAllMandats().pipe(
+    this.mandatHttpService.getAllPeriodeMandats().pipe(
       switchMap(response => {
         if (response.data) {
           this.appStateService.setMandats(response.data);
           const activeMandat = response.data.find(m => m.estActif);
           if (activeMandat) {
-            return this.mandatHttpService.getMandatById(activeMandat.id);
+            return this.mandatHttpService.getPeriodeMandatById(activeMandat.id);
           }
         }
         return [];

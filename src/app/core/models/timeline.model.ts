@@ -1,6 +1,8 @@
-import {MandatDto} from '../../features/mandat/models/mandat.model';
-import {PhaseModel} from '../../features/mandat/models/phase.model';
+
 import {RegistrationModel} from './RegistrationModel';
+import {PhaseModel} from "../../features/configuration/periode-mandat/models/phase.model";
+import {PeriodeMandatDto} from "../../features/configuration/periode-mandat/models/periode-mandat.model";
+
 
 export interface RegistrationOverview {
   latestRegistration: RegistrationModel | null;
@@ -8,7 +10,7 @@ export interface RegistrationOverview {
 }
 
 export interface MandateTimelineItem {
-  mandat: MandatDto;
+  mandat: PeriodeMandatDto;
   phases: PhaseTimelineItem[];
 }
 

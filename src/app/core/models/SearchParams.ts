@@ -8,6 +8,7 @@ export interface SearchParams {
   bourse: string[];
   registrationStatus: string | null;
   mandatIds: string[];
+  memberIds?: string[];
   phaseIds: string[];
   registrationType: string | null;
   sortColumn: string;
