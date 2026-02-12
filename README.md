@@ -1,83 +1,132 @@
-# AEMUD - Portail de Gestion de l'Association
+# aemud-frontend - Application de Gestion (AEMUD)
 
-![Logo AEMUD](src/assets/background/logo_aemud_Plan_de_travail_1.png)
+Cette application front-end, développée avec Angular, est conçue pour la gestion des membres, des contributions et des tâches administratives d'une association. Elle intègre une authentification robuste, un contrôle d'accès basé sur les rôles, et une architecture modulaire pour une maintenance et une évolutivité facilitées.
 
-Ce projet est une application web front-end développée avec Angular, conçue pour offrir une solution complète de gestion pour une association. Elle permet de gérer les membres, les sessions, les configurations internes, et bien plus encore.
+## Technologies Utilisées
 
-## ✨ Fonctionnalités Clés
+*   **Framework :** Angular (version spécifiée dans `package.json`)
+*   **Langage :** TypeScript
+*   **Gestion d'état asynchrone :** RxJS
+*   **Styling :** SCSS, Bootstrap
+*   **Tests :** Karma, Jasmine
+*   **Qualité de code :** ESLint
+*   **Outils de build :** Angular CLI
+*   **Intégration API :** RESTful API
 
-- **Tableau de Bord Intuitif** : Vue d'ensemble des informations importantes de l'association.
-- **Gestion des Membres** : Système CRUD (Créer, Lire, Mettre à jour, Supprimer) complet pour les membres.
-- **Authentification Sécurisée** : Espace de connexion, gestion de mots de passe et protection des routes basée sur les rôles (Admin, Utilisateur).
-- **Configuration Dynamique** : Interface pour les administrateurs pour gérer les sessions, les clubs, les commissions, etc.
-- **Suivi des Contributions** : Visualisation et gestion des cotisations des membres.
-- **Module de Notifications** : Envoi de communications ciblées aux membres.
+## Fonctionnalités Principales
 
-## 🛠️ Stack Technique
+*   **Authentification Utilisateur :** Connexion, déconnexion, changement de mot de passe, gestion de la première connexion.
+*   **Contrôle d'Accès :** Protection des routes et des fonctionnalités basée sur les rôles (Super Administrateur, Administrateur, Utilisateur) via Angular Guards.
+*   **Gestion des Données :** Modules dédiés à la gestion des membres, des phases de mandat, des contributions et des notifications.
+*   **Interface Réactive :** Design responsive adapté à différentes tailles d'écran.
+*   **Optimisation des Performances :** Utilisation du lazy loading pour les modules feature.
+*   **Gestion des Erreurs :** Intercepteurs HTTP globaux pour gérer les erreurs API (ex: 401 Unauthorized, 403 Forbidden).
 
-| Domaine               | Technologies                                                             |
-|-----------------------|--------------------------------------------------------------------------|
-| **Framework**         | Angular 16+, TypeScript                                                  |
-| **Style**             | SCSS, avec une architecture BEM et des variables centralisées            |
-| **Gestion d'État**    | Services Angular et RxJS (BehaviorSubject) pour un état réactif et léger |
-| **Qualité de Code**   | ESLint                                                                   |
-| **Tests**             | Karma, Jasmine                                                           |
-| **Environnement Dev** | Docker, Docker Compose, Nginx, `json-server` pour le mock d'API          |
-
-## 🏛️ Architecture
-
-Le projet est structuré en suivant les meilleures pratiques d'Angular pour garantir la maintenabilité et l'évolutivité :
-
-- `CoreModule` : Fournit les services singletons, les gardes et les intercepteurs HTTP.
-- `SharedModule` : Contient les composants, directives et pipes réutilisables à travers l'application.
-- `Features Modules` : Chaque fonctionnalité métier (authentification, membres, etc.) est isolée dans son propre module.
-
-## 🚀 Démarrage Rapide
+## Démarrage Rapide
 
 ### Prérequis
 
-- Node.js (version 18.x ou supérieure)
-- npm (version 9.x ou supérieure)
-- Docker et Docker Compose (recommandé)
+Assurez-vous d'avoir les éléments suivants installés :
+*   Node.js (LTS version recommandée)
+*   npm (normalement inclus avec Node.js) ou Yarn
+*   Angular CLI (`npm install -g @angular/cli`)
 
-### Installation et Lancement
+### Installation
 
-1. **Clonez le dépôt :**
-   ```bash
-   git clone [URL_DU_REPO]
-   cd amued-frontend
-   ```
+1.  Clonez le dépôt :
+    ```bash
+    git clone [URL_DU_DEPOT]
+    ```
+2.  Naviguez vers le répertoire du projet :
+    ```bash
+    cd aemud-frontend
+    ```
+3.  Installez les dépendances :
+    ```bash
+    npm install # ou yarn install
+    ```
 
-2. **Installez les dépendances :**
-   ```bash
-   npm install
-   ```
+### Configuration
 
-3. **Lancez le mock server (API simulée) :**
-   *Dans un terminal séparé*, exécutez la commande suivante pour démarrer `json-server` qui servira les données du fichier `data/db.json`.
-   ```bash
-   npm run start:db
-   ```
-   *(Note : Il faudra peut-être ajouter le script `"start:db": "json-server --watch data/db.json"` à votre `package.json`)*
+L'URL de l'API backend est configurée dans les fichiers d'environnement. Modifiez `src/environments/environment.ts` (ou `environment.development.ts` pour le développement local) pour pointer vers votre instance backend :
 
-4. **Lancez le serveur de développement Angular :**
-   ```bash
-   npm start
-   ```
-   L'application sera accessible à l'adresse `http://localhost:4200/`.
-
-### Utilisation avec Docker
-
-Vous pouvez également lancer l'ensemble de l'environnement (application + mock server) avec Docker Compose.
-
-```bash
-docker-compose up --build
+```typescript
+export const environment = {
+  production: false,
+  API_URL: 'http://localhost:8080/api', // Adaptez selon votre configuration backend
+};
 ```
 
-L'application sera accessible sur `http://localhost:80/`.
+## Scripts de Développement
 
-## 📦 Commandes Utiles
+*   **Serveur de développement :** Lance le serveur de développement local. L'application sera disponible sur `http://localhost:4200/`. Les changements de fichiers seront automatiquement rechargés.
+    ```bash
+    ng serve
+    ```
+*   **Build de production :** Construit l'application pour le déploiement en production. Les fichiers de sortie seront placés dans le dossier spécifié par `outputPath` dans `angular.json` (ex: `dist/`).
+    ```bash
+    ng build --configuration production
+    ```
+*   **Tests unitaires :** Exécute les tests unitaires via Karma.
+    ```bash
+    ng test
+    ```
+*   **Linting :** Vérifie le code source pour les erreurs de style et de potentiel problème via ESLint.
+    ```bash
+    ng lint
+    ```
 
-- `npm run build` : Compiler le projet pour la production.
-- `npm run test` : Lancer les tests unitaires.
-- `npm run lint` : Analyser la qualité du code avec ESLint.
+## Architecture du Projet
+
+Le projet suit une structure modulaire typique des applications Angular de taille moyenne à grande :
+
+*   `src/app/core/` : Contient les services singleton, guards, interceptors, modèles de données partagés.
+*   `src/app/features/` : Regroupe les modules métier spécifiques à une fonctionnalité (ex: `auth`, `member`, `contribution`).
+*   `src/app/shared/` : Composants réutilisables, pipes, directives partagés entre plusieurs modules feature.
+
+## Captures d'écran
+
+Voici quelques aperçus de l'application en action.
+
+### Authentification
+*   **Page de connexion**
+    ![Page de connexion](assets/screenshots/auth-login.png)
+
+### Membres
+*   **Liste des membres**
+    ![Liste des membres](assets/screenshots/member-list.png)
+*   **Ajout d'un membre (formulaire multipage)**
+    ![Ajout d'un membre](assets/screenshots/member-add.png)
+*   **Détail d'un membre (avec calendrier de cotisations)**
+    ![Détail d'un membre](assets/screenshots/member-detail.png)
+
+### Configuration
+*   **Tableau de bord de Configuration (avec onglets Clubs/Commissions/Bourses)**
+    ![Tableau de bord de Configuration](assets/screenshots/config-dashboard.png)
+*   **Liste des Périodes de Mandat**
+    ![Liste des Périodes de Mandat](assets/screenshots/config-mandat-list.png)
+*   **Création/Modification d'une Période de Mandat (avec gestion des phases)**
+    ![Création/Modification d'une Période de Mandat](assets/screenshots/config-mandat-add-edit.png)
+
+### Notifications
+*   **Tableau de bord des Notifications (Admin)**
+    ![Tableau de bord des Notifications](assets/screenshots/notif-dashboard.png)
+*   **Liste des Campagnes de Communication**
+    ![Liste des Campagnes de Communication](assets/screenshots/notif-campaigns-list.png)
+*   **Envoi de SMS immédiat**
+    ![Envoi de SMS immédiat](assets/screenshots/notif-sms-instant.png)
+*   **Gestion des Modèles de SMS/Email**
+    ![Gestion des Modèles](assets/screenshots/notif-templates.png)
+
+### Utilisateurs
+*   **Liste des utilisateurs**
+    ![Liste des utilisateurs](assets/screenshots/user-list.png)
+*   **Création/Modification d'un utilisateur (avec sélection de membre et rôles)**
+    ![Création/Modification d'un utilisateur](assets/screenshots/user-add.png)
+*   **Détail d'un utilisateur**
+    ![Détail d'un utilisateur](assets/screenshots/user-detail.png)
+
+## Auteur
+
+**Boubacar Diallo**
+*   GitHub : [http://github.com/ciidii](http://github.com/ciidii)
