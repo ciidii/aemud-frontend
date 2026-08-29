@@ -1,0 +1,38 @@
+.form-schema-admin-container {
+  .btn-xs {
+    padding: 0.15rem 0.35rem;
+    font-size: 0.75rem;
+  }
+
+  .accordion-button {
+    font-size: 0.95rem;
+
+    &:not(.collapsed) {
+      background-color: #f8fafc;
+      color: #1e293b;
+      box-shadow: none;
+    }
+
+    &::after {
+      margin-left: 0;
+    }
+  }
+
+  .badge {
+    font-weight: 500;
+    font-size: 0.78rem;
+    padding: 0.35em 0.6em;
+  }
+
+  table {
+    font-size: 0.88rem;
+
+    code {
+      font-size: 0.82rem;
+      color: #0d6efd;
+      background-color: #e7f1ff;
+      padding: 0.15rem 0.4rem;
+      border-radius: 4px;
+    }
+  }
+}
