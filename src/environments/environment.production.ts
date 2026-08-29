@@ -3,7 +3,7 @@ import {Environment} from './environment.interface';
 export const environment: Environment = {
   name: 'stage',
   production: true,
-  apiKey: 'http://apiaemudcontainer:8081',
+  apiKey: 'http://apiaemudcontainer:8080',
   identity_API_URL: 'https://stage.identity.com',
   storage_API_URL: 'https://stage.storage.com',
   users_API_URL: 'https://stage.user.com',

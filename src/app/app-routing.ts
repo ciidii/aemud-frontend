@@ -72,6 +72,11 @@ export const routes: Routes = [
     ]
   },
   {
+    path: 'census',
+    loadComponent: () => import('./features/census/pages/census-page/census-page.component').then(m => m.CensusPageComponent),
+    title: 'Grand Recensement & Alumni AEMUD',
+  },
+  {
     path: 'auth',
     loadChildren: () => import('./features/auth/AUTH_ROUTES').then(m => m.APP_ROUTES),
     title: 'Authentication',

@@ -1,0 +1,48 @@
+.dynamic-field-container {
+  position: relative;
+
+  .small-badge {
+    font-size: 0.7rem;
+    font-weight: 500;
+    padding: 0.2rem 0.45rem;
+    border-radius: 4px;
+  }
+
+  .form-label {
+    font-size: 0.88rem;
+    color: #2d3748;
+  }
+
+  .form-control, .form-select {
+    font-size: 0.9rem;
+    border-radius: 6px;
+    border-color: #cbd5e1;
+    transition: all 0.2s ease-in-out;
+
+    &:focus {
+      border-color: #198754;
+      box-shadow: 0 0 0 0.2rem rgba(25, 135, 84, 0.15);
+    }
+  }
+
+  .form-check-input:checked {
+    background-color: #198754;
+    border-color: #198754;
+  }
+
+  .animate-fade-in {
+    animation: fadeIn 0.2s ease-in;
+    font-size: 0.8rem;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-3px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

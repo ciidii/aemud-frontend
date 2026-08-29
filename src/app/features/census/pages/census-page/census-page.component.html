@@ -1,0 +1,65 @@
+<div class="census-container py-5">
+  <div class="container">
+    
+    <!-- En-tête officiel AEMUD -->
+    <div class="text-center mb-5 header-intro">
+      <div class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-3 fw-bold border border-success-subtle">
+        CAMPAGNE OFFICIELLE AEMUD
+      </div>
+      <h1 class="display-5 fw-bold text-dark mb-3">Grand Recensement & Réseau Alumni</h1>
+      <p class="lead text-muted mx-auto" style="max-width: 720px;">
+        Étudiants actuels, nouveaux bacheliers et anciens diplômés : renseignez vos informations pour mettre à jour le registre officiel et rejoindre le Cercle de solidarité de l'AEMUD.
+      </p>
+    </div>
+
+    <!-- Spinner de Chargement -->
+    <div *ngIf="isLoading" class="text-center py-5">
+      <div class="spinner-border text-success" style="width: 3rem; height: 3rem;" role="status">
+        <span class="visually-hidden">Chargement du formulaire...</span>
+      </div>
+      <p class="text-muted mt-3">Chargement du formulaire dynamique en cours...</p>
+    </div>
+
+    <!-- Écran de Succès après Soumission -->
+    <div *ngIf="isSubmittedSuccess" class="row justify-content-center">
+      <div class="col-lg-8">
+        <div class="card shadow-sm border-0 rounded-4 p-5 text-center bg-white animate-fade-in">
+          <div class="icon-circle bg-success-subtle text-success mx-auto mb-4">
+            <i class="bi bi-check-circle-fill" style="font-size: 3.5rem;"></i>
+          </div>
+          <h2 class="fw-bold text-dark mb-3">Auto-Recensement Enregistré !</h2>
+          <p class="text-muted mb-4 fs-5">
+            Merci <strong>{{ submittedMember?.firstname }} {{ submittedMember?.name }}</strong> ! Vos informations ont été enregistrées avec succès dans la base de données de l'AEMUD.
+          </p>
+          
+          <div class="alert alert-light border text-start p-4 mb-4 rounded-3">
+            <h6 class="fw-bold text-dark mb-2"><i class="bi bi-info-circle text-primary me-2"></i>Que se passe-t-il maintenant ?</h6>
+            <ul class="mb-0 text-muted small">
+              <li class="mb-1">Si vous êtes étudiant, votre compte utilisateur a été provisionné et vos accès vous seront envoyés par email.</li>
+              <li>Si vous êtes diplômé (Alumni), vous faites désormais partie du Cercle d'honneur et recevrez nos actualités et opportunités de mentorat.</li>
+            </ul>
+          </div>
+
+          <div class="d-flex justify-content-center gap-3">
+            <button class="btn btn-success btn-lg px-4" (click)="goToLogin()">
+              <i class="bi bi-box-arrow-in-right me-2"></i> Accéder à l'Espace Membre
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Formulaire Dynamique -->
+    <div *ngIf="!isLoading && !isSubmittedSuccess && schema" class="row justify-content-center">
+      <div class="col-lg-9 col-xl-8">
+        <app-dynamic-form
+          [schema]="schema"
+          [submitButtonText]="'Valider mon Recensement'"
+          [isSubmitting]="isSubmitting"
+          (formSubmit)="handleFormSubmit($event)"
+        ></app-dynamic-form>
+      </div>
+    </div>
+
+  </div>
+</div>

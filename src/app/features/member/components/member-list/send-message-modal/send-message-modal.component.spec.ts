@@ -1,5 +1,7 @@
 import {ComponentFixture, TestBed} from '@angular/core/testing';
-
+import {provideHttpClient} from '@angular/common/http';
+import {provideHttpClientTesting} from '@angular/common/http/testing';
+import {provideToastr} from 'ngx-toastr';
 import {SendMessageModalComponent} from './send-message-modal.component';
 
 describe('SendMessageModalComponent', () => {
@@ -8,7 +10,12 @@ describe('SendMessageModalComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [SendMessageModalComponent]
+      imports: [SendMessageModalComponent],
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        provideToastr()
+      ]
     })
       .compileComponents();
 

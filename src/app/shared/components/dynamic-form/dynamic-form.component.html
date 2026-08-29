@@ -1,0 +1,48 @@
+<form *ngIf="form && schema" [formGroup]="form" (ngSubmit)="onSubmit()" class="dynamic-form-wrapper">
+
+  <!-- Group Loop -->
+  <ng-container *ngFor="let group of schema.groups">
+    <div *ngIf="isGroupVisible(group)" class="card shadow-sm border-0 mb-4 form-group-card">
+      
+      <!-- Card Header -->
+      <div class="card-header bg-white border-bottom py-3">
+        <div class="d-flex align-items-center">
+          <div class="group-indicator me-3"></div>
+          <div>
+            <h5 class="card-title mb-0 fw-bold text-dark">{{ group.title }}</h5>
+            <small *ngIf="group.description" class="text-muted">{{ group.description }}</small>
+          </div>
+        </div>
+      </div>
+
+      <!-- Card Body with 2-Column Responsive Grid -->
+      <div class="card-body p-4">
+        <div class="row g-3">
+          <div
+            *ngFor="let field of group.fields"
+            [class]="field.type === 'TEXTAREA' || field.type === 'MULTI_SELECT' ? 'col-12' : 'col-md-6 col-12'"
+          >
+            <app-dynamic-field
+              [field]="field"
+              [formGroup]="form"
+            ></app-dynamic-field>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- Form Actions Bar -->
+  <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
+    <button
+      type="submit"
+      class="btn btn-success btn-lg px-4 d-flex align-items-center shadow-sm"
+      [disabled]="isSubmitting"
+    >
+      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+      <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
+      {{ submitButtonText }}
+    </button>
+  </div>
+
+</form>

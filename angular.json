@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "C:/workspace/aemud/projets/App/aemud-api/src/main/resources/static",
+            "outputPath": "dist/amued-frontend",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": [
@@ -60,8 +60,7 @@
                   "maximumError": "2mb"
                 }
               ],
-              "outputHashing": "all",
-              "outputPath": "C:/workspace/aemud/projets/App/aemud-api/src/main/resources/static"
+              "outputHashing": "all"
             },
             "staging": {
               "fileReplacements": [
@@ -122,14 +121,20 @@
               "src/assets"
             ],
             "styles": [
-              "node_modules/bootstrap/dist/css/bootstrap.css",
-              "src/styles.css",
-              "src/assets/fonts/font.css"
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
+              "src/styles.scss",
+              "node_modules/ngx-toastr/toastr.css",
+              "./node_modules/intl-tel-input/build/css/intlTelInput.css"
             ],
             "scripts": [
               "node_modules/jquery/dist/jquery.js",
               "node_modules/bootstrap/dist/js/bootstrap.bundle.js"
-            ]
+            ],
+            "stylePreprocessorOptions": {
+              "includePaths": [
+                "src/assets/scss"
+              ]
+            }
           }
         },
         "lint": {
