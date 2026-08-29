@@ -24,8 +24,12 @@ export class FormSchemaAdminComponent implements OnInit {
   isLoading: boolean = true;
   isSaving: boolean = false;
   isPreviewModalOpen: boolean = false;
-  isAddFieldModalOpen: boolean = false;
 
+  // --- Modals State ---
+  isAddFieldModalOpen: boolean = false;
+  isAddGroupModalOpen: boolean = false;
+
+  // --- New Field State ---
   selectedGroupCode: string = '';
   newField: {
     key: string;
@@ -41,6 +45,24 @@ export class FormSchemaAdminComponent implements OnInit {
     groupCode: string;
     field: FormFieldDefinition;
     optionsInput: string;
+  } | null = null;
+
+  // --- New / Edit Group State ---
+  newGroup: {
+    title: string;
+    description: string;
+    visibilityTarget: 'ALL' | 'STUDENT' | 'ALUMNI';
+  } = {
+    title: '',
+    description: '',
+    visibilityTarget: 'ALL'
+  };
+
+  editingGroup: {
+    group: FormGroupDefinition;
+    title: string;
+    description: string;
+    visibilityTarget: 'ALL' | 'STUDENT' | 'ALUMNI';
   } | null = null;
 
   availableFieldTypes: {value: FieldType; label: string}[] = [
@@ -96,7 +118,7 @@ export class FormSchemaAdminComponent implements OnInit {
   }
 
   resetToDefault(): void {
-    if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire aux valeurs d\'usine officielles ? Tous les champs personnalisés seront réinitialisés.')) {
+    if (!confirm('Êtes-vous sûr de vouloir réinitialiser le formulaire aux valeurs d\'usine officielles ? Tous les groupes et champs personnalisés seront réinitialisés.')) {
       return;
     }
 
@@ -114,7 +136,146 @@ export class FormSchemaAdminComponent implements OnInit {
     });
   }
 
-  // --- Modal Ajout de Champ ---
+  // ================= GESTION DES GROUPES (SECTIONS) =================
+
+  openAddGroupModal(): void {
+    this.newGroup = {
+      title: '',
+      description: '',
+      visibilityTarget: 'ALL'
+    };
+    this.isAddGroupModalOpen = true;
+  }
+
+  closeAddGroupModal(): void {
+    this.isAddGroupModalOpen = false;
+  }
+
+  submitNewGroup(): void {
+    if (!this.newGroup.title || this.newGroup.title.trim() === '') {
+      this.toastr.warning('Veuillez renseigner le nom de la section.', 'Validation');
+      return;
+    }
+
+    if (!this.schema) return;
+
+    const baseCode = this.slugify(this.newGroup.title).toUpperCase() || 'CUSTOM_GRP';
+    let uniqueCode = baseCode;
+    let counter = 1;
+    while (this.schema.groups.some(g => g.code === uniqueCode)) {
+      uniqueCode = `${baseCode}_${counter++}`;
+    }
+
+    let visibilityCondition: any = undefined;
+    if (this.newGroup.visibilityTarget === 'STUDENT') {
+      visibilityCondition = {dependsOn: 'isStudent', equals: true};
+    } else if (this.newGroup.visibilityTarget === 'ALUMNI') {
+      visibilityCondition = {dependsOn: 'isStudent', equals: false};
+    }
+
+    const groupToAdd: FormGroupDefinition = {
+      id: 'grp-' + uniqueCode.toLowerCase() + '-' + Date.now(),
+      code: uniqueCode,
+      title: this.newGroup.title.trim(),
+      description: this.newGroup.description?.trim() || undefined,
+      order: this.schema.groups.length + 1,
+      isActive: true,
+      visibilityCondition,
+      fields: []
+    };
+
+    this.schema.groups.push(groupToAdd);
+    this.closeAddGroupModal();
+    this.toastr.success(`Section "${groupToAdd.title}" créée avec succès. Vous pouvez y ajouter des champs.`, 'Section Ajoutée');
+  }
+
+  openEditGroupModal(group: FormGroupDefinition): void {
+    let visibilityTarget: 'ALL' | 'STUDENT' | 'ALUMNI' = 'ALL';
+    if (group.visibilityCondition?.dependsOn === 'isStudent') {
+      visibilityTarget = group.visibilityCondition.equals === true ? 'STUDENT' : 'ALUMNI';
+    }
+
+    this.editingGroup = {
+      group,
+      title: group.title,
+      description: group.description || '',
+      visibilityTarget
+    };
+  }
+
+  closeEditGroupModal(): void {
+    this.editingGroup = null;
+  }
+
+  submitEditGroup(): void {
+    if (!this.editingGroup || !this.schema) return;
+
+    if (!this.editingGroup.title || this.editingGroup.title.trim() === '') {
+      this.toastr.warning('Le titre de la section est obligatoire.', 'Validation');
+      return;
+    }
+
+    this.editingGroup.group.title = this.editingGroup.title.trim();
+    this.editingGroup.group.description = this.editingGroup.description.trim() || undefined;
+
+    if (this.editingGroup.visibilityTarget === 'STUDENT') {
+      this.editingGroup.group.visibilityCondition = {dependsOn: 'isStudent', equals: true};
+    } else if (this.editingGroup.visibilityTarget === 'ALUMNI') {
+      this.editingGroup.group.visibilityCondition = {dependsOn: 'isStudent', equals: false};
+    } else {
+      this.editingGroup.group.visibilityCondition = undefined;
+    }
+
+    this.closeEditGroupModal();
+    this.toastr.info('Section modifiée. Pensez à enregistrer vos modifications.', 'Modifié');
+  }
+
+  deleteGroup(group: FormGroupDefinition): void {
+    if (this.isCoreGroup(group)) {
+      this.toastr.error('Cette section contient des informations système indispensables et ne peut pas être supprimée.', 'Action Interdite');
+      return;
+    }
+
+    if (!confirm(`Confirmez-vous la suppression de la section "${group.title}" et de tous ses champs associés ?`)) {
+      return;
+    }
+
+    if (!this.schema) return;
+
+    this.schema.groups = this.schema.groups.filter(g => g.code !== group.code);
+    this.reindexGroups();
+    this.toastr.warning(`Section "${group.title}" supprimée.`, 'Suppression');
+  }
+
+  isCoreGroup(group: FormGroupDefinition): boolean {
+    return group.fields.some(f => f.category === 'CORE');
+  }
+
+  moveGroupUp(index: number): void {
+    if (!this.schema || index <= 0) return;
+    const temp = this.schema.groups[index];
+    this.schema.groups[index] = this.schema.groups[index - 1];
+    this.schema.groups[index - 1] = temp;
+    this.reindexGroups();
+  }
+
+  moveGroupDown(index: number): void {
+    if (!this.schema || index >= this.schema.groups.length - 1) return;
+    const temp = this.schema.groups[index];
+    this.schema.groups[index] = this.schema.groups[index + 1];
+    this.schema.groups[index + 1] = temp;
+    this.reindexGroups();
+  }
+
+  private reindexGroups(): void {
+    if (!this.schema) return;
+    this.schema.groups.forEach((g, idx) => {
+      g.order = idx + 1;
+    });
+  }
+
+  // ================= GESTION DES CHAMPS =================
+
   openAddFieldModal(groupCode?: string): void {
     this.selectedGroupCode = groupCode || (this.schema?.groups[0]?.code || '');
     this.newField = this.getEmptyNewField();
@@ -132,13 +293,21 @@ export class FormSchemaAdminComponent implements OnInit {
   }
 
   submitNewField(): void {
-    if (!this.newField.label || !this.newField.key || !this.selectedGroupCode) {
-      this.toastr.warning('Veuillez renseigner le libellé et l\'identifiant du champ.', 'Validation');
+    if (!this.newField.label || !this.selectedGroupCode) {
+      this.toastr.warning('Veuillez renseigner le libellé de la question.', 'Validation');
       return;
     }
 
     const group = this.schema?.groups.find((g: FormGroupDefinition) => g.code === this.selectedGroupCode);
     if (!group) return;
+
+    let autoKey = this.newField.key?.trim();
+    if (!autoKey) {
+      autoKey = this.slugify(this.newField.label);
+    }
+    if (!autoKey) {
+      autoKey = 'field_' + Date.now();
+    }
 
     // Parse options if SELECT, RADIO, MULTI_SELECT
     let parsedOptions: string[] | undefined = undefined;
@@ -150,7 +319,7 @@ export class FormSchemaAdminComponent implements OnInit {
     }
 
     const fieldToAdd: FormFieldDefinition = {
-      key: this.newField.key.trim(),
+      key: autoKey,
       label: this.newField.label.trim(),
       category: 'CUSTOM',
       type: this.newField.type,
@@ -162,10 +331,9 @@ export class FormSchemaAdminComponent implements OnInit {
 
     group.fields.push(fieldToAdd);
     this.closeAddFieldModal();
-    this.toastr.info(`Champ "${fieldToAdd.label}" ajouté au groupe. N'oubliez pas d'enregistrer.`, 'Ajouté');
+    this.toastr.info(`Question "${fieldToAdd.label}" ajoutée. N'oubliez pas d'enregistrer les modifications.`, 'Ajouté');
   }
 
-  // --- Édition d'un Champ ---
   openEditFieldModal(groupCode: string, field: FormFieldDefinition): void {
     this.editingField = {
       groupCode,
@@ -193,28 +361,26 @@ export class FormSchemaAdminComponent implements OnInit {
           .filter((o: string) => o.length > 0);
       }
       group.fields[index] = this.editingField.field;
-      this.toastr.info('Champ modifié. N\'oubliez pas d\'enregistrer les changements.', 'Modifié');
+      this.toastr.info('Question modifiée.', 'Modifié');
     }
 
     this.closeEditFieldModal();
   }
 
-  // --- Suppression de Champ ---
   deleteField(group: FormGroupDefinition, field: FormFieldDefinition): void {
     if (field.category === 'CORE') {
-      this.toastr.error('Les champs CORE indispensables au système ne peuvent pas être supprimés.', 'Action Interdite');
+      this.toastr.error('Les champs Système indispensables ne peuvent pas être supprimés.', 'Action Interdite');
       return;
     }
 
-    if (!confirm(`Confirmez-vous la suppression du champ "${field.label}" ?`)) {
+    if (!confirm(`Confirmez-vous la suppression de la question "${field.label}" ?`)) {
       return;
     }
 
     group.fields = group.fields.filter((f: FormFieldDefinition) => f.key !== field.key);
-    this.toastr.warning(`Champ "${field.label}" supprimé du groupe.`, 'Suppression');
+    this.toastr.warning(`Question "${field.label}" supprimée de la section.`, 'Suppression');
   }
 
-  // --- Réorganisation de l'ordre ---
   moveFieldUp(group: FormGroupDefinition, index: number): void {
     if (index <= 0) return;
     const temp = group.fields[index];

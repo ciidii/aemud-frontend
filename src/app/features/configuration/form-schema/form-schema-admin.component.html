@@ -5,7 +5,7 @@
     <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
       <span class="visually-hidden">Chargement...</span>
     </div>
-    <p class="text-muted mt-3" style="font-size: 1.4rem;">Chargement du moteur de formulaires...</p>
+    <p class="text-muted mt-3" style="font-size: 1.4rem;">Chargement du gestionnaire de formulaires...</p>
   </div>
 
   <ng-container *ngIf="!isLoading && schema">
@@ -22,7 +22,7 @@
             <span class="badge badge-version">v{{ schema.version }}</span>
           </div>
           <p class="text-muted mb-0 small-text">
-            Configurez les sections, personnalisez les questions et adaptez le parcours étudiants / diplômés.
+            Organisez les sections, ajoutez de nouveaux groupes de questions et adaptez le parcours selon les besoins.
           </p>
         </div>
       </div>
@@ -35,7 +35,10 @@
         <button class="btn btn-outline-secondary btn-action" (click)="openPreviewModal()">
           <i class="bi bi-eye me-1"></i> Aperçu
         </button>
-        <button class="btn btn-outline-primary btn-action" (click)="openAddFieldModal()">
+        <button class="btn btn-outline-primary btn-action" (click)="openAddGroupModal()">
+          <i class="bi bi-folder-plus me-1"></i> Nouvelle Section
+        </button>
+        <button class="btn btn-primary btn-action" (click)="openAddFieldModal()">
           <i class="bi bi-plus-lg me-1"></i> Nouveau Champ
         </button>
         <button class="btn btn-teal btn-action px-3 text-white fw-semibold shadow-sm" (click)="saveSchema()" [disabled]="isSaving">
@@ -62,9 +65,33 @@
           >
             <div class="d-flex align-items-center justify-content-between w-100 me-3">
               
-              <!-- Group Title -->
+              <!-- Group Title & Reorder / Actions -->
               <div class="d-flex align-items-center gap-3">
+                
+                <!-- Group Reorder Arrows -->
+                <div class="btn-group reorder-btn-group" role="group" (click)="$event.stopPropagation()">
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-icon"
+                    [disabled]="gIdx === 0"
+                    (click)="moveGroupUp(gIdx)"
+                    title="Monter cette section"
+                  >
+                    <i class="bi bi-chevron-up"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-sm btn-icon"
+                    [disabled]="gIdx === schema.groups.length - 1"
+                    (click)="moveGroupDown(gIdx)"
+                    title="Descendre cette section"
+                  >
+                    <i class="bi bi-chevron-down"></i>
+                  </button>
+                </div>
+
                 <div class="group-status-dot" [class.active]="group.isActive"></div>
+                
                 <div>
                   <div class="d-flex align-items-center gap-2">
                     <span class="fw-bold group-title-text">{{ group.title }}</span>
@@ -73,13 +100,35 @@
                 </div>
               </div>
 
-              <!-- Conditions & Status Switch -->
+              <!-- Conditions, Edit/Delete Group & Status Switch -->
               <div class="d-flex align-items-center gap-3">
                 <span *ngIf="group.visibilityCondition" class="badge badge-condition d-none d-sm-inline-flex align-items-center">
                   <i class="bi bi-funnel me-1"></i> {{ getVisibilityConditionLabel(group.visibilityCondition) }}
                 </span>
                 <span class="badge badge-field-count">{{ group.fields.length }} champs</span>
 
+                <!-- Edit Group Button -->
+                <div class="d-inline-flex gap-1" (click)="$event.stopPropagation()">
+                  <button
+                    type="button"
+                    class="btn btn-icon-action btn-edit"
+                    (click)="openEditGroupModal(group)"
+                    title="Modifier le nom ou la visibilité de la section"
+                  >
+                    <i class="bi bi-pencil"></i>
+                  </button>
+                  <button
+                    type="button"
+                    class="btn btn-icon-action btn-delete"
+                    [disabled]="isCoreGroup(group)"
+                    (click)="deleteGroup(group)"
+                    [title]="isCoreGroup(group) ? 'Les sections contenant des champs système ne peuvent pas être supprimées' : 'Supprimer cette section'"
+                  >
+                    <i class="bi bi-trash3"></i>
+                  </button>
+                </div>
+
+                <!-- Group Active Toggle -->
                 <div class="form-check form-switch mb-0 group-switch" (click)="$event.stopPropagation()">
                   <input
                     class="form-check-input"
@@ -87,6 +136,7 @@
                     role="switch"
                     [id]="'switch_' + group.code"
                     [(ngModel)]="group.isActive"
+                    title="Activer / Désactiver cette section"
                   />
                 </div>
               </div>
@@ -118,6 +168,13 @@
                   </tr>
                 </thead>
                 <tbody>
+                  <tr *ngIf="group.fields.length === 0">
+                    <td colspan="6" class="text-center py-4 text-muted">
+                      <i class="bi bi-inbox fs-3 d-block mb-1"></i>
+                      Aucune question dans cette section pour le moment.
+                    </td>
+                  </tr>
+
                   <tr *ngFor="let field of group.fields; let fIdx = index">
                     
                     <!-- Ordre Buttons -->
@@ -198,7 +255,7 @@
                           class="btn btn-icon-action btn-delete"
                           [disabled]="field.category === 'CORE'"
                           (click)="deleteField(group, field)"
-                          [title]="field.category === 'CORE' ? 'Les champs CORE indispensables ne peuvent pas être supprimés' : 'Supprimer'"
+                          [title]="field.category === 'CORE' ? 'Les champs Système indispensables ne peuvent pas être supprimés' : 'Supprimer'"
                         >
                           <i class="bi bi-trash3"></i>
                         </button>
@@ -213,7 +270,7 @@
             <!-- Footer Quick Add Button -->
             <div class="p-3 bg-light-subtle border-top text-end pe-4">
               <button class="btn btn-sm btn-outline-teal" (click)="openAddFieldModal(group.code)">
-                <i class="bi bi-plus-circle me-1"></i> Ajouter un champ dans ce groupe
+                <i class="bi bi-plus-circle me-1"></i> Ajouter un champ dans cette section
               </button>
             </div>
 
@@ -223,6 +280,120 @@
     </div>
 
   </ng-container>
+
+  <!-- ================= MODAL CRÉATION DE SECTION / GROUPE ================= -->
+  <div *ngIf="isAddGroupModalOpen" class="modal-backdrop fade show"></div>
+  <div *ngIf="isAddGroupModalOpen" class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg border-0 rounded-4">
+        
+        <div class="modal-header border-bottom py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-icon-header bg-teal-subtle text-teal">
+              <i class="bi bi-folder-plus"></i>
+            </div>
+            <h5 class="modal-title fw-bold mb-0">Créer une Nouvelle Section</h5>
+          </div>
+          <button type="button" class="btn-close" (click)="closeAddGroupModal()"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            
+            <div class="col-12">
+              <label class="form-label fw-semibold">Titre de la section <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control custom-input"
+                [(ngModel)]="newGroup.title"
+                placeholder="Ex: Besoins pour le Séminaire, Sondage Restauration..."
+              />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description (facultative)</label>
+              <input
+                type="text"
+                class="form-control custom-input"
+                [(ngModel)]="newGroup.description"
+                placeholder="Ex: Informations pratiques et logistiques pour l'organisation"
+              />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">À qui cette section doit-elle s'afficher ?</label>
+              <select class="form-select custom-input" [(ngModel)]="newGroup.visibilityTarget">
+                <option value="ALL">Tout le monde (Étudiants et Diplômés)</option>
+                <option value="STUDENT">Uniquement les étudiants actifs</option>
+                <option value="ALUMNI">Uniquement les diplômés (Alumni)</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer border-top py-3 px-4">
+          <button type="button" class="btn btn-light" (click)="closeAddGroupModal()">Annuler</button>
+          <button type="button" class="btn btn-teal text-white px-4" (click)="submitNewGroup()">
+            <i class="bi bi-check-lg me-1"></i> Créer la section
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <!-- ================= MODAL MODIFICATION DE SECTION ================= -->
+  <div *ngIf="editingGroup" class="modal-backdrop fade show"></div>
+  <div *ngIf="editingGroup" class="modal fade show d-block" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content shadow-lg border-0 rounded-4">
+        
+        <div class="modal-header border-bottom py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-icon-header bg-secondary-subtle text-dark">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+            <h5 class="modal-title fw-bold mb-0">Modifier la Section</h5>
+          </div>
+          <button type="button" class="btn-close" (click)="closeEditGroupModal()"></button>
+        </div>
+
+        <div class="modal-body p-4">
+          <div class="row g-3">
+            
+            <div class="col-12">
+              <label class="form-label fw-semibold">Titre de la section <span class="text-danger">*</span></label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="editingGroup.title" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Description</label>
+              <input type="text" class="form-control custom-input" [(ngModel)]="editingGroup.description" />
+            </div>
+
+            <div class="col-12">
+              <label class="form-label fw-semibold">Affichage conditionnel</label>
+              <select class="form-select custom-input" [(ngModel)]="editingGroup.visibilityTarget">
+                <option value="ALL">Tout le monde (Étudiants et Diplômés)</option>
+                <option value="STUDENT">Uniquement les étudiants actifs</option>
+                <option value="ALUMNI">Uniquement les diplômés (Alumni)</option>
+              </select>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="modal-footer border-top py-3 px-4">
+          <button type="button" class="btn btn-light" (click)="closeEditGroupModal()">Annuler</button>
+          <button type="button" class="btn btn-teal text-white px-4" (click)="submitEditGroup()">
+            Enregistrer les modifications
+          </button>
+        </div>
+
+      </div>
+    </div>
+  </div>
 
   <!-- ================= MODAL AJOUT DE CHAMP ================= -->
   <div *ngIf="isAddFieldModalOpen" class="modal-backdrop fade show"></div>
