@@ -406,6 +406,26 @@ export class MemberDetailComponent implements OnInit {
   private loadData(): void {
     if (!this.memberId) return;
 
+    // 1. Charger immédiatement le membre pour affichage direct
+    this.memberHttpService.getMemberById(this.memberId).subscribe({
+      next: (res) => {
+        const member = res.data;
+        if (!member) {
+          this.notificationService.showError("Membre non trouvé.");
+          this.router.navigate(['/members/list-members']);
+          return;
+        }
+        this.currentMember = member;
+        this.member$ = of(member);
+        this.loadTimelineAndOverview();
+      },
+      error: (err) => {
+        this.notificationService.showError("Impossible de charger les informations du membre.");
+        console.error('Failed to load member', err);
+      }
+    });
+
+    // 2. Charger les mandats disponibles
     this.appStateService.mandats$.pipe(
       filter(mandats => mandats.length > 0),
       take(1)
@@ -413,33 +433,21 @@ export class MemberDetailComponent implements OnInit {
       this.availableMandats = mandats;
     });
 
-    combineLatest([
-      this.appStateService.activeMandat$.pipe(filter((m): m is PeriodeMandatDto => m !== null)),
-      this.memberHttpService.getMemberById(this.memberId).pipe(map(res => res.data))
-    ]).pipe(
+    // 3. Charger le mandat actif et le calendrier des cotisations
+    this.appStateService.activeMandat$.pipe(
+      filter((m): m is PeriodeMandatDto => m !== null),
       take(1)
-    ).subscribe(([activeMandat, member]) => {
-      if (!member) {
-        this.notificationService.showError("Membre non trouvé.");
-        this.router.navigate(['/members/list-members']);
-        return;
-      }
+    ).subscribe(activeMandat => {
       this.activeMandat = activeMandat;
-      this.currentMember = member;
-      this.member$ = of(member);
-      this.loadTimelineAndOverview();
-
-      const activePhaseInMandate = activeMandat.phases.find(p => p.status === PhaseStatus.CURRENT);
+      const activePhaseInMandate = activeMandat.phases?.find(p => p.status === PhaseStatus.CURRENT);
 
       if (activePhaseInMandate) {
         this.selectedPhaseId = activePhaseInMandate.id;
         this.loadContributionData(activePhaseInMandate.id);
-      } else {
-        this.notificationService.showWarning("Aucune phase active trouvée dans le mandat actuel.");
+      } else if (activeMandat.phases && activeMandat.phases.length > 0) {
         const fallbackPhase = activeMandat.phases[0];
-        if (fallbackPhase) {
-          this.loadContributionData(fallbackPhase.id);
-        }
+        this.selectedPhaseId = fallbackPhase.id;
+        this.loadContributionData(fallbackPhase.id);
       }
     });
   }
