@@ -67,7 +67,16 @@ export class MemberAddComponent implements OnInit {
     this.isSubmitting = true;
     const apiUrl = `${environment.API_URL}/census/self-register`;
 
-    this.http.post<ResponseEntityApi<any>>(apiUrl, payload).subscribe({
+    const formattedPayload = {
+      ...payload,
+      firstname: payload['firstname'],
+      lastname: payload['lastname'] || payload['name'] || '',
+      phoneNumber: payload['phoneNumber'] || payload['numberPhone'] || '',
+      isStudent: payload['isStudent'] !== undefined ? Boolean(payload['isStudent']) : true,
+      dynamicAttributes: payload['dynamicAttributes'] || {}
+    };
+
+    this.http.post<ResponseEntityApi<any>>(apiUrl, formattedPayload).subscribe({
       next: response => {
         this.isSubmitting = false;
         this.toastr.success('Membre inscrit avec succès !', 'Inscription Réussie');
