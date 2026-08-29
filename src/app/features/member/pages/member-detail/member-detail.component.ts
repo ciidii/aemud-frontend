@@ -57,16 +57,19 @@ import {
   ContributionMonth,
   ContributionYear
 } from "../../../../core/models/contribution-data.model";
-import {RegistrationModel} from "../../../../core/models/RegistrationModel";
 import {PeriodeMandatDto} from "../../../configuration/periode-mandat/models/periode-mandat.model";
 import {PhaseModel} from "../../../configuration/periode-mandat/models/phase.model";
+import {RegistrationModel} from "../../../../core/models/RegistrationModel";
 import {SearchParams} from "../../../../core/models/SearchParams";
+import {FormSchemaService} from "../../../../core/services/form-schema.service";
+import {FormSchema} from "../../../../core/models/form-schema.model";
+import {DynamicFormComponent} from "../../../../shared/components/dynamic-form/dynamic-form.component";
 
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase, ContributionCalendarComponent],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase, ContributionCalendarComponent, DynamicFormComponent],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -89,6 +92,12 @@ export class MemberDetailComponent implements OnInit {
   isEditAddressInfoModalOpen = false;
   isEditBourseInfoModalOpen = false;
 
+  // Full Member Dynamic Form Edit
+  isEditFullMemberModalOpen = false;
+  fullMemberSchema: FormSchema | null = null;
+  prefilledMemberValues: Record<string, any> = {};
+  isUpdatingMember = false;
+
   // Contribution data
   contributionData: ContributionData | null = null;
   selectedContributions: ContributionMonth[] = [];
@@ -103,6 +112,7 @@ export class MemberDetailComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private memberHttpService = inject(MemberHttpService);
+  private formSchemaService = inject(FormSchemaService);
   private memberStateService = inject(MemberStateService);
   private contributionService = inject(ContributionService);
   private notificationService = inject(NotificationService);
@@ -496,5 +506,136 @@ export class MemberDetailComponent implements OnInit {
     });
   }
 
+  // --- Dynamic Form Full Member Edition ---
+  openEditFullMemberModal(): void {
+    if (!this.currentMember) return;
+    this.formSchemaService.getFormSchema().subscribe({
+      next: (res) => {
+        this.fullMemberSchema = res;
+        this.buildPrefilledValues();
+        this.isEditFullMemberModalOpen = true;
+      },
+      error: (err) => {
+        this.notificationService.showError("Impossible de charger le schéma du formulaire.");
+        console.error('Failed to load schema', err);
+      }
+    });
+  }
+
+  closeEditFullMemberModal(): void {
+    this.isEditFullMemberModalOpen = false;
+  }
+
+  private buildPrefilledValues(): void {
+    if (!this.currentMember) return;
+    const m = this.currentMember;
+
+    let birthdayStr = '';
+    if (m.personalInfo?.birthday && Array.isArray(m.personalInfo.birthday)) {
+      const [y, mon, d] = m.personalInfo.birthday;
+      birthdayStr = `${y}-${String(mon).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+    }
+
+    this.prefilledMemberValues = {
+      firstname: m.personalInfo?.firstname || '',
+      name: m.personalInfo?.name || '',
+      nationality: m.personalInfo?.nationality || 'Sénégalaise',
+      gender: m.personalInfo?.gender || '',
+      birthday: birthdayStr,
+      maritalStatus: m.personalInfo?.maritalStatus || 'SINGLE',
+      email: m.contactInfo?.email || '',
+      numberPhone: m.contactInfo?.numberPhone || '',
+      addressInDakar: m.addressInfo?.addressInDakar || '',
+      addressToCampus: m.addressInfo?.addressToCampus || '',
+      isStudent: m.status !== 'ALUMNI',
+      institutionName: m.academicInfo?.institutionName || '',
+      studiesDomain: m.academicInfo?.studiesDomain || '',
+      studiesLevel: m.academicInfo?.studiesLevel || '',
+      bourseId: m.bourse?.libelle || '',
+      bacSeries: m.membershipInfo?.bacSeries || '',
+      bacMention: m.membershipInfo?.bacMention || '',
+      yearOfBac: m.membershipInfo?.yearOfBac || '',
+      legacyInstitution: m.membershipInfo?.legacyInstitution || '',
+      arabicProficiency: m.religiousKnowledge?.arabicProficiency || '',
+      coranLevel: m.religiousKnowledge?.coranLevel || '',
+      ...(m.dynamicAttributes || {})
+    };
+  }
+
+  handleFullMemberSave(formData: Record<string, any>): void {
+    if (!this.memberId) return;
+    this.isUpdatingMember = true;
+
+    const updatePayload: any = {
+      id: this.memberId,
+      personalInfo: {
+        firstname: formData['firstname'],
+        name: formData['name'],
+        nationality: formData['nationality'],
+        gender: formData['gender'],
+        birthday: formData['birthday'],
+        maritalStatus: formData['maritalStatus']
+      },
+      contactInfo: {
+        email: formData['email'],
+        numberPhone: formData['numberPhone'],
+        personToCalls: this.currentMember?.contactInfo?.personToCalls || []
+      },
+      addressInfo: {
+        addressInDakar: formData['addressInDakar'],
+        addressToCampus: formData['addressToCampus']
+      },
+      academicInfo: {
+        institutionName: formData['institutionName'],
+        studiesDomain: formData['studiesDomain'],
+        studiesLevel: formData['studiesLevel']
+      },
+      membershipInfo: {
+        legacyInstitution: formData['legacyInstitution'],
+        bacSeries: formData['bacSeries'],
+        bacMention: formData['bacMention'],
+        yearOfBac: formData['yearOfBac'],
+        aemudCourses: formData['aemudCourses'],
+        otherCourses: formData['otherCourses'],
+        participatedActivity: formData['participatedActivity'],
+        politicOrganisation: formData['politicOrganisation']
+      },
+      religiousKnowledge: {
+        arabicProficiency: formData['arabicProficiency'],
+        coranLevel: formData['coranLevel'],
+        aqida: this.currentMember?.religiousKnowledge?.aqida || [],
+        fiqh: this.currentMember?.religiousKnowledge?.fiqh || []
+      },
+      bourse: formData['bourseId'] || this.currentMember?.bourse?.id,
+      clubs: this.currentMember?.clubs?.map(c => c.id) || [],
+      commissions: this.currentMember?.commissions?.map(c => c.id) || []
+    };
+
+    this.memberHttpService.updateMember(updatePayload).subscribe({
+      next: () => {
+        this.isUpdatingMember = false;
+        this.notificationService.showSuccess("Fiche membre mise à jour avec succès.");
+        this.closeEditFullMemberModal();
+        this.loadData();
+      },
+      error: (err) => {
+        this.isUpdatingMember = false;
+        this.notificationService.showError("Erreur lors de la mise à jour du membre.");
+        console.error('Update member failed', err);
+      }
+    });
+  }
+
+  hasDynamicAttributes(member: MemberDataResponse): boolean {
+    return !!member.dynamicAttributes && Object.keys(member.dynamicAttributes).length > 0;
+  }
+
+  getDynamicAttributeEntries(member: MemberDataResponse): { key: string, value: any }[] {
+    if (!member.dynamicAttributes) return [];
+    return Object.entries(member.dynamicAttributes).map(([key, value]) => ({
+      key,
+      value: typeof value === 'boolean' ? (value ? 'Oui' : 'Non') : Array.isArray(value) ? value.join(', ') : value
+    }));
+  }
 }
 

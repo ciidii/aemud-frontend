@@ -993,3 +993,18 @@
     color: $white;
   }
 }
+
+.text-teal {
+  color: #278F8F !important;
+}
+
+.bg-teal-subtle {
+  background-color: #e6f4f4 !important;
+}
+
+.modal-backdrop-custom {
+  background-color: rgba(0, 0, 0, 0.5);
+  backdrop-filter: blur(2px);
+  z-index: 1050;
+}
+

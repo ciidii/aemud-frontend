@@ -13,19 +13,32 @@
         <div *ngIf="member.personalInfo" class="header-text">
           <h1>{{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h1>
           <div class="status-badges">
-            <span class="badge bg-success">Membre Actif</span>
+            <span *ngIf="member.status === 'ALUMNI'" class="badge bg-primary-subtle text-primary border px-2 py-1">
+              <i class="bi bi-mortarboard me-1"></i> Cercle des Diplômés (Alumni)
+            </span>
+            <span *ngIf="member.status === 'ACTIVE' || !member.status" class="badge bg-success-subtle text-success border px-2 py-1">
+              <i class="bi bi-person-check me-1"></i> Étudiant Actif
+            </span>
+            <span *ngIf="member.status && member.status !== 'ACTIVE' && member.status !== 'ALUMNI'" class="badge bg-warning-subtle text-warning border px-2 py-1">
+              <i class="bi bi-clock-history me-1"></i> {{ member.status }}
+            </span>
           </div>
         </div>
       </div>
     </div>
     <div class="header-actions">
-      <button (click)="openSendMessageModal()" class="btn btn-primary"><i class="bi bi-send"></i> Envoyer un message
+      <button (click)="openEditFullMemberModal()" class="btn btn-outline-primary me-2">
+        <i class="bi bi-pencil-square me-1"></i> Modifier la fiche
+      </button>
+      <button (click)="openSendMessageModal()" class="btn btn-primary">
+        <i class="bi bi-send me-1"></i> Envoyer un message
       </button>
       <div class="actions-dropdown">
         <button (click)="toggleActionsDropdown($event)" class="btn btn-secondary btn-icon">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
         <ul [class.show]="isActionsDropdownOpen" class="dropdown-menu">
+          <li><a (click)="openEditFullMemberModal()"><i class="bi bi-pencil-square"></i> Modifier (Formulaire)</a></li>
           <li><a (click)="openExportModal()"><i class="bi bi-upload"></i> Exporter</a></li>
           <li><a (click)="toggleDeleteModal()" class="text-danger"><i class="bi bi-trash"></i> Supprimer</a></li>
         </ul>
@@ -238,6 +251,20 @@
             class="info-value">{{ bourse.libelle }}</span></div>
           <div class="info-pair"><span class="info-key">Montant</span><span
             class="info-value">{{ bourse.montant | currency:'XOF':'symbol':'1.0-0' }}</span></div>
+        </div>
+      </div>
+
+      <!-- Dynamic Attributes Card -->
+      <div *ngIf="hasDynamicAttributes(member)" class="permanent-info-card">
+        <div class="card-header d-flex justify-content-between align-items-center">
+          <h5>Informations Complémentaires & Réponses</h5>
+          <button (click)="openEditFullMemberModal()" class="btn-modify-card">Modifier</button>
+        </div>
+        <div class="card-body info-grid">
+          <div *ngFor="let item of getDynamicAttributeEntries(member)" class="info-pair">
+            <span class="info-key">{{ item.key }}</span>
+            <span class="info-value fw-semibold text-teal">{{ item.value }}</span>
+          </div>
         </div>
       </div>
     </div>
@@ -490,4 +517,35 @@
   *ngIf="isEditBourseInfoModalOpen && currentMember?.bourse"
   [initialData]="currentMember!.bourse">
 </app-edit-bourse-info-modal>
+
+<!-- Full Member Dynamic Edit Modal -->
+<div *ngIf="isEditFullMemberModalOpen" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+  <div class="modal-dialog modal-xl modal-dialog-centered modal-dialog-scrollable">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-bottom py-3 px-4 bg-white rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="modal-header-icon me-3 bg-teal-subtle text-teal rounded-circle d-flex align-items-center justify-content-center" style="width: 40px; height: 40px;">
+            <i class="bi bi-pencil-square fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark mb-0">Modifier la Fiche du Membre</h5>
+            <small class="text-muted">Mettez à jour les informations générales et personnalisées via le formulaire</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="closeEditFullMemberModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4 bg-light-subtle">
+        <app-dynamic-form
+          *ngIf="fullMemberSchema"
+          [schema]="fullMemberSchema"
+          [initialValues]="prefilledMemberValues"
+          [submitButtonText]="'Mettre à jour la fiche'"
+          [isSubmitting]="isUpdatingMember"
+          (formSubmit)="handleFullMemberSave($event)"
+        ></app-dynamic-form>
+      </div>
+    </div>
+  </div>
+</div>
+
 

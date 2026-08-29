@@ -3,6 +3,8 @@ import {RegistrationOverview} from "./timeline.model";
 
 export interface MemberDataResponse {
   id: string;
+  status?: string;
+  isStudent?: boolean;
   personalInfo: PersonalInfo;
   membershipInfo: MembershipInfo;
   academicInfo: AcademicInfoRequest;
@@ -13,6 +15,7 @@ export interface MemberDataResponse {
   commissions: Commission[];
   registrationOverview: RegistrationOverview;
   religiousKnowledge: ReligiousKnowledge;
+  dynamicAttributes?: Record<string, any>;
 }
 
 export interface PersonalInfo {

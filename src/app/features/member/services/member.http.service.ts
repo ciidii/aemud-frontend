@@ -51,8 +51,8 @@ export class MemberHttpService {
     return this._http.post<RegistrationResponse>(`${environment.API_URL}/registration`, registrationData);
   }
 
-  updateRegister(registrationData: RegistrationModel): Observable<ResponseEntityApi<RegistrationModel>> {
-    return this._http.put<ResponseEntityApi<RegistrationModel>>(`${this._url}/register`, registrationData);
+  updateMember(member: any): Observable<ResponseEntityApi<MemberDataResponse>> {
+    return this._http.put<ResponseEntityApi<MemberDataResponse>>(`${this._url}`, member);
   }
 
   deleteMember(id: string): Observable<void> {
