@@ -1,25 +1,81 @@
-<form *ngIf="form && schema" [formGroup]="form" (ngSubmit)="onSubmit()" class="dynamic-form-wrapper">
+<div #stepperTop class="dynamic-form-container">
 
-  <!-- Group Loop -->
-  <ng-container *ngFor="let group of schema.groups">
-    <div *ngIf="isGroupVisible(group)" class="card shadow-sm border-0 mb-4 form-group-card">
+  <!-- ================= STEPPER HEADER TRACK ================= -->
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="stepper-header-card p-3 p-md-4 mb-4 rounded-4 bg-white border shadow-sm">
+    
+    <!-- Step Track -->
+    <div class="stepper-track-wrapper">
+      <div class="stepper-track">
+        <ng-container *ngFor="let group of visibleGroups; let idx = index">
+          
+          <!-- Step Item -->
+          <div
+            class="step-item"
+            [class.active]="idx === currentStepIndex"
+            [class.completed]="idx < currentStepIndex"
+            (click)="goToStep(idx)"
+          >
+            <!-- Step Circle -->
+            <div class="step-circle">
+              <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
+              <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
+            </div>
+
+            <!-- Step Label (Desktop) -->
+            <div class="step-label d-none d-lg-block">
+              <span class="step-num-text">Étape {{ idx + 1 }}</span>
+              <span class="step-title-text">{{ group.title }}</span>
+            </div>
+          </div>
+
+          <!-- Connector Line between steps -->
+          <div
+            *ngIf="idx < visibleGroups.length - 1"
+            class="step-connector"
+            [class.filled]="idx < currentStepIndex"
+          ></div>
+
+        </ng-container>
+      </div>
+    </div>
+
+    <!-- Active Step Title (Mobile & Tablet) -->
+    <div class="d-lg-none mt-3 pt-2 border-top text-center">
+      <span class="badge bg-teal-subtle text-teal fw-semibold px-2 py-1 mb-1">
+        Étape {{ currentStepIndex + 1 }} / {{ visibleGroups.length }}
+      </span>
+      <h6 class="fw-bold mb-0 text-dark">{{ currentGroup?.title }}</h6>
+    </div>
+
+  </div>
+
+  <!-- ================= FORM BODY ================= -->
+  <form *ngIf="form && schema && currentGroup" [formGroup]="form" (ngSubmit)="onSubmit()" class="dynamic-form-wrapper">
+
+    <!-- Active Step Card -->
+    <div class="card shadow-sm border rounded-4 mb-4 form-step-card bg-white animate-fade-in">
       
       <!-- Card Header -->
-      <div class="card-header bg-white border-bottom py-3">
-        <div class="d-flex align-items-center">
-          <div class="group-indicator me-3"></div>
-          <div>
-            <h5 class="card-title mb-0 fw-bold text-dark">{{ group.title }}</h5>
-            <small *ngIf="group.description" class="text-muted">{{ group.description }}</small>
+      <div class="card-header bg-white border-bottom py-3 px-4 rounded-top-4">
+        <div class="d-flex align-items-center justify-content-between">
+          <div class="d-flex align-items-center">
+            <div class="group-indicator me-3"></div>
+            <div>
+              <h5 class="card-title mb-0 fw-bold text-dark">{{ currentGroup.title }}</h5>
+              <small *ngIf="currentGroup.description" class="text-muted group-desc-text">{{ currentGroup.description }}</small>
+            </div>
           </div>
+          <span class="badge bg-light text-muted border px-2 py-1 d-none d-sm-inline-block">
+            {{ currentGroup.fields.length }} question{{ currentGroup.fields.length > 1 ? 's' : '' }}
+          </span>
         </div>
       </div>
 
-      <!-- Card Body with 2-Column Responsive Grid -->
+      <!-- Card Body (Grid of Fields) -->
       <div class="card-body p-4">
         <div class="row g-3">
           <div
-            *ngFor="let field of group.fields"
+            *ngFor="let field of currentGroup.fields"
             [class]="field.type === 'TEXTAREA' || field.type === 'MULTI_SELECT' ? 'col-12' : 'col-md-6 col-12'"
           >
             <app-dynamic-field
@@ -29,20 +85,65 @@
           </div>
         </div>
       </div>
+
     </div>
-  </ng-container>
 
-  <!-- Form Actions Bar -->
-  <div class="d-flex justify-content-end gap-3 mt-4 mb-5">
-    <button
-      type="submit"
-      class="btn btn-submit-dynamic d-flex align-items-center shadow-sm"
-      [disabled]="isSubmitting"
-    >
-      <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-      <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
-      {{ submitButtonText }}
-    </button>
-  </div>
+    <!-- ================= STEPPER NAVIGATION FOOTER ================= -->
+    <div class="stepper-footer-card p-3 p-md-4 rounded-4 bg-white border shadow-sm d-flex flex-wrap justify-content-between align-items-center gap-3">
+      
+      <!-- Button Précédent -->
+      <div>
+        <button
+          type="button"
+          class="btn btn-outline-secondary btn-step-nav px-4"
+          [disabled]="currentStepIndex === 0"
+          (click)="previousStep()"
+        >
+          <i class="bi bi-arrow-left me-2"></i> Précédent
+        </button>
+      </div>
 
-</form>
+      <!-- Progress Pill & Indicator -->
+      <div class="d-flex align-items-center gap-3">
+        <div class="text-center">
+          <span class="text-muted small-text fw-medium">
+            Progression : {{ progressPercentage }}%
+          </span>
+          <div class="progress progress-mini mt-1" style="width: 140px; height: 6px;">
+            <div
+              class="progress-bar bg-teal"
+              role="progressbar"
+              [style.width.%]="progressPercentage"
+            ></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Button Suivant / Soumettre -->
+      <div>
+        <button
+          *ngIf="!isLastStep"
+          type="button"
+          class="btn btn-teal text-white btn-step-nav px-4 fw-semibold shadow-sm"
+          (click)="nextStep()"
+        >
+          Suivant <i class="bi bi-arrow-right ms-2"></i>
+        </button>
+
+        <button
+          *ngIf="isLastStep"
+          type="submit"
+          class="btn btn-teal text-white btn-step-nav px-4 fw-semibold shadow-sm"
+          [disabled]="isSubmitting"
+        >
+          <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+          <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
+          {{ submitButtonText }}
+        </button>
+      </div>
+
+    </div>
+
+  </form>
+
+</div>

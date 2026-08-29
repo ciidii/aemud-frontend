@@ -1,17 +1,166 @@
-.dynamic-form-wrapper {
+.dynamic-form-container {
   $color-teal: #278F8F;
   $color-teal-hover: #1e7373;
+  $color-teal-subtle: #e6f4f4;
 
-  .form-group-card {
-    border-radius: 12px;
-    border: 1px solid #e2e8f0 !important;
-    background-color: #ffffff;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-    transition: all 0.2s ease-in-out;
+  .text-teal {
+    color: $color-teal !important;
+  }
 
-    &:hover {
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06) !important;
+  .bg-teal {
+    background-color: $color-teal !important;
+  }
+
+  .bg-teal-subtle {
+    background-color: $color-teal-subtle !important;
+  }
+
+  .btn-teal {
+    background-color: $color-teal;
+    border-color: $color-teal;
+    transition: all 0.2s ease;
+
+    &:hover:not(:disabled) {
+      background-color: $color-teal-hover;
+      border-color: $color-teal-hover;
+      transform: translateY(-1px);
     }
+  }
+
+  .btn-step-nav {
+    font-size: 1.4rem;
+    padding: 0.8rem 1.8rem;
+    border-radius: 8px;
+  }
+
+  .small-text {
+    font-size: 1.25rem;
+  }
+
+  // --- Stepper Header ---
+  .stepper-header-card {
+    border-color: #e2e8f0 !important;
+
+    .stepper-track-wrapper {
+      overflow-x: auto;
+      padding: 0.4rem 0;
+
+      &::-webkit-scrollbar {
+        height: 4px;
+      }
+      &::-webkit-scrollbar-thumb {
+        background-color: #cbd5e1;
+        border-radius: 4px;
+      }
+    }
+
+    .stepper-track {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      min-width: 600px;
+    }
+
+    .step-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      cursor: pointer;
+      user-select: none;
+      padding: 0.4rem 0.8rem;
+      border-radius: 10px;
+      transition: background-color 0.2s ease;
+
+      &:hover {
+        background-color: #f8fafc;
+      }
+
+      .step-circle {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: 700;
+        font-size: 1.35rem;
+        background-color: #f1f5f9;
+        color: #64748b;
+        border: 2px solid #e2e8f0;
+        transition: all 0.3s ease;
+      }
+
+      .step-label {
+        display: flex;
+        flex-direction: column;
+
+        .step-num-text {
+          font-size: 1.15rem;
+          color: #94a3b8;
+          text-transform: uppercase;
+          letter-spacing: 0.04em;
+        }
+
+        .step-title-text {
+          font-size: 1.35rem;
+          font-weight: 600;
+          color: #475569;
+        }
+      }
+
+      // State: Active
+      &.active {
+        .step-circle {
+          background-color: $color-teal;
+          border-color: $color-teal;
+          color: #ffffff;
+          box-shadow: 0 0 0 4px rgba($color-teal, 0.2);
+        }
+
+        .step-label {
+          .step-num-text {
+            color: $color-teal;
+            font-weight: 700;
+          }
+          .step-title-text {
+            color: #0f172a;
+            font-weight: 700;
+          }
+        }
+      }
+
+      // State: Completed
+      &.completed {
+        .step-circle {
+          background-color: $color-teal-subtle;
+          border-color: $color-teal;
+          color: $color-teal;
+        }
+
+        .step-label {
+          .step-title-text {
+            color: #334155;
+          }
+        }
+      }
+    }
+
+    .step-connector {
+      flex: 1;
+      height: 2px;
+      background-color: #e2e8f0;
+      margin: 0 0.8rem;
+      transition: background-color 0.4s ease;
+
+      &.filled {
+        background-color: $color-teal;
+      }
+    }
+  }
+
+  // --- Step Form Card ---
+  .form-step-card {
+    border-color: #e2e8f0 !important;
 
     .group-indicator {
       width: 4px;
@@ -21,36 +170,33 @@
     }
 
     .card-title {
-      font-size: 1.6rem;
+      font-size: 1.7rem;
       color: #1e293b;
     }
 
     .group-desc-text {
-      font-size: 1.3rem;
+      font-size: 1.35rem;
       color: #64748b;
     }
   }
 
-  .btn-submit-dynamic {
-    background-color: $color-teal;
-    border-color: $color-teal;
-    color: #ffffff;
-    font-size: 1.5rem;
-    font-weight: 600;
-    padding: 1rem 2.4rem;
-    border-radius: 10px;
-    transition: all 0.2s ease;
+  // --- Footer ---
+  .stepper-footer-card {
+    border-color: #e2e8f0 !important;
+  }
 
-    &:hover:not(:disabled) {
-      background-color: $color-teal-hover;
-      border-color: $color-teal-hover;
-      transform: translateY(-2px);
-      box-shadow: 0 6px 12px rgba(39, 143, 143, 0.25);
+  .animate-fade-in {
+    animation: fadeIn 0.25s ease-in-out;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(4px);
     }
-
-    &:disabled {
-      opacity: 0.65;
-      transform: none;
+    to {
+      opacity: 1;
+      transform: translateY(0);
     }
   }
 }

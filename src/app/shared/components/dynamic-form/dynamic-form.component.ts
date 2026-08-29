@@ -1,12 +1,14 @@
 import {
   Component,
+  ElementRef,
   EventEmitter,
   Input,
   OnChanges,
   OnDestroy,
   OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
+  ViewChild
 } from '@angular/core';
 import {CommonModule} from '@angular/common';
 import {
@@ -37,10 +39,13 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
   @Input() initialValues?: Record<string, any>;
   @Input() submitButtonText: string = 'Enregistrer';
   @Input() isSubmitting: boolean = false;
+  @Input() isStepper: boolean = true;
 
   @Output() formSubmit = new EventEmitter<Record<string, any>>();
+  @ViewChild('stepperTop') stepperTopRef?: ElementRef;
 
   form!: FormGroup;
+  currentStepIndex: number = 0;
   private valueChangeSubscriptions: Subscription[] = [];
 
   constructor(private fb: FormBuilder) {}
@@ -57,6 +62,27 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnDestroy(): void {
     this.valueChangeSubscriptions.forEach(sub => sub.unsubscribe());
+  }
+
+  /**
+   * Retourne la liste ordonnée des groupes actuellement visibles.
+   */
+  get visibleGroups(): FormGroupDefinition[] {
+    if (!this.schema || !this.schema.groups) return [];
+    return this.schema.groups.filter(g => this.isGroupVisible(g));
+  }
+
+  get currentGroup(): FormGroupDefinition | undefined {
+    return this.visibleGroups[this.currentStepIndex];
+  }
+
+  get isLastStep(): boolean {
+    return this.currentStepIndex === this.visibleGroups.length - 1;
+  }
+
+  get progressPercentage(): number {
+    if (this.visibleGroups.length <= 1) return 100;
+    return Math.round(((this.currentStepIndex + 1) / this.visibleGroups.length) * 100);
   }
 
   /**
@@ -85,6 +111,11 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
     // Initialisation de l'état des validateurs conditionnels
     this.updateConditionalValidators();
+
+    // Reset step index if out of bounds
+    if (this.currentStepIndex >= this.visibleGroups.length) {
+      this.currentStepIndex = Math.max(0, this.visibleGroups.length - 1);
+    }
   }
 
   private getInitialValue(field: FormFieldDefinition): any {
@@ -157,6 +188,9 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
       if (control) {
         const sub = control.valueChanges.subscribe(() => {
           this.updateConditionalValidators();
+          if (this.currentStepIndex >= this.visibleGroups.length) {
+            this.currentStepIndex = Math.max(0, this.visibleGroups.length - 1);
+          }
         });
         this.valueChangeSubscriptions.push(sub);
       }
@@ -198,12 +232,105 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
     return dependentControl.value === group.visibilityCondition.equals;
   }
 
+  // ================= NAVIGATION DANS LE STEPPER =================
+
+  isCurrentStepValid(): boolean {
+    if (!this.currentGroup || !this.form) return true;
+    for (const field of this.currentGroup.fields) {
+      const control = this.form.get(field.key);
+      if (control && control.invalid) {
+        return false;
+      }
+    }
+    return true;
+  }
+
+  isStepCompleted(index: number): boolean {
+    if (index >= this.visibleGroups.length) return false;
+    const group = this.visibleGroups[index];
+    if (!group || !this.form) return false;
+
+    return group.fields.every(f => {
+      const ctrl = this.form.get(f.key);
+      return !ctrl || ctrl.valid;
+    });
+  }
+
+  goToStep(targetIndex: number): void {
+    if (targetIndex < 0 || targetIndex >= this.visibleGroups.length) return;
+
+    // Si on recule, c'est toujours autorisé
+    if (targetIndex < this.currentStepIndex) {
+      this.currentStepIndex = targetIndex;
+      this.scrollToTop();
+      return;
+    }
+
+    // Si on avance, vérifier que l'étape courante est valide
+    if (this.validateCurrentStep()) {
+      this.currentStepIndex = targetIndex;
+      this.scrollToTop();
+    }
+  }
+
+  nextStep(): void {
+    if (!this.validateCurrentStep()) {
+      return;
+    }
+
+    if (this.currentStepIndex < this.visibleGroups.length - 1) {
+      this.currentStepIndex++;
+      this.scrollToTop();
+    }
+  }
+
+  previousStep(): void {
+    if (this.currentStepIndex > 0) {
+      this.currentStepIndex--;
+      this.scrollToTop();
+    }
+  }
+
+  private validateCurrentStep(): boolean {
+    if (!this.currentGroup || !this.form) return true;
+
+    let hasErrors = false;
+    this.currentGroup.fields.forEach(field => {
+      const control = this.form.get(field.key);
+      if (control) {
+        control.markAsTouched();
+        control.markAsDirty();
+        if (control.invalid) {
+          hasErrors = true;
+        }
+      }
+    });
+
+    return !hasErrors;
+  }
+
+  private scrollToTop(): void {
+    if (this.stepperTopRef) {
+      this.stepperTopRef.nativeElement.scrollIntoView({behavior: 'smooth', block: 'start'});
+    }
+  }
+
   /**
-   * Traitement et soumission du formulaire.
+   * Traitement et soumission finale du formulaire.
    */
   onSubmit(): void {
+    if (!this.validateCurrentStep()) {
+      return;
+    }
+
     if (this.form.invalid) {
       this.markAllAsTouched();
+      // Trouver la première étape invalide et s'y positionner
+      const firstInvalidIndex = this.visibleGroups.findIndex(g => !this.isStepCompleted(this.visibleGroups.indexOf(g)));
+      if (firstInvalidIndex !== -1) {
+        this.currentStepIndex = firstInvalidIndex;
+        this.scrollToTop();
+      }
       return;
     }
 
