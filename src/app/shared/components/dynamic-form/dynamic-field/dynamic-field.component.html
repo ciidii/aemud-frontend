@@ -1,139 +1,162 @@
-<div class="mb-3 dynamic-field-container" [formGroup]="formGroup">
+<div class="dynamic-field-wrapper" [formGroup]="formGroup">
   
-  <!-- Label & Badges -->
-  <div class="d-flex justify-content-between align-items-center mb-1">
-    <label [for]="field.key" class="form-label mb-0 fw-semibold">
+  <!-- Label & Category Badge -->
+  <div class="d-flex justify-content-between align-items-center mb-2">
+    <label [for]="field.key" class="form-label field-label mb-0">
       {{ field.label }}
-      <span *ngIf="isFieldRequired" class="text-danger">*</span>
+      <span *ngIf="isFieldRequired" class="required-star">*</span>
     </label>
-    <span *ngIf="field.category === 'CUSTOM'" class="badge bg-info-subtle text-info border border-info-subtle small-badge">
+    <span *ngIf="field.category === 'CUSTOM'" class="badge custom-tag">
       Personnalisé
     </span>
   </div>
 
   <!-- 1. TEXT -->
   <ng-container *ngIf="field.type === 'TEXT'">
-    <input
-      type="text"
-      class="form-control"
-      [id]="field.key"
-      [formControlName]="field.key"
-      [placeholder]="field.placeholder || ''"
-      [class.is-invalid]="isInvalid"
-    />
+    <div class="input-wrapper">
+      <input
+        type="text"
+        class="form-control modern-input"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || 'Saisissez votre réponse...'"
+        [class.is-invalid]="isInvalid"
+      />
+    </div>
   </ng-container>
 
   <!-- 2. TEXTAREA -->
   <ng-container *ngIf="field.type === 'TEXTAREA'">
-    <textarea
-      class="form-control"
-      [id]="field.key"
-      [formControlName]="field.key"
-      [placeholder]="field.placeholder || ''"
-      rows="3"
-      [class.is-invalid]="isInvalid"
-    ></textarea>
+    <div class="input-wrapper">
+      <textarea
+        class="form-control modern-input"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || 'Détaillez votre réponse ici...'"
+        rows="3"
+        [class.is-invalid]="isInvalid"
+      ></textarea>
+    </div>
   </ng-container>
 
   <!-- 3. NUMBER -->
   <ng-container *ngIf="field.type === 'NUMBER'">
-    <input
-      type="number"
-      class="form-control"
-      [id]="field.key"
-      [formControlName]="field.key"
-      [placeholder]="field.placeholder || ''"
-      [min]="field.validation?.min ?? null"
-      [max]="field.validation?.max ?? null"
-      [class.is-invalid]="isInvalid"
-    />
+    <div class="input-wrapper">
+      <input
+        type="number"
+        class="form-control modern-input"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [placeholder]="field.placeholder || '0'"
+        [min]="field.validation?.min ?? null"
+        [max]="field.validation?.max ?? null"
+        [class.is-invalid]="isInvalid"
+      />
+    </div>
   </ng-container>
 
   <!-- 4. DATE -->
   <ng-container *ngIf="field.type === 'DATE'">
-    <input
-      type="date"
-      class="form-control"
-      [id]="field.key"
-      [formControlName]="field.key"
-      [class.is-invalid]="isInvalid"
-    />
-  </ng-container>
-
-  <!-- 5. SELECT -->
-  <ng-container *ngIf="field.type === 'SELECT'">
-    <select
-      class="form-select"
-      [id]="field.key"
-      [formControlName]="field.key"
-      [class.is-invalid]="isInvalid"
-    >
-      <option value="" disabled selected>-- Sélectionnez une option --</option>
-      <option *ngFor="let opt of field.options" [value]="opt">
-        {{ opt }}
-      </option>
-    </select>
-  </ng-container>
-
-  <!-- 6. BOOLEAN (Switch) -->
-  <ng-container *ngIf="field.type === 'BOOLEAN'">
-    <div class="form-check form-switch mt-2">
+    <div class="input-wrapper">
       <input
-        class="form-check-input"
-        type="checkbox"
-        role="switch"
+        type="date"
+        class="form-control modern-input"
         [id]="field.key"
         [formControlName]="field.key"
         [class.is-invalid]="isInvalid"
       />
-      <label class="form-check-label text-muted" [for]="field.key">
-        {{ control.value ? 'Oui' : 'Non' }}
-      </label>
     </div>
   </ng-container>
 
-  <!-- 7. RADIO -->
-  <ng-container *ngIf="field.type === 'RADIO'">
-    <div class="d-flex flex-wrap gap-3 mt-1">
-      <div *ngFor="let opt of field.options; let i = index" class="form-check">
+  <!-- 5. SELECT -->
+  <ng-container *ngIf="field.type === 'SELECT'">
+    <div class="input-wrapper">
+      <select
+        class="form-select modern-input modern-select"
+        [id]="field.key"
+        [formControlName]="field.key"
+        [class.is-invalid]="isInvalid"
+      >
+        <option value="" disabled selected>-- Sélectionnez une option --</option>
+        <option *ngFor="let opt of field.options" [value]="opt">
+          {{ opt }}
+        </option>
+      </select>
+    </div>
+  </ng-container>
+
+  <!-- 6. BOOLEAN (Modern Toggle Card) -->
+  <ng-container *ngIf="field.type === 'BOOLEAN'">
+    <div class="boolean-toggle-card p-3 rounded-3 border d-flex align-items-center justify-content-between" [class.active]="control.value">
+      <div>
+        <span class="fw-semibold boolean-state-text" [class.text-teal]="control.value">
+          {{ control.value ? 'Oui (Actif)' : 'Non (Inactif)' }}
+        </span>
+        <small class="text-muted d-block boolean-subtext">Basculez pour modifier</small>
+      </div>
+      <div class="form-check form-switch mb-0">
         <input
-          class="form-check-input"
+          class="form-check-input switch-teal"
+          type="checkbox"
+          role="switch"
+          [id]="field.key"
+          [formControlName]="field.key"
+        />
+      </div>
+    </div>
+  </ng-container>
+
+  <!-- 7. RADIO (Selectable Tiles) -->
+  <ng-container *ngIf="field.type === 'RADIO'">
+    <div class="radio-tiles-grid">
+      <label
+        *ngFor="let opt of field.options; let i = index"
+        class="radio-tile-card"
+        [class.selected]="control.value === opt"
+      >
+        <input
           type="radio"
+          class="d-none"
           [id]="field.key + '_' + i"
           [name]="field.key"
           [value]="opt"
           [formControlName]="field.key"
-          [class.is-invalid]="isInvalid"
         />
-        <label class="form-check-label" [for]="field.key + '_' + i">
-          {{ opt }}
-        </label>
-      </div>
-    </div>
-  </ng-container>
-
-  <!-- 8. MULTI_SELECT (Checkboxes with badges) -->
-  <ng-container *ngIf="field.type === 'MULTI_SELECT'">
-    <div class="card p-2 bg-light-subtle border mt-1">
-      <div class="d-flex flex-column gap-2">
-        <div *ngFor="let opt of field.options; let i = index" class="form-check">
-          <input
-            class="form-check-input"
-            type="checkbox"
-            [id]="field.key + '_multi_' + i"
-            [checked]="isMultiSelectOptionSelected(opt)"
-            (change)="toggleMultiSelectOption(opt, $event)"
-          />
-          <label class="form-check-label" [for]="field.key + '_multi_' + i">
-            {{ opt }}
-          </label>
+        <div class="radio-circle">
+          <div class="radio-circle-dot" *ngIf="control.value === opt"></div>
         </div>
-      </div>
+        <span class="tile-label">{{ opt }}</span>
+      </label>
     </div>
   </ng-container>
 
-  <!-- Validation Error Feedback -->
-  <div *ngIf="isInvalid" class="invalid-feedback d-block mt-1 animate-fade-in">
-    <i class="bi bi-exclamation-circle me-1"></i> {{ errorMessage }}
+  <!-- 8. MULTI_SELECT (Multi Selectable Tiles) -->
+  <ng-container *ngIf="field.type === 'MULTI_SELECT'">
+    <div class="multiselect-tiles-grid">
+      <label
+        *ngFor="let opt of field.options; let i = index"
+        class="multiselect-tile-card"
+        [class.selected]="isMultiSelectOptionSelected(opt)"
+      >
+        <input
+          type="checkbox"
+          class="d-none"
+          [id]="field.key + '_multi_' + i"
+          [checked]="isMultiSelectOptionSelected(opt)"
+          (change)="toggleMultiSelectOption(opt, $event)"
+        />
+        <div class="checkbox-box">
+          <i *ngIf="isMultiSelectOptionSelected(opt)" class="bi bi-check-lg text-white"></i>
+        </div>
+        <span class="tile-label">{{ opt }}</span>
+      </label>
+    </div>
+  </ng-container>
+
+  <!-- Error Feedback -->
+  <div *ngIf="isInvalid" class="field-error-message animate-fade-in mt-1">
+    <i class="bi bi-exclamation-circle-fill me-1"></i>
+    <span>{{ errorMessage }}</span>
   </div>
+
 </div>
