@@ -1,58 +1,36 @@
-<div class="form-container">
-  <h2 class="form-title">Formulaire d'inscription d'un nouveau membre</h2>
-  <p class="form-subtitle">Suivez les étapes pour compléter l'inscription.</p>
-
-  <!-- Barre de progression -->
-  <div class="progress-bar">
-    <div [style.width.%]="(currentStep - 1) * 25" class="progress-bar-fill"></div>
+<div class="member-add-page-container p-4">
+  
+  <!-- Header & Back navigation -->
+  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+    <div>
+      <a [routerLink]="['/members/list-members']" class="text-decoration-none text-muted mb-2 d-inline-flex align-items-center back-link">
+        <i class="bi bi-arrow-left me-2"></i> Retour à la liste des membres
+      </a>
+      <h2 class="fw-bold mb-1 page-title">Inscription d'un Nouveau Membre</h2>
+      <p class="text-muted mb-0 page-subtitle">
+        Renseignez les informations de l'adhérent. Le formulaire s'adapte automatiquement selon sa situation (étudiant ou diplômé).
+      </p>
+    </div>
   </div>
 
-  <form (ngSubmit)="onSubmit()" [formGroup]="mainForm">
-
-    <div class="wizard-content">
-      <!-- Étape 1 -->
-      <div *ngIf="currentStep === 1" class="step">
-        <h3 class="step-title">Étape 1: Informations Personnelles</h3>
-        <app-personal-info-form formControlName="personalInfo"></app-personal-info-form>
-      </div>
-
-      <!-- Étape 2 -->
-      <div *ngIf="currentStep === 2" class="step">
-        <h3 class="step-title">Étape 2: Coordonnées et Contact d'Urgence</h3>
-        <app-contact-info-form formControlName="contactInfo"></app-contact-info-form>
-      </div>
-
-      <!-- Étape 3 -->
-      <div *ngIf="currentStep === 3" class="step">
-        <h3 class="step-title">Étape 3: Parcours Académique</h3>
-        <app-academic-info-form formControlName="academicInfo"></app-academic-info-form>
-      </div>
-
-      <!-- Étape 4 -->
-      <div *ngIf="currentStep === 4" class="step">
-        <h3 class="step-title">Étape 4: Connaissances Religieuses</h3>
-        <app-religious-knowledge-form formControlName="religiousKnowledge"></app-religious-knowledge-form>
-      </div>
-
-      <!-- Étape 5 -->
-      <div *ngIf="currentStep === 5" class="step">
-        <h3 class="step-title">Étape 5: Engagements</h3>
-        <app-engagements-form
-          [bourses]="bourses"
-          [clubs]="clubs"
-          [commissions]="commissions"
-          formControlName="engagements"
-        ></app-engagements-form>
-      </div>
+  <!-- Loading Spinner -->
+  <div *ngIf="isLoading" class="text-center py-5 bg-white rounded-4 border shadow-sm">
+    <div class="spinner-border text-teal" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Chargement du formulaire...</span>
     </div>
+    <p class="text-muted mt-3" style="font-size: 1.4rem;">Chargement du formulaire dynamique...</p>
+  </div>
 
-    <div class="form-actions">
-      <button (click)="previousStep()" [disabled]="currentStep === 1" class="button-secondary" type="button">Précédent
-      </button>
-
-      <button (click)="nextStep()" *ngIf="currentStep < 5" class="button-primary" type="button">Suivant</button>
-
-      <button *ngIf="currentStep === 5" class="button-primary" type="submit">Soumettre l'inscription</button>
+  <!-- Dynamic Form Container -->
+  <div *ngIf="!isLoading && schema" class="row justify-content-center">
+    <div class="col-xl-9 col-lg-10 col-12">
+      <app-dynamic-form
+        [schema]="schema"
+        [submitButtonText]="'Enregistrer et inscrire le membre'"
+        [isSubmitting]="isSubmitting"
+        (formSubmit)="onFormSubmit($event)"
+      ></app-dynamic-form>
     </div>
-  </form>
+  </div>
+
 </div>
