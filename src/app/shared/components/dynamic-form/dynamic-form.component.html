@@ -1,7 +1,7 @@
 <div #stepperTop class="dynamic-form-container">
 
   <!-- ================= 1. DESKTOP / TABLET STEPPER HEADER (>= 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 p-4 rounded-4 bg-white border shadow-sm">
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 p-3 p-lg-4 rounded-4 bg-white border shadow-sm">
     <div class="stepper-track">
       <ng-container *ngFor="let group of visibleGroups; let idx = index">
         
@@ -14,22 +14,22 @@
           [title]="group.title"
         >
           <!-- Step Circle -->
-          <div class="step-circle">
+          <div class="step-circle flex-shrink-0">
             <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
             <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
           </div>
 
           <!-- Step Label -->
-          <div class="step-label">
+          <div class="step-label min-w-0">
             <span class="step-sub">Étape {{ idx + 1 }}</span>
-            <span class="step-main">{{ group.title }}</span>
+            <span class="step-main text-truncate" [title]="group.title">{{ group.title }}</span>
           </div>
         </div>
 
         <!-- Connector Line between steps -->
         <div
           *ngIf="idx < visibleGroups.length - 1"
-          class="step-connector"
+          class="step-connector flex-shrink-1"
           [class.filled]="idx < currentStepIndex"
         ></div>
 
@@ -43,11 +43,11 @@
     <!-- Top Row: Current Title & Pill -->
     <div class="d-flex justify-content-between align-items-center mb-2">
       <div>
-        <span class="mobile-step-pill">
-          Étape {{ currentStepIndex + 1 }} / {{ visibleGroups.length }}
+        <span class="mobile-step-pill text-nowrap">
+          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
         </span>
       </div>
-      <span class="mobile-percent-text">{{ progressPercentage }}%</span>
+      <span class="mobile-percent-text text-nowrap">{{ progressPercentage }}%</span>
     </div>
 
     <!-- Progress Bar -->
@@ -62,7 +62,7 @@
     </div>
 
     <!-- Mobile Step Dots Bar -->
-    <div class="d-flex align-items-center justify-content-between gap-1">
+    <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
       <div
         *ngFor="let g of visibleGroups; let idx = index"
         class="mobile-step-dot flex-grow-1"
@@ -73,8 +73,8 @@
     </div>
 
     <!-- Current Step Title -->
-    <div class="mt-2 text-center">
-      <h6 class="fw-bold mb-0 text-dark mobile-step-title">{{ currentGroup?.title }}</h6>
+    <div class="text-center">
+      <h6 class="fw-bold mb-0 text-dark mobile-step-title text-break">{{ currentGroup?.title }}</h6>
     </div>
 
   </div>
@@ -86,17 +86,17 @@
       
       <!-- Card Header -->
       <div class="card-header bg-white border-bottom py-3 px-3 px-md-4 rounded-top-4">
-        <div class="d-flex align-items-center justify-content-between">
-          <div class="d-flex align-items-center">
-            <div class="step-indicator-bar me-3"></div>
-            <div>
-              <h5 class="card-title mb-0 fw-bold text-dark">{{ currentGroup.title }}</h5>
-              <small *ngIf="currentGroup.description" class="text-muted group-desc-text d-block mt-1">
+        <div class="d-flex align-items-start justify-content-between gap-3">
+          <div class="d-flex align-items-start flex-grow-1 min-w-0">
+            <div class="step-indicator-bar me-3 mt-1 flex-shrink-0"></div>
+            <div class="flex-grow-1 min-w-0">
+              <h5 class="card-title mb-1 fw-bold text-dark text-break">{{ currentGroup.title }}</h5>
+              <small *ngIf="currentGroup.description" class="text-muted group-desc-text d-block text-break">
                 {{ currentGroup.description }}
               </small>
             </div>
           </div>
-          <span class="badge question-count-badge d-none d-sm-inline-block">
+          <span class="badge question-count-badge flex-shrink-0 d-none d-sm-inline-block text-nowrap">
             {{ currentGroup.fields.length }} question{{ currentGroup.fields.length > 1 ? 's' : '' }}
           </span>
         </div>
@@ -126,7 +126,7 @@
         <!-- Précédent Button -->
         <button
           type="button"
-          class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1"
+          class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1 text-nowrap"
           [disabled]="currentStepIndex === 0"
           (click)="previousStep()"
         >
@@ -134,8 +134,10 @@
         </button>
 
         <!-- Progress Indicator (Desktop/Tablet) -->
-        <div class="d-none d-sm-flex align-items-center gap-2 order-sm-2 text-muted small-text">
-          <span>Étape <strong>{{ currentStepIndex + 1 }}</strong> sur <strong>{{ visibleGroups.length }}</strong></span>
+        <div class="d-none d-sm-flex align-items-center justify-content-center gap-2 order-sm-2 text-muted small-text flex-shrink-0 text-nowrap">
+          <span class="step-counter-pill">
+            Étape <strong class="text-dark">{{ currentStepIndex + 1 }}</strong> sur <strong class="text-dark">{{ visibleGroups.length }}</strong>
+          </span>
         </div>
 
         <!-- Suivant / Soumettre Button -->
@@ -143,7 +145,7 @@
           <button
             *ngIf="!isLastStep"
             type="button"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm"
+            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
             (click)="nextStep()"
           >
             Continuer <i class="bi bi-arrow-right ms-2"></i>
@@ -152,7 +154,7 @@
           <button
             *ngIf="isLastStep"
             type="submit"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm"
+            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
             [disabled]="isSubmitting"
           >
             <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
