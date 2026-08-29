@@ -4,7 +4,7 @@
   <div class="d-flex justify-content-between align-items-center mb-1">
     <label [for]="field.key" class="form-label mb-0 fw-semibold">
       {{ field.label }}
-      <span *ngIf="field.isRequired" class="text-danger">*</span>
+      <span *ngIf="isFieldRequired" class="text-danger">*</span>
     </label>
     <span *ngIf="field.category === 'CUSTOM'" class="badge bg-info-subtle text-info border border-info-subtle small-badge">
       Personnalisé

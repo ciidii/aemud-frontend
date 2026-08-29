@@ -29,7 +29,8 @@ export interface FormFieldDefinition {
   label: string;
   category: FieldCategory;
   type: FieldType;
-  isRequired: boolean;
+  isRequired?: boolean;
+  required?: boolean;
   placeholder?: string;
   defaultValue?: any;
   options?: string[];
@@ -43,13 +44,14 @@ export interface FormGroupDefinition {
   title: string;
   description?: string;
   order: number;
-  isActive: boolean;
+  isActive?: boolean;
+  active?: boolean;
   visibilityCondition?: VisibilityCondition;
   fields: FormFieldDefinition[];
 }
 
 export interface FormSchema {
   version: string;
-  lastModified: string;
+  lastModified: string | number[];
   groups: FormGroupDefinition[];
 }

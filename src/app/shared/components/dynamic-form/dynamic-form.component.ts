@@ -103,10 +103,18 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
     return '';
   }
 
+  private isFieldMandatory(field: FormFieldDefinition): boolean {
+    return field.isRequired ?? field.required ?? false;
+  }
+
+  private isGroupActive(group: FormGroupDefinition): boolean {
+    return group.isActive ?? group.active ?? true;
+  }
+
   private buildValidators(field: FormFieldDefinition): ValidatorFn[] {
     const validators: ValidatorFn[] = [];
 
-    if (field.isRequired) {
+    if (this.isFieldMandatory(field)) {
       if (field.type === 'BOOLEAN') {
         // Un boolean n'est pas soumis à required standard
       } else {
@@ -181,7 +189,7 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
    * Détermine si un groupe est actuellement visible.
    */
   isGroupVisible(group: FormGroupDefinition): boolean {
-    if (!group.isActive) return false;
+    if (!this.isGroupActive(group)) return false;
     if (!group.visibilityCondition) return true;
 
     const dependentControl = this.form?.get(group.visibilityCondition.dependsOn);

@@ -18,6 +18,10 @@ export class DynamicFieldComponent {
     return this.formGroup.get(this.field.key) as FormControl;
   }
 
+  get isFieldRequired(): boolean {
+    return this.field.isRequired ?? this.field.required ?? false;
+  }
+
   get isInvalid(): boolean {
     return !!(this.control && this.control.invalid && (this.control.dirty || this.control.touched));
   }

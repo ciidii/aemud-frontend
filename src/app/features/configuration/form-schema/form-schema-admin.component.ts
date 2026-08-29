@@ -472,6 +472,19 @@ export class FormSchemaAdminComponent implements OnInit {
     return `Condition : ${condition.dependsOn} = ${condition.equals}`;
   }
 
+  isGroupActive(group: FormGroupDefinition): boolean {
+    return group.isActive ?? group.active ?? true;
+  }
+
+  isFieldMandatory(field: FormFieldDefinition): boolean {
+    return field.isRequired ?? field.required ?? false;
+  }
+
+  setGroupActive(group: FormGroupDefinition, val: boolean): void {
+    group.isActive = val;
+    group.active = val;
+  }
+
   private slugify(text: string): string {
     return text
       .toString()

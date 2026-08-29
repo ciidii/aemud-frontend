@@ -90,7 +90,7 @@
                   </button>
                 </div>
 
-                <div class="group-status-dot" [class.active]="group.isActive"></div>
+                <div class="group-status-dot" [class.active]="isGroupActive(group)"></div>
                 
                 <div>
                   <div class="d-flex align-items-center gap-2">
@@ -135,7 +135,8 @@
                     type="checkbox"
                     role="switch"
                     [id]="'switch_' + group.code"
-                    [(ngModel)]="group.isActive"
+                    [checked]="isGroupActive(group)"
+                    (change)="setGroupActive(group, $any($event.target).checked)"
                     title="Activer / Désactiver cette section"
                   />
                 </div>
@@ -231,10 +232,10 @@
 
                     <!-- Obligatoire / Optionnel -->
                     <td>
-                      <span *ngIf="field.isRequired" class="pill-badge pill-required">
+                      <span *ngIf="isFieldMandatory(field)" class="pill-badge pill-required">
                         <i class="bi bi-asterisk"></i> Obligatoire
                       </span>
-                      <span *ngIf="!field.isRequired" class="pill-badge pill-optional">
+                      <span *ngIf="!isFieldMandatory(field)" class="pill-badge pill-optional">
                         Facultatif
                       </span>
                     </td>
