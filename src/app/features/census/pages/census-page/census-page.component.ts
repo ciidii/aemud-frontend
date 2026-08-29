@@ -1,6 +1,7 @@
 import {Component, OnInit} from '@angular/core';
-import {CommonModule} from '@angular/common';
+import {CommonModule, CurrencyPipe, DatePipe} from '@angular/common';
 import {HttpClient} from '@angular/common/http';
+import {FormsModule} from '@angular/forms';
 import {Router} from '@angular/router';
 import {ToastrService} from 'ngx-toastr';
 import {FormSchema} from '../../../../core/models/form-schema.model';
@@ -10,10 +11,26 @@ import {DynamicFormComponent} from '../../../../shared/components/dynamic-form/d
 import {environment} from '../../../../../environments/environment';
 import {ResponseEntityApi} from '../../../../core/models/response-entity-api';
 
+export type CensusStep = 'FORM' | 'PAYMENT' | 'SUCCESS';
+
+export interface CensusReceipt {
+  registrationId: string;
+  memberId: string;
+  memberName: string;
+  mandatName: string;
+  phaseName: string;
+  registrationType: string;
+  amount: number;
+  paymentMethod: string;
+  paymentDate: string;
+  receiptNumber: string;
+  statusPayment: boolean;
+}
+
 @Component({
   selector: 'app-census-page',
   standalone: true,
-  imports: [CommonModule, DynamicFormComponent],
+  imports: [CommonModule, DynamicFormComponent, FormsModule, CurrencyPipe, DatePipe],
   templateUrl: './census-page.component.html',
   styleUrls: ['./census-page.component.scss']
 })
@@ -21,8 +38,15 @@ export class CensusPageComponent implements OnInit {
   schema: FormSchema | null = null;
   isLoading: boolean = true;
   isSubmitting: boolean = false;
-  isSubmittedSuccess: boolean = false;
+  currentStep: CensusStep = 'FORM';
+
   submittedMember: any = null;
+  selectedPaymentMethod: 'WAVE_MONEY' | 'ORANGE_MONEY' | 'CASH' = 'WAVE_MONEY';
+  omPhoneNumber: string = '';
+  isProcessingPayment: boolean = false;
+  feeAmount: number = 2000;
+  receipt: CensusReceipt | null = null;
+  paidLater: boolean = false;
 
   constructor(
     private formSchemaService: FormSchemaService,
@@ -40,7 +64,6 @@ export class CensusPageComponent implements OnInit {
     this.isLoading = true;
     this.formSchemaService.getFormSchema().subscribe({
       next: schema => {
-        // Chargement dynamique des bourses pour enrichir le champ bourseId
         this.bourseService.getAllBourses().subscribe({
           next: bourses => {
             const academicGroup = schema.groups.find(g => g.code === 'ACADEMIC_INFO');
@@ -59,7 +82,7 @@ export class CensusPageComponent implements OnInit {
           }
         });
       },
-      error: err => {
+      error: () => {
         this.toastr.error('Impossible de charger le formulaire de recensement.', 'Erreur');
         this.isLoading = false;
       }
@@ -73,9 +96,18 @@ export class CensusPageComponent implements OnInit {
     this.http.post<ResponseEntityApi<any>>(apiUrl, payload).subscribe({
       next: response => {
         this.isSubmitting = false;
-        this.isSubmittedSuccess = true;
         this.submittedMember = response.data;
-        this.toastr.success('Votre auto-recensement a été enregistré avec succès !', 'Félicitations');
+        this.omPhoneNumber = payload['phoneNumber'] || '';
+
+        // Si Alumni : pas de frais de scolarité étudiant, direct succès
+        const isStudent = payload['isStudent'] === undefined || payload['isStudent'] === true || payload['isStudent'] === 'true';
+        if (!isStudent) {
+          this.currentStep = 'SUCCESS';
+          this.toastr.success('Votre inscription au réseau Alumni a été enregistrée avec succès !', 'Bienvenue');
+        } else {
+          this.currentStep = 'PAYMENT';
+          this.toastr.success('Informations enregistrées ! Veuillez choisir votre option de règlement des frais d\'adhésion.', 'Étape 2');
+        }
       },
       error: err => {
         this.isSubmitting = false;
@@ -83,6 +115,44 @@ export class CensusPageComponent implements OnInit {
         this.toastr.error(msg, 'Erreur de soumission');
       }
     });
+  }
+
+  confirmOnlinePayment(): void {
+    if (!this.submittedMember?.id) return;
+
+    this.isProcessingPayment = true;
+    const apiUrl = `${environment.API_URL}/census/${this.submittedMember.id}/pay-fee`;
+
+    const payload = {
+      amount: this.feeAmount,
+      paymentMethod: this.selectedPaymentMethod,
+      notes: `Paiement en ligne portail public (${this.selectedPaymentMethod === 'WAVE_MONEY' ? 'Wave' : 'Orange Money'})`
+    };
+
+    this.http.post<ResponseEntityApi<CensusReceipt>>(apiUrl, payload).subscribe({
+      next: response => {
+        this.isProcessingPayment = false;
+        this.receipt = response.data;
+        this.paidLater = false;
+        this.currentStep = 'SUCCESS';
+        this.toastr.success('Paiement validé avec succès ! Votre quittance d\'adhésion est disponible.', 'Adhésion confirmée');
+      },
+      error: err => {
+        this.isProcessingPayment = false;
+        const msg = err.error?.message || "Échec de l'enregistrement du paiement.";
+        this.toastr.error(msg, 'Erreur paiement');
+      }
+    });
+  }
+
+  choosePayLater(): void {
+    this.paidLater = true;
+    this.currentStep = 'SUCCESS';
+    this.toastr.info('Adhésion enregistrée. Vous pourrez régler vos frais en espèces auprès du trésorier.', 'Paiement différé');
+  }
+
+  printReceipt(): void {
+    window.print();
   }
 
   goToLogin(): void {
