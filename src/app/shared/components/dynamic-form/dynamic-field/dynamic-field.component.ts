@@ -36,19 +36,22 @@ export class DynamicFieldComponent {
     if (this.control.errors['required']) {
       return `Le champ "${this.field.label}" est obligatoire.`;
     }
-    if (this.control.errors['email'] || this.control.errors['pattern']) {
-      return `Veuillez saisir un format valide pour "${this.field.label}".`;
+    if (this.control.errors['email']) {
+      return `Veuillez saisir une adresse email valide (ex: contact@domaine.com).`;
     }
-    if (this.control.errors['minlength']) {
+    if (this.control.errors['pattern']) {
+      return `Veuillez respecter le format attendu pour "${this.field.label}".`;
+    }
+    if (this.control.errors['minlength'] && this.control.errors['minlength'].requiredLength != null) {
       return `Minimum ${this.control.errors['minlength'].requiredLength} caractères requis.`;
     }
-    if (this.control.errors['maxlength']) {
+    if (this.control.errors['maxlength'] && this.control.errors['maxlength'].requiredLength != null) {
       return `Maximum ${this.control.errors['maxlength'].requiredLength} caractères autorisés.`;
     }
-    if (this.control.errors['min']) {
+    if (this.control.errors['min'] && this.control.errors['min'].min != null) {
       return `La valeur minimale autorisée est ${this.control.errors['min'].min}.`;
     }
-    if (this.control.errors['max']) {
+    if (this.control.errors['max'] && this.control.errors['max'].max != null) {
       return `La valeur maximale autorisée est ${this.control.errors['max'].max}.`;
     }
 

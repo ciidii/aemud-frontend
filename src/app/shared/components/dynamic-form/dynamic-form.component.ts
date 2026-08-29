@@ -153,20 +153,24 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
       }
     }
 
+    if (field.key === 'email') {
+      validators.push(Validators.email);
+    }
+
     if (field.validation) {
-      if (field.validation.minLength !== undefined) {
+      if (field.validation.minLength != null && field.validation.minLength > 0) {
         validators.push(Validators.minLength(field.validation.minLength));
       }
-      if (field.validation.maxLength !== undefined) {
+      if (field.validation.maxLength != null && field.validation.maxLength > 0) {
         validators.push(Validators.maxLength(field.validation.maxLength));
       }
-      if (field.validation.min !== undefined) {
+      if (field.validation.min != null) {
         validators.push(Validators.min(field.validation.min));
       }
-      if (field.validation.max !== undefined) {
+      if (field.validation.max != null) {
         validators.push(Validators.max(field.validation.max));
       }
-      if (field.validation.pattern) {
+      if (field.validation.pattern && field.validation.pattern.trim().length > 0) {
         validators.push(Validators.pattern(field.validation.pattern));
       }
     }
