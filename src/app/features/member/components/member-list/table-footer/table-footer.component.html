@@ -1,37 +1,91 @@
-<div class="footer-bar">
-  <!-- Left Section: Contextual Actions -->
-  <div class="actions-container">
-    <div *ngIf="hasSelection$ | async" class="selection-info">
-      <i class="bi bi-check-circle-fill"></i>
-      <span>{{ selectedMembersCount$ | async }} séléctionné(s)</span>
+<div class="footer-wrapper">
+  <!-- Floating Selection Actions Bar -->
+  <div *ngIf="hasSelection$ | async" class="floating-selection-bar shadow-lg">
+    <div class="selection-indicator">
+      <div class="check-icon-circle">
+        <i class="bi bi-check2-all"></i>
+      </div>
+      <span class="selection-count">
+        <strong>{{ selectedMembersCount$ | async }}</strong> membre(s) sélectionné(s)
+      </span>
     </div>
-    <div class="actions">
-      <button *ngIf="!isSmsSelectMode" (click)="sendMessageTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
-        <i class="bi bi-send"></i> Envoyer message
+
+    <div class="selection-actions">
+      <button *ngIf="!isSmsSelectMode"
+              (click)="sendMessageTriggered.emit()"
+              type="button"
+              class="btn-bulk-action btn-bulk-sms">
+        <i class="bi bi-chat-text-fill"></i> Envoyer un SMS
       </button>
-      <button *ngIf="isSmsSelectMode" (click)="useSelectionForSms.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
-        <i class="bi bi-people"></i> Utiliser cette sélection pour un SMS
+
+      <button *ngIf="isSmsSelectMode"
+              (click)="useSelectionForSms.emit()"
+              type="button"
+              class="btn-bulk-action btn-bulk-sms">
+        <i class="bi bi-people-fill"></i> Valider pour la campagne SMS
       </button>
-      <button (click)="exportTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn">
-        <i class="bi bi-upload"></i> Exporter
+
+      <button (click)="exportTriggered.emit()"
+              type="button"
+              class="btn-bulk-action btn-bulk-export">
+        <i class="bi bi-file-earmark-arrow-down"></i> Exporter la sélection
       </button>
-      <button (click)="deleteTriggered.emit()" [disabled]="!(hasSelection$ | async)" class="footer-action-btn primary">
-        <i class="bi bi-trash"></i> Supprimer
+
+      <button (click)="deleteTriggered.emit()"
+              type="button"
+              class="btn-bulk-action btn-bulk-delete">
+        <i class="bi bi-trash3-fill"></i> Supprimer
+      </button>
+
+      <button (click)="clearSelection()"
+              type="button"
+              class="btn-clear-selection"
+              title="Désélectionner tout">
+        <i class="bi bi-x-lg"></i>
       </button>
     </div>
   </div>
 
-  <!-- Right Section: Pagination -->
-  <div *ngIf="(paginationInfo$ | async) as pagination" class="pagination-container">
-    <div class="pagination-controls">
-      <button (click)="previousPage()" [disabled]="pagination.pageIndex === 1" class="pagination-btn">
-        <i class="bi bi-arrow-left"></i>
+  <!-- Standard Pagination Bar -->
+  <div *ngIf="(paginationInfo$ | async) as pagination" class="standard-pagination-bar">
+    <!-- Left: Range Info & Page Size -->
+    <div class="pagination-info-left">
+      <div class="range-text" *ngIf="getDisplayRange(pagination) as range">
+        Affichage de <strong>{{ range.from }}</strong> à <strong>{{ range.to }}</strong> sur <strong>{{ pagination.totalItems }}</strong> membres
+      </div>
+
+      <div class="page-size-selector">
+        <label for="pageSizeSelect">Par page :</label>
+        <select id="pageSizeSelect"
+                [value]="pagination.pageSize"
+                (change)="onPageSizeChange($event)"
+                class="form-select-page-size">
+          <option *ngFor="let size of pageSizes" [value]="size">{{ size }}</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- Right: Page Controls -->
+    <div class="pagination-controls-right" *ngIf="pagination.totalPages > 1">
+      <button type="button"
+              class="btn-page-nav"
+              (click)="previousPage()"
+              [disabled]="pagination.pageIndex <= 1"
+              title="Page précédente">
+        <i class="bi bi-chevron-left"></i>
       </button>
-      <span>Page {{ pagination.pageIndex }} / {{ pagination.totalPages }}</span>
-      <button (click)="nextPage()" [disabled]="pagination.pageIndex === pagination.totalPages" class="pagination-btn">
-        <i class="bi bi-arrow-right"></i>
+
+      <span class="page-current-pill">
+        Page {{ pagination.pageIndex }} sur {{ pagination.totalPages }}
+      </span>
+
+      <button type="button"
+              class="btn-page-nav"
+              (click)="nextPage()"
+              [disabled]="pagination.pageIndex >= pagination.totalPages"
+              title="Page suivante">
+        <i class="bi bi-chevron-right"></i>
       </button>
     </div>
   </div>
 </div>
-

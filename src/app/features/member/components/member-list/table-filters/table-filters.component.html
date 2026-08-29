@@ -1,19 +1,51 @@
-<div class="container">
-  <!-- Zone recherche -->
-  <div class="filters">
-    <div class="search-input-group">
-      <input (keyup.enter)="applySearchTerm()" [(ngModel)]="searchTerm" placeholder="Search orders..." type="text">
-      <button (click)="applySearchTerm()" class="search-icon-btn">
-        <i class="bi bi-search"></i>
+<div class="filters-container">
+  <div class="search-and-actions-bar">
+    <!-- Search Box -->
+    <div class="search-box">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text"
+             class="search-input"
+             placeholder="Rechercher par prénom, nom, téléphone, email, établissement..."
+             [(ngModel)]="searchTerm"
+             (keyup.enter)="applySearchTerm()">
+      <button *ngIf="searchTerm"
+              (click)="clearSearchTerm()"
+              type="button"
+              class="btn-clear-search"
+              title="Effacer la recherche">
+        <i class="bi bi-x-circle-fill"></i>
       </button>
-      <i (click)="clearSearchTerm()" *ngIf="searchTerm" class="bi bi-x-circle-fill clear-search-icon"></i>
+      <button (click)="applySearchTerm()"
+              type="button"
+              class="btn-search-trigger">
+        Rechercher
+      </button>
     </div>
+
+    <!-- Filter Panel Toggle -->
+    <button (click)="openFilterPanel.emit()"
+            [class.active]="filtersActive"
+            type="button"
+            class="btn-filter-drawer">
+      <i class="bi bi-sliders2"></i>
+      <span>Filtres Avancés</span>
+      <span *ngIf="activeFilterCount > 0" class="filter-count-badge">{{ activeFilterCount }}</span>
+    </button>
   </div>
 
-  <!-- Bouton filtres -->
-  <button (click)="openFilterPanel.emit()" [class.active]="filtersActive" class="filter-btn">
-    <i class="bi bi-funnel"></i> Filters <span *ngIf="filtersActive">({{ activeFilterCount }})</span>
-  </button>
-
-
+  <!-- Active Filter Chips Row -->
+  <div *ngIf="activeChips.length > 0" class="active-chips-row">
+    <span class="chips-label">Filtres actifs :</span>
+    <div class="chips-list">
+      <span *ngFor="let chip of activeChips" class="filter-chip">
+        <span class="chip-text">{{ chip.label }}</span>
+        <button (click)="removeChip(chip)" type="button" class="btn-remove-chip" title="Retirer ce filtre">
+          <i class="bi bi-x"></i>
+        </button>
+      </span>
+      <button (click)="clearAllFilters()" type="button" class="btn-clear-all-chips">
+        <i class="bi bi-arrow-counterclockwise"></i> Tout réinitialiser
+      </button>
+    </div>
+  </div>
 </div>

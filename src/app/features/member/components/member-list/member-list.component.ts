@@ -3,6 +3,7 @@ import {TableHeaderComponent} from "./table-header/table-header.component";
 import {TableBodyComponent} from "./table-body/table-body.component";
 import {TableFooterComponent} from "./table-footer/table-footer.component";
 import {MemberStateService} from "../../services/member.state.service";
+import {MemberHttpService} from "../../services/member.http.service";
 import {combineLatest, filter, map, Observable, switchMap, take} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {ExportModalComponent} from './export-modal/export-modal.component';
@@ -18,6 +19,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {PhaseHttpService} from "../../../configuration/periode-mandat/services/phase-http.service";
 import {SearchParams} from "../../../../core/models/SearchParams";
 import {SendMessageModalComponent} from "./send-message-modal/send-message-modal.component";
+import {ToastrService} from "ngx-toastr";
 
 @Component({
   selector: 'app-member-list',
@@ -46,15 +48,18 @@ export class MemberListComponent implements OnInit {
   isSendMessageModalOpen = false;
   isFilterPanelOpen = false;
   isDeleteModalOpen = false;
+  memberToDelete: MemberDataResponse | null = null;
   recipientNumbers: string[] = [];
   isSmsSelectMode = false;
   searchParamsForExport$: Observable<Partial<SearchParams>>;
 
   private memberStateService = inject(MemberStateService);
+  private memberHttpService = inject(MemberHttpService);
   private appStateService = inject(AppStateService);
   private phaseService = inject(PhaseHttpService);
   private route = inject(ActivatedRoute);
   private router = inject(Router);
+  private toastr = inject(ToastrService);
 
   constructor() {
     this.members$ = this.memberStateService.paginatedMembers$;
@@ -62,9 +67,6 @@ export class MemberListComponent implements OnInit {
     this.selectedMembersCount$ = this.memberStateService.selectedMembersCount$;
     this.hasSelection$ = this.memberStateService.hasSelection$;
 
-    // This logic ensures the export modal gets the right context:
-    // 1. If members are selected via checkbox, export only those members.
-    // 2. If no members are selected, export based on the current filters.
     this.searchParamsForExport$ = combineLatest([
       this.memberStateService.selectedMemberIds$,
       this.memberStateService.searchMemberParamsObject$
@@ -113,13 +115,12 @@ export class MemberListComponent implements OnInit {
     });
   }
 
-  toggleExportModal() {
+  toggleExportModal(): void {
     this.isExportModalOpen = !this.isExportModalOpen;
   }
 
-  toggleSendMessageModal() {
+  toggleSendMessageModal(): void {
     if (this.isSmsSelectMode) {
-      // En mode sélection SMS, on ignore le modal et on renvoie vers la page d'envoi immédiat.
       this.useSelectionForSms();
       return;
     }
@@ -159,23 +160,42 @@ export class MemberListComponent implements OnInit {
   }
 
   private normalizePhoneNumber(raw: string): string {
-    if (!raw) {
-      return '';
-    }
-    // Nettoyage simple : suppression des espaces et du signe plus.
+    if (!raw) return '';
     return raw.replace(/\s+/g, '').replace(/\+/g, '');
   }
 
-  toggleFilterPanel() {
+  toggleFilterPanel(): void {
     this.isFilterPanelOpen = !this.isFilterPanelOpen;
   }
 
-  toggleDeleteModal() {
+  toggleDeleteModal(): void {
+    this.memberToDelete = null;
     this.isDeleteModalOpen = !this.isDeleteModalOpen;
   }
 
-  onDeleteConfirmed() {
-    this.toggleDeleteModal();
+  handleSingleDelete(member: MemberDataResponse): void {
+    this.memberToDelete = member;
+    this.isDeleteModalOpen = true;
+  }
+
+  onDeleteConfirmed(): void {
+    if (this.memberToDelete) {
+      this.memberHttpService.deleteMember(this.memberToDelete.id).subscribe({
+        next: () => {
+          this.toastr.success('Membre supprimé avec succès.');
+          this.memberToDelete = null;
+          this.isDeleteModalOpen = false;
+          this.memberStateService.fetchMembers().subscribe();
+        },
+        error: () => {
+          this.toastr.error('Impossible de supprimer ce membre.');
+          this.memberToDelete = null;
+          this.isDeleteModalOpen = false;
+        }
+      });
+    } else {
+      this.toggleDeleteModal();
+    }
   }
 
   applyFilters(filters: any): void {
@@ -185,6 +205,9 @@ export class MemberListComponent implements OnInit {
 
   resetFilters(): void {
     this.memberStateService.updateSearchParams({
+      page: 1,
+      keyword: null,
+      status: null,
       paymentStatus: '',
       registrationStatus: '',
       club: [],

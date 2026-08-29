@@ -1,16 +1,36 @@
 <div class="header-container">
-  <div class="left-section">
-    <div class="page-title">Les membres</div>
+  <div class="top-row">
+    <div class="left-section">
+      <div class="title-with-badge">
+        <h1 class="page-title">Répertoire des Membres</h1>
+        <span class="count-badge" *ngIf="(totalItems$ | async) !== null">
+          <i class="bi bi-people-fill"></i>
+          {{ totalItems$ | async }} membre{{ ((totalItems$ | async) || 0) > 1 ? 's' : '' }}
+        </span>
+      </div>
+      <p class="page-subtitle">Gestion centralisée des adhérents, étudiants actifs et anciens de l'AEMUD.</p>
+    </div>
+
+    <div class="right-section">
+      <button (click)="exportTriggered.emit()" class="btn-action btn-secondary" title="Exporter la sélection ou l'ensemble des membres">
+        <i class="bi bi-file-earmark-arrow-down"></i>
+        <span>Exporter</span>
+      </button>
+      <button (click)="onAddMember()" class="btn-action btn-primary" title="Inscrire un nouveau membre">
+        <i class="bi bi-person-plus-fill"></i>
+        <span>Nouveau Membre</span>
+      </button>
+    </div>
   </div>
-  <div class="right-section">
-    <button (click)="onAddMember()" class="action-button primary">
-      <i class="bi bi-plus"></i> Ajouter un membre
-    </button>
-    <button class="action-button">
-      <i class="bi bi-download"></i> Importer
-    </button>
-    <button (click)="exportTriggered.emit()" class="action-button">
-      <i class="bi bi-upload"></i> Exporter
+
+  <!-- Segment Quick Filter Tabs -->
+  <div class="status-tabs-nav">
+    <button *ngFor="let tab of statusTabs"
+            (click)="onSelectStatusTab(tab.value)"
+            [ngClass]="{'active': (activeStatusTab$ | async) === tab.value}"
+            class="tab-pill">
+      <i class="bi {{ tab.icon }}"></i>
+      <span>{{ tab.label }}</span>
     </button>
   </div>
 </div>

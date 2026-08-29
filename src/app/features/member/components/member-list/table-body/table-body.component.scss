@@ -1,199 +1,440 @@
-@import 'variables';
-
-.table-container {
-  background-color: $white;
-  height: 100%;
-  overflow-y: auto;
+:host {
+  display: block;
+  width: 100%;
+  padding: 0 2.4rem 1.6rem;
 }
 
-.table {
+.table-card {
+  background: #ffffff;
+  border-radius: 1.2rem;
+  border: 1px solid #e2e8f0;
+  overflow: visible;
+}
+
+.table-responsive {
   width: 100%;
-  border-collapse: collapse;
+  overflow-x: auto;
+  border-radius: 1.2rem;
+}
+
+.modern-table {
+  width: 100%;
+  margin-bottom: 0;
+  border-collapse: separate;
+  border-spacing: 0;
 
   thead {
+    background: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
 
+    th {
+      padding: 1.2rem 1.6rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.04em;
+      white-space: nowrap;
+      border: none;
 
-    tr {
-      background-color: $gray-100;
-      border-bottom: 1px solid $color-border-default;
-      box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-      border-bottom: none;
-
-      th {
-        padding: $space-3 $space-4;
-        text-align: left;
-        font-weight: 600;
-        font-size: $font-size-small;
-        color: $color-text-secondary;
-        white-space: nowrap;
+      &.sortable-th {
         cursor: pointer;
+        user-select: none;
         transition: color 0.2s ease;
 
-        .sort-icon {
-          margin-right: $space-2;
+        &:hover {
+          color: #0f172a;
         }
 
         &.active-sort {
-          color: $primary-600;
+          color: #278F8F;
           font-weight: 700;
         }
+
+        .sort-icon {
+          margin-left: 0.6rem;
+          font-size: 1.2rem;
+        }
+      }
+
+      &.col-checkbox {
+        width: 4.8rem;
+        padding-left: 2rem;
+        padding-right: 0.8rem;
       }
     }
   }
 
   tbody {
-    tr {
-      border-bottom: 1px solid $color-border-default;
-      transition: background-color 0.2s ease;
+    tr.member-row {
       cursor: pointer;
+      transition: background-color 0.15s ease;
+      border-bottom: 1px solid #f1f5f9;
+
+      &:last-child {
+        border-bottom: none;
+      }
 
       &:hover {
-        background-color: #f9f9f9; // Should be a variable
+        background-color: #f8fafc;
+      }
+
+      &.row-selected {
+        background-color: #f0fdfa;
       }
 
       td {
-        padding: $space-4;
-        vertical-align: middle;
-        font-size: $font-size-body;
-        color: $color-text-primary;
-        white-space: nowrap;
-
-        .badge {
-          font-size: 1.2rem; // smaller than body
-          padding: 0.4em 0.7em;
-          border-radius: $radius-md;
-          font-weight: 600;
-        }
-      }
-
-      th { // For the checkbox
-        padding: $space-4;
+        padding: 1.4rem 1.6rem;
+        font-size: 1.35rem;
+        color: #334155;
+        border: none;
         vertical-align: middle;
 
-        input[type="checkbox"]:checked {
-          background-color: $primary-500;
-          border-color: $primary-500;
+        &.col-checkbox {
+          padding-left: 2rem;
+          padding-right: 0.8rem;
         }
       }
-    }
-  }
-
-  .btn-action {
-    background: transparent;
-    border: 1px solid $color-border-default;
-    color: $color-text-primary;
-    padding: $space-2 $space-3;
-    border-radius: $radius-sm;
-    font-size: $font-size-small;
-    transition: all 0.2s ease;
-
-    &:hover {
-      background: $primary-500;
-      color: $white;
-      border-color: $primary-500;
-    }
-  }
-
-  // Kebab menu styles
-  .kebab-menu {
-    position: relative;
-    display: inline-block;
-  }
-
-  .kebab-icon {
-    background: transparent;
-    border: none;
-    padding: $space-1 $space-2;
-    border-radius: $radius-sm;
-    cursor: pointer;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: $gray-100;
-    }
-
-    i {
-      font-size: $icon-md;
-      color: $color-text-secondary;
-    }
-  }
-
-  .kebab-dropdown {
-    display: none; // Hidden by default
-    position: absolute;
-    right: 100%; // Position to the left of the icon
-    top: 0;
-    background-color: $white;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-sm;
-    box-shadow: $shadow-md;
-    min-width: 180px;
-    list-style: none;
-    padding: $space-2 0;
-    margin: 0;
-    z-index: 100;
-  }
-
-  .kebab-menu:hover .kebab-dropdown {
-    display: block; // Show on hover for demo
-  }
-
-  .kebab-dropdown li a {
-    display: block;
-    padding: $space-2 $space-4;
-    font-size: $font-size-small;
-    color: $color-text-primary;
-    text-decoration: none;
-    transition: background-color 0.2s ease;
-
-    &:hover {
-      background-color: $gray-100;
     }
   }
 }
 
-.empty-state-container {
+.custom-checkbox {
+  width: 1.8rem;
+  height: 1.8rem;
+  cursor: pointer;
+  border-radius: 0.4rem;
+  border: 1.5px solid #cbd5e1;
+
+  &:checked {
+    background-color: #278F8F;
+    border-color: #278F8F;
+  }
+
+  &:focus {
+    box-shadow: 0 0 0 3px rgba(39, 143, 143, 0.2);
+  }
+}
+
+.member-identity-cell {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+
+  .member-avatar {
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.35rem;
+    font-weight: 700;
+    flex-shrink: 0;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+  }
+
+  .member-names {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+
+    .full-name {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: #0f172a;
+    }
+
+    .member-email {
+      font-size: 1.25rem;
+      color: #64748b;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+
+      i {
+        font-size: 1.1rem;
+      }
+    }
+  }
+}
+
+.contact-cell {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+
+  .phone-number {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #1e293b;
+  }
+
+  .btn-whatsapp-direct {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.6rem;
+    height: 2.6rem;
+    border-radius: 50%;
+    background: #dcfce7;
+    color: #16a34a;
+    font-size: 1.4rem;
+    text-decoration: none;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #16a34a;
+      color: #ffffff;
+      transform: scale(1.1);
+    }
+  }
+}
+
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.4rem 1rem;
+  border-radius: 2rem;
+  font-size: 1.2rem;
+  font-weight: 600;
+  white-space: nowrap;
+
+  i {
+    font-size: 1.2rem;
+  }
+
+  &.badge-active {
+    background: #f0fdfa;
+    color: #0f766e;
+    border: 1px solid #ccfbf1;
+  }
+
+  &.badge-alumni {
+    background: #f5f3ff;
+    color: #6d28d9;
+    border: 1px solid #ede9fe;
+  }
+
+  &.badge-inactive {
+    background: #f8fafc;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+  }
+}
+
+.cursus-cell {
+  display: flex;
+  flex-direction: column;
+  gap: 0.2rem;
+
+  .main-info {
+    font-size: 1.35rem;
+    font-weight: 500;
+    color: #1e293b;
+
+    .sub-level {
+      font-size: 1.2rem;
+      color: #64748b;
+      font-weight: 400;
+    }
+  }
+
+  .sub-info {
+    font-size: 1.2rem;
+  }
+}
+
+.engagement-badges {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+
+  .badge-tag {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.25rem 0.7rem;
+    border-radius: 0.4rem;
+    font-size: 1.15rem;
+    font-weight: 500;
+
+    i {
+      font-size: 1.1rem;
+    }
+
+    &.tag-bourse {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    &.tag-club {
+      background: #e0f2fe;
+      color: #0369a1;
+    }
+
+    &.tag-commission {
+      background: #ede9fe;
+      color: #6d28d9;
+    }
+  }
+}
+
+.dropdown-action-wrapper {
+  position: relative;
+  display: inline-block;
+
+  .btn-kebab-menu {
+    border: none;
+    background: transparent;
+    width: 3.2rem;
+    height: 3.2rem;
+    border-radius: 50%;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #64748b;
+    font-size: 1.6rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #f1f5f9;
+      color: #0f172a;
+    }
+  }
+
+  .kebab-menu-dropdown {
+    position: absolute;
+    right: 0;
+    top: 100%;
+    z-index: 1050;
+    min-width: 20rem;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 0.8rem;
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.05);
+    padding: 0.6rem 0;
+    display: flex;
+    flex-direction: column;
+    animation: fadeIn 0.15s ease-out;
+
+    .dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.9rem 1.6rem;
+      border: none;
+      background: transparent;
+      font-size: 1.3rem;
+      font-weight: 500;
+      color: #334155;
+      text-align: left;
+      cursor: pointer;
+      width: 100%;
+      transition: background 0.15s ease;
+
+      i {
+        font-size: 1.4rem;
+        width: 1.6rem;
+      }
+
+      &:hover {
+        background: #f8fafc;
+        color: #0f172a;
+      }
+
+      &.text-danger {
+        color: #dc2626;
+
+        &:hover {
+          background: #fef2f2;
+          color: #b91c1c;
+        }
+      }
+    }
+
+    .dropdown-divider {
+      height: 1px;
+      background: #e2e8f0;
+      margin: 0.4rem 0;
+    }
+  }
+}
+
+.empty-state-card {
+  padding: 6rem 2.4rem;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: $space-16 $space-6;
   text-align: center;
-  height: 100%;
 
-  .empty-state-icon {
-    font-size: $icon-xl;
-    color: $primary-500;
-    margin-bottom: $space-6;
+  .empty-state-icon-circle {
+    width: 7.2rem;
+    height: 7.2rem;
+    border-radius: 50%;
+    background: #f0fdfa;
+    color: #278F8F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    margin-bottom: 2rem;
   }
 
   .empty-state-title {
-    font-size: $font-size-h5;
-    font-weight: 600;
-    color: $color-text-primary;
-    margin-bottom: $space-2;
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.8rem;
   }
 
-  .empty-state-text {
-    font-size: $font-size-body;
-    color: $color-text-secondary;
-    max-width: 400px;
-    margin-bottom: $space-8;
+  .empty-state-description {
+    font-size: 1.4rem;
+    color: #64748b;
+    max-width: 48rem;
+    margin: 0 0 2.4rem;
   }
 
-  .empty-state-button {
-    background-color: $primary-500;
-    color: $white;
+  .btn-teal-primary {
+    background: #278F8F;
+    color: #ffffff;
     border: none;
-    padding: $space-3 $space-6;
-    font-size: $font-size-body;
-    font-weight: 500;
-    border-radius: $radius-sm;
+    padding: 1rem 2rem;
+    border-radius: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 600;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+    transition: background 0.2s ease;
 
     &:hover {
-      background-color: $primary-600;
+      background: #1f7373;
     }
+  }
+}
+
+.text-teal {
+  color: #278F8F !important;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 0 1.6rem 1.6rem;
   }
 }

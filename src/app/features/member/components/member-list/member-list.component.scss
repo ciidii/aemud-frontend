@@ -1,25 +1,49 @@
-@import 'variables';
-
-:host {
-  display: block;
-  height: 100%;
-}
-
-.container {
-  display: grid;
-  grid-template-rows: auto 1fr auto; // header, body, footer
-  height: 95%;
+.member-list-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  background: #f8fafc;
 }
 
 .list-header {
-  // The header content determines its own height
+  width: 100%;
+  background: #ffffff;
+}
+
+.sms-mode-banner {
+  margin: 1.6rem 2.4rem 0;
+  padding: 1.2rem 1.6rem;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 0.8rem;
+
+  .banner-icon {
+    font-size: 2rem;
+    color: #2563eb;
+  }
+
+  .btn-teal-primary {
+    background: #278F8F;
+    color: #ffffff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.6rem;
+    font-weight: 600;
+    font-size: 1.3rem;
+
+    &:hover:not(:disabled) {
+      background: #1f7373;
+    }
+  }
 }
 
 .list-body {
-  // This container will grow and shrink
-  overflow: hidden; // Crucial for the inner component's scrolling
+  width: 100%;
+  flex: 1;
+  padding-top: 1.6rem;
 }
 
 .list-footer {
-  // The footer content determines its own height
+  width: 100%;
 }

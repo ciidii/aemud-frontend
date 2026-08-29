@@ -1,114 +1,232 @@
-@import 'variables';
-
-.container {
-  display: flex;
-  align-items: center;
-  gap: $space-4;
-  padding: $space-3 0;
-  background-color: #f9f9f9; // Should this be a variable?
-  border-bottom: 1px solid $color-border-default;
-}
-
-.filters {
-  flex: 1;
-  display: flex;
-  align-items: center;
-}
-
-.search-input-group {
-  display: flex;
-  align-items: center;
-  background: $white;
-  border: 1px solid $color-border-default;
-  border-radius: $radius-sm;
-  overflow: hidden;
+:host {
+  display: block;
   width: 100%;
-  max-width: 400px;
-  box-shadow: $shadow-sm;
+  padding: 1.6rem 2.4rem;
+  background: #ffffff;
+}
 
-  input {
+.filters-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.search-and-actions-bar {
+  display: flex;
+  align-items: center;
+  gap: 1.2rem;
+  width: 100%;
+}
+
+.search-box {
+  position: relative;
+  display: flex;
+  align-items: center;
+  flex: 1;
+  background: #f8fafc;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.8rem;
+  padding: 0.2rem 0.4rem 0.2rem 1.4rem;
+  transition: all 0.2s ease;
+
+  &:focus-within {
+    background: #ffffff;
+    border-color: #278F8F;
+    box-shadow: 0 0 0 3px rgba(39, 143, 143, 0.15);
+  }
+
+  .search-icon {
+    font-size: 1.5rem;
+    color: #94a3b8;
+    margin-right: 1rem;
+  }
+
+  .search-input {
     flex: 1;
     border: none;
+    background: transparent;
+    font-size: 1.4rem;
+    color: #0f172a;
     outline: none;
-    font-size: $font-size-small;
-    padding: $space-2 $space-3;
+    padding: 0.8rem 0;
+
+    &::placeholder {
+      color: #94a3b8;
+      font-size: 1.35rem;
+    }
   }
 
-  .search-icon-btn {
-    background: transparent;
+  .btn-clear-search {
     border: none;
-    padding: $space-2 $space-3;
+    background: transparent;
+    color: #94a3b8;
     cursor: pointer;
+    font-size: 1.6rem;
+    padding: 0 0.8rem;
     display: flex;
     align-items: center;
-    justify-content: center;
-    border-left: 1px solid $color-border-default;
-
-    i {
-      font-size: $icon-sm;
-      color: $color-text-secondary;
-    }
 
     &:hover {
-      background: rgba(0, 0, 0, 0.05);
+      color: #64748b;
     }
   }
 
-  .clear-search-icon {
-    margin-right: $space-2;
+  .btn-search-trigger {
+    background: #278F8F;
+    color: #ffffff;
+    border: none;
+    border-radius: 0.6rem;
+    padding: 0.7rem 1.4rem;
+    font-size: 1.3rem;
+    font-weight: 600;
     cursor: pointer;
-    color: $color-text-secondary;
-    transition: color 0.2s ease;
+    transition: background 0.2s ease;
 
     &:hover {
-      color: $color-text-primary;
+      background: #1f7373;
     }
   }
 }
 
-.filter-btn, .action-btn {
-  display: flex;
+.btn-filter-drawer {
+  display: inline-flex;
   align-items: center;
-  gap: $space-2;
-  padding: $space-2 $space-4;
-  border-radius: $radius-sm;
-  font-size: $font-size-small;
-  font-weight: 500;
+  gap: 0.8rem;
+  padding: 0.95rem 1.6rem;
+  background: #f8fafc;
+  color: #334155;
+  border: 1.5px solid #e2e8f0;
+  border-radius: 0.8rem;
+  font-size: 1.35rem;
+  font-weight: 600;
   cursor: pointer;
+  white-space: nowrap;
   transition: all 0.2s ease;
-  border: 1px solid $color-border-default;
-  box-shadow: $shadow-sm;
 
   i {
-    font-size: $icon-sm;
+    font-size: 1.5rem;
+    color: #64748b;
   }
-}
-
-.filter-btn {
-  background: $white;
-  color: $color-text-primary;
 
   &:hover {
-    background: $gray-200;
-    box-shadow: $shadow-md;
+    background: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #0f172a;
   }
 
   &.active {
-    background-color: $primary-100;
-    color: $primary-700;
-    border-color: $primary-200;
-    font-weight: 600;
+    background: #f0fdfa;
+    border-color: #278F8F;
+    color: #0f766e;
+
+    i {
+      color: #0f766e;
+    }
+  }
+
+  .filter-count-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 2rem;
+    height: 2rem;
+    border-radius: 50%;
+    background: #278F8F;
+    color: #ffffff;
+    font-size: 1.15rem;
+    font-weight: 700;
   }
 }
 
-.action-btn {
-  background: $primary-500;
-  color: $white;
-  border-color: $primary-500;
+.active-chips-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+  padding-top: 0.4rem;
 
-  &:hover {
-    background: $primary-400;
-    border-color: $primary-400;
-    box-shadow: $shadow-md;
+  .chips-label {
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: #64748b;
+  }
+
+  .chips-list {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    flex-wrap: wrap;
+  }
+
+  .filter-chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.35rem 0.9rem 0.35rem 1.1rem;
+    background: #f1f5f9;
+    border: 1px solid #e2e8f0;
+    border-radius: 2rem;
+    font-size: 1.25rem;
+    color: #334155;
+
+    .chip-text {
+      font-weight: 500;
+    }
+
+    .btn-remove-chip {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border: none;
+      background: #cbd5e1;
+      color: #334155;
+      width: 1.6rem;
+      height: 1.6rem;
+      border-radius: 50%;
+      cursor: pointer;
+      font-size: 1.3rem;
+      padding: 0;
+      transition: all 0.2s ease;
+
+      &:hover {
+        background: #ef4444;
+        color: #ffffff;
+      }
+    }
+  }
+
+  .btn-clear-all-chips {
+    border: none;
+    background: transparent;
+    color: #ef4444;
+    font-size: 1.25rem;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0.35rem 0.6rem;
+    border-radius: 0.4rem;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+
+    &:hover {
+      background: #fef2f2;
+      text-decoration: underline;
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  :host {
+    padding: 1.2rem 1.6rem;
+  }
+
+  .search-and-actions-bar {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .btn-filter-drawer {
+    justify-content: center;
   }
 }

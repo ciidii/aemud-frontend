@@ -1,17 +1,20 @@
-<div class="container">
+<div class="member-list-page">
   <div class="list-header">
-    <div *ngIf="isSmsSelectMode" class="alert alert-info mb-3" role="alert">
+    <div *ngIf="isSmsSelectMode" class="sms-mode-banner" role="alert">
       <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-        <div>
-          <strong>Mode sélection SMS activé</strong>
-          <div class="small text-muted">Sélectionnez les membres à contacter, puis utilisez l'action ci-dessous pour envoyer un SMS groupé.</div>
+        <div class="d-flex align-items-center gap-2">
+          <i class="bi bi-chat-dots-fill banner-icon"></i>
+          <div>
+            <strong>Mode sélection SMS activé</strong>
+            <div class="small text-muted">Sélectionnez les membres à contacter, puis cliquez sur "Valider pour la campagne SMS".</div>
+          </div>
         </div>
         <div class="d-flex align-items-center gap-2">
           <button type="button"
-                  class="btn btn-primary btn-sm"
+                  class="btn btn-teal-primary btn-sm"
                   [disabled]="!(hasSelection$ | async)"
                   (click)="useSelectionForSms()">
-            <i class="bi bi-people"></i> Utiliser cette sélection pour un SMS
+            <i class="bi bi-people-fill"></i> Utiliser la sélection ({{ selectedMembersCount$ | async }})
           </button>
           <button type="button" class="btn btn-outline-secondary btn-sm" routerLink="/notifications/sms">
             Quitter le mode SMS
@@ -19,17 +22,17 @@
         </div>
       </div>
     </div>
+
     <app-table-header (exportTriggered)="toggleExportModal()"></app-table-header>
     <app-table-filters (openFilterPanel)="toggleFilterPanel()"></app-table-filters>
   </div>
 
   <div class="list-body">
-    <div *ngIf="loading$ | async" class="loading-indicator">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Loading...</span>
-      </div>
-    </div>
-    <app-table-body [loading]="loading$ | async" [members]="members$ | async"/>
+    <app-table-body
+      [loading]="loading$ | async"
+      [members]="members$ | async"
+      (singleDelete)="handleSingleDelete($event)">
+    </app-table-body>
   </div>
 
   <div class="list-footer">
@@ -43,18 +46,28 @@
   </div>
 </div>
 
-<app-export-modal (close)="toggleExportModal()" *ngIf="isExportModalOpen"
-                  [searchRequest]="searchParamsForExport$ | async"></app-export-modal>
+<app-export-modal
+  (close)="toggleExportModal()"
+  *ngIf="isExportModalOpen"
+  [searchRequest]="searchParamsForExport$ | async">
+</app-export-modal>
+
 <app-send-message-modal
   *ngIf="isSendMessageModalOpen"
   [recipientNumbers]="recipientNumbers"
   (close)="toggleSendMessageModal()">
 </app-send-message-modal>
-<app-filter-panel (applyFilters)="applyFilters($event)" (close)="toggleFilterPanel()" (resetFilters)="resetFilters()"
-                  [isOpen]="isFilterPanelOpen"></app-filter-panel>
+
+<app-filter-panel
+  (applyFilters)="applyFilters($event)"
+  (close)="toggleFilterPanel()"
+  (resetFilters)="resetFilters()"
+  [isOpen]="isFilterPanelOpen">
+</app-filter-panel>
+
 <app-confirm-delete-modal
   (close)="toggleDeleteModal()"
   (confirm)="onDeleteConfirmed()"
   *ngIf="isDeleteModalOpen"
-  [itemCount]="(selectedMembersCount$ | async) || 0">
+  [itemCount]="memberToDelete ? 1 : ((selectedMembersCount$ | async) || 0)">
 </app-confirm-delete-modal>

@@ -2,6 +2,7 @@ export interface SearchParams {
   page: number;
   rpp: number;
   keyword: string | null;
+  status?: string | null;
   club: string[];
   commission: string[];
   paymentStatus: string;

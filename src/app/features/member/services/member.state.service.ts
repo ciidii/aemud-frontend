@@ -3,7 +3,6 @@ import {BehaviorSubject, map, tap} from "rxjs";
 import {MemberHttpService} from "./member.http.service";
 import {MemberDataResponse} from "../../../core/models/member-data.model";
 import {SearchParams} from "../../../core/models/SearchParams";
-import {AppStateService} from "../../../core/services/app-state.service";
 
 export type SortDirection = 'asc' | 'desc' | '';
 
@@ -14,7 +13,6 @@ export interface PaginationInfo {
   totalPages: number;
 }
 
-
 @Injectable({
   providedIn: 'root'
 })
@@ -24,6 +22,7 @@ export class MemberStateService {
     page: 1,
     rpp: 10,
     keyword: null,
+    status: null,
     club: [],
     commission: [],
     paymentStatus: "",
@@ -35,16 +34,20 @@ export class MemberStateService {
     sortColumn: "personalInfo.name",
     sortDirection: true
   });
+
   private readonly _selectedMemberIds = new BehaviorSubject<string[]>([]);
-  searchMemberParamsObject$ = this._searchMemberParamsObject$.asObservable();
+  readonly searchMemberParamsObject$ = this._searchMemberParamsObject$.asObservable();
   readonly selectedMemberIds$ = this._selectedMemberIds.asObservable();
   readonly selectedMembersCount$ = this.selectedMemberIds$.pipe(map(ids => ids.length));
   readonly hasSelection$ = this.selectedMembersCount$.pipe(map(count => count > 0));
   readonly sortDirection$ = this.searchMemberParamsObject$.pipe(map(params => params.sortDirection ? 'asc' : 'desc'));
   readonly sortColumn$ = this.searchMemberParamsObject$.pipe(map(params => params.sortColumn));
+  readonly activeStatusTab$ = this.searchMemberParamsObject$.pipe(map(params => params.status ?? null));
+
   private memberHttpService = inject(MemberHttpService);
   private readonly _paginatedMemberSubject = new BehaviorSubject<MemberDataResponse[]>([]);
   readonly paginatedMembers$ = this._paginatedMemberSubject.asObservable();
+
   private readonly _paginationInfoSubject = new BehaviorSubject<PaginationInfo>({
     pageIndex: 1,
     pageSize: 10,
@@ -52,6 +55,8 @@ export class MemberStateService {
     totalPages: 0
   });
   readonly paginationInfo$ = this._paginationInfoSubject.asObservable();
+  readonly totalItems$ = this.paginationInfo$.pipe(map(info => info.totalItems));
+
   private readonly _loading = new BehaviorSubject<boolean>(false);
   readonly loading$ = this._loading.asObservable();
 
@@ -63,16 +68,37 @@ export class MemberStateService {
     return this.memberHttpService.searchMember(this._searchMemberParamsObject$.getValue())
       .pipe(
         tap(response => {
-          this._paginatedMemberSubject.next(response.items);
+          this._paginatedMemberSubject.next(response.items || []);
           this._paginationInfoSubject.next({
-            pageIndex: response.page,
+            pageIndex: response.page || 1,
             pageSize: this._searchMemberParamsObject$.getValue().rpp,
-            totalItems: response.records,
-            totalPages: response.pages
+            totalItems: response.records || 0,
+            totalPages: response.pages || 1
           });
           this._loading.next(false);
         })
       );
+  }
+
+  setStatusTab(status: string | null) {
+    this.updateSearchParams({
+      status: status || null,
+      page: 1
+    });
+    this.fetchMembers().subscribe();
+  }
+
+  setPageSize(pageSize: number) {
+    this.updateSearchParams({
+      rpp: pageSize,
+      page: 1
+    });
+    this.fetchMembers().subscribe();
+  }
+
+  goToPage(page: number) {
+    this.updateSearchParams({ page });
+    this.fetchMembers().subscribe();
   }
 
   updateSort(column: string) {
@@ -96,22 +122,18 @@ export class MemberStateService {
     this.fetchMembers().subscribe();
   }
 
-  toggleMemberSelection(id: string
-  ):
-    void {
+  toggleMemberSelection(id: string): void {
     const currentIds = this._selectedMemberIds.getValue();
     const index = currentIds.indexOf(id);
 
-    if (index > -1
-    ) {
+    if (index > -1) {
       this._selectedMemberIds.next(currentIds.filter(i => i !== id));
     } else {
       this._selectedMemberIds.next([...currentIds, id]);
     }
   }
 
-  toggleSelectAll(pageMemberIds: string[], isPageSelected: boolean):
-    void {
+  toggleSelectAll(pageMemberIds: string[], isPageSelected: boolean): void {
     const currentIds = new Set(this._selectedMemberIds.getValue());
 
     if (isPageSelected) {
@@ -122,9 +144,7 @@ export class MemberStateService {
     this._selectedMemberIds.next(Array.from(currentIds));
   }
 
-  clearSelection()
-    :
-    void {
+  clearSelection(): void {
     this._selectedMemberIds.next([]);
   }
 
@@ -132,5 +152,4 @@ export class MemberStateService {
     const current = this._searchMemberParamsObject$.getValue();
     this._searchMemberParamsObject$.next({...current, ...partial});
   }
-
 }
