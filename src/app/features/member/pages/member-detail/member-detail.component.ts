@@ -64,12 +64,13 @@ import {SearchParams} from "../../../../core/models/SearchParams";
 import {FormSchemaService} from "../../../../core/services/form-schema.service";
 import {FormSchema} from "../../../../core/models/form-schema.model";
 import {DynamicFormComponent} from "../../../../shared/components/dynamic-form/dynamic-form.component";
+import {FormsModule} from "@angular/forms";
 
 
 @Component({
   selector: 'app-member-detail',
   standalone: true,
-  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase, ContributionCalendarComponent, DynamicFormComponent],
+  imports: [AsyncPipe, CurrencyPipe, NgIf, ReregisterModalComponent, NgForOf, ConfirmDeleteModalComponent, SendMessageModalComponent, ExportModalComponent, NgClass, RecordPaymentModalComponent, ToDatePipe, DatePipe, EditPersonalInfoModalComponent, EditContactInfoModalComponent, EditAcademicInfoModalComponent, EditEngagementsModalComponent, EditReligiousKnowledgeModalComponent, EditAddressInfoModalComponent, EditBourseInfoModalComponent, NgSwitch, NgSwitchCase, ContributionCalendarComponent, DynamicFormComponent, FormsModule],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.scss'
 })
@@ -91,6 +92,16 @@ export class MemberDetailComponent implements OnInit {
   isEditReligiousKnowledgeModalOpen = false;
   isEditAddressInfoModalOpen = false;
   isEditBourseInfoModalOpen = false;
+
+  // Fee payment modal
+  isPayFeeModalOpen = false;
+  selectedRegistrationForFee: RegistrationModel | null = null;
+  feeAmount: number = 2000;
+  feePaymentMethod: string = 'CASH';
+  feeNotes: string = '';
+  isSubmittingFee = false;
+  isReceiptModalOpen = false;
+  receiptRegistration: RegistrationModel | null = null;
 
   // Full Member Dynamic Form Edit
   isEditFullMemberModalOpen = false;
@@ -644,6 +655,58 @@ export class MemberDetailComponent implements OnInit {
       key,
       value: typeof value === 'boolean' ? (value ? 'Oui' : 'Non') : Array.isArray(value) ? value.join(', ') : value
     }));
+  }
+
+  // --- REGISTRATION FEE PAYMENT ---
+  openPayFeeModal(registration: RegistrationModel): void {
+    this.selectedRegistrationForFee = registration;
+    this.feeAmount = registration.registrationType === 'INITIAL' ? 2000 : 1000;
+    this.feePaymentMethod = 'CASH';
+    this.feeNotes = '';
+    this.isPayFeeModalOpen = true;
+  }
+
+  closePayFeeModal(): void {
+    this.isPayFeeModalOpen = false;
+    this.selectedRegistrationForFee = null;
+  }
+
+  submitPayFee(): void {
+    if (!this.selectedRegistrationForFee) return;
+
+    this.isSubmittingFee = true;
+    const payload = {
+      amount: this.feeAmount,
+      paymentMethod: this.feePaymentMethod,
+      notes: this.feeNotes
+    };
+
+    this.memberHttpService.payRegistrationFee(this.selectedRegistrationForFee.id, payload).subscribe({
+      next: (res) => {
+        this.isSubmittingFee = false;
+        this.notificationService.showSuccess("Frais d'adhésion enregistrés avec succès !");
+        this.closePayFeeModal();
+        if (res.data) {
+          this.openReceiptModal(res.data);
+        }
+        this.loadData();
+      },
+      error: (err) => {
+        this.isSubmittingFee = false;
+        this.notificationService.showError("Erreur lors de l'enregistrement du paiement.");
+        console.error('Pay fee failed', err);
+      }
+    });
+  }
+
+  openReceiptModal(registration: RegistrationModel): void {
+    this.receiptRegistration = registration;
+    this.isReceiptModalOpen = true;
+  }
+
+  closeReceiptModal(): void {
+    this.isReceiptModalOpen = false;
+    this.receiptRegistration = null;
   }
 }
 

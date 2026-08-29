@@ -51,6 +51,10 @@ export class MemberHttpService {
     return this._http.post<RegistrationResponse>(`${environment.API_URL}/registration`, registrationData);
   }
 
+  payRegistrationFee(registrationId: string, payload: { amount?: number; paymentMethod: string; notes?: string }): Observable<ResponseEntityApi<RegistrationModel>> {
+    return this._http.post<ResponseEntityApi<RegistrationModel>>(`${environment.API_URL}/registration/${registrationId}/pay-fee`, payload);
+  }
+
   updateMember(member: any): Observable<ResponseEntityApi<MemberDataResponse>> {
     return this._http.put<ResponseEntityApi<MemberDataResponse>>(`${this._url}`, member);
   }

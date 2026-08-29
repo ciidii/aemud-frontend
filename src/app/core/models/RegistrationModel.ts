@@ -20,4 +20,8 @@ export interface RegistrationModel {
   registrationType: TypeInscription;
   statusPayment: boolean;
   registrationStatus: RegistrationStatus;
+  amount?: number;
+  receiptNumber?: string;
+  paymentMethod?: string;
+  paymentDate?: string;
 }

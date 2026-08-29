@@ -304,7 +304,6 @@
                   </div>
                 </div>
 
-
                 <!-- Ligne 2 : bouton -->
                 <button (click)="toggleReregisterModal(registrationOverview.nextRegistrablePhase)"
                         class="btn btn-primary btn-outline-primary">
@@ -314,12 +313,48 @@
               </div>
 
               <ng-template #upToDate>
-                <div class="status-section">
-                  <div class="status-text">
-                    <i class="bi bi-check-circle-fill text-success"></i>
+                <div class="status-section d-flex flex-column gap-2">
+                  <div class="status-text d-flex align-items-start gap-2">
+                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
                     <div>
                       <strong>Membre à jour</strong>
-                      <span>Inscrit pour: {{ registrationOverview.latestRegistration?.mandatName }}</span>
+                      <div>
+                        <span class="text-muted small">Inscrit pour : </span>
+                        <span class="fw-semibold">{{ registrationOverview.latestRegistration?.mandatName }}</span>
+                        <span class="badge bg-teal-subtle text-teal ms-2 px-2 py-0 border">
+                          {{ registrationOverview.latestRegistration?.registrationType === 'INITIAL' ? '1ère Inscription' : 'Réinscription' }}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <!-- Fee Status Row -->
+                  <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light border mt-1" *ngIf="registrationOverview.latestRegistration as reg">
+                    <div class="d-flex align-items-center gap-2">
+                      <i class="bi bi-wallet2 text-teal"></i>
+                      <span class="small fw-semibold">Frais d'adhésion :</span>
+                      <span *ngIf="reg.statusPayment" class="badge bg-success text-white">
+                        Réglés ({{ (reg.amount || 2000) | currency:'XOF':'symbol':'1.0-0' }})
+                      </span>
+                      <span *ngIf="!reg.statusPayment" class="badge bg-warning-subtle text-warning-emphasis border">
+                        En attente ({{ (reg.registrationType === 'INITIAL' ? 2000 : 1000) | currency:'XOF':'symbol':'1.0-0' }})
+                      </span>
+                    </div>
+
+                    <div class="d-flex gap-1">
+                      <button *ngIf="!reg.statusPayment"
+                              (click)="openPayFeeModal(reg)"
+                              type="button"
+                              class="btn btn-sm btn-success px-2 py-1 d-inline-flex align-items-center gap-1">
+                        <i class="bi bi-cash-stack"></i> Encaisser
+                      </button>
+                      <button *ngIf="reg.statusPayment"
+                              (click)="openReceiptModal(reg)"
+                              type="button"
+                              class="btn btn-sm btn-outline-secondary px-2 py-1 d-inline-flex align-items-center gap-1"
+                              title="Consulter la quittance d'adhésion">
+                        <i class="bi bi-receipt"></i> Reçu
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -408,7 +443,11 @@
                     </div>
                     <div class="phase-status">
                       <ng-container [ngSwitch]="phaseItem.status">
-                        <span *ngSwitchCase="'REGISTERED'" class="badge bg-success-light">Inscrit</span>
+                        <div *ngSwitchCase="'REGISTERED'" class="d-flex align-items-center gap-1">
+                          <span class="badge bg-success-light">Inscrit</span>
+                          <span *ngIf="phaseItem.registration?.statusPayment" class="badge bg-success-subtle text-success border">Frais Payés</span>
+                          <span *ngIf="!phaseItem.registration?.statusPayment" class="badge bg-warning-subtle text-warning-emphasis border">Frais Impayés</span>
+                        </div>
                         <span *ngSwitchCase="'MISSED_OPEN'" class="badge bg-warning-light">Action requise</span>
                         <span *ngSwitchCase="'MISSED_CLOSED'" class="badge bg-secondary-light">Manqué</span>
                         <span *ngSwitchCase="'PENDING'" class="badge bg-info-light">À venir</span>
@@ -418,6 +457,14 @@
                       <button (click)="toggleReregisterModal(phaseItem.phase)" *ngIf="phaseItem.isRegistrable"
                               class="btn btn-sm btn-outline-primary">
                         S'inscrire
+                      </button>
+                      <button (click)="openPayFeeModal(phaseItem.registration)" *ngIf="phaseItem.registration && !phaseItem.registration.statusPayment"
+                              class="btn btn-sm btn-success py-0 px-2" title="Encaisser les frais d'adhésion">
+                        <i class="bi bi-cash"></i>
+                      </button>
+                      <button (click)="openReceiptModal(phaseItem.registration)" *ngIf="phaseItem.registration && phaseItem.registration.statusPayment"
+                              class="btn btn-sm btn-outline-secondary py-0 px-2" title="Voir le reçu">
+                        <i class="bi bi-receipt"></i>
                       </button>
                     </div>
                   </li>
@@ -543,6 +590,144 @@
           [isSubmitting]="isUpdatingMember"
           (formSubmit)="handleFullMemberSave($event)"
         ></app-dynamic-form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Encaissement Frais d'Adhésion -->
+<div *ngIf="isPayFeeModalOpen" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-bottom py-3 px-4 bg-white rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="me-3 bg-teal-subtle text-teal rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-cash-stack fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark mb-0">Encaisser les Frais d'Adhésion</h5>
+            <small class="text-muted">
+              {{ currentMember?.personalInfo?.firstname }} {{ currentMember?.personalInfo?.name }} — {{ selectedRegistrationForFee?.mandatName }}
+            </small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="closePayFeeModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4 bg-light-subtle">
+        <div class="alert alert-light border py-2 px-3 mb-4 rounded-3 d-flex align-items-center justify-content-between">
+          <div class="small">
+            <span class="text-muted">Type d'adhésion : </span>
+            <strong class="text-dark">{{ selectedRegistrationForFee?.registrationType === 'INITIAL' ? '1ère Inscription (Nouvel Adhérent)' : 'Réinscription (Renouvellement)' }}</strong>
+          </div>
+          <span class="badge bg-teal-subtle text-teal border">{{ selectedRegistrationForFee?.registrationType }}</span>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-dark">Montant des Frais (FCFA) <span class="text-danger">*</span></label>
+          <div class="input-group input-group-lg">
+            <input type="number" class="form-control fw-bold text-teal" [(ngModel)]="feeAmount" min="0" step="500">
+            <span class="input-group-text bg-white fw-semibold">FCFA</span>
+          </div>
+        </div>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-dark">Moyen de Paiement <span class="text-danger">*</span></label>
+          <select class="form-select form-select-lg" [(ngModel)]="feePaymentMethod">
+            <option value="CASH">💵 Espèces (Cash en mains propres)</option>
+            <option value="WAVE_MONEY">🔵 Wave (Transfert direct)</option>
+            <option value="ORANGE_MONEY">🟠 Orange Money (Transfert direct)</option>
+            <option value="BANK_TRANSFER">🏦 Virement bancaire / Chèque</option>
+          </select>
+        </div>
+
+        <div class="mb-2">
+          <label class="form-label fw-semibold text-dark">Notes / Référence de transaction (facultatif)</label>
+          <input type="text" class="form-control" [(ngModel)]="feeNotes" placeholder="Ex: Reçu en espèces par Trésorier, Réf Wave TX-992...">
+        </div>
+      </div>
+
+      <div class="modal-footer border-top py-3 px-4 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-outline-secondary" (click)="closePayFeeModal()">Annuler</button>
+        <button type="button"
+                class="btn btn-teal-primary"
+                [disabled]="isSubmittingFee || !feeAmount || feeAmount <= 0"
+                (click)="submitPayFee()">
+          <span *ngIf="isSubmittingFee" class="spinner-border spinner-border-sm me-1"></span>
+          <i *ngIf="!isSubmittingFee" class="bi bi-check2-circle me-1"></i>
+          Valider & Émettre la Quittance
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Quittance Officielle d'Adhésion -->
+<div *ngIf="isReceiptModalOpen" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-bottom py-3 px-4 bg-white rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="me-3 bg-success-subtle text-success rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-patch-check-fill fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark mb-0">Quittance d'Adhésion</h5>
+            <small class="text-muted">Reçu officiel de paiement</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="closeReceiptModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4" id="printable-receipt">
+        <!-- Receipt Card Design -->
+        <div class="p-4 border rounded-4 bg-light position-relative">
+          <div class="d-flex justify-content-between align-items-start border-bottom pb-3 mb-3">
+            <div>
+              <h5 class="fw-bold text-teal mb-0">AEMUD</h5>
+              <small class="text-muted">Association des Étudiants Musulmans</small>
+            </div>
+            <div class="text-end">
+              <span class="badge bg-success px-2 py-1">Payé / Réglé</span>
+              <div class="small fw-bold text-dark mt-1">{{ receiptRegistration?.receiptNumber || 'REC-ADH-2026' }}</div>
+            </div>
+          </div>
+
+          <div class="d-flex flex-column gap-2 small">
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Adhérent :</span>
+              <strong class="text-dark">{{ currentMember?.personalInfo?.firstname }} {{ currentMember?.personalInfo?.name }}</strong>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Mandat / Phase :</span>
+              <span class="text-dark fw-semibold">{{ receiptRegistration?.mandatName }} ({{ receiptRegistration?.phase?.nom }})</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Nature :</span>
+              <span class="text-dark">{{ receiptRegistration?.registrationType === 'INITIAL' ? '1ère Inscription' : 'Réinscription' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Moyen de règlement :</span>
+              <span class="badge bg-secondary-subtle text-secondary border">{{ receiptRegistration?.paymentMethod || 'CASH' }}</span>
+            </div>
+            <div class="d-flex justify-content-between">
+              <span class="text-muted">Date d'enregistrement :</span>
+              <span class="text-dark">{{ (receiptRegistration?.paymentDate || receiptRegistration?.dateInscription) | date:'dd MMMM yyyy':'':'fr' }}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between align-items-center">
+              <span class="fw-bold text-dark">Montant Réglé :</span>
+              <h4 class="fw-bold text-teal mb-0">{{ (receiptRegistration?.amount || 2000) | currency:'XOF':'symbol':'1.0-0' }}</h4>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-top py-3 px-4 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-secondary" (click)="closeReceiptModal()">Fermer</button>
+        <button type="button" class="btn btn-teal-primary" onclick="window.print()">
+          <i class="bi bi-printer me-1"></i> Imprimer la Quittance
+        </button>
       </div>
     </div>
   </div>
