@@ -259,6 +259,53 @@ export class FormSchemaAdminComponent implements OnInit {
     };
   }
 
+  // --- Libellés Métier Accessibles & Non Techniques ---
+  getCategoryLabel(category: FieldCategory): string {
+    switch (category) {
+      case 'CORE':
+        return 'Système';
+      case 'PRESET':
+        return 'Standard';
+      case 'CUSTOM':
+        return 'Personnalisé';
+      default:
+        return category;
+    }
+  }
+
+  getTypeLabel(type: FieldType): string {
+    switch (type) {
+      case 'TEXT':
+        return 'Texte court';
+      case 'TEXTAREA':
+        return 'Texte long';
+      case 'NUMBER':
+        return 'Nombre';
+      case 'BOOLEAN':
+        return 'Oui / Non';
+      case 'DATE':
+        return 'Date';
+      case 'SELECT':
+        return 'Liste déroulante';
+      case 'MULTI_SELECT':
+        return 'Choix multiples';
+      case 'RADIO':
+        return 'Choix unique';
+      default:
+        return type;
+    }
+  }
+
+  getVisibilityConditionLabel(condition: any): string {
+    if (!condition) return '';
+    if (condition.dependsOn === 'isStudent') {
+      return condition.equals === true
+        ? 'Visible pour les étudiants'
+        : 'Visible pour les diplômés (Alumni)';
+    }
+    return `Condition : ${condition.dependsOn} = ${condition.equals}`;
+  }
+
   private slugify(text: string): string {
     return text
       .toString()

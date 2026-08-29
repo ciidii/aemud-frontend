@@ -62,13 +62,12 @@
           >
             <div class="d-flex align-items-center justify-content-between w-100 me-3">
               
-              <!-- Group Title & Code -->
+              <!-- Group Title -->
               <div class="d-flex align-items-center gap-3">
                 <div class="group-status-dot" [class.active]="group.isActive"></div>
                 <div>
                   <div class="d-flex align-items-center gap-2">
                     <span class="fw-bold group-title-text">{{ group.title }}</span>
-                    <span class="badge badge-code">{{ group.code }}</span>
                   </div>
                   <small *ngIf="group.description" class="text-muted d-none d-md-block group-desc">{{ group.description }}</small>
                 </div>
@@ -77,7 +76,7 @@
               <!-- Conditions & Status Switch -->
               <div class="d-flex align-items-center gap-3">
                 <span *ngIf="group.visibilityCondition" class="badge badge-condition d-none d-sm-inline-flex align-items-center">
-                  <i class="bi bi-funnel me-1"></i> {{ group.visibilityCondition.dependsOn }} = {{ group.visibilityCondition.equals }}
+                  <i class="bi bi-funnel me-1"></i> {{ getVisibilityConditionLabel(group.visibilityCondition) }}
                 </span>
                 <span class="badge badge-field-count">{{ group.fields.length }} champs</span>
 
@@ -111,11 +110,10 @@
                 <thead>
                   <tr>
                     <th style="width: 80px;" class="ps-4">Ordre</th>
-                    <th>Libellé & Indication</th>
-                    <th>Clé technique</th>
+                    <th>Question / Champ</th>
                     <th>Catégorie</th>
-                    <th>Type de contrôle</th>
-                    <th>Règle</th>
+                    <th>Type de réponse</th>
+                    <th>Obligation</th>
                     <th class="text-end pe-4" style="width: 120px;">Actions</th>
                   </tr>
                 </thead>
@@ -152,12 +150,7 @@
                       <small *ngIf="field.placeholder" class="text-muted field-placeholder">Ex: {{ field.placeholder }}</small>
                     </td>
 
-                    <!-- Clé technique -->
-                    <td>
-                      <span class="tech-key-chip">{{ field.key }}</span>
-                    </td>
-
-                    <!-- Catégorie Pill -->
+                    <!-- Catégorie Pill (Accessible) -->
                     <td>
                       <span
                         class="pill-badge"
@@ -167,15 +160,15 @@
                           'pill-custom': field.category === 'CUSTOM'
                         }"
                       >
-                        {{ field.category }}
+                        {{ getCategoryLabel(field.category) }}
                       </span>
                     </td>
 
-                    <!-- Type Badge -->
+                    <!-- Type Badge (Accessible) -->
                     <td>
-                      <span class="pill-badge pill-type">{{ field.type }}</span>
+                      <span class="pill-badge pill-type">{{ getTypeLabel(field.type) }}</span>
                       <small *ngIf="field.options && field.options.length" class="d-block text-muted mt-1 small-text">
-                        {{ field.options.length }} options
+                        {{ field.options.length }} choix possibles
                       </small>
                     </td>
 
@@ -185,7 +178,7 @@
                         <i class="bi bi-asterisk"></i> Obligatoire
                       </span>
                       <span *ngIf="!field.isRequired" class="pill-badge pill-optional">
-                        Optionnel
+                        Facultatif
                       </span>
                     </td>
 
@@ -242,7 +235,7 @@
             <div class="modal-icon-header bg-teal-subtle text-teal">
               <i class="bi bi-plus-circle-fill"></i>
             </div>
-            <h5 class="modal-title fw-bold mb-0">Ajouter un Champ Personnalisé</h5>
+            <h5 class="modal-title fw-bold mb-0">Ajouter une Question / un Champ</h5>
           </div>
           <button type="button" class="btn-close" (click)="closeAddFieldModal()"></button>
         </div>
@@ -250,19 +243,31 @@
         <div class="modal-body p-4">
           <div class="row g-3">
             
+            <!-- Libellé -->
+            <div class="col-12">
+              <label class="form-label fw-semibold">Intitulé de la question <span class="text-danger">*</span></label>
+              <input
+                type="text"
+                class="form-control custom-input"
+                [(ngModel)]="newField.label"
+                (ngModelChange)="onLabelChange()"
+                placeholder="Ex: Quelle est votre pointure de chaussure ? / Numéro de carte..."
+              />
+            </div>
+
             <!-- Groupe cible -->
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Groupe de destination</label>
+              <label class="form-label fw-semibold">Section de destination</label>
               <select class="form-select custom-input" [(ngModel)]="selectedGroupCode">
                 <option *ngFor="let g of schema?.groups" [value]="g.code">
-                  {{ g.title }} ({{ g.code }})
+                  {{ g.title }}
                 </option>
               </select>
             </div>
 
             <!-- Type de champ -->
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Type de contrôle</label>
+              <label class="form-label fw-semibold">Type de réponse attendue</label>
               <select class="form-select custom-input" [(ngModel)]="newField.type">
                 <option *ngFor="let t of availableFieldTypes" [value]="t.value">
                   {{ t.label }}
@@ -270,51 +275,27 @@
               </select>
             </div>
 
-            <!-- Libellé -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Libellé de la question <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control custom-input"
-                [(ngModel)]="newField.label"
-                (ngModelChange)="onLabelChange()"
-                placeholder="Ex: Taille de T-Shirt, Numéro d'étudiant..."
-              />
-            </div>
-
-            <!-- Clé technique -->
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Identifiant technique (clé unique) <span class="text-danger">*</span></label>
-              <input
-                type="text"
-                class="form-control custom-input"
-                [(ngModel)]="newField.key"
-                placeholder="Ex: studentIdNumber, tShirtSize..."
-              />
-              <small class="text-muted" style="font-size: 1.2rem;">Sera utilisé pour le stockage en base</small>
-            </div>
-
             <!-- Placeholder -->
             <div class="col-12" *ngIf="['TEXT', 'TEXTAREA', 'NUMBER'].includes(newField.type)">
-              <label class="form-label fw-semibold">Texte d'indication (Placeholder)</label>
+              <label class="form-label fw-semibold">Exemple de réponse (Texte d'indication)</label>
               <input
                 type="text"
                 class="form-control custom-input"
                 [(ngModel)]="newField.placeholder"
-                placeholder="Ex: Saisissez votre réponse..."
+                placeholder="Ex: Saisissez votre réponse ici..."
               />
             </div>
 
             <!-- Options pour Select / Radio / MultiSelect -->
             <div class="col-12" *ngIf="['SELECT', 'RADIO', 'MULTI_SELECT'].includes(newField.type)">
-              <label class="form-label fw-semibold">Options sélectionnables (une option par ligne)</label>
+              <label class="form-label fw-semibold">Choix possibles (un choix par ligne)</label>
               <textarea
                 class="form-control custom-input"
                 rows="4"
                 [(ngModel)]="newField.optionsInput"
-                placeholder="Option 1&#10;Option 2&#10;Option 3"
+                placeholder="Choix 1&#10;Choix 2&#10;Choix 3"
               ></textarea>
-              <small class="text-muted" style="font-size: 1.2rem;">Chaque ligne représentera un choix dans la liste ou les cases à cocher.</small>
+              <small class="text-muted" style="font-size: 1.2rem;">Chaque ligne représentera une option sélectionnable par l'adhérent.</small>
             </div>
 
             <!-- Obligatoire Switch -->
@@ -329,7 +310,7 @@
                     [(ngModel)]="newField.isRequired"
                   />
                   <label class="form-check-label fw-semibold ms-2" for="newFieldRequired">
-                    Rendre ce champ obligatoire lors de la soumission
+                    Réponse obligatoire lors du remplissage
                   </label>
                 </div>
               </div>
@@ -341,7 +322,7 @@
         <div class="modal-footer border-top py-3 px-4">
           <button type="button" class="btn btn-light" (click)="closeAddFieldModal()">Annuler</button>
           <button type="button" class="btn btn-teal text-white px-4" (click)="submitNewField()">
-            <i class="bi bi-plus-lg me-1"></i> Ajouter le champ
+            <i class="bi bi-plus-lg me-1"></i> Ajouter cette question
           </button>
         </div>
 
@@ -360,7 +341,7 @@
             <div class="modal-icon-header bg-secondary-subtle text-dark">
               <i class="bi bi-pencil-square"></i>
             </div>
-            <h5 class="modal-title fw-bold mb-0">Modifier le Champ : {{ editingField.field.label }}</h5>
+            <h5 class="modal-title fw-bold mb-0">Modifier la Question : {{ editingField.field.label }}</h5>
           </div>
           <button type="button" class="btn-close" (click)="closeEditFieldModal()"></button>
         </div>
@@ -368,28 +349,18 @@
         <div class="modal-body p-4">
           <div class="row g-3">
             
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Libellé</label>
+            <div class="col-12">
+              <label class="form-label fw-semibold">Intitulé de la question</label>
               <input type="text" class="form-control custom-input" [(ngModel)]="editingField.field.label" />
             </div>
 
-            <div class="col-md-6">
-              <label class="form-label fw-semibold">Identifiant technique (clé)</label>
-              <input
-                type="text"
-                class="form-control custom-input"
-                [(ngModel)]="editingField.field.key"
-                [disabled]="editingField.field.category === 'CORE'"
-              />
-            </div>
-
             <div class="col-12" *ngIf="['TEXT', 'TEXTAREA', 'NUMBER'].includes(editingField.field.type)">
-              <label class="form-label fw-semibold">Texte d'indication (Placeholder)</label>
+              <label class="form-label fw-semibold">Exemple de réponse (Texte d'indication)</label>
               <input type="text" class="form-control custom-input" [(ngModel)]="editingField.field.placeholder" />
             </div>
 
             <div class="col-12" *ngIf="['SELECT', 'RADIO', 'MULTI_SELECT'].includes(editingField.field.type)">
-              <label class="form-label fw-semibold">Options possibles (une par ligne)</label>
+              <label class="form-label fw-semibold">Choix possibles (un choix par ligne)</label>
               <textarea
                 class="form-control custom-input"
                 rows="4"
@@ -409,7 +380,7 @@
                     [disabled]="editingField.field.category === 'CORE'"
                   />
                   <label class="form-check-label fw-semibold ms-2" for="editFieldRequired">
-                    Champ obligatoire
+                    Réponse obligatoire
                   </label>
                 </div>
               </div>
