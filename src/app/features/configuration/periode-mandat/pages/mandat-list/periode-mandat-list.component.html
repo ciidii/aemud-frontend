@@ -1,65 +1,169 @@
 <div class="mandat-list-page">
-  <header class="page-header">
-    <h1>Gestion des Périodes de Mandat</h1>
-    <button (click)="goToAdd()" class="btn-primary">+ Créer une période de mandat</button>
+  <!-- Page Header -->
+  <header class="page-header shadow-sm">
+    <div class="header-left">
+      <div class="title-row">
+        <h1 class="page-title">Gestion des Mandats & Temporalité</h1>
+        <ng-container *ngIf="periodeMandats$ | async as mandats">
+          <span class="count-badge">
+            <i class="bi bi-clock-history"></i>
+            {{ mandats.length }} mandat{{ mandats.length > 1 ? 's' : '' }}
+          </span>
+        </ng-container>
+      </div>
+      <p class="page-subtitle">Pilotez les mandats de l'AEMUD, leur découpage en phases temporelles et les fenêtres d'adhésion.</p>
+    </div>
+
+    <div class="header-right">
+      <button (click)="goToAdd()" type="button" class="btn-create-mandat">
+        <i class="bi bi-plus-lg"></i>
+        <span>Créer un Mandat</span>
+      </button>
+    </div>
   </header>
 
+  <!-- Main Content -->
   <div class="page-content">
-    <div *ngIf="isLoading" class="loading-container">
-      <!-- Skeleton loader cards -->
-      <div *ngFor="let _ of [1, 2, 3]" class="mandate-card skeleton">
-        <div class="skeleton-line title"></div>
-        <div class="skeleton-line text"></div>
-        <div class="skeleton-line text short"></div>
+    <!-- Loading State -->
+    <div *ngIf="isLoading" class="loading-grid">
+      <div *ngFor="let _ of [1, 2, 3]" class="mandate-card skeleton-card">
+        <div class="skeleton-shimmer skeleton-title"></div>
+        <div class="skeleton-shimmer skeleton-line"></div>
+        <div class="skeleton-shimmer skeleton-box"></div>
       </div>
     </div>
 
+    <!-- Error State -->
     <div *ngIf="!isLoading && hasError" class="error-container">
-      <p>Impossible de charger les périodes de mandat. Veuillez réessayer plus tard.</p>
-      <button (click)="loadPeriodeMandats()">Réessayer</button>
+      <i class="bi bi-exclamation-triangle-fill error-icon"></i>
+      <h3>Impossible de charger les mandats</h3>
+      <p>Une erreur est survenue lors de la communication avec le serveur.</p>
+      <button (click)="loadPeriodeMandats()" type="button" class="btn-retry">
+        <i class="bi bi-arrow-clockwise"></i> Réessayer
+      </button>
     </div>
 
+    <!-- Data State -->
     <ng-container *ngIf="periodeMandats$ | async as periodeMandats">
-      <div *ngIf="!isLoading && !hasError && periodeMandats.length === 0" class="empty-state">
-        <div class="empty-content">
-          <!-- Add an icon here if available, e.g., <i class="icon-folder-open"></i> -->
-          <h2>Aucune période de mandat trouvée</h2>
-          <p>Commencez par créer votre première période de mandat.</p>
-          <button (click)="goToAdd()" class="btn-primary">+ Créer une période de mandat</button>
+      <!-- Empty State -->
+      <div *ngIf="!isLoading && !hasError && periodeMandats.length === 0" class="empty-state-card">
+        <div class="empty-icon-circle">
+          <i class="bi bi-calendar4-week"></i>
         </div>
+        <h2>Aucun mandat configuré</h2>
+        <p>Démarrez la gouvernance en créant le premier mandat de l'association.</p>
+        <button (click)="goToAdd()" type="button" class="btn-create-mandat">
+          <i class="bi bi-plus-lg"></i> Créer une période de mandat
+        </button>
       </div>
 
-      <div *ngIf="!isLoading && periodeMandats.length > 0" class="mandate-grid">
-        <div *ngFor="let periodeMandat of periodeMandats" class="mandate-card">
-          <div class="card-header">
-            <h3 class="card-title">{{ periodeMandat.nom }}</h3>
-            <span [class.active]="periodeMandat.estActif" [class.inactive]="!periodeMandat.estActif" class="status-badge">
-              {{ periodeMandat.estActif ? 'Actif' : 'Inactif' }}
-            </span>
-          </div>
-          <div (click)="goToDetail(periodeMandat.id)" class="card-body clickable">
-            <div class="mandate-period">
-              <div class="date-item">
-                <small class="date-label date-label-debut">Début</small>
-                <span class="date-value">{{ dateArrayToString (periodeMandat.dateDebut) | date: 'longDate' }}</span>
-              </div>
-              <div class="date-item">
-                <small class="date-label date-label-fin">Fin</small>
-                <span class="date-value">{{ dateArrayToString(periodeMandat.dateFin) | date: 'longDate' }}</span>
-              </div>
+      <!-- Mandates Grid -->
+      <div *ngIf="!isLoading && periodeMandats.length > 0" class="mandates-grid">
+        <div *ngFor="let mandat of periodeMandats"
+             (click)="goToDetail(mandat.id)"
+             [class.is-active-mandat]="mandat.estActif"
+             class="mandate-card">
+
+          <!-- Card Header -->
+          <div class="card-header-row">
+            <div class="mandat-name-wrapper">
+              <h3 class="mandat-nom">{{ mandat.nom }}</h3>
             </div>
-            <div class="phase-summary">
-              <!-- Add phases icon if available -->
-              <span>{{ periodeMandat.phases.length }} {{ periodeMandat.phases.length > 1 ? 'phases' : 'phase' }}</span>
+            <div class="status-indicator">
+              <span *ngIf="mandat.estActif" class="badge-status badge-active" title="Mandat actuellement actif dans l'application">
+                <span class="pulse-dot"></span> Mandat Actif
+              </span>
+              <span *ngIf="!mandat.estActif" class="badge-status badge-inactive">
+                Inactif
+              </span>
             </div>
           </div>
-          <div class="card-footer">
-            <button (click)="goToEdit(periodeMandat.id)" class="btn-secondary">Modifier</button>
-            <button (click)="deletePeriodeMandat(periodeMandat.id)" class="btn-danger">Supprimer</button>
+
+          <!-- Card Body -->
+          <div class="card-body-content">
+            <!-- Dates Range -->
+            <div class="date-range-box">
+              <div class="date-col">
+                <span class="date-label">Date Début</span>
+                <span class="date-value">
+                  <i class="bi bi-calendar-event"></i>
+                  {{ dateArrayToString(mandat.dateDebut) | date: 'dd MMMM yyyy' : '' : 'fr' }}
+                </span>
+              </div>
+              <div class="date-separator">
+                <i class="bi bi-arrow-right"></i>
+              </div>
+              <div class="date-col">
+                <span class="date-label">Date Fin</span>
+                <span class="date-value">
+                  <i class="bi bi-calendar-check"></i>
+                  {{ dateArrayToString(mandat.dateFin) | date: 'dd MMMM yyyy' : '' : 'fr' }}
+                </span>
+              </div>
+            </div>
+
+            <!-- Phases Summary & Mini Badges -->
+            <div class="phases-summary-section">
+              <div class="phases-title-row">
+                <span class="phases-count-label">
+                  <i class="bi bi-layers-fill"></i>
+                  {{ mandat.phases.length }} Phase{{ mandat.phases.length > 1 ? 's' : '' }}
+                </span>
+              </div>
+              <div class="phases-mini-pills">
+                <div *ngFor="let phase of mandat.phases"
+                     [ngClass]="'phase-pill-' + (phase.status ? phase.status.toLowerCase() : 'future')"
+                     class="phase-mini-pill"
+                     title="Phase {{ phase.nom }}">
+                  <span class="pill-name">{{ phase.nom }}</span>
+                  <span class="pill-status-dot"></span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card Footer Actions -->
+          <div class="card-footer-actions" (click)="$event.stopPropagation()">
+            <button *ngIf="!mandat.estActif"
+                    (click)="activateMandat(mandat, $event)"
+                    [disabled]="isActivatingId === mandat.id"
+                    type="button"
+                    class="btn-action-card btn-activate">
+              <i class="bi bi-lightning-charge-fill" *ngIf="isActivatingId !== mandat.id"></i>
+              <span class="spinner-border spinner-border-sm me-1" *ngIf="isActivatingId === mandat.id"></span>
+              <span>Activer</span>
+            </button>
+
+            <button (click)="goToDetail(mandat.id)"
+                    type="button"
+                    class="btn-action-card btn-view">
+              <i class="bi bi-eye"></i>
+              <span>Détail</span>
+            </button>
+
+            <button (click)="goToEdit(mandat.id, $event)"
+                    type="button"
+                    class="btn-action-card btn-edit">
+              <i class="bi bi-pencil"></i>
+            </button>
+
+            <button (click)="openDeleteModal(mandat, $event)"
+                    type="button"
+                    class="btn-action-card btn-delete"
+                    title="Supprimer le mandat">
+              <i class="bi bi-trash3"></i>
+            </button>
           </div>
         </div>
       </div>
     </ng-container>
-
   </div>
 </div>
+
+<!-- Confirm Delete Modal -->
+<app-confirm-delete-modal
+  *ngIf="isDeleteModalOpen"
+  [itemCount]="1"
+  (confirm)="confirmDelete()"
+  (close)="closeDeleteModal()">
+</app-confirm-delete-modal>

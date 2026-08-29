@@ -1,205 +1,489 @@
-@import 'variables';
-@import 'typography';
-
 .mandat-list-page {
-  padding: $space-6;
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  background: #f8fafc;
 }
 
 .page-header {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  margin-bottom: $space-8;
+  align-items: flex-start;
+  flex-wrap: wrap;
+  gap: 1.6rem;
+  padding: 2.4rem 2.4rem 2rem;
+  background: #ffffff;
+  border-bottom: 1px solid #e2e8f0;
 
-  h1 {
-    @include text-heading-2;
-    margin: 0;
+  .header-left {
+    .title-row {
+      display: flex;
+      align-items: center;
+      gap: 1.2rem;
+      flex-wrap: wrap;
+
+      .page-title {
+        font-size: 2.2rem;
+        font-weight: 700;
+        color: #0f172a;
+        margin: 0;
+        letter-spacing: -0.02em;
+      }
+
+      .count-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.6rem;
+        padding: 0.4rem 1rem;
+        background: #f0fdfa;
+        color: #0d9488;
+        border: 1px solid #ccfbf1;
+        border-radius: 2rem;
+        font-size: 1.25rem;
+        font-weight: 600;
+
+        i {
+          font-size: 1.3rem;
+        }
+      }
+    }
+
+    .page-subtitle {
+      font-size: 1.35rem;
+      color: #64748b;
+      margin: 0.4rem 0 0;
+    }
   }
-}
 
-// Generic button styles - assuming they might be global, but placing them here for now
-.btn-primary, .btn-secondary, .btn-danger {
-  padding: $button-padding-y $button-padding-x;
-  border-radius: $button-border-radius;
-  border: none;
-  cursor: pointer;
-  @include text-button;
-  transition: background-color 0.2s ease-in-out;
-}
+  .header-right {
+    .btn-create-mandat {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.8rem;
+      padding: 0.9rem 1.8rem;
+      background: #278F8F;
+      color: #ffffff;
+      border: 1px solid #278F8F;
+      border-radius: 0.8rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+      transition: all 0.2s ease;
 
-.btn-primary {
-  background-color: $primary-500;
-  color: $color-text-on-primary;
-
-  &:hover {
-    background-color: $primary-600;
-  }
-}
-
-.btn-secondary {
-  background-color: $gray-200;
-  color: $color-text-primary;
-  border: 1px solid $color-border-default;
-
-  &:hover {
-    background-color: $gray-300;
-  }
-}
-
-.btn-danger {
-  background-color: $danger-500;
-  color: $white;
-
-  &:hover {
-    background-color: darken($danger-500, 10%);
+      &:hover {
+        background: #1f7373;
+        border-color: #1f7373;
+        box-shadow: 0 4px 12px rgba(39, 143, 143, 0.25);
+        transform: translateY(-1px);
+      }
+    }
   }
 }
 
 .page-content {
-  .loading-container, .mandate-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: $space-6;
-  }
+  padding: 2.4rem;
+  width: 100%;
+}
 
-  .error-container, .empty-state {
-    text-align: center;
-    padding: $space-16 $space-6;
-    background-color: $color-background-panel;
-    border-radius: $radius-lg;
-    border: 1px solid $color-border-default;
-  }
+.mandates-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(36rem, 1fr));
+  gap: 2rem;
 }
 
 .mandate-card {
-  background-color: $color-background-panel;
-  border: 1px solid $color-border-default;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
+  background: #ffffff;
+  border-radius: 1.2rem;
+  border: 1px solid #e2e8f0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
   display: flex;
   flex-direction: column;
-  transition: all 0.2s ease-in-out;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  overflow: hidden;
+  position: relative;
 
   &:hover {
+    box-shadow: 0 10px 20px -5px rgba(0, 0, 0, 0.08);
     transform: translateY(-2px);
-    box-shadow: $shadow-lg;
+    border-color: #cbd5e1;
   }
 
-  .card-header {
-    padding: $space-4;
-    border-bottom: 1px solid $color-border-default;
+  &.is-active-mandat {
+    border: 2px solid #278F8F;
+    box-shadow: 0 4px 15px rgba(39, 143, 143, 0.12);
+
+    &::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      background: #278F8F;
+    }
+  }
+
+  .card-header-row {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
+    padding: 1.8rem 2rem 1.4rem;
+    border-bottom: 1px solid #f1f5f9;
 
-    .card-title {
-      @include text-heading-5;
+    .mandat-nom {
+      font-size: 1.7rem;
+      font-weight: 700;
+      color: #0f172a;
       margin: 0;
     }
 
-    .status-badge {
-      @include text-label;
-      padding: $space-1 $space-2;
-      border-radius: $radius-full;
+    .badge-status {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.35rem 0.9rem;
+      border-radius: 2rem;
       font-size: 1.2rem;
+      font-weight: 600;
 
-      &.active {
-        background-color: lighten($success-base, 45%);
-        color: darken($success-base, 10%);
+      &.badge-active {
+        background: #f0fdfa;
+        color: #0f766e;
+        border: 1px solid #ccfbf1;
+
+        .pulse-dot {
+          width: 0.8rem;
+          height: 0.8rem;
+          background: #0d9488;
+          border-radius: 50%;
+          animation: pulse 1.8s infinite;
+        }
       }
 
-      &.inactive {
-        background-color: $gray-200;
-        color: $gray-600;
+      &.badge-inactive {
+        background: #f1f5f9;
+        color: #64748b;
+        border: 1px solid #e2e8f0;
       }
     }
   }
 
-  .card-body {
-    padding: $space-4;
-    flex-grow: 1;
+  .card-body-content {
+    padding: 1.6rem 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.6rem;
+    flex: 1;
 
-      .date-item {
+    .date-range-box {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 0.8rem;
+      padding: 1rem 1.4rem;
+
+      .date-col {
+        display: flex;
+        flex-direction: column;
+        gap: 0.3rem;
+
         .date-label {
-          @include text-body-small;
-          display: block;
-          margin-bottom: 2px;
-        }
-
-        .date-label-debut {
-          color: $primary-500;
-        }
-
-        .date-label-fin {
-          color: $secondary-500;
+          font-size: 1.1rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.05em;
+          color: #94a3b8;
         }
 
         .date-value {
-          @include text-body-regular;
-          font-weight: $font-weight-bold;
-          color: $color-text-primary;
+          font-size: 1.25rem;
+          font-weight: 600;
+          color: #1e293b;
+          display: flex;
+          align-items: center;
+          gap: 0.5rem;
+
+          i {
+            color: #278F8F;
+            font-size: 1.3rem;
+          }
         }
       }
 
-    .phase-summary {
-      display: flex;
-      align-items: center;
-      color: $color-text-secondary;
-      @include text-body-small;
-
-      span {
-        margin-right: $space-2;
+      .date-separator {
+        color: #94a3b8;
+        font-size: 1.4rem;
       }
     }
 
-    .clickable:hover {
-      cursor: pointer;
-      background-color: $gray-100;
+    .phases-summary-section {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+
+      .phases-count-label {
+        font-size: 1.25rem;
+        font-weight: 600;
+        color: #475569;
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+
+        i {
+          color: #64748b;
+        }
+      }
+
+      .phases-mini-pills {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        flex-wrap: wrap;
+
+        .phase-mini-pill {
+          display: inline-flex;
+          align-items: center;
+          gap: 0.5rem;
+          padding: 0.35rem 0.85rem;
+          border-radius: 0.6rem;
+          font-size: 1.15rem;
+          font-weight: 500;
+
+          .pill-status-dot {
+            width: 0.6rem;
+            height: 0.6rem;
+            border-radius: 50%;
+          }
+
+          &.phase-pill-current {
+            background: #f0fdfa;
+            color: #0f766e;
+            border: 1px solid #ccfbf1;
+            font-weight: 600;
+
+            .pill-status-dot {
+              background: #0d9488;
+            }
+          }
+
+          &.phase-pill-passed {
+            background: #f1f5f9;
+            color: #64748b;
+            border: 1px solid #e2e8f0;
+
+            .pill-status-dot {
+              background: #94a3b8;
+            }
+          }
+
+          &.phase-pill-future {
+            background: #eff6ff;
+            color: #2563eb;
+            border: 1px solid #dbeafe;
+
+            .pill-status-dot {
+              background: #3b82f6;
+            }
+          }
+        }
+      }
     }
   }
 
-  .card-footer {
-    padding: $space-4;
-    border-top: 1px solid $color-border-default;
+  .card-footer-actions {
     display: flex;
+    align-items: center;
     justify-content: flex-end;
-    gap: $space-3;
+    gap: 0.8rem;
+    padding: 1.2rem 2rem;
+    background: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+
+    .btn-action-card {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.6rem 1.1rem;
+      border-radius: 0.6rem;
+      font-size: 1.25rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: 1px solid transparent;
+
+      &.btn-activate {
+        background: #f0fdfa;
+        color: #0f766e;
+        border-color: #99f6e4;
+        margin-right: auto;
+
+        &:hover:not(:disabled) {
+          background: #278F8F;
+          color: #ffffff;
+          border-color: #278F8F;
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+
+      &.btn-view {
+        background: #ffffff;
+        color: #334155;
+        border-color: #cbd5e1;
+
+        &:hover {
+          background: #f1f5f9;
+          color: #0f172a;
+        }
+      }
+
+      &.btn-edit {
+        background: #ffffff;
+        color: #2563eb;
+        border-color: #cbd5e1;
+
+        &:hover {
+          background: #eff6ff;
+          border-color: #bfdbfe;
+        }
+      }
+
+      &.btn-delete {
+        background: #ffffff;
+        color: #dc2626;
+        border-color: #cbd5e1;
+
+        &:hover {
+          background: #fef2f2;
+          border-color: #fecaca;
+        }
+      }
+    }
   }
 }
 
-// Skeleton Loader styles
-.mandate-card.skeleton {
-  .skeleton-line {
-    background-color: $gray-200;
-    border-radius: $radius-sm;
-    animation: pulse 1.5s infinite ease-in-out;
+.empty-state-card {
+  padding: 6rem 2.4rem;
+  background: #ffffff;
+  border-radius: 1.2rem;
+  border: 1px solid #e2e8f0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+
+  .empty-icon-circle {
+    width: 7.2rem;
+    height: 7.2rem;
+    border-radius: 50%;
+    background: #f0fdfa;
+    color: #278F8F;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3.2rem;
+    margin-bottom: 2rem;
   }
 
-  .title {
-    height: 2.8rem;
-    width: 70%;
-    margin-bottom: $space-4;
+  h2 {
+    font-size: 2rem;
+    font-weight: 700;
+    color: #0f172a;
+    margin: 0 0 0.8rem;
   }
 
-  .text {
-    height: 1.6rem;
-    width: 90%;
-    margin-bottom: $space-2;
+  p {
+    font-size: 1.4rem;
+    color: #64748b;
+    max-width: 48rem;
+    margin: 0 0 2.4rem;
   }
 
-  .short {
-    width: 50%;
+  .btn-create-mandat {
+    background: #278F8F;
+    color: #ffffff;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 0.8rem;
+    font-size: 1.4rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.8rem;
+
+    &:hover {
+      background: #1f7373;
+    }
+  }
+}
+
+.error-container {
+  padding: 4rem 2rem;
+  background: #ffffff;
+  border-radius: 1.2rem;
+  border: 1px solid #fee2e2;
+  text-align: center;
+
+  .error-icon {
+    font-size: 3.5rem;
+    color: #dc2626;
+    margin-bottom: 1.2rem;
+  }
+
+  h3 {
+    font-size: 1.8rem;
+    color: #0f172a;
+  }
+
+  p {
+    color: #64748b;
+    margin-bottom: 1.6rem;
+  }
+
+  .btn-retry {
+    padding: 0.8rem 1.6rem;
+    border-radius: 0.6rem;
+    background: #278F8F;
+    color: #ffffff;
+    border: none;
+    font-weight: 600;
+    cursor: pointer;
   }
 }
 
 @keyframes pulse {
   0% {
-    opacity: 1;
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0.7);
   }
-  50% {
-    opacity: 0.5;
+  70% {
+    transform: scale(1);
+    box-shadow: 0 0 0 6px rgba(13, 148, 136, 0);
   }
   100% {
-    opacity: 1;
+    transform: scale(0.95);
+    box-shadow: 0 0 0 0 rgba(13, 148, 136, 0);
+  }
+}
+
+@media (max-width: 768px) {
+  .page-header {
+    flex-direction: column;
+    padding: 1.6rem;
+  }
+  .page-content {
+    padding: 1.6rem;
+  }
+  .mandates-grid {
+    grid-template-columns: 1fr;
   }
 }

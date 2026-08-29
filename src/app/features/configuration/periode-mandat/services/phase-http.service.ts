@@ -3,7 +3,7 @@ import {HttpClient} from "@angular/common/http";
 import {map, Observable} from "rxjs";
 import {PhaseModel} from "../models/phase.model";
 import {UpdatePhaseModel} from "../models/UpdatePhaseModel";
-import { environment } from "src/environments/environment.development";
+import {environment} from "../../../../../environments/environment";
 import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
 
 @Injectable({
@@ -11,7 +11,7 @@ import {ResponseEntityApi} from "../../../../core/models/response-entity-api";
 })
 export class PhaseHttpService {
   private readonly url = `${environment.API_URL}/phases`;
-  http = inject(HttpClient);
+  private http = inject(HttpClient);
 
   public getActivePhase(): Observable<ResponseEntityApi<PhaseModel>> {
     return this.http.get<ResponseEntityApi<PhaseModel>>(`${this.url}/active`);
@@ -32,7 +32,19 @@ export class PhaseHttpService {
       map(response => response.data)
     );
   }
+
   public deletePhaseById(id: string): Observable<ResponseEntityApi<void>> {
-    return this.http.get<ResponseEntityApi<void>>(`${this.url}/${id}`);
+    return this.http.delete<ResponseEntityApi<void>>(`${this.url}/${id}`);
+  }
+
+  public openRegistrationCampaign(phaseId: string, startDate: string, endDate: string): Observable<ResponseEntityApi<void>> {
+    return this.http.patch<ResponseEntityApi<void>>(`${this.url}/${phaseId}/open-registrations`, {
+      startDate,
+      endDate
+    });
+  }
+
+  public closeRegistrationCampaign(phaseId: string): Observable<ResponseEntityApi<void>> {
+    return this.http.patch<ResponseEntityApi<void>>(`${this.url}/${phaseId}/close-registrations`, {});
   }
 }

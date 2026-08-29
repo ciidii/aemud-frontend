@@ -36,4 +36,8 @@ export class PeriodeMandatHttpService {
   public deletePeriodeMandat(id: string): Observable<void> {
     return this.http.delete<void>(`${this.url}/periode-mandats/${id}`);
   }
+
+  public activatePeriodeMandat(id: string): Observable<ResponseEntityApi<PeriodeMandatDto>> {
+    return this.http.patch<ResponseEntityApi<PeriodeMandatDto>>(`${this.url}/periode-mandats/${id}/activate`, {});
+  }
 }
