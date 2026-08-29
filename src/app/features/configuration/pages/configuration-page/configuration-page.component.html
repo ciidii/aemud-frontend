@@ -1,30 +1,45 @@
-<div class="container-fluid p-4">
-  <h2 class="mb-4">Paramétrage de l'application</h2>
+<div class="config-page-container p-4">
+  
+  <!-- Page Header -->
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="fw-bold mb-1 config-title">Paramétrage de l'application</h2>
+      <p class="text-muted mb-0 config-subtitle">Gérez les configurations globales, les structures associatives et le moteur de formulaires.</p>
+    </div>
+  </div>
 
-  <ul class="nav nav-tabs" id="configTab" role="tablist">
-    <li class="nav-item" role="presentation">
-      <button class="nav-link active" id="clubs-tab" data-bs-toggle="tab" data-bs-target="#clubs-tab-pane" type="button" role="tab" aria-controls="clubs-tab-pane" aria-selected="true">
-        Clubs
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="commissions-tab" data-bs-toggle="tab" data-bs-target="#commissions-tab-pane" type="button" role="tab" aria-controls="commissions-tab-pane" aria-selected="false">
-        Commissions
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="bourses-tab" data-bs-toggle="tab" data-bs-target="#bourses-tab-pane" type="button" role="tab" aria-controls="bourses-tab-pane" aria-selected="false">
-        Bourses
-      </button>
-    </li>
-    <li class="nav-item" role="presentation">
-      <button class="nav-link" id="forms-tab" data-bs-toggle="tab" data-bs-target="#forms-tab-pane" type="button" role="tab" aria-controls="forms-tab-pane" aria-selected="false">
-        <i class="bi bi-ui-checks me-1"></i> Formulaire & Recensement
-      </button>
-    </li>
-  </ul>
+  <!-- Modern Pill Tabs -->
+  <div class="modern-tabs-wrapper mb-4">
+    <ul class="nav nav-pills custom-pill-tabs p-1 rounded-3" id="configTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active d-flex align-items-center gap-2" id="clubs-tab" data-bs-toggle="tab" data-bs-target="#clubs-tab-pane" type="button" role="tab" aria-controls="clubs-tab-pane" aria-selected="true">
+          <i class="bi bi-people-fill"></i>
+          <span>Clubs</span>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link d-flex align-items-center gap-2" id="commissions-tab" data-bs-toggle="tab" data-bs-target="#commissions-tab-pane" type="button" role="tab" aria-controls="commissions-tab-pane" aria-selected="false">
+          <i class="bi bi-diagram-3-fill"></i>
+          <span>Commissions</span>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link d-flex align-items-center gap-2" id="bourses-tab" data-bs-toggle="tab" data-bs-target="#bourses-tab-pane" type="button" role="tab" aria-controls="bourses-tab-pane" aria-selected="false">
+          <i class="bi bi-mortarboard-fill"></i>
+          <span>Bourses</span>
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link d-flex align-items-center gap-2" id="forms-tab" data-bs-toggle="tab" data-bs-target="#forms-tab-pane" type="button" role="tab" aria-controls="forms-tab-pane" aria-selected="false">
+          <i class="bi bi-ui-checks"></i>
+          <span>Formulaire & Recensement</span>
+        </button>
+      </li>
+    </ul>
+  </div>
 
-  <div class="tab-content bg-white p-4 border border-top-0" id="configTabContent">
+  <!-- Tab Content Panes -->
+  <div class="tab-content config-tab-content bg-white rounded-4 p-4 shadow-sm border" id="configTabContent">
     <div class="tab-pane fade show active" id="clubs-tab-pane" role="tabpanel" aria-labelledby="clubs-tab" tabindex="0">
       <app-club-admin></app-club-admin>
     </div>

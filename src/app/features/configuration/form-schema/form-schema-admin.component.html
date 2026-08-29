@@ -2,44 +2,52 @@
 
   <!-- Spinner de Chargement -->
   <div *ngIf="isLoading" class="text-center py-5">
-    <div class="spinner-border text-primary" role="status">
-      <span class="visually-hidden">Chargement du schéma...</span>
+    <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Chargement...</span>
     </div>
-    <p class="text-muted mt-2">Chargement de la configuration des formulaires...</p>
+    <p class="text-muted mt-3" style="font-size: 1.4rem;">Chargement du moteur de formulaires...</p>
   </div>
 
   <ng-container *ngIf="!isLoading && schema">
-    <!-- Barre d'actions supérieure -->
-    <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3 bg-light p-3 rounded border">
-      <div>
-        <h5 class="mb-1 fw-bold text-dark">
-          <i class="bi bi-ui-checks-grid text-success me-2"></i>Gestionnaire de Formulaire & Recensement
-        </h5>
-        <small class="text-muted">
-          Version : <strong>{{ schema.version }}</strong> | Groupes : <strong>{{ schema.groups.length }}</strong>
-        </small>
+    
+    <!-- Hero Toolbar Card -->
+    <div class="schema-hero-toolbar d-flex flex-wrap justify-content-between align-items-center mb-4 p-4 rounded-4 bg-light-subtle border">
+      <div class="d-flex align-items-center gap-3">
+        <div class="hero-icon-box rounded-3 d-flex align-items-center justify-content-center">
+          <i class="bi bi-sliders text-teal fs-3"></i>
+        </div>
+        <div>
+          <div class="d-flex align-items-center gap-2 mb-1">
+            <h4 class="mb-0 fw-bold text-dark hero-title">Formulaire d'Inscription & Recensement</h4>
+            <span class="badge badge-version">v{{ schema.version }}</span>
+          </div>
+          <p class="text-muted mb-0 small-text">
+            Configurez les sections, personnalisez les questions et adaptez le parcours étudiants / diplômés.
+          </p>
+        </div>
       </div>
 
-      <div class="d-flex flex-wrap gap-2">
-        <button class="btn btn-outline-danger btn-sm" (click)="resetToDefault()" [disabled]="isSaving">
-          <i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser d'usine
+      <!-- Action Buttons -->
+      <div class="d-flex flex-wrap align-items-center gap-2 mt-3 mt-lg-0">
+        <button class="btn btn-outline-danger btn-action" (click)="resetToDefault()" [disabled]="isSaving" title="Restaurer le schéma initial officiel">
+          <i class="bi bi-arrow-counterclockwise me-1"></i> Réinitialiser
         </button>
-        <button class="btn btn-outline-primary btn-sm" (click)="openPreviewModal()">
-          <i class="bi bi-eye me-1"></i> Prévisualiser
+        <button class="btn btn-outline-secondary btn-action" (click)="openPreviewModal()">
+          <i class="bi bi-eye me-1"></i> Aperçu
         </button>
-        <button class="btn btn-primary btn-sm" (click)="openAddFieldModal()">
-          <i class="bi bi-plus-circle me-1"></i> Ajouter un champ
+        <button class="btn btn-outline-primary btn-action" (click)="openAddFieldModal()">
+          <i class="bi bi-plus-lg me-1"></i> Nouveau Champ
         </button>
-        <button class="btn btn-success btn-sm px-3 fw-semibold shadow-sm" (click)="saveSchema()" [disabled]="isSaving">
+        <button class="btn btn-teal btn-action px-3 text-white fw-semibold shadow-sm" (click)="saveSchema()" [disabled]="isSaving">
           <span *ngIf="isSaving" class="spinner-border spinner-border-sm me-1"></span>
-          <i *ngIf="!isSaving" class="bi bi-check-lg me-1"></i> Enregistrer les modifications
+          <i *ngIf="!isSaving" class="bi bi-cloud-check me-1"></i> Enregistrer
         </button>
       </div>
     </div>
 
-    <!-- Accordion des Groupes de Champs -->
-    <div class="accordion" id="formSchemaAccordion">
-      <div *ngFor="let group of schema.groups; let gIdx = index" class="accordion-item mb-3 border shadow-sm rounded overflow-hidden">
+    <!-- Group Accordion List -->
+    <div class="accordion schema-accordion" id="formSchemaAccordion">
+      <div *ngFor="let group of schema.groups; let gIdx = index" class="accordion-item mb-3 rounded-4 overflow-hidden border">
         
         <!-- Accordion Header -->
         <h2 class="accordion-header" [id]="'heading_' + group.code">
@@ -53,16 +61,27 @@
             [attr.aria-controls]="'collapse_' + group.code"
           >
             <div class="d-flex align-items-center justify-content-between w-100 me-3">
-              <div class="d-flex align-items-center gap-2">
-                <span class="badge bg-secondary-subtle text-dark border">{{ group.code }}</span>
-                <span class="fw-bold fs-6">{{ group.title }}</span>
-                <span class="badge bg-light text-muted border ms-2">{{ group.fields.length }} champs</span>
-              </div>
+              
+              <!-- Group Title & Code -->
               <div class="d-flex align-items-center gap-3">
-                <span *ngIf="group.visibilityCondition" class="badge bg-warning-subtle text-dark border small">
-                  Condition : {{ group.visibilityCondition.dependsOn }} == {{ group.visibilityCondition.equals }}
+                <div class="group-status-dot" [class.active]="group.isActive"></div>
+                <div>
+                  <div class="d-flex align-items-center gap-2">
+                    <span class="fw-bold group-title-text">{{ group.title }}</span>
+                    <span class="badge badge-code">{{ group.code }}</span>
+                  </div>
+                  <small *ngIf="group.description" class="text-muted d-none d-md-block group-desc">{{ group.description }}</small>
+                </div>
+              </div>
+
+              <!-- Conditions & Status Switch -->
+              <div class="d-flex align-items-center gap-3">
+                <span *ngIf="group.visibilityCondition" class="badge badge-condition d-none d-sm-inline-flex align-items-center">
+                  <i class="bi bi-funnel me-1"></i> {{ group.visibilityCondition.dependsOn }} = {{ group.visibilityCondition.equals }}
                 </span>
-                <div class="form-check form-switch mb-0" (click)="$event.stopPropagation()">
+                <span class="badge badge-field-count">{{ group.fields.length }} champs</span>
+
+                <div class="form-check form-switch mb-0 group-switch" (click)="$event.stopPropagation()">
                   <input
                     class="form-check-input"
                     type="checkbox"
@@ -70,11 +89,9 @@
                     [id]="'switch_' + group.code"
                     [(ngModel)]="group.isActive"
                   />
-                  <label class="form-check-label small" [for]="'switch_' + group.code">
-                    {{ group.isActive ? 'Actif' : 'Inactif' }}
-                  </label>
                 </div>
               </div>
+
             </div>
           </button>
         </h2>
@@ -87,100 +104,97 @@
           [attr.aria-labelledby]="'heading_' + group.code"
           data-bs-parent="#formSchemaAccordion"
         >
-          <div class="accordion-body p-3 bg-white">
-            <p *ngIf="group.description" class="text-muted small mb-3">
-              <i class="bi bi-info-circle me-1"></i> {{ group.description }}
-            </p>
-
+          <div class="accordion-body p-0 bg-white">
+            
             <div class="table-responsive">
-              <table class="table table-hover align-middle border mb-2">
-                <thead class="table-light">
-                  <tr class="small text-muted">
-                    <th style="width: 80px;">Ordre</th>
-                    <th>Libellé du champ</th>
+              <table class="table table-hover align-middle mb-0 schema-table">
+                <thead>
+                  <tr>
+                    <th style="width: 80px;" class="ps-4">Ordre</th>
+                    <th>Libellé & Indication</th>
                     <th>Clé technique</th>
                     <th>Catégorie</th>
-                    <th>Type</th>
-                    <th>Obligatoire</th>
-                    <th class="text-end" style="width: 140px;">Actions</th>
+                    <th>Type de contrôle</th>
+                    <th>Règle</th>
+                    <th class="text-end pe-4" style="width: 120px;">Actions</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr *ngFor="let field of group.fields; let fIdx = index">
                     
-                    <!-- Ordre -->
-                    <td>
-                      <div class="btn-group btn-group-sm" role="group">
+                    <!-- Ordre Buttons -->
+                    <td class="ps-4">
+                      <div class="btn-group reorder-btn-group" role="group">
                         <button
                           type="button"
-                          class="btn btn-outline-secondary btn-xs"
+                          class="btn btn-sm btn-icon"
                           [disabled]="fIdx === 0"
                           (click)="moveFieldUp(group, fIdx)"
                           title="Monter"
                         >
-                          <i class="bi bi-arrow-up"></i>
+                          <i class="bi bi-chevron-up"></i>
                         </button>
                         <button
                           type="button"
-                          class="btn btn-outline-secondary btn-xs"
+                          class="btn btn-sm btn-icon"
                           [disabled]="fIdx === group.fields.length - 1"
                           (click)="moveFieldDown(group, fIdx)"
                           title="Descendre"
                         >
-                          <i class="bi bi-arrow-down"></i>
+                          <i class="bi bi-chevron-down"></i>
                         </button>
                       </div>
                     </td>
 
                     <!-- Libellé -->
                     <td>
-                      <span class="fw-semibold text-dark">{{ field.label }}</span>
-                      <small *ngIf="field.placeholder" class="d-block text-muted">Ex: {{ field.placeholder }}</small>
+                      <div class="fw-semibold text-dark field-label-text">{{ field.label }}</div>
+                      <small *ngIf="field.placeholder" class="text-muted field-placeholder">Ex: {{ field.placeholder }}</small>
                     </td>
 
-                    <!-- Clé -->
+                    <!-- Clé technique -->
                     <td>
-                      <code>{{ field.key }}</code>
+                      <span class="tech-key-chip">{{ field.key }}</span>
                     </td>
 
-                    <!-- Catégorie -->
+                    <!-- Catégorie Pill -->
                     <td>
                       <span
-                        class="badge"
+                        class="pill-badge"
                         [ngClass]="{
-                          'bg-primary-subtle text-primary border border-primary-subtle': field.category === 'CORE',
-                          'bg-warning-subtle text-warning-emphasis border border-warning-subtle': field.category === 'PRESET',
-                          'bg-info-subtle text-info-emphasis border border-info-subtle': field.category === 'CUSTOM'
+                          'pill-core': field.category === 'CORE',
+                          'pill-preset': field.category === 'PRESET',
+                          'pill-custom': field.category === 'CUSTOM'
                         }"
                       >
                         {{ field.category }}
                       </span>
                     </td>
 
-                    <!-- Type -->
+                    <!-- Type Badge -->
                     <td>
-                      <span class="badge bg-light text-dark border">{{ field.type }}</span>
-                      <small *ngIf="field.options && field.options.length" class="d-block text-muted small">
-                        ({{ field.options.length }} options)
+                      <span class="pill-badge pill-type">{{ field.type }}</span>
+                      <small *ngIf="field.options && field.options.length" class="d-block text-muted mt-1 small-text">
+                        {{ field.options.length }} options
                       </small>
                     </td>
 
-                    <!-- Obligatoire -->
+                    <!-- Obligatoire / Optionnel -->
                     <td>
-                      <span *ngIf="field.isRequired" class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                        <i class="bi bi-asterisk me-1"></i> Obligatoire
+                      <span *ngIf="field.isRequired" class="pill-badge pill-required">
+                        <i class="bi bi-asterisk"></i> Obligatoire
                       </span>
-                      <span *ngIf="!field.isRequired" class="badge bg-light text-muted border">
+                      <span *ngIf="!field.isRequired" class="pill-badge pill-optional">
                         Optionnel
                       </span>
                     </td>
 
                     <!-- Actions -->
-                    <td class="text-end">
-                      <div class="btn-group btn-group-sm">
+                    <td class="text-end pe-4">
+                      <div class="d-inline-flex gap-1">
                         <button
                           type="button"
-                          class="btn btn-outline-secondary"
+                          class="btn btn-icon-action btn-edit"
                           (click)="openEditFieldModal(group.code, field)"
                           title="Modifier le champ"
                         >
@@ -188,12 +202,12 @@
                         </button>
                         <button
                           type="button"
-                          class="btn btn-outline-danger"
+                          class="btn btn-icon-action btn-delete"
                           [disabled]="field.category === 'CORE'"
                           (click)="deleteField(group, field)"
-                          [title]="field.category === 'CORE' ? 'Impossible de supprimer un champ CORE système' : 'Supprimer le champ'"
+                          [title]="field.category === 'CORE' ? 'Les champs CORE indispensables ne peuvent pas être supprimés' : 'Supprimer'"
                         >
-                          <i class="bi bi-trash"></i>
+                          <i class="bi bi-trash3"></i>
                         </button>
                       </div>
                     </td>
@@ -203,10 +217,10 @@
               </table>
             </div>
 
-            <!-- Bouton ajout dans ce groupe -->
-            <div class="d-flex justify-content-end mt-2">
-              <button class="btn btn-outline-primary btn-sm" (click)="openAddFieldModal(group.code)">
-                <i class="bi bi-plus me-1"></i> Ajouter un champ dans ce groupe
+            <!-- Footer Quick Add Button -->
+            <div class="p-3 bg-light-subtle border-top text-end pe-4">
+              <button class="btn btn-sm btn-outline-teal" (click)="openAddFieldModal(group.code)">
+                <i class="bi bi-plus-circle me-1"></i> Ajouter un champ dans ce groupe
               </button>
             </div>
 
@@ -214,6 +228,7 @@
         </div>
       </div>
     </div>
+
   </ng-container>
 
   <!-- ================= MODAL AJOUT DE CHAMP ================= -->
@@ -222,10 +237,13 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content shadow-lg border-0 rounded-4">
         
-        <div class="modal-header border-bottom py-3">
-          <h5 class="modal-title fw-bold">
-            <i class="bi bi-plus-circle text-primary me-2"></i>Ajouter un Champ Personnalisé
-          </h5>
+        <div class="modal-header border-bottom py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-icon-header bg-teal-subtle text-teal">
+              <i class="bi bi-plus-circle-fill"></i>
+            </div>
+            <h5 class="modal-title fw-bold mb-0">Ajouter un Champ Personnalisé</h5>
+          </div>
           <button type="button" class="btn-close" (click)="closeAddFieldModal()"></button>
         </div>
 
@@ -235,7 +253,7 @@
             <!-- Groupe cible -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">Groupe de destination</label>
-              <select class="form-select" [(ngModel)]="selectedGroupCode">
+              <select class="form-select custom-input" [(ngModel)]="selectedGroupCode">
                 <option *ngFor="let g of schema?.groups" [value]="g.code">
                   {{ g.title }} ({{ g.code }})
                 </option>
@@ -244,8 +262,8 @@
 
             <!-- Type de champ -->
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Type de champ</label>
-              <select class="form-select" [(ngModel)]="newField.type">
+              <label class="form-label fw-semibold">Type de contrôle</label>
+              <select class="form-select custom-input" [(ngModel)]="newField.type">
                 <option *ngFor="let t of availableFieldTypes" [value]="t.value">
                   {{ t.label }}
                 </option>
@@ -254,10 +272,10 @@
 
             <!-- Libellé -->
             <div class="col-md-6">
-              <label class="form-label fw-semibold">Libellé de la question / du champ <span class="text-danger">*</span></label>
+              <label class="form-label fw-semibold">Libellé de la question <span class="text-danger">*</span></label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control custom-input"
                 [(ngModel)]="newField.label"
                 (ngModelChange)="onLabelChange()"
                 placeholder="Ex: Taille de T-Shirt, Numéro d'étudiant..."
@@ -269,11 +287,11 @@
               <label class="form-label fw-semibold">Identifiant technique (clé unique) <span class="text-danger">*</span></label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control custom-input"
                 [(ngModel)]="newField.key"
                 placeholder="Ex: studentIdNumber, tShirtSize..."
               />
-              <small class="text-muted">Utilisé pour l'enregistrement en base</small>
+              <small class="text-muted" style="font-size: 1.2rem;">Sera utilisé pour le stockage en base</small>
             </div>
 
             <!-- Placeholder -->
@@ -281,7 +299,7 @@
               <label class="form-label fw-semibold">Texte d'indication (Placeholder)</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control custom-input"
                 [(ngModel)]="newField.placeholder"
                 placeholder="Ex: Saisissez votre réponse..."
               />
@@ -289,38 +307,40 @@
 
             <!-- Options pour Select / Radio / MultiSelect -->
             <div class="col-12" *ngIf="['SELECT', 'RADIO', 'MULTI_SELECT'].includes(newField.type)">
-              <label class="form-label fw-semibold">Options possibles (une option par ligne)</label>
+              <label class="form-label fw-semibold">Options sélectionnables (une option par ligne)</label>
               <textarea
-                class="form-control"
+                class="form-control custom-input"
                 rows="4"
                 [(ngModel)]="newField.optionsInput"
                 placeholder="Option 1&#10;Option 2&#10;Option 3"
               ></textarea>
-              <small class="text-muted">Chaque ligne deviendra un choix sélectionnable.</small>
+              <small class="text-muted" style="font-size: 1.2rem;">Chaque ligne représentera un choix dans la liste ou les cases à cocher.</small>
             </div>
 
-            <!-- Obligatoire Toggle -->
+            <!-- Obligatoire Switch -->
             <div class="col-12">
-              <div class="form-check form-switch mt-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  id="newFieldRequired"
-                  [(ngModel)]="newField.isRequired"
-                />
-                <label class="form-check-label fw-semibold" for="newFieldRequired">
-                  Rendre ce champ obligatoire
-                </label>
+              <div class="card p-3 bg-light border rounded-3 mt-2">
+                <div class="form-check form-switch mb-0">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="newFieldRequired"
+                    [(ngModel)]="newField.isRequired"
+                  />
+                  <label class="form-check-label fw-semibold ms-2" for="newFieldRequired">
+                    Rendre ce champ obligatoire lors de la soumission
+                  </label>
+                </div>
               </div>
             </div>
 
           </div>
         </div>
 
-        <div class="modal-footer border-top py-3">
-          <button type="button" class="btn btn-secondary" (click)="closeAddFieldModal()">Annuler</button>
-          <button type="button" class="btn btn-primary" (click)="submitNewField()">
+        <div class="modal-footer border-top py-3 px-4">
+          <button type="button" class="btn btn-light" (click)="closeAddFieldModal()">Annuler</button>
+          <button type="button" class="btn btn-teal text-white px-4" (click)="submitNewField()">
             <i class="bi bi-plus-lg me-1"></i> Ajouter le champ
           </button>
         </div>
@@ -335,72 +355,72 @@
     <div class="modal-dialog modal-dialog-centered modal-lg">
       <div class="modal-content shadow-lg border-0 rounded-4">
         
-        <div class="modal-header border-bottom py-3">
-          <h5 class="modal-title fw-bold">
-            <i class="bi bi-pencil-square text-secondary me-2"></i>Modifier le Champ : {{ editingField.field.label }}
-          </h5>
+        <div class="modal-header border-bottom py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-icon-header bg-secondary-subtle text-dark">
+              <i class="bi bi-pencil-square"></i>
+            </div>
+            <h5 class="modal-title fw-bold mb-0">Modifier le Champ : {{ editingField.field.label }}</h5>
+          </div>
           <button type="button" class="btn-close" (click)="closeEditFieldModal()"></button>
         </div>
 
         <div class="modal-body p-4">
           <div class="row g-3">
             
-            <!-- Libellé -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">Libellé</label>
-              <input type="text" class="form-control" [(ngModel)]="editingField.field.label" />
+              <input type="text" class="form-control custom-input" [(ngModel)]="editingField.field.label" />
             </div>
 
-            <!-- Clé (Lecture seule si CORE) -->
             <div class="col-md-6">
               <label class="form-label fw-semibold">Identifiant technique (clé)</label>
               <input
                 type="text"
-                class="form-control"
+                class="form-control custom-input"
                 [(ngModel)]="editingField.field.key"
                 [disabled]="editingField.field.category === 'CORE'"
               />
             </div>
 
-            <!-- Placeholder -->
             <div class="col-12" *ngIf="['TEXT', 'TEXTAREA', 'NUMBER'].includes(editingField.field.type)">
               <label class="form-label fw-semibold">Texte d'indication (Placeholder)</label>
-              <input type="text" class="form-control" [(ngModel)]="editingField.field.placeholder" />
+              <input type="text" class="form-control custom-input" [(ngModel)]="editingField.field.placeholder" />
             </div>
 
-            <!-- Options -->
             <div class="col-12" *ngIf="['SELECT', 'RADIO', 'MULTI_SELECT'].includes(editingField.field.type)">
               <label class="form-label fw-semibold">Options possibles (une par ligne)</label>
               <textarea
-                class="form-control"
+                class="form-control custom-input"
                 rows="4"
                 [(ngModel)]="editingField.optionsInput"
               ></textarea>
             </div>
 
-            <!-- Obligatoire -->
             <div class="col-12">
-              <div class="form-check form-switch mt-2">
-                <input
-                  class="form-check-input"
-                  type="checkbox"
-                  role="switch"
-                  id="editFieldRequired"
-                  [(ngModel)]="editingField.field.isRequired"
-                  [disabled]="editingField.field.category === 'CORE'"
-                />
-                <label class="form-check-label fw-semibold" for="editFieldRequired">
-                  Champ obligatoire
-                </label>
+              <div class="card p-3 bg-light border rounded-3 mt-2">
+                <div class="form-check form-switch mb-0">
+                  <input
+                    class="form-check-input"
+                    type="checkbox"
+                    role="switch"
+                    id="editFieldRequired"
+                    [(ngModel)]="editingField.field.isRequired"
+                    [disabled]="editingField.field.category === 'CORE'"
+                  />
+                  <label class="form-check-label fw-semibold ms-2" for="editFieldRequired">
+                    Champ obligatoire
+                  </label>
+                </div>
               </div>
             </div>
 
           </div>
         </div>
 
-        <div class="modal-footer border-top py-3">
-          <button type="button" class="btn btn-secondary" (click)="closeEditFieldModal()">Annuler</button>
-          <button type="button" class="btn btn-primary" (click)="submitEditField()">
+        <div class="modal-footer border-top py-3 px-4">
+          <button type="button" class="btn btn-light" (click)="closeEditFieldModal()">Annuler</button>
+          <button type="button" class="btn btn-teal text-white px-4" (click)="submitEditField()">
             Enregistrer les modifications
           </button>
         </div>
@@ -415,12 +435,15 @@
     <div class="modal-dialog modal-dialog-centered modal-xl modal-dialog-scrollable">
       <div class="modal-content shadow-lg border-0 rounded-4">
         
-        <div class="modal-header bg-light border-bottom py-3">
-          <div>
-            <h5 class="modal-title fw-bold text-dark">
-              <i class="bi bi-eye text-primary me-2"></i>Prévisualisation en Direct du Formulaire
-            </h5>
-            <small class="text-muted">Aperçu du rendu final tel qu'il apparaît aux membres</small>
+        <div class="modal-header bg-light border-bottom py-3 px-4">
+          <div class="d-flex align-items-center gap-2">
+            <div class="modal-icon-header bg-teal-subtle text-teal">
+              <i class="bi bi-eye-fill"></i>
+            </div>
+            <div>
+              <h5 class="modal-title fw-bold mb-0">Prévisualisation en Direct du Formulaire</h5>
+              <small class="text-muted" style="font-size: 1.2rem;">Rendu interactif en conditions réelles</small>
+            </div>
           </div>
           <button type="button" class="btn-close" (click)="closePreviewModal()"></button>
         </div>
@@ -429,13 +452,13 @@
           <app-dynamic-form
             *ngIf="schema"
             [schema]="schema"
-            [submitButtonText]="'Tester la validation'"
-            (formSubmit)="toastr.success('Formulaire valide ! Données prêtes à l\'envoi.', 'Test OK')"
+            [submitButtonText]="'Tester la validation en direct'"
+            (formSubmit)="toastr.success('Formulaire validé avec succès ! Format du payload conforme.', 'Test Réussi')"
           ></app-dynamic-form>
         </div>
 
-        <div class="modal-footer border-top py-3 bg-white">
-          <button type="button" class="btn btn-secondary" (click)="closePreviewModal()">Fermer</button>
+        <div class="modal-footer border-top py-3 px-4 bg-white">
+          <button type="button" class="btn btn-secondary" (click)="closePreviewModal()">Fermer l'aperçu</button>
         </div>
 
       </div>
