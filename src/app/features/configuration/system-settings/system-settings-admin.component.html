@@ -1,0 +1,148 @@
+<div class="system-settings-admin-container">
+  
+  <!-- Loading State -->
+  <div *ngIf="isLoading" class="text-center py-5">
+    <div class="spinner-border text-teal mb-3" style="width: 3rem; height: 3rem;" role="status">
+      <span class="visually-hidden">Chargement des paramètres...</span>
+    </div>
+    <p class="text-muted">Chargement des configurations système en cours...</p>
+  </div>
+
+  <div *ngIf="!isLoading" class="settings-content">
+    
+    <!-- Section 1 : Tarification des Frais d'Adhésion -->
+    <div class="card settings-section-card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white border-bottom py-3 px-4 rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="section-icon bg-teal-subtle text-teal rounded-circle me-3 d-flex align-items-center justify-content-center">
+            <i class="bi bi-cash-coin fs-4"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0">Frais d'Adhésion & Inscription (Gouvernance SG)</h5>
+            <small class="text-muted">Définissez les montants officiels exigés lors de l'enrôlement ou du renouvellement des étudiants</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="row g-4">
+          <!-- 1ère Inscription -->
+          <div class="col-md-6">
+            <div class="fee-input-card p-3 rounded-3 border bg-light-subtle">
+              <label class="form-label fw-bold text-dark mb-1">
+                Frais de 1ère Inscription (Nouvel Adhérent) <span class="text-danger">*</span>
+              </label>
+              <p class="text-muted small mb-2">Montant appliqué automatiquement aux nouveaux étudiants lors de leur premier recensement.</p>
+              <div class="input-group input-group-lg">
+                <input type="number" class="form-control fw-bold text-teal" [(ngModel)]="initialRegistrationFee" min="0" step="500">
+                <span class="input-group-text bg-white fw-semibold">FCFA</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Réinscription -->
+          <div class="col-md-6">
+            <div class="fee-input-card p-3 rounded-3 border bg-light-subtle">
+              <label class="form-label fw-bold text-dark mb-1">
+                Frais de Réinscription (Renouvellement) <span class="text-danger">*</span>
+              </label>
+              <p class="text-muted small mb-2">Montant appliqué aux anciens membres réactivant leur statut pour une nouvelle phase.</p>
+              <div class="input-group input-group-lg">
+                <input type="number" class="form-control fw-bold text-teal" [(ngModel)]="reregistrationFee" min="0" step="500">
+                <span class="input-group-text bg-white fw-semibold">FCFA</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2 : Coordonnées Officielles des Paiements en Ligne -->
+    <div class="card settings-section-card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white border-bottom py-3 px-4 rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="section-icon bg-primary-subtle text-primary rounded-circle me-3 d-flex align-items-center justify-content-center">
+            <i class="bi bi-wallet-fill fs-4"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0">Comptes de Paiement Numérique (Wave & Orange Money)</h5>
+            <small class="text-muted">Numéros officiels présentés aux adhérents sur le portail public pour les versements en ligne</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="row g-4">
+          <!-- Numéro Wave -->
+          <div class="col-md-6">
+            <div class="fee-input-card p-3 rounded-3 border bg-light-subtle">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="badge bg-primary text-white px-2 py-1"><i class="bi bi-water"></i> Wave</div>
+                <label class="form-label fw-bold text-dark mb-0">Numéro Wave Officiel AEMUD</label>
+              </div>
+              <p class="text-muted small mb-2">Numéro de transfert direct communiqué sur le portail de recensement.</p>
+              <input type="text" class="form-control form-control-lg" [(ngModel)]="wavePaymentPhone" placeholder="+221 77 xxx xx xx">
+            </div>
+          </div>
+
+          <!-- Numéro Orange Money -->
+          <div class="col-md-6">
+            <div class="fee-input-card p-3 rounded-3 border bg-light-subtle">
+              <div class="d-flex align-items-center gap-2 mb-2">
+                <div class="badge bg-warning text-dark px-2 py-1"><i class="bi bi-phone"></i> Orange Money</div>
+                <label class="form-label fw-bold text-dark mb-0">Numéro Orange Money Officiel AEMUD</label>
+              </div>
+              <p class="text-muted small mb-2">Numéro officiel utilisé pour les notifications de prélèvement OM.</p>
+              <input type="text" class="form-control form-control-lg" [(ngModel)]="orangeMoneyPhone" placeholder="+221 78 xxx xx xx">
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 3 : Paramètres Système & Notifications -->
+    <div class="card settings-section-card shadow-sm border-0 rounded-4 mb-4">
+      <div class="card-header bg-white border-bottom py-3 px-4 rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="section-icon bg-info-subtle text-info rounded-circle me-3 d-flex align-items-center justify-content-center">
+            <i class="bi bi-chat-dots-fill fs-4"></i>
+          </div>
+          <div>
+            <h5 class="fw-bold text-dark mb-0">Paramètres Système & Communications</h5>
+            <small class="text-muted">Tarification des SMS et paramètres généraux de l'application</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="card-body p-4">
+        <div class="row g-4">
+          <div class="col-md-6">
+            <div class="fee-input-card p-3 rounded-3 border bg-light-subtle">
+              <label class="form-label fw-bold text-dark mb-1">
+                Coût unitaire SMS Orange (FCFA)
+              </label>
+              <p class="text-muted small mb-2">Utilisé pour le calcul prévisionnel des devis lors de l'envoi de campagnes SMS.</p>
+              <div class="input-group">
+                <input type="number" class="form-control fw-bold" [(ngModel)]="smsCostPerUnit" min="0" step="1">
+                <span class="input-group-text bg-white">FCFA / SMS</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Action Bar -->
+    <div class="d-flex justify-content-end p-3 bg-white rounded-4 border shadow-sm mt-4">
+      <button (click)="saveSettings()"
+              [disabled]="isSaving"
+              type="button"
+              class="btn btn-teal-primary btn-lg px-4 d-inline-flex align-items-center gap-2 fw-semibold">
+        <span *ngIf="isSaving" class="spinner-border spinner-border-sm"></span>
+        <i *ngIf="!isSaving" class="bi bi-check2-circle fs-5"></i>
+        <span>Enregistrer les Paramètres (SG)</span>
+      </button>
+    </div>
+
+  </div>
+</div>

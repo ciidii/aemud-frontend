@@ -1,0 +1,36 @@
+.system-settings-admin-container {
+  .section-icon {
+    width: 44px;
+    height: 44px;
+  }
+
+  .fee-input-card {
+    background: #f8fafc;
+    transition: all 0.2s ease;
+
+    &:hover {
+      background: #ffffff;
+      border-color: #cbd5e1 !important;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+    }
+  }
+
+  .text-teal {
+    color: #278F8F !important;
+  }
+
+  .bg-teal-subtle {
+    background-color: #f0fdfa !important;
+  }
+
+  .btn-teal-primary {
+    background: #278F8F;
+    color: #ffffff;
+    border: 1px solid #278F8F;
+
+    &:hover:not(:disabled) {
+      background: #1f7373;
+      color: #ffffff;
+    }
+  }
+}
