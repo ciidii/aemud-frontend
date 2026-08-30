@@ -9,6 +9,9 @@ import {PeriodeMandatDto} from "../../../features/configuration/periode-mandat/m
 import {
   PeriodeMandatHttpService
 } from "../../../features/configuration/periode-mandat/services/periode-mandat-http.service";
+import {SidebarService} from "../../services/sidebar.service";
+import {SessionService} from "../../../core/services/session.service";
+
 @Component({
   selector: 'app-nav-bar',
   templateUrl: './header.component.html',
@@ -22,6 +25,8 @@ export class HeaderComponent implements OnInit {
   activeMandat$!: Observable<PeriodeMandatDto | null>;
   appStateService = inject(AppStateService);
   authService = inject(AuthHttpService);
+  sessionService = inject(SessionService);
+  sidebarService = inject(SidebarService);
   router = inject(Router);
   mandatHttpService = inject(PeriodeMandatHttpService);
   private elementRef = inject(ElementRef);
@@ -29,7 +34,21 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.mandats$ = this.appStateService.mandats$;
     this.activeMandat$ = this.appStateService.activeMandat$;
+  }
 
+  toggleMobileSidebar(): void {
+    this.sidebarService.toggleMobile();
+  }
+
+  get userInitials(): string {
+    const user = this.sessionService.getCurrentUser();
+    if (!user || !user.username) return 'U';
+    return user.username.substring(0, 2).toUpperCase();
+  }
+
+  get userName(): string {
+    const user = this.sessionService.getCurrentUser();
+    return user?.username || 'Utilisateur';
   }
 
   onMandatChange(mandat: PeriodeMandatDto): void {
@@ -61,12 +80,14 @@ export class HeaderComponent implements OnInit {
   }
 
   logout(): void {
-    this.authService.logout();
-    this.router.navigate(['/auth/login']);
+    this.authService.logout().subscribe({
+      next: () => this.router.navigate(['/auth/login']),
+      error: () => this.router.navigate(['/auth/login'])
+    });
   }
 
   viewMyProfile(): void {
-    const currentUser = this.authService.currentUserValue;
+    const currentUser = this.sessionService.getCurrentUser();
     if (currentUser && currentUser.id) {
       this.router.navigate(['/users/details', currentUser.id]);
     }
@@ -78,5 +99,5 @@ export class HeaderComponent implements OnInit {
       this.isPopoverOpen = false;
     }
   }
-  //commente for test
 }
+

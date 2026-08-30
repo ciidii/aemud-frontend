@@ -2,29 +2,86 @@
 
 .app-root-container {
   display: grid;
-  grid-template-rows: $header-height 1fr; // Header row, Content row
+  grid-template-rows: $header-height 1fr;
   height: 100vh;
+  height: 100dvh;
   width: 100vw;
+  overflow: hidden;
 }
 
 .app-container {
   display: grid;
-  grid-template-columns: $sidebar-expanded-width 1fr; // sidebar, main-content
-  transition: grid-template-columns 0.3s ease-in-out;
-  overflow: hidden; // Prevents scrollbars on the container
+  grid-template-columns: $sidebar-expanded-width 1fr;
+  transition: grid-template-columns 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+  overflow: hidden;
+  height: 100%;
+  position: relative;
 
   &.sidebar--collapsed {
-    grid-template-columns: $sidebar-collapsed-width 1fr;
+    grid-template-columns: 6.4rem 1fr;
   }
 }
 
 app-aside-bare {
   overflow: hidden;
-  transition: width 0.3s ease-in-out;
+  height: 100%;
+  flex-shrink: 0;
 }
 
 .main-content {
   background-color: $color-background-body;
-  overflow-y: auto; // Allow scrolling only in the main content
+  overflow-y: auto;
   padding: $space-6;
+  height: 100%;
 }
+
+// -------------------------------------------------------------
+// MOBILE BACKDROP & RESPONSIVE LAYOUT (< 992px)
+// -------------------------------------------------------------
+.mobile-backdrop {
+  display: none;
+}
+
+@media (max-width: 991.98px) {
+  .app-container {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    width: 100%;
+
+    &.sidebar--collapsed {
+      grid-template-columns: none;
+    }
+  }
+
+  app-aside-bare {
+    position: static;
+    height: auto;
+  }
+
+  .main-content {
+    padding: $space-4;
+    width: 100%;
+    flex: 1;
+  }
+
+  .mobile-backdrop {
+    display: block;
+    position: fixed;
+    inset: 0;
+    background-color: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(3px);
+    -webkit-backdrop-filter: blur(3px);
+    z-index: 9998;
+    animation: fadeInBackdrop 0.2s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+  }
+
+  @keyframes fadeInBackdrop {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}

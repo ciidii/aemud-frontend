@@ -7,7 +7,8 @@
   height: $header-height;
   background-color: $color-background-panel;
   border-bottom: 1px solid $color-border-default;
-  z-index: 5000;
+  z-index: 1010;
+  box-shadow: $shadow-xs;
 }
 
 .app-header {
@@ -15,32 +16,99 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  padding: 0 $space-6;
+  padding: 0 $space-5;
+
+  @media (max-width: 576px) {
+    padding: 0 $space-3;
+  }
 }
 
 .header-left {
-  .navbar-brand {
-    @include text-heading-4;
+  display: flex;
+  align-items: center;
+  gap: $space-3;
+
+  .mobile-menu-btn {
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-border-default;
+    background-color: $color-background-panel;
     color: $color-text-primary;
-    font-weight: $font-weight-bold;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 0;
+    transition: all 0.2s ease;
+
+    i {
+      font-size: 2rem;
+      line-height: 1;
+    }
+
+    &:hover {
+      background-color: $color-background-hover;
+      border-color: $color-border-strong;
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  .navbar-brand {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+    gap: $space-2;
+
+    .brand-title {
+      @include text-heading-4;
+      color: $primary-700;
+      font-weight: $font-weight-bold;
+      margin: 0;
+      letter-spacing: -0.02em;
+
+      @media (max-width: 576px) {
+        font-size: 1.8rem;
+      }
+    }
   }
 }
 
 .header-right {
   display: flex;
   align-items: center;
-  gap: $space-4;
+  gap: $space-3;
 
-  .dropdown-toggle {
-    @include text-body-regular;
-    background-color: $color-background-panel;
-    color: $color-text-secondary;
-    border: 1px solid $color-border-default;
-    border-radius: $radius-md;
+  @media (max-width: 576px) {
+    gap: $space-2;
+  }
 
-    &:hover, &:focus {
-      background-color: $color-background-hover;
-      border-color: $color-border-strong;
+  .mandat-dropdown {
+    .dropdown-toggle {
+      @include text-body-small;
+      background-color: $gray-100;
+      color: $color-text-secondary;
+      border: 1px solid $color-border-default;
+      border-radius: $radius-md;
+      padding: $space-2 $space-3;
+      display: flex;
+      align-items: center;
+      max-width: 18rem;
+      font-weight: 500;
+
+      .mandat-name {
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+      }
+
+      &:hover, &:focus {
+        background-color: $color-background-hover;
+        border-color: $color-border-strong;
+        color: $color-text-primary;
+      }
     }
   }
 
@@ -48,12 +116,14 @@
     border-radius: $radius-md;
     border-color: $color-border-default;
     box-shadow: $shadow-lg;
+    font-size: $font-size-small;
 
     .dropdown-item {
       display: flex;
       align-items: center;
       gap: $space-2;
       cursor: pointer;
+      padding: $space-2 $space-3;
 
       &:disabled {
         cursor: not-allowed;
@@ -85,37 +155,39 @@
     color: $color-text-secondary;
     cursor: pointer;
     position: relative;
-    width: 4rem;
-    height: 4rem;
+    width: 3.8rem;
+    height: 3.8rem;
     border-radius: $radius-full;
+    transition: background-color 0.2s ease;
 
     &:hover {
       background-color: $color-background-hover;
-    }
-
-    svg {
-      width: $icon-md;
-      height: $icon-md;
+      color: $color-text-primary;
     }
   }
 
   .notification-icon {
     position: relative;
     cursor: pointer;
-    padding: $space-2;
-    border-radius: 50%;
+    width: 3.8rem;
+    height: 3.8rem;
+    border-radius: $radius-full;
     transition: background-color 0.2s ease;
     display: flex;
     align-items: center;
     justify-content: center;
 
     i {
-      font-size: $icon-md;
+      font-size: 1.9rem;
       color: $color-text-secondary;
     }
 
     &:hover {
-      background-color: $gray-100;
+      background-color: $color-background-hover;
+
+      i {
+        color: $color-text-primary;
+      }
     }
 
     .badge {
@@ -132,21 +204,28 @@
       justify-content: center;
       border-radius: 50%;
       border: 2px solid $white;
+      font-weight: $font-weight-bold;
     }
   }
 
   .profile-button {
+    padding: 0;
+
     .profile-avatar {
       width: 3.6rem;
       height: 3.6rem;
       border-radius: $radius-full;
-      background-color: $primary-500;
+      background: linear-gradient(135deg, $primary-500 0%, $primary-700 100%);
       color: $color-text-on-primary;
       display: flex;
       align-items: center;
       justify-content: center;
       @include text-body-bold;
+      font-size: 1.35rem;
       text-transform: uppercase;
+      box-shadow: $shadow-xs;
+      border: 2px solid $white;
     }
   }
 }
+

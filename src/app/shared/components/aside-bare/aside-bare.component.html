@@ -1,26 +1,45 @@
-<div [class.collapsed]="!(sideBareService.isOpen$ | async)" class="sidebar-container">
+<div [class.collapsed]="!(isOpen$ | async)"
+     [class.mobile-open]="(isMobileOpen$ | async)"
+     class="sidebar-container">
 
   <!-- 1. Brand Header -->
   <div class="brand-header">
-    <div class="logo-area">
-      <i class="bi bi-grid-1x2-fill logo-icon"></i>
-      <span class="app-name">AEMUD</span>
+    <div class="logo-area" routerLink="/members/list-members" (click)="onNavItemClick()">
+      <div class="logo-badge">
+        <i class="bi bi-grid-1x2-fill logo-icon"></i>
+      </div>
+      <div class="brand-text">
+        <span class="app-name">AEMUD</span>
+        <span class="app-tagline">Portail RH & Gestion</span>
+      </div>
     </div>
-    <button (click)="toggleCollapse()" class="toggle-btn">
-      <i [class.bi-chevron-left]="sideBareService.isOpen$ | async" [class.bi-chevron-right]="!(sideBareService.isOpen$ | async)"
-         class="bi"></i>
+
+    <!-- Desktop Collapse Button -->
+    <button (click)="toggleCollapse()"
+            class="toggle-btn d-none d-lg-flex"
+            [title]="(isOpen$ | async) ? 'Réduire la barre latérale' : 'Développer la barre latérale'"
+            [attr.aria-label]="(isOpen$ | async) ? 'Réduire la barre latérale' : 'Développer la barre latérale'">
+      <i class="bi" [ngClass]="(isOpen$ | async) ? 'bi-layout-sidebar-inset' : 'bi-layout-sidebar-inset-reverse'"></i>
+    </button>
+
+    <!-- Mobile Close Button -->
+    <button (click)="closeMobile()"
+            class="mobile-close-btn d-lg-none"
+            title="Fermer le menu"
+            aria-label="Fermer le menu">
+      <i class="bi bi-x-lg"></i>
     </button>
   </div>
 
   <!-- 2. Navigation Scroll Area -->
-  <div class="nav-scroll">
+  <nav class="nav-scroll" aria-label="Navigation principale">
 
     <!-- Groupe: Principal -->
     <div class="nav-group">
       <span class="group-title">Principal</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/dashboard" routerLinkActive="active">
+          <a class="nav-link" routerLink="/members/list-contribution" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-speedometer2"></i>
             <span class="nav-text">Tableau de bord</span>
             <span class="tooltip-text">Tableau de bord</span>
@@ -34,24 +53,24 @@
       <span class="group-title">Gestion</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a class="nav-link" routerLink="members/list-members" routerLinkActive="active">
+          <a class="nav-link" routerLink="/members/list-members" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-people"></i>
             <span class="nav-text">Membres</span>
-            <span class="tooltip-text">Membres</span>
+            <span class="tooltip-text">Liste des Membres</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/members/register-form" routerLinkActive="active">
+          <a class="nav-link" routerLink="/members/register-form" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-person-plus"></i>
-            <span class="nav-text">Ajouter Membre</span>
-            <span class="tooltip-text">Ajouter Membre</span>
+            <span class="nav-text">Nouveau Membre</span>
+            <span class="tooltip-text">Ajouter un Membre</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="periode-mandats/list" routerLinkActive="active">
-            <i class="bi bi-card-checklist"></i>
-            <span class="nav-text">Mandats</span>
-            <span class="tooltip-text">Mandats</span>
+          <a class="nav-link" routerLink="/periode-mandats/list" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-calendar2-range"></i>
+            <span class="nav-text">Mandats & Phases</span>
+            <span class="tooltip-text">Mandats & Phases</span>
           </a>
         </li>
       </ul>
@@ -63,17 +82,17 @@
       <ul class="nav-items">
         <li class="nav-item">
           <a [routerLinkActiveOptions]="{exact: true}" class="nav-link" routerLink="/contributions"
-             routerLinkActive="active">
-            <i class="bi bi-cash-stack"></i>
-            <span class="nav-text">Contributions</span>
-            <span class="tooltip-text">Contributions</span>
+             routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-wallet2"></i>
+            <span class="nav-text">Cotisations</span>
+            <span class="tooltip-text">Gestion des Cotisations</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/contributions/new" routerLinkActive="active">
+          <a class="nav-link" routerLink="/contributions/new" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-plus-circle"></i>
             <span class="nav-text">Nouvelle Contrib.</span>
-            <span class="tooltip-text">Nouvelle Contrib.</span>
+            <span class="tooltip-text">Enregistrer Contribution</span>
           </a>
         </li>
       </ul>
@@ -83,37 +102,30 @@
     <div class="nav-group">
       <span class="group-title">Communication</span>
       <ul class="nav-items">
-        <!-- NOUVEAU: Le tableau de bord des communications -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/dashboard" routerLinkActive="active">
-            <i class="bi bi-graph-up"></i>
+          <a class="nav-link" routerLink="/notifications/dashboard" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-graph-up-arrow"></i>
             <span class="nav-text">Vue d'ensemble</span>
             <span class="tooltip-text">Dashboard Communication</span>
           </a>
         </li>
-
-        <!-- NOUVEAU: Le point d'entrée central pour les campagnes -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/campaigns" routerLinkActive="active">
+          <a class="nav-link" routerLink="/notifications/campaigns" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-send"></i>
             <span class="nav-text">Campagnes</span>
-            <span class="tooltip-text">Gérer les campagnes SMS & Email</span>
+            <span class="tooltip-text">Campagnes SMS & Email</span>
           </a>
         </li>
-
-        <!-- MIS À JOUR: Gestion centralisée des modèles -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/templates" routerLinkActive="active">
-            <i class="bi bi-files"></i>
+          <a class="nav-link" routerLink="/notifications/templates" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-file-earmark-text"></i>
             <span class="nav-text">Modèles</span>
             <span class="tooltip-text">Modèles de messages</span>
           </a>
         </li>
-        
-        <!-- NOUVEAU: Gestion des audiences -->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/notifications/audiences" routerLinkActive="active">
-            <i class="bi bi-people"></i>
+          <a class="nav-link" routerLink="/notifications/audiences" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-people-fill"></i>
             <span class="nav-text">Audiences</span>
             <span class="tooltip-text">Groupes de destinataires</span>
           </a>
@@ -126,50 +138,45 @@
       <span class="group-title">Administration</span>
       <ul class="nav-items">
         <li class="nav-item">
-          <a class="nav-link" routerLink="/configurations" routerLinkActive="active">
-            <i class="bi bi-gear"></i>
+          <a class="nav-link" routerLink="/configurations" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-sliders"></i>
             <span class="nav-text">Paramétrage</span>
-            <span class="tooltip-text">Paramétrage</span>
+            <span class="tooltip-text">Paramétrage Système</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" routerLink="/users" routerLinkActive="active">
+          <a class="nav-link" routerLink="/users" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-shield-lock"></i>
             <span class="nav-text">Utilisateurs</span>
-            <span class="tooltip-text">Utilisateurs</span>
+            <span class="tooltip-text">Gestion des Utilisateurs</span>
           </a>
         </li>
-<!--        <li class="nav-item">-->
-<!--          <a class="nav-link" routerLink="/users/add" routerLinkActive="active">-->
-<!--            <i class="bi bi-shield-lock"></i>-->
-<!--            <span class="nav-text">Utilisateurs</span>-->
-<!--            <span class="tooltip-text">Utilisateurs</span>-->
-<!--          </a>-->
-<!--        </li>-->
         <li class="nav-item">
-          <a class="nav-link" routerLink="/roles" routerLinkActive="active">
-            <i class="bi bi-person-badge"></i>
-            <span class="nav-text">Rôles</span>
-            <span class="tooltip-text">Rôles</span>
+          <a class="nav-link" routerLink="/census" routerLinkActive="active" (click)="onNavItemClick()">
+            <i class="bi bi-globe2"></i>
+            <span class="nav-text">Grand Recensement</span>
+            <span class="tooltip-text">Grand Recensement</span>
           </a>
         </li>
       </ul>
     </div>
 
-  </div>
+  </nav>
 
   <!-- 3. User Footer -->
   <div class="user-footer">
-    <div class="user-info">
-      <div class="avatar">AD</div>
+    <div class="user-card" [title]="userName + ' (' + userRoleLabel + ')'">
+      <div class="avatar">{{ userInitials }}</div>
       <div class="meta">
-        <span class="name">Admin</span>
-        <span class="role">Super Admin</span>
+        <span class="name">{{ userName }}</span>
+        <span class="role">{{ userRoleLabel }}</span>
       </div>
     </div>
-    <button (click)="logout()" class="logout-btn" title="Déconnexion">
+    <button (click)="logout()" class="logout-btn" title="Déconnexion" aria-label="Déconnexion">
       <i class="bi bi-box-arrow-right"></i>
+      <span class="tooltip-text">Déconnexion</span>
     </button>
   </div>
 
 </div>
+
