@@ -1,10 +1,10 @@
-import {Component, inject, OnInit} from '@angular/core';
+import {Component, inject, OnDestroy, OnInit} from '@angular/core';
 import {TableHeaderComponent} from "./table-header/table-header.component";
 import {TableBodyComponent} from "./table-body/table-body.component";
 import {TableFooterComponent} from "./table-footer/table-footer.component";
 import {MemberStateService} from "../../services/member.state.service";
 import {MemberHttpService} from "../../services/member.http.service";
-import {combineLatest, filter, map, Observable, switchMap, take} from "rxjs";
+import {catchError, combineLatest, filter, map, Observable, of, Subject, switchMap, take, takeUntil} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {ExportModalComponent} from './export-modal/export-modal.component';
 import {TableFiltersComponent} from "./table-filters/table-filters.component";
@@ -39,7 +39,7 @@ import {ToastrService} from "ngx-toastr";
   templateUrl: './member-list.component.html',
   styleUrl: './member-list.component.scss'
 })
-export class MemberListComponent implements OnInit {
+export class MemberListComponent implements OnInit, OnDestroy {
   members$: Observable<MemberDataResponse[]>;
   loading$: Observable<boolean>;
   selectedMembersCount$: Observable<number>;
@@ -60,6 +60,7 @@ export class MemberListComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
   private toastr = inject(ToastrService);
+  private destroy$ = new Subject<void>();
 
   constructor() {
     this.members$ = this.memberStateService.paginatedMembers$;
@@ -88,31 +89,54 @@ export class MemberListComponent implements OnInit {
       }
     });
 
+    // 1. Déclencher le chargement initial des mandats
+    this.appStateService.loadInitialMandat().subscribe();
+
+    // 2. Écouter les sélections de mandat (actif par défaut ou sélection manuelle)
     this.appStateService.activeMandat$.pipe(
-      filter(mandat => mandat !== null),
-      take(1),
-      switchMap(mandat => {
-        const activeMandat = mandat!;
-        return this.phaseService.getMandatPhases(activeMandat.id).pipe(
-          map(phases => {
-            const activePhase = phases.find(p => p.status === PhaseStatus.CURRENT);
-            return {activeMandat, activePhase};
-          })
-        );
-      })
-    ).subscribe(({activeMandat, activePhase}) => {
-      if (activePhase) {
-        this.memberStateService.updateSearchParams({
-          mandatIds: [activeMandat.id],
-          phaseIds: [activePhase.id]
-        });
+      switchMap(activeMandat => {
+        if (activeMandat) {
+          return this.phaseService.getMandatPhases(activeMandat.id).pipe(
+            map(phases => {
+              const activePhase = phases.find(p => p.status === PhaseStatus.CURRENT);
+              return { activeMandat, activePhase };
+            }),
+            catchError(() => of({ activeMandat, activePhase: undefined }))
+          );
+        }
+        return of({ activeMandat: null, activePhase: undefined });
+      }),
+      takeUntil(this.destroy$)
+    ).subscribe(({ activeMandat, activePhase }) => {
+      if (activeMandat) {
+        if (activePhase) {
+          this.memberStateService.updateSearchParams({
+            mandatIds: [activeMandat.id],
+            phaseIds: [activePhase.id],
+            page: 1
+          });
+        } else {
+          this.memberStateService.updateSearchParams({
+            mandatIds: [activeMandat.id],
+            phaseIds: [],
+            page: 1
+          });
+        }
       } else {
+        // Mode "Tous les mandats (Historique global)"
         this.memberStateService.updateSearchParams({
-          mandatIds: [activeMandat.id]
+          mandatIds: [],
+          phaseIds: [],
+          page: 1
         });
       }
       this.memberStateService.fetchMembers().subscribe();
     });
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   toggleExportModal(): void {

@@ -15,20 +15,30 @@
   <!-- Right Section: Controls -->
   <div class="header-right">
     <!-- Mandat Selector -->
-    <div *ngIf="(activeMandat$ | async) as selectedMandat" class="dropdown mandat-dropdown">
+    <div *ngIf="(mandats$ | async) as mandatsList" class="dropdown mandat-dropdown">
       <button aria-expanded="false" class="btn btn-secondary dropdown-toggle" data-bs-toggle="dropdown"
               id="mandatDropdown" type="button">
         <i class="bi bi-calendar-event me-1 d-none d-sm-inline"></i>
-        <span class="mandat-name">{{ selectedMandat.nom }}</span>
+        <span class="mandat-name">{{ (activeMandat$ | async)?.nom || 'Tous les mandats' }}</span>
       </button>
       <ul aria-labelledby="mandatDropdown" class="dropdown-menu dropdown-menu-end shadow">
-        <li *ngFor="let mandat of (mandats$ | async)">
+        <li>
+          <button class="dropdown-item" type="button" (click)="onMandatChange(null)">
+            <i class="bi status-icon" [ngClass]="{
+              'bi-check-circle-fill status-current': (activeMandat$ | async) === null,
+              'bi-circle': (activeMandat$ | async) !== null
+            }"></i>
+            <span>Tous les mandats (Historique)</span>
+          </button>
+        </li>
+        <li><hr class="dropdown-divider my-1"></li>
+        <li *ngFor="let mandat of mandatsList">
           <button class="dropdown-item" type="button"
                   (click)="onMandatChange(mandat)"
                   [disabled]="getPeriodeStatus(mandat) === 'FUTURE'">
             <i class="bi status-icon" [ngClass]="{
-              'bi-check-circle-fill status-current': mandat.id === selectedMandat.id,
-              'bi-play-circle-fill status-active': mandat.id !== selectedMandat.id && getPeriodeStatus(mandat) === 'CURRENT',
+              'bi-check-circle-fill status-current': mandat.id === (activeMandat$ | async)?.id,
+              'bi-play-circle-fill status-active': mandat.id !== (activeMandat$ | async)?.id && getPeriodeStatus(mandat) === 'CURRENT',
               'bi-pause-circle-fill status-passed': getPeriodeStatus(mandat) === 'PASSED',
               'bi-clock-fill status-future': getPeriodeStatus(mandat) === 'FUTURE'
             }"></i>

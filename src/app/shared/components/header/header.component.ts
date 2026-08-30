@@ -34,6 +34,9 @@ export class HeaderComponent implements OnInit {
   ngOnInit(): void {
     this.mandats$ = this.appStateService.mandats$;
     this.activeMandat$ = this.appStateService.activeMandat$;
+
+    // Initialisation automatique du mandat actif au démarrage
+    this.appStateService.loadInitialMandat().subscribe();
   }
 
   toggleMobileSidebar(): void {
@@ -51,7 +54,11 @@ export class HeaderComponent implements OnInit {
     return user?.username || 'Utilisateur';
   }
 
-  onMandatChange(mandat: PeriodeMandatDto): void {
+  onMandatChange(mandat: PeriodeMandatDto | null): void {
+    if (!mandat) {
+      this.appStateService.setSelectedMandat(null);
+      return;
+    }
     this.mandatHttpService.getPeriodeMandatById(mandat.id).subscribe(response => {
       if (response.data) {
         this.appStateService.setSelectedMandat(response.data);
