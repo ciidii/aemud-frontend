@@ -217,9 +217,9 @@ jobs:
               ENV_FLAG="--env-file .env"
             fi
 
-            # Téléchargement et redémarrage du conteneur Frontend Nginx
+            # Téléchargement et redémarrage du conteneur Frontend Nginx (avec force-recreate)
             docker compose ${ENV_FLAG} -f docker-compose.prod.yml pull aemud-frontend
-            docker compose ${ENV_FLAG} -f docker-compose.prod.yml up -d --no-deps aemud-frontend
+            docker compose ${ENV_FLAG} -f docker-compose.prod.yml up -d --no-deps --force-recreate aemud-frontend
             
             # Vérification de disponibilité HTTP
             echo "⏳ Validation du Healthcheck Frontend..."
