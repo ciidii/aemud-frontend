@@ -1,5 +1,17 @@
 <div class="app-root-container">
-  <app-nav-bar></app-nav-bar>
+  <!-- Mobile-Only Compact Action Bar -->
+  <header class="mobile-top-bar d-lg-none">
+    <button (click)="openMobileSidebar()"
+            class="mobile-menu-trigger-btn"
+            aria-label="Ouvrir le menu"
+            title="Menu">
+      <i class="bi bi-list"></i>
+    </button>
+    <a [routerLink]="['/members/list-members']" class="mobile-brand-link">
+      <span class="mobile-brand-text">AEMUD</span>
+    </a>
+  </header>
+
   <div [class.sidebar--collapsed]="!(isSidebarOpen$ | async)" class="app-container">
     <!-- Mobile Backdrop Overlay -->
     <div *ngIf="isMobileOpen$ | async"
@@ -7,12 +19,15 @@
          class="mobile-backdrop"
          aria-hidden="true"></div>
 
+    <!-- 100% Sidebar Cockpit -->
     <app-aside-bare></app-aside-bare>
 
+    <!-- Full-Height Main Content -->
     <main class="main-content">
       <router-outlet></router-outlet>
     </main>
   </div>
 </div>
+
 
 

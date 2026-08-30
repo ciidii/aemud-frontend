@@ -57,6 +57,50 @@
     }
 
     // Centered icon-only rail items
+    .mandat-switcher-section {
+      padding: $space-2 0;
+      display: flex;
+      justify-content: center;
+
+      .mandat-pill-btn {
+        width: 4.2rem;
+        height: 4.2rem;
+        padding: 0;
+        margin: 0 auto;
+        justify-content: center;
+        border-radius: $radius-md;
+
+        .mandat-pill-left {
+          justify-content: center;
+          margin: 0;
+        }
+
+        .mandat-info,
+        .chevron-icon {
+          opacity: 0;
+          width: 0;
+          display: none;
+        }
+
+        .mandat-icon-dot {
+          margin: 0;
+          font-size: 1.8rem;
+        }
+
+        &:hover .tooltip-text {
+          opacity: 1;
+          visibility: visible;
+          transform: translateY(-50%) translateX(0);
+        }
+      }
+
+      .mandat-dropdown-menu {
+        left: calc(100% + 10px);
+        top: 0;
+        width: 240px;
+      }
+    }
+
     .nav-group {
       margin-bottom: $space-3;
 
@@ -97,7 +141,8 @@
         font-size: 1.8rem;
       }
 
-      .nav-text {
+      .nav-text,
+      .nav-counter-badge {
         opacity: 0;
         width: 0;
         display: none;
@@ -155,6 +200,7 @@
     }
   }
 }
+
 
 // -------------------------------------------------------------
 // 1. BRAND HEADER
@@ -277,7 +323,194 @@
 }
 
 // -------------------------------------------------------------
-// 2. NAVIGATION SCROLL
+// 2. MANDATE SWITCHER SECTION (Relocalisé depuis le Header)
+// -------------------------------------------------------------
+.mandat-switcher-section {
+  padding: $space-2 $space-3 $space-1 $space-3;
+  border-bottom: 1px solid rgba($white, 0.05);
+
+  .mandat-switcher-wrapper {
+    position: relative;
+  }
+
+  .mandat-pill-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    padding: $space-2 $space-3;
+    border-radius: $radius-md;
+    background: rgba($white, 0.05);
+    border: 1px solid rgba($white, 0.1);
+    color: $gray-200;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    text-align: left;
+
+    &:hover, &.dropdown-opened {
+      background: rgba($white, 0.09);
+      border-color: rgba($secondary-500, 0.4);
+      color: $white;
+      box-shadow: 0 0 10px rgba($secondary-500, 0.15);
+
+      .mandat-icon-dot i {
+        color: $secondary-400;
+      }
+    }
+
+    .mandat-pill-left {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      overflow: hidden;
+      min-width: 0;
+      flex: 1;
+
+      .mandat-icon-dot {
+        width: 2.4rem;
+        height: 2.4rem;
+        border-radius: $radius-full;
+        background: rgba($secondary-500, 0.15);
+        color: $secondary-400;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.3rem;
+        flex-shrink: 0;
+      }
+
+      .mandat-info {
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+
+        .mandat-label {
+          font-size: 0.95rem;
+          text-transform: uppercase;
+          letter-spacing: 0.06em;
+          color: rgba($white, 0.45);
+          font-weight: $font-weight-bold;
+          line-height: 1.1;
+        }
+
+        .mandat-name {
+          font-size: 1.25rem;
+          font-weight: $font-weight-bold;
+          color: $white;
+          white-space: nowrap;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          line-height: 1.3;
+        }
+      }
+    }
+
+    .chevron-icon {
+      color: rgba($white, 0.4);
+      font-size: 1.2rem;
+      flex-shrink: 0;
+      margin-left: $space-1;
+      transition: transform 0.2s ease;
+    }
+  }
+
+  .mandat-dropdown-menu {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    width: 100%;
+    min-width: 220px;
+    background: #0d2222;
+    border: 1px solid rgba($white, 0.15);
+    border-radius: $radius-md;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6);
+    z-index: 10000;
+    padding: $space-2;
+    animation: dropdownFade 0.15s ease-out;
+
+    .dropdown-header-title {
+      font-size: 1.05rem;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      color: rgba($white, 0.5);
+      font-weight: $font-weight-bold;
+      padding: $space-1 $space-2 $space-2 $space-2;
+      border-bottom: 1px solid rgba($white, 0.08);
+      margin-bottom: $space-1;
+      display: flex;
+      align-items: center;
+    }
+
+    .dropdown-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      max-height: 220px;
+      overflow-y: auto;
+    }
+
+    .mandat-menu-item {
+      display: flex;
+      align-items: center;
+      gap: $space-2;
+      width: 100%;
+      padding: $space-2 $space-3;
+      border-radius: $radius-sm;
+      border: none;
+      background: transparent;
+      color: $gray-300;
+      font-size: 1.25rem;
+      text-align: left;
+      cursor: pointer;
+      transition: all 0.15s ease;
+
+      &:hover:not(:disabled) {
+        background: rgba($white, 0.08);
+        color: $white;
+      }
+
+      &.selected-mandat {
+        background: rgba($primary-500, 0.22);
+        color: $white;
+        font-weight: $font-weight-bold;
+        border-left: 2px solid $secondary-500;
+      }
+
+      &:disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+      }
+
+      .item-name {
+        flex: 1;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+
+      .badge-active {
+        font-size: 0.95rem;
+        background: $secondary-500;
+        color: $gray-900;
+        font-weight: $font-weight-bold;
+        padding: 1px 6px;
+        border-radius: $radius-full;
+      }
+
+      .status-dot {
+        font-size: 1.3rem;
+
+        &.status-current { color: $success-500; }
+        &.status-active { color: $primary-400; }
+        &.status-passed { color: $gray-500; }
+        &.status-future { color: $gray-600; }
+      }
+    }
+  }
+}
+
+// -------------------------------------------------------------
+// 3. NAVIGATION SCROLL
 // -------------------------------------------------------------
 .nav-scroll {
   flex: 1;
@@ -388,7 +621,85 @@
       }
     }
   }
+
+  // Notification item wrapper in navigation
+  .notification-item-wrapper {
+    position: relative;
+
+    .notification-link-btn {
+      width: calc(100% - 1.6rem);
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      font-family: inherit;
+      text-align: left;
+      border-left: 3px solid transparent;
+
+      &.active {
+        background: rgba($primary-500, 0.25);
+        border-left-color: $secondary-500;
+        color: $white;
+
+        i {
+          color: $secondary-400;
+        }
+      }
+    }
+
+    .nav-counter-badge {
+      background-color: $danger-500;
+      color: $white;
+      font-size: 1.05rem;
+      font-weight: $font-weight-bold;
+      padding: 1px 7px;
+      border-radius: $radius-full;
+      margin-left: auto;
+      border: 1px solid rgba($white, 0.25);
+      box-shadow: 0 2px 6px rgba($danger-500, 0.4);
+      line-height: 1.2;
+    }
+
+    .notification-sidebar-popover {
+      position: absolute;
+      left: calc(100% + 12px);
+      top: -20px;
+      width: 360px;
+      max-width: 90vw;
+      background: $color-background-panel;
+      border-radius: $radius-md;
+      border: 1px solid $color-border-default;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      z-index: 10005;
+      overflow: hidden;
+      animation: popoverFade 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+  }
 }
+
+@keyframes dropdownFade {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes popoverFade {
+  from {
+    opacity: 0;
+    transform: translateX(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
 
 // -------------------------------------------------------------
 // FLOATING TOOLTIP (ChatGPT Style for Collapsed Mode)
@@ -566,6 +877,40 @@
         }
       }
 
+      .mandat-switcher-section {
+        padding: $space-2 $space-4 $space-1 $space-4;
+        display: block;
+
+        .mandat-pill-btn {
+          width: 100%;
+          height: auto;
+          padding: $space-2 $space-3;
+          justify-content: space-between;
+
+          .mandat-info {
+            opacity: 1;
+            width: auto;
+            display: flex;
+          }
+
+          .chevron-icon {
+            opacity: 1;
+            width: auto;
+            display: inline-block;
+          }
+
+          .mandat-icon-dot {
+            font-size: 1.3rem;
+          }
+        }
+
+        .mandat-dropdown-menu {
+          left: 0;
+          top: calc(100% + 4px);
+          width: 100%;
+        }
+      }
+
       .nav-group {
         margin-bottom: $space-4;
 
@@ -605,6 +950,12 @@
           display: block;
         }
 
+        .nav-counter-badge {
+          opacity: 1;
+          width: auto;
+          display: inline-block;
+        }
+
         &.active {
           border-left-color: $secondary-500;
         }
@@ -639,9 +990,19 @@
     }
   }
 
+  .notification-item-wrapper .notification-sidebar-popover {
+    position: fixed;
+    top: 60px;
+    left: 10px;
+    right: 10px;
+    width: auto;
+    max-width: calc(100vw - 20px);
+  }
+
   // Disable hover tooltips on mobile touch devices
   .tooltip-text {
     display: none !important;
   }
 }
+
 
