@@ -37,23 +37,29 @@
     </div>
   </div>
 
-  <!-- ================= 2. MOBILE PROGRESS HEADER (< 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-card mb-3 p-3 rounded-4 bg-white border shadow-sm">
+  <!-- ================= 2. MOBILE STEPPER COCKPIT (< 768px) ================= -->
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-cockpit mb-3 p-3 rounded-4 bg-white border shadow-sm">
     
-    <!-- Top Row: Current Title & Pill -->
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div>
+    <!-- Top Row: Step Pill + Percentage + Next Step Hint -->
+    <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+      <div class="d-flex align-items-center gap-2 flex-shrink-0">
         <span class="mobile-step-pill text-nowrap">
-          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
+          Étape {{ currentStepIndex + 1 }}/{{ visibleGroups.length }}
         </span>
+        <span class="mobile-percent-pill text-nowrap">{{ progressPercentage }}%</span>
       </div>
-      <span class="mobile-percent-text text-nowrap">{{ progressPercentage }}%</span>
+
+      <div *ngIf="nextGroupTitle" class="mobile-next-hint text-truncate" title="Prochaine étape : {{ nextGroupTitle }}">
+        <span class="next-label">Suivant:</span>
+        <span class="next-title text-truncate">{{ nextGroupTitle }}</span>
+        <i class="bi bi-chevron-right ms-1"></i>
+      </div>
     </div>
 
-    <!-- Progress Bar -->
-    <div class="progress mobile-progress-track mb-3">
+    <!-- Single Continuous Fluid Progress Line -->
+    <div class="progress mobile-unified-track mb-3">
       <div
-        class="progress-bar mobile-progress-fill"
+        class="progress-bar mobile-unified-fill"
         role="progressbar"
         [style.width.%]="progressPercentage"
         aria-valuemin="0"
@@ -61,20 +67,25 @@
       ></div>
     </div>
 
-    <!-- Mobile Step Dots Bar -->
-    <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
-      <div
-        *ngFor="let g of visibleGroups; let idx = index"
-        class="mobile-step-dot flex-grow-1"
-        [class.active]="idx === currentStepIndex"
-        [class.completed]="idx < currentStepIndex"
-        (click)="goToStep(idx)"
-      ></div>
-    </div>
-
-    <!-- Current Step Title -->
-    <div class="text-center">
-      <h6 class="fw-bold mb-0 text-dark mobile-step-title text-break">{{ currentGroup?.title }}</h6>
+    <!-- Horizontal Swipeable Step Chips Ribbon -->
+    <div #chipsScrollContainer class="mobile-chips-scroll-wrapper">
+      <div class="mobile-chips-track">
+        <button
+          *ngFor="let group of visibleGroups; let idx = index"
+          type="button"
+          class="mobile-chip-btn"
+          [class.active]="idx === currentStepIndex"
+          [class.completed]="idx < currentStepIndex"
+          [class.upcoming]="idx > currentStepIndex"
+          (click)="goToStep(idx)"
+        >
+          <div class="chip-circle">
+            <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
+            <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
+          </div>
+          <span class="chip-title">{{ group.title }}</span>
+        </button>
+      </div>
     </div>
 
   </div>

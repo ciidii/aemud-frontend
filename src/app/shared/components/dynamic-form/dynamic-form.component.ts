@@ -43,6 +43,7 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() formSubmit = new EventEmitter<Record<string, any>>();
   @ViewChild('stepperTop') stepperTopRef?: ElementRef;
+  @ViewChild('chipsScrollContainer') chipsScrollContainer?: ElementRef;
 
   form!: FormGroup;
   currentStepIndex: number = 0;
@@ -74,6 +75,14 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
   get currentGroup(): FormGroupDefinition | undefined {
     return this.visibleGroups[this.currentStepIndex];
+  }
+
+  get nextGroup(): FormGroupDefinition | undefined {
+    return this.visibleGroups[this.currentStepIndex + 1];
+  }
+
+  get nextGroupTitle(): string | null {
+    return this.nextGroup ? this.nextGroup.title : null;
   }
 
   get isLastStep(): boolean {
@@ -317,6 +326,20 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
     if (this.stepperTopRef) {
       this.stepperTopRef.nativeElement.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
+    this.scrollActiveChipIntoView();
+  }
+
+  private scrollActiveChipIntoView(): void {
+    setTimeout(() => {
+      if (this.chipsScrollContainer) {
+        const container = this.chipsScrollContainer.nativeElement as HTMLElement;
+        const activeChip = container.querySelector('.active') as HTMLElement;
+        if (activeChip) {
+          const scrollLeft = activeChip.offsetLeft - (container.offsetWidth / 2) + (activeChip.offsetWidth / 2);
+          container.scrollTo({left: Math.max(0, scrollLeft), behavior: 'smooth'});
+        }
+      }
+    }, 50);
   }
 
   /**
