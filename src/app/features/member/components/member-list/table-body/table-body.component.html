@@ -1,165 +1,317 @@
 <div class="table-card shadow-sm">
-  <div class="table-responsive">
-    <table class="table modern-table align-middle">
-      <thead>
-        <tr>
-          <th class="col-checkbox">
-            <input
-              type="checkbox"
-              class="form-check-input custom-checkbox"
-              [checked]="isAllSelected$ | async"
-              (change)="toggleSelectAll()"
-              title="Sélectionner tous les membres de la page">
-          </th>
-          <th class="sortable-th"
-              (click)="onSort('personalInfo.firstname')"
-              [class.active-sort]="(sortColumn$ | async) === 'personalInfo.firstname'">
-            <span>Membre</span>
-            <i class="bi sort-icon"
-               [ngClass]="{
-                 'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.firstname',
-                 'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'asc',
-                 'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'desc'
-               }"></i>
-          </th>
-          <th>Contact</th>
-          <th>Statut</th>
-          <th>Cursus / Métier</th>
-          <th>Engagement</th>
-          <th class="text-end">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <!-- Loading Skeleton Rows -->
-        <ng-container *ngIf="loading">
-          <tr *ngFor="let row of skeletonRows" app-skeleton-loader></tr>
-        </ng-container>
 
-        <!-- Data Rows -->
-        <ng-container *ngIf="!loading && hasMembers">
-          <tr *ngFor="let member of members"
-              (click)="navigateToMember(member.id)"
-              [class.row-selected]="(selectedMemberIds$ | async)?.includes(member.id)"
-              class="member-row">
-            <td class="col-checkbox" (click)="$event.stopPropagation()">
+  <!-- ======================================================== -->
+  <!-- DESKTOP TABLE VIEW (Visible on tablets & desktop >= 768px) -->
+  <!-- ======================================================== -->
+  <div class="desktop-table-wrapper d-none d-md-block">
+    <div class="table-responsive">
+      <table class="table modern-table align-middle">
+        <thead>
+          <tr>
+            <th class="col-checkbox">
               <input
                 type="checkbox"
                 class="form-check-input custom-checkbox"
-                [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
-                (change)="toggleMemberSelection(member.id, $event)">
-            </td>
-
-            <!-- Member Identity -->
-            <td>
-              <div class="member-identity-cell">
-                <div class="member-avatar"
-                     [ngStyle]="{
-                       'background-color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).bg,
-                       'color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).color
-                     }">
-                  {{ getInitials(member.personalInfo.firstname, member.personalInfo.name) }}
-                </div>
-                <div class="member-names">
-                  <span class="full-name">
-                    {{ member.personalInfo.firstname }} {{ member.personalInfo.name | uppercase }}
-                  </span>
-                  <span class="member-email" *ngIf="member.contactInfo?.email">
-                    <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
-                  </span>
-                </div>
-              </div>
-            </td>
-
-            <!-- Contact -->
-            <td>
-              <div class="contact-cell" *ngIf="member.contactInfo?.numberPhone">
-                <span class="phone-number">{{ member.contactInfo.numberPhone }}</span>
-                <a [href]="getWhatsAppUrl(member.contactInfo.numberPhone)"
-                   target="_blank"
-                   (click)="$event.stopPropagation()"
-                   class="btn-whatsapp-direct"
-                   title="Contacter sur WhatsApp">
-                  <i class="bi bi-whatsapp"></i>
-                </a>
-              </div>
-              <span *ngIf="!member.contactInfo?.numberPhone" class="text-muted fst-italic">Non renseigné</span>
-            </td>
-
-            <!-- Statut Badge -->
-            <td>
-              <ng-container *ngIf="getStatusBadge(member) as badge">
-                <span class="status-pill {{ badge.cssClass }}">
-                  <i class="bi {{ badge.icon }}"></i>
-                  {{ badge.label }}
-                </span>
-              </ng-container>
-            </td>
-
-            <!-- Cursus / Profession -->
-            <td>
-              <div class="cursus-cell">
-                <span class="main-info" *ngIf="member.academicInfo?.institutionName">
-                  {{ member.academicInfo.institutionName }}
-                  <span class="sub-level" *ngIf="member.academicInfo?.studiesLevel">({{ member.academicInfo.studiesLevel }})</span>
-                </span>
-                <span class="sub-info text-muted" *ngIf="member.academicInfo?.studiesDomain">
-                  {{ member.academicInfo.studiesDomain }}
-                </span>
-                <span *ngIf="!member.academicInfo?.institutionName && !member.academicInfo?.studiesDomain" class="text-muted fst-italic">
-                  Non spécifié
-                </span>
-              </div>
-            </td>
-
-            <!-- Engagement (Bourses, Clubs, Commissions) -->
-            <td>
-              <div class="engagement-badges">
-                <span *ngIf="member.bourse?.libelle" class="badge-tag tag-bourse" title="Bourse">
-                  <i class="bi bi-award-fill"></i> {{ member.bourse.libelle }}
-                </span>
-                <span *ngFor="let club of (member.clubs || [])" class="badge-tag tag-club" title="Club">
-                  <i class="bi bi-shield-check"></i> {{ club.name }}
-                </span>
-                <span *ngFor="let com of (member.commissions || [])" class="badge-tag tag-commission" title="Commission">
-                  <i class="bi bi-diagram-3"></i> {{ com.name }}
-                </span>
-                <span *ngIf="!member.bourse?.libelle && (!member.clubs || member.clubs.length === 0) && (!member.commissions || member.commissions.length === 0)" class="text-muted fst-italic">
-                  Aucun
-                </span>
-              </div>
-            </td>
-
-            <!-- Actions Dropdown -->
-            <td class="text-end" (click)="$event.stopPropagation()">
-              <div class="dropdown-action-wrapper">
-                <button
-                  type="button"
-                  class="btn-kebab-menu"
-                  (click)="toggleDropdown(member.id, $event)"
-                  title="Actions">
-                  <i class="bi bi-three-dots-vertical"></i>
-                </button>
-                <div class="kebab-menu-dropdown" *ngIf="activeDropdownMemberId === member.id">
-                  <button type="button" class="dropdown-item" (click)="navigateToMember(member.id)">
-                    <i class="bi bi-eye text-teal"></i> Voir la fiche complète
-                  </button>
-                  <button type="button" class="dropdown-item" (click)="onEditMember(member.id, $event)">
-                    <i class="bi bi-pencil-square text-primary"></i> Modifier les infos
-                  </button>
-                  <button type="button" class="dropdown-item" (click)="onSendSms(member, $event)">
-                    <i class="bi bi-chat-dots text-success"></i> Envoyer un SMS
-                  </button>
-                  <div class="dropdown-divider"></div>
-                  <button type="button" class="dropdown-item text-danger" (click)="onDelete(member, $event)">
-                    <i class="bi bi-trash3 text-danger"></i> Archiver / Supprimer
-                  </button>
-                </div>
-              </div>
-            </td>
+                [checked]="isAllSelected$ | async"
+                (change)="toggleSelectAll()"
+                title="Sélectionner tous les membres de la page">
+            </th>
+            <th class="sortable-th"
+                (click)="onSort('personalInfo.firstname')"
+                [class.active-sort]="(sortColumn$ | async) === 'personalInfo.firstname'">
+              <span>Membre</span>
+              <i class="bi sort-icon"
+                 [ngClass]="{
+                   'bi-arrow-down-up': (sortColumn$ | async) !== 'personalInfo.firstname',
+                   'bi-arrow-up': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'asc',
+                   'bi-arrow-down': (sortColumn$ | async) === 'personalInfo.firstname' && (sortDirection$ | async) === 'desc'
+                 }"></i>
+            </th>
+            <th>Contact</th>
+            <th>Statut</th>
+            <th>Cursus / Métier</th>
+            <th>Engagement</th>
+            <th class="text-end">Actions</th>
           </tr>
-        </ng-container>
-      </tbody>
-    </table>
+        </thead>
+        <tbody>
+          <!-- Loading Skeleton Rows -->
+          <ng-container *ngIf="loading">
+            <tr *ngFor="let row of skeletonRows" app-skeleton-loader></tr>
+          </ng-container>
+
+          <!-- Data Rows -->
+          <ng-container *ngIf="!loading && hasMembers">
+            <tr *ngFor="let member of members"
+                (click)="navigateToMember(member.id)"
+                [class.row-selected]="(selectedMemberIds$ | async)?.includes(member.id)"
+                class="member-row">
+              <td class="col-checkbox" (click)="$event.stopPropagation()">
+                <input
+                  type="checkbox"
+                  class="form-check-input custom-checkbox"
+                  [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
+                  (change)="toggleMemberSelection(member.id, $event)">
+              </td>
+
+              <!-- Member Identity -->
+              <td>
+                <div class="member-identity-cell">
+                  <div class="member-avatar"
+                       [ngStyle]="{
+                         'background-color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).bg,
+                         'color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).color
+                       }">
+                    {{ getInitials(member.personalInfo.firstname, member.personalInfo.name) }}
+                  </div>
+                  <div class="member-names">
+                    <span class="full-name">
+                      {{ member.personalInfo.firstname }} {{ member.personalInfo.name | uppercase }}
+                    </span>
+                    <span class="member-email" *ngIf="member.contactInfo?.email">
+                      <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
+                    </span>
+                  </div>
+                </div>
+              </td>
+
+              <!-- Contact -->
+              <td>
+                <div class="contact-cell" *ngIf="member.contactInfo?.numberPhone">
+                  <span class="phone-number">{{ member.contactInfo.numberPhone }}</span>
+                  <a [href]="getWhatsAppUrl(member.contactInfo.numberPhone)"
+                     target="_blank"
+                     (click)="$event.stopPropagation()"
+                     class="btn-whatsapp-direct"
+                     title="Contacter sur WhatsApp">
+                    <i class="bi bi-whatsapp"></i>
+                  </a>
+                </div>
+                <span *ngIf="!member.contactInfo?.numberPhone" class="text-muted fst-italic">Non renseigné</span>
+              </td>
+
+              <!-- Statut Badge -->
+              <td>
+                <ng-container *ngIf="getStatusBadge(member) as badge">
+                  <span class="status-pill {{ badge.cssClass }}">
+                    <i class="bi {{ badge.icon }}"></i>
+                    {{ badge.label }}
+                  </span>
+                </ng-container>
+              </td>
+
+              <!-- Cursus / Profession -->
+              <td>
+                <div class="cursus-cell">
+                  <span class="main-info" *ngIf="member.academicInfo?.institutionName">
+                    {{ member.academicInfo.institutionName }}
+                    <span class="sub-level" *ngIf="member.academicInfo?.studiesLevel">({{ member.academicInfo.studiesLevel }})</span>
+                  </span>
+                  <span class="sub-info text-muted" *ngIf="member.academicInfo?.studiesDomain">
+                    {{ member.academicInfo.studiesDomain }}
+                  </span>
+                  <span *ngIf="!member.academicInfo?.institutionName && !member.academicInfo?.studiesDomain" class="text-muted fst-italic">
+                    Non spécifié
+                  </span>
+                </div>
+              </td>
+
+              <!-- Engagement (Bourses, Clubs, Commissions) -->
+              <td>
+                <div class="engagement-badges">
+                  <span *ngIf="member.bourse?.libelle" class="badge-tag tag-bourse" title="Bourse">
+                    <i class="bi bi-award-fill"></i> {{ member.bourse.libelle }}
+                  </span>
+                  <span *ngFor="let club of (member.clubs || [])" class="badge-tag tag-club" title="Club">
+                    <i class="bi bi-shield-check"></i> {{ club.name }}
+                  </span>
+                  <span *ngFor="let com of (member.commissions || [])" class="badge-tag tag-commission" title="Commission">
+                    <i class="bi bi-diagram-3"></i> {{ com.name }}
+                  </span>
+                  <span *ngIf="!member.bourse?.libelle && (!member.clubs || member.clubs.length === 0) && (!member.commissions || member.commissions.length === 0)" class="text-muted fst-italic">
+                    Aucun
+                  </span>
+                </div>
+              </td>
+
+              <!-- Actions Dropdown -->
+              <td class="text-end" (click)="$event.stopPropagation()">
+                <div class="dropdown-action-wrapper">
+                  <button
+                    type="button"
+                    class="btn-kebab-menu"
+                    (click)="toggleDropdown(member.id, $event)"
+                    title="Actions">
+                    <i class="bi bi-three-dots-vertical"></i>
+                  </button>
+                  <div class="kebab-menu-dropdown shadow-lg" *ngIf="activeDropdownMemberId === member.id">
+                    <button type="button" class="dropdown-item" (click)="navigateToMember(member.id)">
+                      <i class="bi bi-eye text-teal"></i> Voir la fiche complète
+                    </button>
+                    <button type="button" class="dropdown-item" (click)="onEditMember(member.id, $event)">
+                      <i class="bi bi-pencil-square text-primary"></i> Modifier les infos
+                    </button>
+                    <button type="button" class="dropdown-item" (click)="onSendSms(member, $event)">
+                      <i class="bi bi-chat-dots text-success"></i> Envoyer un SMS
+                    </button>
+                    <div class="dropdown-divider"></div>
+                    <button type="button" class="dropdown-item text-danger" (click)="onDelete(member, $event)">
+                      <i class="bi bi-trash3 text-danger"></i> Archiver / Supprimer
+                    </button>
+                  </div>
+                </div>
+              </td>
+            </tr>
+          </ng-container>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ======================================================== -->
+  <!-- MOBILE CARDS VIEW (Visible on smartphones < 768px)       -->
+  <!-- ======================================================== -->
+  <div class="mobile-cards-view d-md-none">
+
+    <!-- Mobile Select All Bar -->
+    <div class="mobile-select-all-bar" *ngIf="!loading && hasMembers">
+      <label class="mobile-select-label">
+        <input
+          type="checkbox"
+          class="form-check-input custom-checkbox"
+          [checked]="isAllSelected$ | async"
+          (change)="toggleSelectAll()">
+        <span>Tout sélectionner</span>
+      </label>
+      <span class="mobile-items-counter">{{ members?.length || 0 }} affiché(s)</span>
+    </div>
+
+    <!-- Mobile Loading Skeleton Cards -->
+    <div *ngIf="loading" class="mobile-cards-stack">
+      <div *ngFor="let s of [1, 2, 3, 4]" class="mobile-skeleton-card">
+        <div class="d-flex align-items-center gap-3 mb-2">
+          <div class="skeleton-avatar"></div>
+          <div class="skeleton-text-group flex-1">
+            <div class="skeleton-line w-75"></div>
+            <div class="skeleton-line w-50"></div>
+          </div>
+        </div>
+        <div class="skeleton-line w-100 mb-1"></div>
+        <div class="skeleton-line w-60"></div>
+      </div>
+    </div>
+
+    <!-- Mobile Cards Stack -->
+    <div *ngIf="!loading && hasMembers" class="mobile-cards-stack">
+      <div *ngFor="let member of members"
+           (click)="navigateToMember(member.id)"
+           [class.card-selected]="(selectedMemberIds$ | async)?.includes(member.id)"
+           class="mobile-member-card">
+
+        <!-- Card Header: Checkbox + Avatar + Names + Actions -->
+        <div class="card-top-row">
+          <div class="card-left-identity" (click)="$event.stopPropagation()">
+            <input
+              type="checkbox"
+              class="form-check-input custom-checkbox"
+              [checked]="(selectedMemberIds$ | async)?.includes(member.id)"
+              (change)="toggleMemberSelection(member.id, $event)">
+
+            <div class="member-avatar"
+                 [ngStyle]="{
+                   'background-color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).bg,
+                   'color': getAvatarColor(member.personalInfo.name || member.personalInfo.firstname).color
+                 }">
+              {{ getInitials(member.personalInfo.firstname, member.personalInfo.name) }}
+            </div>
+
+            <div class="member-names">
+              <span class="full-name">{{ member.personalInfo.firstname }} {{ member.personalInfo.name | uppercase }}</span>
+              <span class="member-email" *ngIf="member.contactInfo?.email">
+                <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
+              </span>
+            </div>
+          </div>
+
+          <div class="card-right-action" (click)="$event.stopPropagation()">
+            <div class="dropdown-action-wrapper">
+              <button
+                type="button"
+                class="btn-kebab-menu"
+                (click)="toggleDropdown(member.id, $event)"
+                aria-label="Menu options">
+                <i class="bi bi-three-dots-vertical"></i>
+              </button>
+              <div class="kebab-menu-dropdown shadow-lg" *ngIf="activeDropdownMemberId === member.id">
+                <button type="button" class="dropdown-item" (click)="navigateToMember(member.id)">
+                  <i class="bi bi-eye text-teal"></i> Voir la fiche
+                </button>
+                <button type="button" class="dropdown-item" (click)="onEditMember(member.id, $event)">
+                  <i class="bi bi-pencil-square text-primary"></i> Modifier
+                </button>
+                <button type="button" class="dropdown-item" (click)="onSendSms(member, $event)">
+                  <i class="bi bi-chat-dots text-success"></i> SMS
+                </button>
+                <div class="dropdown-divider"></div>
+                <button type="button" class="dropdown-item text-danger" (click)="onDelete(member, $event)">
+                  <i class="bi bi-trash3 text-danger"></i> Supprimer
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Card Middle Row: Status Badge & Quick Phone Actions -->
+        <div class="card-mid-row">
+          <ng-container *ngIf="getStatusBadge(member) as badge">
+            <span class="status-pill {{ badge.cssClass }}">
+              <i class="bi {{ badge.icon }}"></i>
+              {{ badge.label }}
+            </span>
+          </ng-container>
+
+          <div class="quick-contact-actions" *ngIf="member.contactInfo?.numberPhone" (click)="$event.stopPropagation()">
+            <span class="phone-text">{{ member.contactInfo.numberPhone }}</span>
+            <a [href]="getWhatsAppUrl(member.contactInfo.numberPhone)"
+               target="_blank"
+               class="btn-icon-pill btn-whatsapp"
+               title="WhatsApp">
+              <i class="bi bi-whatsapp"></i>
+            </a>
+            <a [href]="'tel:' + member.contactInfo.numberPhone"
+               class="btn-icon-pill btn-call"
+               title="Appeler">
+              <i class="bi bi-telephone-fill"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Card Academic / Cursus Row -->
+        <div class="card-academic-row" *ngIf="member.academicInfo && (member.academicInfo.institutionName || member.academicInfo.studiesDomain)">
+          <i class="bi bi-building academic-icon"></i>
+          <div class="academic-text">
+            <span class="institution" *ngIf="member.academicInfo.institutionName">{{ member.academicInfo.institutionName }}</span>
+            <span class="domain" *ngIf="member.academicInfo.studiesDomain"> — {{ member.academicInfo.studiesDomain }}</span>
+            <span class="level-badge" *ngIf="member.academicInfo.studiesLevel">{{ member.academicInfo.studiesLevel }}</span>
+          </div>
+        </div>
+
+        <!-- Card Engagement Badges -->
+        <div class="card-engagement-row" *ngIf="member.bourse?.libelle || (member.clubs && member.clubs.length > 0) || (member.commissions && member.commissions.length > 0)">
+          <span *ngIf="member.bourse?.libelle" class="badge-tag tag-bourse">
+            <i class="bi bi-award-fill"></i> {{ member.bourse.libelle }}
+          </span>
+          <span *ngFor="let club of (member.clubs || [])" class="badge-tag tag-club">
+            <i class="bi bi-shield-check"></i> {{ club.name }}
+          </span>
+          <span *ngFor="let com of (member.commissions || [])" class="badge-tag tag-commission">
+            <i class="bi bi-diagram-3"></i> {{ com.name }}
+          </span>
+        </div>
+
+      </div>
+    </div>
+
   </div>
 
   <!-- Empty State -->
@@ -175,4 +327,6 @@
       <i class="bi bi-person-plus-fill"></i> Inscrire un nouveau membre
     </button>
   </div>
+
 </div>
+
