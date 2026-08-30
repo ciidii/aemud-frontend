@@ -1,39 +1,47 @@
+@import 'src/assets/scss/variables';
+@import 'src/assets/scss/typography';
+
 .member-list-page {
   display: flex;
   flex-direction: column;
   min-height: 100%;
   width: 100%;
-  background: #f8fafc;
+  background: $color-background-body;
 }
 
 .list-header {
   width: 100%;
-  background: #ffffff;
+  background: $color-background-panel;
 }
 
 .sms-mode-banner {
-  margin: 1.6rem 2.4rem 0;
-  padding: 1.2rem 1.6rem;
-  background: #eff6ff;
-  border: 1px solid #bfdbfe;
-  border-radius: 0.8rem;
+  margin: $space-3 $space-6 0;
+  padding: $space-3 $space-4;
+  background: rgba($primary-500, 0.08);
+  border: 1px solid rgba($primary-500, 0.25);
+  border-radius: $radius-md;
+
+  @media (max-width: 768px) {
+    margin: $space-2 $space-3 0;
+    padding: $space-2 $space-3;
+  }
 
   .banner-icon {
     font-size: 2rem;
-    color: #2563eb;
+    color: $primary-600;
   }
 
   .btn-teal-primary {
-    background: #278F8F;
-    color: #ffffff;
+    background: $primary-500;
+    color: $white;
     border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.6rem;
+    padding: 0.65rem 1.2rem;
+    border-radius: $radius-sm;
     font-weight: 600;
     font-size: 1.3rem;
 
     &:hover:not(:disabled) {
-      background: #1f7373;
+      background: $primary-600;
     }
   }
 }
@@ -41,9 +49,10 @@
 .list-body {
   width: 100%;
   flex: 1;
-  padding-top: 1.6rem;
+  padding-top: $space-3;
 }
 
 .list-footer {
   width: 100%;
 }
+
