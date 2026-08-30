@@ -1,80 +1,105 @@
 <div #stepperTop class="dynamic-form-container">
 
   <!-- ================= 1. DESKTOP / TABLET STEPPER HEADER (>= 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 p-3 p-lg-4 rounded-4 bg-white border shadow-sm">
-    <div class="stepper-track">
-      <ng-container *ngFor="let group of visibleGroups; let idx = index">
-        
-        <!-- Step Item -->
-        <div
-          class="step-item"
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 rounded-4 bg-white border shadow-sm">
+    
+    <!-- Top Context Summary (Step Count, Active Title & Progress) -->
+    <div class="stepper-desktop-top-bar d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
+      <div class="d-flex align-items-center gap-3 min-w-0">
+        <span class="desktop-step-badge flex-shrink-0">
+          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
+        </span>
+        <h6 class="fw-bold text-dark mb-0 active-step-headline text-truncate">
+          {{ currentGroup?.title }}
+        </h6>
+      </div>
+
+      <div class="d-flex align-items-center gap-2 flex-shrink-0">
+        <span class="desktop-progress-text">{{ progressPercentage }}% complété</span>
+        <span *ngIf="nextGroupTitle" class="desktop-next-preview text-muted small d-none d-lg-inline">
+          (Suivant : <strong>{{ nextGroupTitle }}</strong>)
+        </span>
+      </div>
+    </div>
+
+    <!-- Scrollable / Adaptable Stepper Track for Variable Groups -->
+    <div #desktopTrackScrollContainer class="stepper-desktop-track-scroll px-3 py-3">
+      <div class="stepper-track" [class.dense-track]="visibleGroups.length > 4">
+        <ng-container *ngFor="let group of visibleGroups; let idx = index">
+          
+          <!-- Step Item -->
+          <div
+            class="step-item"
+            [class.active]="idx === currentStepIndex"
+            [class.completed]="idx < currentStepIndex"
+            [class.upcoming]="idx > currentStepIndex"
+            (click)="goToStep(idx)"
+            [title]="group.title"
+          >
+            <!-- Step Circle -->
+            <div class="step-circle flex-shrink-0">
+              <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
+              <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
+            </div>
+
+            <!-- Step Label (2 lines allowed, no truncation) -->
+            <div class="step-label min-w-0">
+              <span class="step-sub">Étape {{ idx + 1 }}</span>
+              <span class="step-main" [title]="group.title">{{ group.title }}</span>
+            </div>
+          </div>
+
+          <!-- Connector Line between steps -->
+          <div
+            *ngIf="idx < visibleGroups.length - 1"
+            class="step-connector flex-shrink-0"
+            [class.filled]="idx < currentStepIndex"
+          ></div>
+
+        </ng-container>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ================= 2. MOBILE STEPPER COCKPIT (< 768px) ================= -->
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-cockpit mb-3 p-3 rounded-4 bg-white border shadow-sm">
+    
+    <!-- Top Row: Step Pill + Percentage + Next Step Hint -->
+    <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
+      <div class="d-flex align-items-center gap-2 flex-shrink-0">
+        <span class="mobile-step-pill text-nowrap">
+          Étape {{ currentStepIndex + 1 }}/{{ visibleGroups.length }}
+        </span>
+        <span class="mobile-percent-pill text-nowrap">{{ progressPercentage }}%</span>
+      </div>
+
+      <div *ngIf="nextGroupTitle" class="mobile-next-hint text-truncate" title="Prochaine étape : {{ nextGroupTitle }}">
+        <span class="next-label">Suivant:</span>
+        <span class="next-title text-truncate">{{ nextGroupTitle }}</span>
+        <i class="bi bi-chevron-right ms-1"></i>
+      </div>
+    </div>
+
+    <!-- Horizontal Swipeable Step Chips Ribbon -->
+    <div #chipsScrollContainer class="mobile-chips-scroll-wrapper">
+      <div class="mobile-chips-track">
+        <button
+          *ngFor="let group of visibleGroups; let idx = index"
+          type="button"
+          class="mobile-chip-btn"
           [class.active]="idx === currentStepIndex"
           [class.completed]="idx < currentStepIndex"
+          [class.upcoming]="idx > currentStepIndex"
           (click)="goToStep(idx)"
-          [title]="group.title"
         >
-          <!-- Step Circle -->
-          <div class="step-circle flex-shrink-0">
+          <div class="chip-circle">
             <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
             <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
           </div>
-
-          <!-- Step Label -->
-          <div class="step-label min-w-0">
-            <span class="step-sub">Étape {{ idx + 1 }}</span>
-            <span class="step-main text-truncate" [title]="group.title">{{ group.title }}</span>
-          </div>
-        </div>
-
-        <!-- Connector Line between steps -->
-        <div
-          *ngIf="idx < visibleGroups.length - 1"
-          class="step-connector flex-shrink-1"
-          [class.filled]="idx < currentStepIndex"
-        ></div>
-
-      </ng-container>
-    </div>
-  </div>
-
-  <!-- ================= 2. MOBILE PROGRESS HEADER (< 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-card mb-3 p-3 rounded-4 bg-white border shadow-sm">
-    
-    <!-- Top Row: Current Title & Pill -->
-    <div class="d-flex justify-content-between align-items-center mb-2">
-      <div>
-        <span class="mobile-step-pill text-nowrap">
-          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
-        </span>
+          <span class="chip-title">{{ group.title }}</span>
+        </button>
       </div>
-      <span class="mobile-percent-text text-nowrap">{{ progressPercentage }}%</span>
-    </div>
-
-    <!-- Progress Bar -->
-    <div class="progress mobile-progress-track mb-3">
-      <div
-        class="progress-bar mobile-progress-fill"
-        role="progressbar"
-        [style.width.%]="progressPercentage"
-        aria-valuemin="0"
-        aria-valuemax="100"
-      ></div>
-    </div>
-
-    <!-- Mobile Step Dots Bar -->
-    <div class="d-flex align-items-center justify-content-between gap-1 mb-2">
-      <div
-        *ngFor="let g of visibleGroups; let idx = index"
-        class="mobile-step-dot flex-grow-1"
-        [class.active]="idx === currentStepIndex"
-        [class.completed]="idx < currentStepIndex"
-        (click)="goToStep(idx)"
-      ></div>
-    </div>
-
-    <!-- Current Step Title -->
-    <div class="text-center">
-      <h6 class="fw-bold mb-0 text-dark mobile-step-title text-break">{{ currentGroup?.title }}</h6>
     </div>
 
   </div>
@@ -119,50 +144,65 @@
 
     </div>
 
-    <!-- ================= 4. STEPPER NAVIGATION FOOTER ================= -->
-    <div class="stepper-footer-card p-3 p-md-4 rounded-4 bg-white border shadow-sm">
-      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
-        
-        <!-- Précédent Button -->
-        <button
-          type="button"
-          class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1 text-nowrap"
-          [disabled]="currentStepIndex === 0"
-          (click)="previousStep()"
-        >
-          <i class="bi bi-arrow-left me-2"></i> Précédent
-        </button>
+    <!-- ================= 4. STEPPER NAVIGATION FOOTER WITH PROGRESS LINE ================= -->
+    <div class="stepper-footer-card rounded-4 bg-white border shadow-sm overflow-hidden mb-4">
+      
+      <!-- Continuous Fluid Progress Line right above navigation controls -->
+      <div class="progress footer-progress-track">
+        <div
+          class="progress-bar footer-progress-fill"
+          role="progressbar"
+          [style.width.%]="progressPercentage"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
 
-        <!-- Progress Indicator (Desktop/Tablet) -->
-        <div class="d-none d-sm-flex align-items-center justify-content-center gap-2 order-sm-2 text-muted small-text flex-shrink-0 text-nowrap">
-          <span class="step-counter-pill">
-            Étape <strong class="text-dark">{{ currentStepIndex + 1 }}</strong> sur <strong class="text-dark">{{ visibleGroups.length }}</strong>
-          </span>
-        </div>
-
-        <!-- Suivant / Soumettre Button -->
-        <div class="w-100 w-sm-auto order-1 order-sm-3">
+      <div class="p-3 p-md-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+          
+          <!-- Précédent Button -->
           <button
-            *ngIf="!isLastStep"
             type="button"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
-            (click)="nextStep()"
+            class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1 text-nowrap"
+            [disabled]="currentStepIndex === 0"
+            (click)="previousStep()"
           >
-            Continuer <i class="bi bi-arrow-right ms-2"></i>
+            <i class="bi bi-arrow-left me-2"></i> Précédent
           </button>
 
-          <button
-            *ngIf="isLastStep"
-            type="submit"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
-            [disabled]="isSubmitting"
-          >
-            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
-            {{ submitButtonText }}
-          </button>
+          <!-- Progress Indicator & Percentage (Accessible on both mobile & desktop) -->
+          <div class="d-flex align-items-center justify-content-center gap-2 order-sm-2 text-muted small-text flex-shrink-0 text-nowrap">
+            <span class="step-counter-pill">
+              Étape <strong class="text-dark">{{ currentStepIndex + 1 }}</strong> sur <strong class="text-dark">{{ visibleGroups.length }}</strong>
+              <span class="ms-2 footer-percent-tag">{{ progressPercentage }}%</span>
+            </span>
+          </div>
+
+          <!-- Suivant / Soumettre Button -->
+          <div class="w-100 w-sm-auto order-1 order-sm-3">
+            <button
+              *ngIf="!isLastStep"
+              type="button"
+              class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
+              (click)="nextStep()"
+            >
+              Continuer <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+
+            <button
+              *ngIf="isLastStep"
+              type="submit"
+              class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
+              [disabled]="isSubmitting"
+            >
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
+              {{ submitButtonText }}
+            </button>
+          </div>
+
         </div>
-
       </div>
     </div>
 

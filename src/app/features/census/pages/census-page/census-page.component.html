@@ -59,26 +59,33 @@
         </p>
 
         <!-- Stepper Indicator Responsive -->
-        <div class="stepper-wrapper my-4">
-          <div class="step-item" [class.active]="currentStep === 'FORM'" [class.completed]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'">
-            <div class="step-circle">
+        <div class="census-stepper-pills-bar my-4">
+          <div class="census-step-pill" [class.active]="currentStep === 'FORM'" [class.completed]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'">
+            <div class="step-pill-circle">
               <i *ngIf="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'" class="bi bi-check-lg"></i>
               <span *ngIf="currentStep === 'FORM'">1</span>
             </div>
-            <span class="step-label">Informations</span>
+            <span class="step-pill-text">1. Informations</span>
           </div>
-          <div class="step-line" [class.completed]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'"></div>
-          <div class="step-item" [class.active]="currentStep === 'PAYMENT'" [class.completed]="currentStep === 'SUCCESS'">
-            <div class="step-circle">
+
+          <div class="pill-connector" [class.filled]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'"></div>
+
+          <div class="census-step-pill" [class.active]="currentStep === 'PAYMENT'" [class.completed]="currentStep === 'SUCCESS'">
+            <div class="step-pill-circle">
               <i *ngIf="currentStep === 'SUCCESS'" class="bi bi-check-lg"></i>
               <span *ngIf="currentStep !== 'SUCCESS'">2</span>
             </div>
-            <span class="step-label">Frais d'Adhésion</span>
+            <span class="step-pill-text">2. Frais d'Adhésion</span>
           </div>
-          <div class="step-line" [class.completed]="currentStep === 'SUCCESS'"></div>
-          <div class="step-item" [class.active]="currentStep === 'SUCCESS'" [class.completed]="currentStep === 'SUCCESS'">
-            <div class="step-circle">3</div>
-            <span class="step-label">Quittance</span>
+
+          <div class="pill-connector" [class.filled]="currentStep === 'SUCCESS'"></div>
+
+          <div class="census-step-pill" [class.active]="currentStep === 'SUCCESS'" [class.completed]="currentStep === 'SUCCESS'">
+            <div class="step-pill-circle">
+              <span *ngIf="currentStep !== 'SUCCESS'">3</span>
+              <i *ngIf="currentStep === 'SUCCESS'" class="bi bi-check-lg"></i>
+            </div>
+            <span class="step-pill-text">3. Quittance</span>
           </div>
         </div>
       </header>

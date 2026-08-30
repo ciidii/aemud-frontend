@@ -43,6 +43,8 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
   @Output() formSubmit = new EventEmitter<Record<string, any>>();
   @ViewChild('stepperTop') stepperTopRef?: ElementRef;
+  @ViewChild('chipsScrollContainer') chipsScrollContainer?: ElementRef;
+  @ViewChild('desktopTrackScrollContainer') desktopTrackScrollContainer?: ElementRef;
 
   form!: FormGroup;
   currentStepIndex: number = 0;
@@ -74,6 +76,14 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
 
   get currentGroup(): FormGroupDefinition | undefined {
     return this.visibleGroups[this.currentStepIndex];
+  }
+
+  get nextGroup(): FormGroupDefinition | undefined {
+    return this.visibleGroups[this.currentStepIndex + 1];
+  }
+
+  get nextGroupTitle(): string | null {
+    return this.nextGroup ? this.nextGroup.title : null;
   }
 
   get isLastStep(): boolean {
@@ -317,6 +327,31 @@ export class DynamicFormComponent implements OnInit, OnChanges, OnDestroy {
     if (this.stepperTopRef) {
       this.stepperTopRef.nativeElement.scrollIntoView({behavior: 'smooth', block: 'start'});
     }
+    this.scrollActiveChipIntoView();
+  }
+
+  private scrollActiveChipIntoView(): void {
+    setTimeout(() => {
+      // Mobile chips container
+      if (this.chipsScrollContainer) {
+        const container = this.chipsScrollContainer.nativeElement as HTMLElement;
+        const activeChip = container.querySelector('.active') as HTMLElement;
+        if (activeChip) {
+          const scrollLeft = activeChip.offsetLeft - (container.offsetWidth / 2) + (activeChip.offsetWidth / 2);
+          container.scrollTo({left: Math.max(0, scrollLeft), behavior: 'smooth'});
+        }
+      }
+
+      // Desktop track container
+      if (this.desktopTrackScrollContainer) {
+        const dContainer = this.desktopTrackScrollContainer.nativeElement as HTMLElement;
+        const dActiveItem = dContainer.querySelector('.step-item.active') as HTMLElement;
+        if (dActiveItem) {
+          const dScrollLeft = dActiveItem.offsetLeft - (dContainer.offsetWidth / 2) + (dActiveItem.offsetWidth / 2);
+          dContainer.scrollTo({left: Math.max(0, dScrollLeft), behavior: 'smooth'});
+        }
+      }
+    }, 50);
   }
 
   /**
