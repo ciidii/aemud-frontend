@@ -1,40 +1,76 @@
 <div #stepperTop class="dynamic-form-container">
 
   <!-- ================= 1. DESKTOP / TABLET STEPPER HEADER (>= 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 p-3 p-lg-4 rounded-4 bg-white border shadow-sm">
-    <div class="stepper-track">
-      <ng-container *ngFor="let group of visibleGroups; let idx = index">
-        
-        <!-- Step Item -->
-        <div
-          class="step-item"
-          [class.active]="idx === currentStepIndex"
-          [class.completed]="idx < currentStepIndex"
-          (click)="goToStep(idx)"
-          [title]="group.title"
-        >
-          <!-- Step Circle -->
-          <div class="step-circle flex-shrink-0">
-            <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
-            <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
-          </div>
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 rounded-4 bg-white border shadow-sm">
+    
+    <!-- Top Context Summary (Step Count, Active Title & Progress) -->
+    <div class="stepper-desktop-top-bar d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
+      <div class="d-flex align-items-center gap-3 min-w-0">
+        <span class="desktop-step-badge flex-shrink-0">
+          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
+        </span>
+        <h6 class="fw-bold text-dark mb-0 active-step-headline text-truncate">
+          {{ currentGroup?.title }}
+        </h6>
+      </div>
 
-          <!-- Step Label -->
-          <div class="step-label min-w-0">
-            <span class="step-sub">Étape {{ idx + 1 }}</span>
-            <span class="step-main text-truncate" [title]="group.title">{{ group.title }}</span>
-          </div>
-        </div>
-
-        <!-- Connector Line between steps -->
-        <div
-          *ngIf="idx < visibleGroups.length - 1"
-          class="step-connector flex-shrink-1"
-          [class.filled]="idx < currentStepIndex"
-        ></div>
-
-      </ng-container>
+      <div class="d-flex align-items-center gap-2 flex-shrink-0">
+        <span class="desktop-progress-text">{{ progressPercentage }}% complété</span>
+        <span *ngIf="nextGroupTitle" class="desktop-next-preview text-muted small d-none d-lg-inline">
+          (Suivant : <strong>{{ nextGroupTitle }}</strong>)
+        </span>
+      </div>
     </div>
+
+    <!-- Progress Line across the whole card -->
+    <div class="progress desktop-progress-track">
+      <div
+        class="progress-bar desktop-progress-fill"
+        role="progressbar"
+        [style.width.%]="progressPercentage"
+        aria-valuemin="0"
+        aria-valuemax="100"
+      ></div>
+    </div>
+
+    <!-- Scrollable / Adaptable Stepper Track for Variable Groups -->
+    <div #desktopTrackScrollContainer class="stepper-desktop-track-scroll px-3 py-3">
+      <div class="stepper-track" [class.dense-track]="visibleGroups.length > 4">
+        <ng-container *ngFor="let group of visibleGroups; let idx = index">
+          
+          <!-- Step Item -->
+          <div
+            class="step-item"
+            [class.active]="idx === currentStepIndex"
+            [class.completed]="idx < currentStepIndex"
+            [class.upcoming]="idx > currentStepIndex"
+            (click)="goToStep(idx)"
+            [title]="group.title"
+          >
+            <!-- Step Circle -->
+            <div class="step-circle flex-shrink-0">
+              <i *ngIf="idx < currentStepIndex" class="bi bi-check-lg"></i>
+              <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
+            </div>
+
+            <!-- Step Label (2 lines allowed, no truncation) -->
+            <div class="step-label min-w-0">
+              <span class="step-sub">Étape {{ idx + 1 }}</span>
+              <span class="step-main" [title]="group.title">{{ group.title }}</span>
+            </div>
+          </div>
+
+          <!-- Connector Line between steps -->
+          <div
+            *ngIf="idx < visibleGroups.length - 1"
+            class="step-connector flex-shrink-0"
+            [class.filled]="idx < currentStepIndex"
+          ></div>
+
+        </ng-container>
+      </div>
+    </div>
+
   </div>
 
   <!-- ================= 2. MOBILE STEPPER COCKPIT (< 768px) ================= -->
