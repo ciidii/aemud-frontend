@@ -1,24 +1,24 @@
-<div class="member-add-page-container p-4">
+<div class="member-add-page-container">
   
   <!-- Header & Back navigation -->
-  <div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <div class="page-top-bar d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
     <div>
-      <a [routerLink]="['/members/list-members']" class="text-decoration-none text-muted mb-2 d-inline-flex align-items-center back-link">
-        <i class="bi bi-arrow-left me-2"></i> Retour à la liste des membres
+      <a [routerLink]="['/members/list-members']" class="back-nav-btn mb-2 d-inline-flex align-items-center">
+        <i class="bi bi-arrow-left me-2"></i> Retour au répertoire des membres
       </a>
-      <h2 class="fw-bold mb-1 page-title">Inscription d'un Nouveau Membre</h2>
-      <p class="text-muted mb-0 page-subtitle">
-        Renseignez les informations de l'adhérent. Le formulaire s'adapte automatiquement selon sa situation (étudiant ou diplômé).
+      <h2 class="page-title mb-1">Inscription d'un Nouveau Membre</h2>
+      <p class="page-subtitle mb-0">
+        Renseignez la fiche d'adhésion. Le formulaire s'adapte dynamiquement selon la catégorie choisie (Étudiant ou Alumni).
       </p>
     </div>
   </div>
 
   <!-- Loading Spinner -->
-  <div *ngIf="isLoading" class="text-center py-5 bg-white rounded-4 border shadow-sm">
-    <div class="spinner-border text-teal" style="width: 3rem; height: 3rem;" role="status">
+  <div *ngIf="isLoading" class="text-center py-5 bg-white rounded-4 border shadow-sm loading-card">
+    <div class="spinner-border text-teal" style="width: 3.2rem; height: 3.2rem;" role="status">
       <span class="visually-hidden">Chargement du formulaire...</span>
     </div>
-    <p class="text-muted mt-3" style="font-size: 1.4rem;">Chargement du formulaire dynamique...</p>
+    <p class="text-muted mt-3 mb-0" style="font-size: 1.4rem;">Chargement du formulaire dynamique...</p>
   </div>
 
   <!-- Dynamic Form Container -->
@@ -34,3 +34,4 @@
   </div>
 
 </div>
+
