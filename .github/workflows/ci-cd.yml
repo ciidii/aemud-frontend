@@ -221,9 +221,9 @@ jobs:
             docker compose ${ENV_FLAG} -f docker-compose.prod.yml pull aemud-frontend
             docker compose ${ENV_FLAG} -f docker-compose.prod.yml up -d --no-deps --force-recreate aemud-frontend
             
-            # Vérification de disponibilité HTTP
+            # Vérification de disponibilité HTTP sur le port 8085
             echo "⏳ Validation du Healthcheck Frontend..."
-            timeout 60s bash -c 'until [ "$$(docker inspect --format="{{.State.Health.Status}}" aemud-frontend-prod 2>/dev/null)" = "healthy" ]; do sleep 3; done' || {
+            timeout 60s bash -c 'until curl -sSf http://127.0.0.1:8085/ >/dev/null 2>&1; do sleep 3; done' || {
               echo "❌ Frontend check failed! Logs du conteneur:"
               docker logs --tail 30 aemud-frontend-prod
               exit 1
