@@ -1,10 +1,18 @@
 <div class="app-root-container">
   <app-nav-bar></app-nav-bar>
-  <div [class.sidebar--collapsed]="!(isSidebarOpen$ | async)" class="app-container sidebar--collapsed">
+  <div [class.sidebar--collapsed]="!(isSidebarOpen$ | async)" class="app-container">
+    <!-- Mobile Backdrop Overlay -->
+    <div *ngIf="isMobileOpen$ | async"
+         (click)="closeMobileSidebar()"
+         class="mobile-backdrop"
+         aria-hidden="true"></div>
+
     <app-aside-bare></app-aside-bare>
-    <div class="main-content">
+
+    <main class="main-content">
       <router-outlet></router-outlet>
-    </div>
+    </main>
   </div>
 </div>
+
 

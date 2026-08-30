@@ -2,7 +2,7 @@ import {Component, inject, OnInit} from '@angular/core';
 import {RouterOutlet} from "@angular/router";
 import {SidebarService} from "../../services/sidebar.service";
 import {Observable, switchMap} from "rxjs";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, NgClass, NgIf} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
 import {HeaderComponent} from "../header/header.component";
 import {AppStateService} from "../../../core/services/app-state.service";
@@ -18,6 +18,8 @@ import {
   imports: [
     RouterOutlet,
     AsyncPipe,
+    NgIf,
+    NgClass,
     AsideBareComponent,
     HeaderComponent
   ]
@@ -25,13 +27,20 @@ import {
 export class LayoutComponent implements OnInit {
 
   isSidebarOpen$: Observable<boolean>;
+  isMobileOpen$: Observable<boolean>;
   mandatHttpService = inject(PeriodeMandatHttpService);
   appStateService = inject(AppStateService);
   private sidebarService = inject(SidebarService);
 
   constructor() {
     this.isSidebarOpen$ = this.sidebarService.isOpen$;
+    this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
   }
+
+  closeMobileSidebar(): void {
+    this.sidebarService.closeMobile();
+  }
+
 
   ngOnInit(): void {
     this.mandatHttpService.getAllPeriodeMandats().pipe(
