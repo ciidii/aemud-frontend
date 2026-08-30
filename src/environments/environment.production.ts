@@ -1,5 +1,6 @@
 import {Environment} from './environment.interface';
 
+// AEMUD Production Build - CI/CD Release
 export const environment: Environment = {
   name: 'production',
   production: true,
