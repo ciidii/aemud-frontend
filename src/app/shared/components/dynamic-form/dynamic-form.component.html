@@ -22,17 +22,6 @@
       </div>
     </div>
 
-    <!-- Progress Line across the whole card -->
-    <div class="progress desktop-progress-track">
-      <div
-        class="progress-bar desktop-progress-fill"
-        role="progressbar"
-        [style.width.%]="progressPercentage"
-        aria-valuemin="0"
-        aria-valuemax="100"
-      ></div>
-    </div>
-
     <!-- Scrollable / Adaptable Stepper Track for Variable Groups -->
     <div #desktopTrackScrollContainer class="stepper-desktop-track-scroll px-3 py-3">
       <div class="stepper-track" [class.dense-track]="visibleGroups.length > 4">
@@ -90,17 +79,6 @@
         <span class="next-title text-truncate">{{ nextGroupTitle }}</span>
         <i class="bi bi-chevron-right ms-1"></i>
       </div>
-    </div>
-
-    <!-- Single Continuous Fluid Progress Line -->
-    <div class="progress mobile-unified-track mb-3">
-      <div
-        class="progress-bar mobile-unified-fill"
-        role="progressbar"
-        [style.width.%]="progressPercentage"
-        aria-valuemin="0"
-        aria-valuemax="100"
-      ></div>
     </div>
 
     <!-- Horizontal Swipeable Step Chips Ribbon -->
@@ -166,50 +144,65 @@
 
     </div>
 
-    <!-- ================= 4. STEPPER NAVIGATION FOOTER ================= -->
-    <div class="stepper-footer-card p-3 p-md-4 rounded-4 bg-white border shadow-sm">
-      <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
-        
-        <!-- Précédent Button -->
-        <button
-          type="button"
-          class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1 text-nowrap"
-          [disabled]="currentStepIndex === 0"
-          (click)="previousStep()"
-        >
-          <i class="bi bi-arrow-left me-2"></i> Précédent
-        </button>
+    <!-- ================= 4. STEPPER NAVIGATION FOOTER WITH PROGRESS LINE ================= -->
+    <div class="stepper-footer-card rounded-4 bg-white border shadow-sm overflow-hidden mb-4">
+      
+      <!-- Continuous Fluid Progress Line right above navigation controls -->
+      <div class="progress footer-progress-track">
+        <div
+          class="progress-bar footer-progress-fill"
+          role="progressbar"
+          [style.width.%]="progressPercentage"
+          aria-valuemin="0"
+          aria-valuemax="100"
+        ></div>
+      </div>
 
-        <!-- Progress Indicator (Desktop/Tablet) -->
-        <div class="d-none d-sm-flex align-items-center justify-content-center gap-2 order-sm-2 text-muted small-text flex-shrink-0 text-nowrap">
-          <span class="step-counter-pill">
-            Étape <strong class="text-dark">{{ currentStepIndex + 1 }}</strong> sur <strong class="text-dark">{{ visibleGroups.length }}</strong>
-          </span>
-        </div>
-
-        <!-- Suivant / Soumettre Button -->
-        <div class="w-100 w-sm-auto order-1 order-sm-3">
+      <div class="p-3 p-md-4">
+        <div class="d-flex flex-column flex-sm-row justify-content-between align-items-center gap-3">
+          
+          <!-- Précédent Button -->
           <button
-            *ngIf="!isLastStep"
             type="button"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
-            (click)="nextStep()"
+            class="btn btn-outline-secondary btn-step-nav w-100 w-sm-auto order-2 order-sm-1 text-nowrap"
+            [disabled]="currentStepIndex === 0"
+            (click)="previousStep()"
           >
-            Continuer <i class="bi bi-arrow-right ms-2"></i>
+            <i class="bi bi-arrow-left me-2"></i> Précédent
           </button>
 
-          <button
-            *ngIf="isLastStep"
-            type="submit"
-            class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
-            [disabled]="isSubmitting"
-          >
-            <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
-            <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
-            {{ submitButtonText }}
-          </button>
+          <!-- Progress Indicator & Percentage (Accessible on both mobile & desktop) -->
+          <div class="d-flex align-items-center justify-content-center gap-2 order-sm-2 text-muted small-text flex-shrink-0 text-nowrap">
+            <span class="step-counter-pill">
+              Étape <strong class="text-dark">{{ currentStepIndex + 1 }}</strong> sur <strong class="text-dark">{{ visibleGroups.length }}</strong>
+              <span class="ms-2 footer-percent-tag">{{ progressPercentage }}%</span>
+            </span>
+          </div>
+
+          <!-- Suivant / Soumettre Button -->
+          <div class="w-100 w-sm-auto order-1 order-sm-3">
+            <button
+              *ngIf="!isLastStep"
+              type="button"
+              class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
+              (click)="nextStep()"
+            >
+              Continuer <i class="bi bi-arrow-right ms-2"></i>
+            </button>
+
+            <button
+              *ngIf="isLastStep"
+              type="submit"
+              class="btn btn-teal text-white btn-step-nav w-100 w-sm-auto fw-semibold shadow-sm text-nowrap"
+              [disabled]="isSubmitting"
+            >
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2" role="status" aria-hidden="true"></span>
+              <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
+              {{ submitButtonText }}
+            </button>
+          </div>
+
         </div>
-
       </div>
     </div>
 

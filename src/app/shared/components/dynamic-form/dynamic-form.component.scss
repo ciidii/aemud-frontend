@@ -83,19 +83,6 @@
       }
     }
 
-    // Full Progress Line
-    .desktop-progress-track {
-      height: 4px;
-      background-color: #f1f5f9;
-      border-radius: 0;
-      overflow: hidden;
-
-      .desktop-progress-fill {
-        background: linear-gradient(90deg, #278F8F, #4FB9B9);
-        transition: width 0.3s ease;
-      }
-    }
-
     // Scrollable / Adaptable Stepper Track
     .stepper-desktop-track-scroll {
       overflow-x: auto;
@@ -314,18 +301,6 @@
       }
     }
 
-    .mobile-unified-track {
-      height: 4px;
-      background-color: #e2e8f0;
-      border-radius: 9999px;
-      overflow: hidden;
-
-      .mobile-unified-fill {
-        background: linear-gradient(90deg, #278F8F, #4FB9B9);
-        transition: width 0.3s ease;
-      }
-    }
-
     // Scrollable Horizontal Step Chips Ribbon
     .mobile-chips-scroll-wrapper {
       overflow-x: auto;
@@ -460,6 +435,19 @@
   .stepper-footer-card {
     border-color: $color-border !important;
 
+    // Progress Line across the top of footer
+    .footer-progress-track {
+      height: 4px;
+      background-color: #f1f5f9;
+      border-radius: 0;
+      overflow: hidden;
+
+      .footer-progress-fill {
+        background: linear-gradient(90deg, #278F8F, #4FB9B9);
+        transition: width 0.3s ease;
+      }
+    }
+
     .step-counter-pill {
       background-color: #f8fafc;
       padding: 0.6rem 1.4rem;
@@ -467,6 +455,17 @@
       border: 1px solid #e2e8f0;
       font-size: 1.35rem;
       color: #64748b;
+      display: inline-flex;
+      align-items: center;
+
+      .footer-percent-tag {
+        color: $color-teal;
+        font-weight: 700;
+        background-color: $color-teal-subtle;
+        padding: 0.15rem 0.6rem;
+        border-radius: 12px;
+        font-size: 1.2rem;
+      }
     }
   }
 
