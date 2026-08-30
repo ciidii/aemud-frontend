@@ -1,189 +1,327 @@
 <div *ngIf="member$ | async as member; else loading" class="detail-page-container">
 
-  <!-- Header (Fixed) -->
-  <div class="detail-header">
-    <div class="header-left-side">
-      <button (click)="goBack()" aria-label="Go back" class="back-button">
+  <!-- HERO TOPBAR / PROFILE HEADER -->
+  <header class="detail-header">
+    <div class="header-identity-wrapper">
+      <button (click)="goBack()" aria-label="Retour au répertoire" class="btn-back-nav" title="Retour">
         <i class="bi bi-arrow-left"></i>
       </button>
-      <div class="header-main-info">
-        <div class="avatar-placeholder">
-          <i class="bi bi-person-fill"></i>
+
+      <div class="header-main-info" *ngIf="member.personalInfo as personalInfo">
+        <div class="member-avatar-badge"
+             [style.backgroundColor]="getAvatarColor(personalInfo.name).bg"
+             [style.color]="getAvatarColor(personalInfo.name).color">
+          {{ getInitials(personalInfo.firstname, personalInfo.name) }}
         </div>
-        <div *ngIf="member.personalInfo" class="header-text">
-          <h1>{{ member.personalInfo.firstname }} {{ member.personalInfo.name }}</h1>
-          <div class="status-badges">
-            <span *ngIf="member.status === 'ALUMNI'" class="badge bg-primary-subtle text-primary border px-2 py-1">
-              <i class="bi bi-mortarboard me-1"></i> Cercle des Diplômés (Alumni)
+
+        <div class="header-names-block">
+          <div class="name-and-status">
+            <h1 class="member-full-name">{{ personalInfo.firstname }} {{ personalInfo.name }}</h1>
+            <span class="status-pill" [ngClass]="getStatusBadge(member).cssClass">
+              <i [ngClass]="getStatusBadge(member).icon" class="bi"></i>
+              {{ getStatusBadge(member).label }}
             </span>
-            <span *ngIf="member.status === 'ACTIVE' || !member.status" class="badge bg-success-subtle text-success border px-2 py-1">
-              <i class="bi bi-person-check me-1"></i> Étudiant Actif
+          </div>
+
+          <div class="header-meta-row">
+            <span class="meta-item" *ngIf="member.contactInfo && member.contactInfo.email">
+              <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
             </span>
-            <span *ngIf="member.status && member.status !== 'ACTIVE' && member.status !== 'ALUMNI'" class="badge bg-warning-subtle text-warning border px-2 py-1">
-              <i class="bi bi-clock-history me-1"></i> {{ member.status }}
+            <span class="meta-item" *ngIf="member.academicInfo && member.academicInfo.institutionName">
+              <i class="bi bi-building"></i> {{ member.academicInfo.institutionName }}
             </span>
           </div>
         </div>
       </div>
     </div>
-    <div class="header-actions">
-      <button (click)="openEditFullMemberModal()" class="btn btn-outline-primary me-2">
-        <i class="bi bi-pencil-square me-1"></i> Modifier la fiche
+
+    <!-- QUICK ACTIONS TOOLBAR -->
+    <div class="header-quick-actions">
+      <!-- Direct WhatsApp Action -->
+      <a *ngIf="member.contactInfo && member.contactInfo.numberPhone"
+         [href]="getWhatsAppUrl(member.contactInfo.numberPhone)"
+         target="_blank"
+         rel="noopener noreferrer"
+         class="btn-action-pill btn-whatsapp"
+         title="Contacter sur WhatsApp">
+        <i class="bi bi-whatsapp"></i>
+        <span class="d-none d-sm-inline">WhatsApp</span>
+      </a>
+
+      <!-- Direct Call Action -->
+      <a *ngIf="member.contactInfo && member.contactInfo.numberPhone"
+         [href]="'tel:' + member.contactInfo.numberPhone"
+         class="btn-action-pill btn-call"
+         title="Appeler directement">
+        <i class="bi bi-telephone-fill"></i>
+        <span class="d-none d-sm-inline">Appel</span>
+      </a>
+
+      <!-- SMS Modal -->
+      <button (click)="openSendMessageModal()" class="btn-action-pill btn-message" title="Envoyer un SMS">
+        <i class="bi bi-chat-dots-fill"></i>
+        <span class="d-none d-md-inline">SMS</span>
       </button>
-      <button (click)="openSendMessageModal()" class="btn btn-primary">
-        <i class="bi bi-send me-1"></i> Envoyer un message
+
+      <!-- Edit Full Profile -->
+      <button (click)="openEditFullMemberModal()" class="btn-action-pill btn-edit-profile">
+        <i class="bi bi-pencil-square"></i>
+        <span class="d-none d-md-inline">Modifier fiche</span>
       </button>
-      <div class="actions-dropdown">
-        <button (click)="toggleActionsDropdown($event)" class="btn btn-secondary btn-icon">
+
+      <!-- More Actions Dropdown -->
+      <div class="actions-dropdown-wrapper">
+        <button (click)="toggleActionsDropdown($event)" class="btn-action-pill btn-kebab" aria-label="Plus d'actions">
           <i class="bi bi-three-dots-vertical"></i>
         </button>
-        <ul [class.show]="isActionsDropdownOpen" class="dropdown-menu">
-          <li><a (click)="openEditFullMemberModal()"><i class="bi bi-pencil-square"></i> Modifier (Formulaire)</a></li>
-          <li><a (click)="openExportModal()"><i class="bi bi-upload"></i> Exporter</a></li>
-          <li><a (click)="toggleDeleteModal()" class="text-danger"><i class="bi bi-trash"></i> Supprimer</a></li>
+        <ul [class.show]="isActionsDropdownOpen" class="actions-dropdown-menu">
+          <li>
+            <a (click)="openEditFullMemberModal()">
+              <i class="bi bi-pencil-square text-primary"></i> Modifier le formulaire complet
+            </a>
+          </li>
+          <li>
+            <a (click)="openExportModal()">
+              <i class="bi bi-file-earmark-arrow-down text-info"></i> Exporter la fiche
+            </a>
+          </li>
+          <li class="dropdown-divider"></li>
+          <li>
+            <a (click)="toggleDeleteModal()" class="text-danger">
+              <i class="bi bi-trash text-danger"></i> Supprimer ce membre
+            </a>
+          </li>
         </ul>
       </div>
     </div>
-  </div>
+  </header>
 
-  <!-- Body Grid (Two Columns) -->
+  <!-- MOBILE SEGMENTED NAVIGATION TABS (Visible on screens < 992px) -->
+  <nav class="mobile-segmented-tabs d-lg-none" aria-label="Navigation des sections">
+    <button (click)="setActiveMobileTab('profile')"
+            [class.active]="activeMobileTab === 'profile'"
+            class="seg-tab-btn">
+      <i class="bi bi-person-lines-fill"></i>
+      <span>Profil</span>
+    </button>
+    <button (click)="setActiveMobileTab('contributions')"
+            [class.active]="activeMobileTab === 'contributions'"
+            class="seg-tab-btn">
+      <i class="bi bi-calendar2-check-fill"></i>
+      <span>Cotisations</span>
+      <span *ngIf="selectedContributions.length > 0" class="tab-badge">{{ selectedContributions.length }}</span>
+    </button>
+    <button (click)="setActiveMobileTab('timeline')"
+            [class.active]="activeMobileTab === 'timeline'"
+            class="seg-tab-btn">
+      <i class="bi bi-clock-history"></i>
+      <span>Inscriptions</span>
+    </button>
+  </nav>
+
+  <!-- MAIN DETAIL LAYOUT -->
   <div [class.sidebar-collapsed]="isSidebarCollapsed" class="detail-body-grid">
 
-    <!-- Left Column: Main Info (Scrollable) -->
-    <div class="main-content-col">
+    <!-- LEFT COLUMN: MAIN PROFILE INFO CARDS -->
+    <main class="main-content-col" [class.d-none-mobile]="activeMobileTab !== 'profile'">
 
-      <!-- Personal Info Card -->
-      <div *ngIf="member.personalInfo as personalInfo" class="permanent-info-card">
+      <!-- PERSONAL INFO CARD -->
+      <section *ngIf="member.personalInfo as personalInfo" class="permanent-info-card">
         <div class="card-header">
-          <h5>Informations Personnelles</h5>
-          <button (click)="openEditPersonalInfoModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-teal-subtle text-teal">
+              <i class="bi bi-person-vcard-fill"></i>
+            </div>
+            <h5>Informations Personnelles</h5>
+          </div>
+          <button (click)="openEditPersonalInfoModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
             <span class="info-key">Nom complet</span>
-            <span class="info-value">{{ personalInfo.firstname }} {{ personalInfo.name }}</span>
+            <span class="info-value font-weight-bold">{{ personalInfo.firstname }} {{ personalInfo.name }}</span>
           </div>
           <div class="info-pair">
             <span class="info-key">Nationalité</span>
-            <span class="info-value">{{ personalInfo.nationality }}</span>
+            <span class="info-value">{{ personalInfo.nationality || 'Sénégalaise' }}</span>
           </div>
           <div class="info-pair">
             <span class="info-key">Genre</span>
-            <span class="info-value">{{ personalInfo.gender }}</span>
+            <span class="info-value">{{ personalInfo.gender || 'Non renseigné' }}</span>
           </div>
           <div class="info-pair">
             <span class="info-key">Date de naissance</span>
-            <span class="info-value">{{ personalInfo.birthday | toDate | date:'d MMMM yyyy' }}</span>
+            <span class="info-value">{{ personalInfo.birthday | toDate | date:'d MMMM yyyy':'':'fr' }}</span>
           </div>
           <div class="info-pair">
             <span class="info-key">Statut Marital</span>
-            <span class="info-value">{{ personalInfo.maritalStatus }}</span>
+            <span class="info-value">{{ personalInfo.maritalStatus || 'Célibataire' }}</span>
           </div>
         </div>
-      </div>
+      </section>
 
-
-      <!-- Contact Info Card -->
-      <div *ngIf="member.contactInfo as contactInfo" class="permanent-info-card">
+      <!-- CONTACT INFO CARD -->
+      <section *ngIf="member.contactInfo as contactInfo" class="permanent-info-card">
         <div class="card-header">
-          <h5>Informations de Contact</h5>
-          <button (click)="openEditContactInfoModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-blue-subtle text-blue">
+              <i class="bi bi-telephone-inbound-fill"></i>
+            </div>
+            <h5>Coordonnées & Contact</h5>
+          </div>
+          <button (click)="openEditContactInfoModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
           <div class="info-pair">
             <span class="info-key">Numéro de téléphone</span>
-            <span class="info-value"><a
-              [href]="'tel:' + contactInfo.numberPhone">{{ contactInfo.numberPhone }}</a></span>
+            <div class="info-value contact-value-row">
+              <a [href]="'tel:' + contactInfo.numberPhone" class="phone-link">{{ contactInfo.numberPhone }}</a>
+              <a [href]="getWhatsAppUrl(contactInfo.numberPhone)" target="_blank" rel="noopener noreferrer" class="btn-mini-whatsapp" title="WhatsApp">
+                <i class="bi bi-whatsapp"></i>
+              </a>
+            </div>
           </div>
           <div class="info-pair">
-            <span class="info-key">Email</span>
-            <span class="info-value"><a [href]="'mailto:' + contactInfo.email">{{ contactInfo.email }}</a></span>
+            <span class="info-key">Adresse Email</span>
+            <span class="info-value">
+              <a [href]="'mailto:' + contactInfo.email" class="email-link">{{ contactInfo.email }}</a>
+            </span>
           </div>
+
           <!-- PersonToCalls -->
-          <ng-container *ngIf="contactInfo.personToCalls.length > 0">
-            <div class="info-pair full-width">
-              <span class="info-key">Personnes à contacter</span>
-              <div class="contact-list">
-                <div *ngFor="let contact of contactInfo.personToCalls" class="contact-card">
-                  <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
-                  <div class="contact-relation">{{ contact.relationship }}</div>
-                  <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
-                    <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
-                  </a>
-                </div>
+          <div *ngIf="contactInfo.personToCalls && contactInfo.personToCalls.length > 0" class="info-pair full-width">
+            <span class="info-key">Personnes à contacter en cas d'urgence</span>
+            <div class="contact-list">
+              <div *ngFor="let contact of contactInfo.personToCalls" class="contact-card">
+                <div class="contact-name">{{ contact.firstname }} {{ contact.lastname }}</div>
+                <div class="contact-relation">{{ contact.relationship }}</div>
+                <a [href]="'tel:' + contact.requiredNumberPhone" class="contact-phone">
+                  <i class="bi bi-telephone-fill"></i> {{ contact.requiredNumberPhone }}
+                </a>
               </div>
             </div>
-          </ng-container>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Academic & Membership Info Card -->
-      <div *ngIf="member.academicInfo || member.membershipInfo" class="permanent-info-card">
+      <!-- ACADEMIC & MEMBERSHIP INFO CARD -->
+      <section *ngIf="member.academicInfo || member.membershipInfo" class="permanent-info-card">
         <div class="card-header">
-          <h5>Informations Académiques & Adhésion</h5>
-          <button (click)="openEditAcademicInfoModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-purple-subtle text-purple">
+              <i class="bi bi-mortarboard-fill"></i>
+            </div>
+            <h5>Cursus Académique & Adhésion</h5>
+          </div>
+          <button (click)="openEditAcademicInfoModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
           <ng-container *ngIf="member.academicInfo as academicInfo">
-            <div class="info-pair"><span class="info-key">Établissement</span><span
-              class="info-value">{{ academicInfo.institutionName }}</span></div>
-            <div class="info-pair"><span class="info-key">Domaine d'études</span><span
-              class="info-value">{{ academicInfo.studiesDomain }}</span></div>
-            <div class="info-pair"><span class="info-key">Niveau d'études</span><span
-              class="info-value">{{ academicInfo.studiesLevel }}</span></div>
+            <div class="info-pair">
+              <span class="info-key">Établissement</span>
+              <span class="info-value font-weight-bold">{{ academicInfo.institutionName || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Domaine d'études</span>
+              <span class="info-value">{{ academicInfo.studiesDomain || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Niveau d'études</span>
+              <span class="info-value">
+                <span class="level-pill" *ngIf="academicInfo.studiesLevel">{{ academicInfo.studiesLevel }}</span>
+                <span *ngIf="!academicInfo.studiesLevel">Non renseigné</span>
+              </span>
+            </div>
           </ng-container>
           <ng-container *ngIf="member.membershipInfo as membershipInfo">
-            <div class="info-pair"><span class="info-key">Établissement d'origine</span><span
-              class="info-value">{{ membershipInfo.legacyInstitution }}</span></div>
-            <div class="info-pair"><span class="info-key">Série du BAC</span><span
-              class="info-value">{{ membershipInfo.bacSeries }}</span></div>
-            <div class="info-pair"><span class="info-key">Mention du BAC</span><span
-              class="info-value">{{ membershipInfo.bacMention }}</span></div>
-            <div class="info-pair"><span class="info-key">Année du BAC</span><span
-              class="info-value">{{ membershipInfo.yearOfBac }}</span></div>
+            <div class="info-pair">
+              <span class="info-key">Établissement d'origine</span>
+              <span class="info-value">{{ membershipInfo.legacyInstitution || 'Non renseigné' }}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Série du BAC</span>
+              <span class="info-value">{{ membershipInfo.bacSeries || 'Non renseignée' }}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Mention du BAC</span>
+              <span class="info-value">{{ membershipInfo.bacMention || 'Non renseignée' }}</span>
+            </div>
+            <div class="info-pair">
+              <span class="info-key">Année du BAC</span>
+              <span class="info-value">{{ membershipInfo.yearOfBac || 'Non renseignée' }}</span>
+            </div>
           </ng-container>
         </div>
-      </div>
+      </section>
 
-      <!-- Engagements Card -->
-      <div class="permanent-info-card">
+      <!-- ENGAGEMENTS ASSOCIATIFS CARD -->
+      <section class="permanent-info-card">
         <div class="card-header">
-          <h5>Engagements Associatifs</h5>
-          <button (click)="openEditEngagementsModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-amber-subtle text-amber">
+              <i class="bi bi-shield-check"></i>
+            </div>
+            <h5>Engagements Associatifs</h5>
+          </div>
+          <button (click)="openEditEngagementsModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body">
           <div class="info-pair">
-            <span class="info-key">Clubs</span>
+            <span class="info-key">Clubs AEMUD</span>
             <div *ngIf="member.clubs && member.clubs.length > 0; else noClubs" class="info-value tag-list">
-              <span *ngFor="let club of member.clubs" class="tag">{{ club.name }}</span>
+              <span *ngFor="let club of member.clubs" class="tag tag-club">
+                <i class="bi bi-bookmark-check-fill"></i> {{ club.name }}
+              </span>
             </div>
-            <ng-template #noClubs><span class="info-value text-muted">Aucun club</span></ng-template>
+            <ng-template #noClubs><span class="info-value text-muted font-italic">Aucun club affilié</span></ng-template>
           </div>
+
           <div class="info-pair mt-4">
             <span class="info-key">Commissions</span>
-            <div *ngIf="member.commissions && member.commissions.length > 0; else noCommissions"
-                 class="info-value tag-list">
-              <span *ngFor="let commission of member.commissions" class="tag">{{ commission.name }}</span>
+            <div *ngIf="member.commissions && member.commissions.length > 0; else noCommissions" class="info-value tag-list">
+              <span *ngFor="let commission of member.commissions" class="tag tag-commission">
+                <i class="bi bi-people-fill"></i> {{ commission.name }}
+              </span>
             </div>
-            <ng-template #noCommissions><span class="info-value text-muted">Aucune commission</span></ng-template>
+            <ng-template #noCommissions><span class="info-value text-muted font-italic">Aucune commission assignée</span></ng-template>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Religious Knowledge Card -->
-      <div *ngIf="member.religiousKnowledge as religiousKnowledge" class="permanent-info-card">
+      <!-- RELIGIOUS KNOWLEDGE CARD -->
+      <section *ngIf="member.religiousKnowledge as religiousKnowledge" class="permanent-info-card">
         <div class="card-header">
-          <h5>Connaissances Religieuses</h5>
-          <button (click)="openEditReligiousKnowledgeModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-green-subtle text-green">
+              <i class="bi bi-book-half"></i>
+            </div>
+            <h5>Connaissances Religieuses</h5>
+          </div>
+          <button (click)="openEditReligiousKnowledgeModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
-          <div class="info-pair"><span class="info-key">Niveau de Coran</span><span
-            class="info-value">{{ religiousKnowledge.coranLevel }}</span></div>
-          <div class="info-pair"><span class="info-key">Maîtrise de l'arabe</span><span
-            class="info-value">{{ religiousKnowledge.arabicProficiency }}</span></div>
+          <div class="info-pair">
+            <span class="info-key">Niveau de Coran</span>
+            <span class="info-value">{{ religiousKnowledge.coranLevel || 'Non renseigné' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Maîtrise de l'arabe</span>
+            <span class="info-value">{{ religiousKnowledge.arabicProficiency || 'Non renseigné' }}</span>
+          </div>
         </div>
+
         <div *ngIf="religiousKnowledge.aqida && religiousKnowledge.aqida.length > 0" class="card-body pt-0">
-          <h6 class="knowledge-header">Aqida</h6>
+          <h6 class="knowledge-header"><i class="bi bi-journals me-2 text-teal"></i>Aqida</h6>
           <div class="table-responsive">
             <table class="knowledge-table">
               <thead>
@@ -195,7 +333,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let knowledge of religiousKnowledge.aqida">
-                <td>{{ knowledge.bookName }}</td>
+                <td class="fw-semibold">{{ knowledge.bookName }}</td>
                 <td>{{ knowledge.teacherName }}</td>
                 <td>{{ knowledge.learningPlace }}</td>
               </tr>
@@ -203,8 +341,9 @@
             </table>
           </div>
         </div>
+
         <div *ngIf="religiousKnowledge.fiqh && religiousKnowledge.fiqh.length > 0" class="card-body pt-0">
-          <h6 class="knowledge-header">Fiqh</h6>
+          <h6 class="knowledge-header"><i class="bi bi-journal-bookmark-fill me-2 text-teal"></i>Fiqh</h6>
           <div class="table-responsive">
             <table class="knowledge-table">
               <thead>
@@ -216,7 +355,7 @@
               </thead>
               <tbody>
               <tr *ngFor="let knowledge of religiousKnowledge.fiqh">
-                <td>{{ knowledge.bookName }}</td>
+                <td class="fw-semibold">{{ knowledge.bookName }}</td>
                 <td>{{ knowledge.teacherName }}</td>
                 <td>{{ knowledge.learningPlace }}</td>
               </tr>
@@ -224,41 +363,70 @@
             </table>
           </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Address Card -->
-      <div *ngIf="member.addressInfo as addressInfo" class="permanent-info-card">
+      <!-- ADDRESS & HOUSING CARD -->
+      <section *ngIf="member.addressInfo as addressInfo" class="permanent-info-card">
         <div class="card-header">
-          <h5>Adresse</h5>
-          <button (click)="openEditAddressInfoModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-teal-subtle text-teal">
+              <i class="bi bi-geo-alt-fill"></i>
+            </div>
+            <h5>Adresse & Résidence</h5>
+          </div>
+          <button (click)="openEditAddressInfoModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
-          <div class="info-pair"><span class="info-key">Adresse à Dakar</span><span
-            class="info-value">{{ addressInfo.addressInDakar }}</span></div>
-          <div class="info-pair"><span class="info-key">Adresse au Campus</span><span
-            class="info-value">{{ addressInfo.addressToCampus }}</span></div>
+          <div class="info-pair">
+            <span class="info-key">Adresse à Dakar</span>
+            <span class="info-value">{{ addressInfo.addressInDakar || 'Non renseignée' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Adresse au Campus</span>
+            <span class="info-value">{{ addressInfo.addressToCampus || 'Non renseignée' }}</span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Bourse Card -->
-      <div *ngIf="member.bourse as bourse" class="permanent-info-card">
+      <!-- BOURSE CARD -->
+      <section *ngIf="member.bourse as bourse" class="permanent-info-card">
         <div class="card-header">
-          <h5>Bourse</h5>
-          <button (click)="openEditBourseInfoModal()" class="btn-modify-card">Modifier</button>
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-amber-subtle text-amber">
+              <i class="bi bi-award-fill"></i>
+            </div>
+            <h5>Bourse & Aides</h5>
+          </div>
+          <button (click)="openEditBourseInfoModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div *ngIf="bourse.id" class="card-body info-grid">
-          <div class="info-pair"><span class="info-key">Libellé</span><span
-            class="info-value">{{ bourse.libelle }}</span></div>
-          <div class="info-pair"><span class="info-key">Montant</span><span
-            class="info-value">{{ bourse.montant | currency:'XOF':'symbol':'1.0-0' }}</span></div>
+          <div class="info-pair">
+            <span class="info-key">Libellé de la bourse</span>
+            <span class="info-value font-weight-bold">{{ bourse.libelle }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Montant mensuel</span>
+            <span class="info-value text-teal font-weight-bold">{{ bourse.montant | currency:'XOF':'symbol':'1.0-0' }}</span>
+          </div>
         </div>
-      </div>
+      </section>
 
-      <!-- Dynamic Attributes Card -->
-      <div *ngIf="hasDynamicAttributes(member)" class="permanent-info-card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-          <h5>Informations Complémentaires & Réponses</h5>
-          <button (click)="openEditFullMemberModal()" class="btn-modify-card">Modifier</button>
+      <!-- DYNAMIC ATTRIBUTES CARD -->
+      <section *ngIf="hasDynamicAttributes(member)" class="permanent-info-card">
+        <div class="card-header">
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-blue-subtle text-blue">
+              <i class="bi bi-sliders2"></i>
+            </div>
+            <h5>Informations Complémentaires & Formulaire</h5>
+          </div>
+          <button (click)="openEditFullMemberModal()" class="btn-modify-card">
+            <i class="bi bi-pencil"></i> Modifier
+          </button>
         </div>
         <div class="card-body info-grid">
           <div *ngFor="let item of getDynamicAttributeEntries(member)" class="info-pair">
@@ -266,62 +434,59 @@
             <span class="info-value fw-semibold text-teal">{{ item.value }}</span>
           </div>
         </div>
-      </div>
-    </div>
+      </section>
+    </main>
 
-    <!-- Right Column: History & Status (Scrollable) -->
-    <div class="sidebar-col">
+    <!-- RIGHT COLUMN: SUBSCRIPTIONS & TIMELINE (Sidebar on Desktop, Tabs on Mobile) -->
+    <aside class="sidebar-col" [class.d-none-mobile]="activeMobileTab === 'profile'">
       <div class="sidebar-card">
         <div class="sidebar-header">
-          <h4 *ngIf="!isSidebarCollapsed">Inscriptions & Cotisations</h4>
+          <h4 *ngIf="!isSidebarCollapsed" class="d-flex align-items-center gap-2">
+            <i class="bi bi-wallet2 text-teal"></i> Inscriptions & Cotisations
+          </h4>
           <button (click)="toggleSidebar()" [title]="isSidebarCollapsed ? 'Agrandir' : 'Réduire'"
-                  class="btn-icon btn-toggle-sidebar">
+                  class="btn-icon btn-toggle-sidebar d-none d-lg-flex">
             <i [ngClass]="isSidebarCollapsed ? 'bi-chevron-double-left' : 'bi-chevron-double-right'" class="bi"></i>
           </button>
         </div>
+
         <div *ngIf="!isSidebarCollapsed" class="sidebar-content">
 
-          <!-- Registration Status Card -->
-          <div *ngIf="registrationOverview" class="registration-status-card">
+          <!-- 1. REGISTRATION STATUS CARD -->
+          <div *ngIf="(activeMobileTab === 'contributions' || activeMobileTab === 'timeline' || activeMobileTab === 'profile') && registrationOverview"
+               class="registration-status-card">
             <div class="card-header">
               <h5>Statut d'Inscription Actuel</h5>
             </div>
 
             <div class="card-body">
-
               <div *ngIf="registrationOverview.nextRegistrablePhase; else upToDate" class="status-section">
-
-                <!-- Ligne 1 : icône + texte -->
-                <div class="status-text d-flex align-items-start gap-2">
-                  <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
-
+                <!-- Action required alert -->
+                <div class="status-text alert-box alert-warning-box">
+                  <i class="bi bi-exclamation-triangle-fill text-warning fs-3"></i>
                   <div class="d-flex flex-column">
                     <strong class="text-dark">Inscription requise</strong>
-                    <small class="text-muted"> Dernière inscription :
-                      <span class="fw-semibold"> {{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}
-                      </span>
+                    <small class="text-muted">
+                      Dernière inscription : <span class="fw-semibold">{{ registrationOverview.latestRegistration?.mandatName || 'Aucune' }}</span>
                     </small>
                   </div>
                 </div>
 
-                <!-- Ligne 2 : bouton -->
                 <button (click)="toggleReregisterModal(registrationOverview.nextRegistrablePhase)"
-                        class="btn btn-primary btn-outline-primary">
-                  Inscrire à {{ registrationOverview.nextRegistrablePhase.nom }}
+                        class="btn-action-primary w-100">
+                  <i class="bi bi-person-plus-fill me-1"></i> Inscrire à {{ registrationOverview.nextRegistrablePhase.nom }}
                 </button>
-
               </div>
 
               <ng-template #upToDate>
                 <div class="status-section d-flex flex-column gap-2">
-                  <div class="status-text d-flex align-items-start gap-2">
-                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                  <div class="status-text alert-box alert-success-box">
+                    <i class="bi bi-check-circle-fill text-success fs-3"></i>
                     <div>
-                      <strong>Membre à jour</strong>
-                      <div>
-                        <span class="text-muted small">Inscrit pour : </span>
-                        <span class="fw-semibold">{{ registrationOverview.latestRegistration?.mandatName }}</span>
-                        <span class="badge bg-teal-subtle text-teal ms-2 px-2 py-0 border">
+                      <strong class="text-dark">Membre à jour</strong>
+                      <div class="small text-muted mt-1">
+                        Inscrit pour : <span class="fw-semibold text-dark">{{ registrationOverview.latestRegistration?.mandatName }}</span>
+                        <span class="badge bg-teal-subtle text-teal ms-1 border">
                           {{ registrationOverview.latestRegistration?.registrationType === 'INITIAL' ? '1ère Inscription' : 'Réinscription' }}
                         </span>
                       </div>
@@ -329,29 +494,31 @@
                   </div>
 
                   <!-- Fee Status Row -->
-                  <div class="d-flex align-items-center justify-content-between p-2 rounded bg-light border mt-1" *ngIf="registrationOverview.latestRegistration as reg">
-                    <div class="d-flex align-items-center gap-2">
-                      <i class="bi bi-wallet2 text-teal"></i>
-                      <span class="small fw-semibold">Frais d'adhésion :</span>
-                      <span *ngIf="reg.statusPayment" class="badge bg-success text-white">
-                        Réglés ({{ (reg.amount || 2000) | currency:'XOF':'symbol':'1.0-0' }})
-                      </span>
-                      <span *ngIf="!reg.statusPayment" class="badge bg-warning-subtle text-warning-emphasis border">
-                        En attente ({{ (reg.registrationType === 'INITIAL' ? 2000 : 1000) | currency:'XOF':'symbol':'1.0-0' }})
-                      </span>
+                  <div class="fee-status-dock" *ngIf="registrationOverview.latestRegistration as reg">
+                    <div class="fee-info-side">
+                      <i class="bi bi-wallet2 text-teal fs-5"></i>
+                      <div>
+                        <span class="small fw-semibold d-block">Frais d'adhésion</span>
+                        <span *ngIf="reg.statusPayment" class="status-tag tag-paid">
+                          Réglés ({{ (reg.amount || 2000) | currency:'XOF':'symbol':'1.0-0' }})
+                        </span>
+                        <span *ngIf="!reg.statusPayment" class="status-tag tag-pending">
+                          En attente ({{ (reg.registrationType === 'INITIAL' ? 2000 : 1000) | currency:'XOF':'symbol':'1.0-0' }})
+                        </span>
+                      </div>
                     </div>
 
-                    <div class="d-flex gap-1">
+                    <div class="fee-actions-side">
                       <button *ngIf="!reg.statusPayment"
                               (click)="openPayFeeModal(reg)"
                               type="button"
-                              class="btn btn-sm btn-success px-2 py-1 d-inline-flex align-items-center gap-1">
+                              class="btn-cash-in">
                         <i class="bi bi-cash-stack"></i> Encaisser
                       </button>
                       <button *ngIf="reg.statusPayment"
                               (click)="openReceiptModal(reg)"
                               type="button"
-                              class="btn btn-sm btn-outline-secondary px-2 py-1 d-inline-flex align-items-center gap-1"
+                              class="btn-receipt"
                               title="Consulter la quittance d'adhésion">
                         <i class="bi bi-receipt"></i> Reçu
                       </button>
@@ -359,18 +526,21 @@
                   </div>
                 </div>
               </ng-template>
-
             </div>
           </div>
-          <!-- Subscription Status -->
-          <div class="sidebar-section">
-            <h5>État des Cotisations</h5>
+
+          <!-- 2. SUBSCRIPTION STATUS SECTION -->
+          <div *ngIf="activeMobileTab === 'contributions' || activeMobileTab === 'profile'" class="sidebar-section">
+            <div class="section-title-row">
+              <h5>État des Cotisations</h5>
+            </div>
+
             <div class="cotisation-header">
               <div class="year-selector-group">
-                <label for="subscription-phase">Phase :</label>
+                <label for="subscription-phase">Phase active :</label>
                 <select
                   (change)="onPhaseChange($event)"
-                  class="form-select-sm w-100"
+                  class="form-select-sm w-100 form-select-phase"
                   id="subscription-phase"
                 >
                   <option
@@ -378,55 +548,60 @@
                     [value]="phase.id"
                     [selected]="phase.id === selectedPhaseId"
                   >
-                    {{ phase.nom }} —
-                    du {{ formatArrayDate(phase.dateDebut) }}
-                    au {{ formatArrayDate(phase.dateFin) }}
+                    {{ phase.nom }} ({{ formatArrayDate(phase.dateDebut) }} - {{ formatArrayDate(phase.dateFin) }})
                   </option>
                 </select>
-
               </div>
             </div>
+
             <div *ngIf="contributionSummary" class="cotisation-summary">
               <div class="summary-item">
-                <span class="summary-value">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
+                <span class="summary-value text-teal">{{ contributionSummary.totalPaid | currency:'XOF':'symbol':'1.0-0' }}</span>
                 <span class="summary-label">Total Payé</span>
               </div>
               <div class="summary-item">
-                <span class="summary-value">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
+                <span class="summary-value text-danger">{{ contributionSummary.totalDue | currency:'XOF':'symbol':'1.0-0' }}</span>
                 <span class="summary-label">Restant Dû</span>
               </div>
               <div class="summary-item">
-                <span class="summary-value">{{ contributionSummary.completionRate }}</span>
+                <span class="summary-value text-dark">{{ contributionSummary.completionRate }}</span>
                 <span class="summary-label">Complétion</span>
               </div>
             </div>
 
+            <!-- Calendar component -->
             <app-contribution-calendar
               (monthClicked)="handleMonthClick($event)"
               [calendar]="contributionData?.calendrier || []"
               [selectedMonths]="selectedContributions">
             </app-contribution-calendar>
 
+            <!-- Multi-Select payment floating / inline dock -->
             <div *ngIf="selectedContributions.length > 0" class="multi-select-bar">
               <div class="selection-info">
                 <strong>{{ selectedContributions.length }} mois sélectionnés</strong>
-                <span>Total: {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
+                <span class="selection-amount">Total : {{ selectedTotalAmount | currency:'XOF':'symbol':'1.0-0' }}</span>
               </div>
-              <button (click)="openRecordPaymentModal()" class="btn btn-primary">Enregistrer le paiement</button>
+              <button (click)="openRecordPaymentModal()" class="btn-record-payment">
+                <i class="bi bi-credit-card-2-front-fill me-1"></i> Encaisser
+              </button>
             </div>
+
             <div class="cotisation-actions">
-              <button (click)="sendContributionReminder()" class="btn btn-sm btn-secondary">
-                <i class="bi bi-bell"></i> Envoyer un rappel
+              <button (click)="sendContributionReminder()" class="btn-reminder">
+                <i class="bi bi-bell"></i> Envoyer un rappel de cotisation
               </button>
             </div>
           </div>
 
+          <hr class="sidebar-divider" *ngIf="activeMobileTab === 'profile'">
 
-          <hr class="sidebar-divider">
+          <!-- 3. REGISTRATION TIMELINE SECTION -->
+          <div *ngIf="activeMobileTab === 'timeline' || activeMobileTab === 'profile'" class="sidebar-section">
+            <div class="section-title-row">
+              <h5>Historique des Inscriptions</h5>
+            </div>
 
-          <!-- Registration Timeline -->
-          <div class="sidebar-section">
-            <h5>Historique des Inscriptions</h5>
             <div *ngIf="timeline$ | async as timeline; else loadingTimeline" class="registration-timeline">
               <div *ngFor="let mandateItem of timeline" class="timeline-mandate-group">
                 <h6 class="mandate-title">{{ mandateItem.mandat.nom }}</h6>
@@ -441,11 +616,12 @@
                       }" class="bi phase-icon"></i>
                       <span class="phase-name">{{ phaseItem.phase.nom }}</span>
                     </div>
+
                     <div class="phase-status">
                       <ng-container [ngSwitch]="phaseItem.status">
-                        <div *ngSwitchCase="'REGISTERED'" class="d-flex align-items-center gap-1">
+                        <div *ngSwitchCase="'REGISTERED'" class="d-flex align-items-center gap-1 flex-wrap">
                           <span class="badge bg-success-light">Inscrit</span>
-                          <span *ngIf="phaseItem.registration?.statusPayment" class="badge bg-success-subtle text-success border">Frais Payés</span>
+                          <span *ngIf="phaseItem.registration?.statusPayment" class="badge bg-success-subtle text-success border">Frais Réglés</span>
                           <span *ngIf="!phaseItem.registration?.statusPayment" class="badge bg-warning-subtle text-warning-emphasis border">Frais Impayés</span>
                         </div>
                         <span *ngSwitchCase="'MISSED_OPEN'" class="badge bg-warning-light">Action requise</span>
@@ -453,17 +629,18 @@
                         <span *ngSwitchCase="'PENDING'" class="badge bg-info-light">À venir</span>
                       </ng-container>
                     </div>
+
                     <div class="phase-actions">
                       <button (click)="toggleReregisterModal(phaseItem.phase)" *ngIf="phaseItem.isRegistrable"
                               class="btn btn-sm btn-outline-primary">
                         S'inscrire
                       </button>
                       <button (click)="openPayFeeModal(phaseItem.registration)" *ngIf="phaseItem.registration && !phaseItem.registration.statusPayment"
-                              class="btn btn-sm btn-success py-0 px-2" title="Encaisser les frais d'adhésion">
+                              class="btn btn-sm btn-success py-1 px-2" title="Encaisser les frais d'adhésion">
                         <i class="bi bi-cash"></i>
                       </button>
                       <button (click)="openReceiptModal(phaseItem.registration)" *ngIf="phaseItem.registration && phaseItem.registration.statusPayment"
-                              class="btn btn-sm btn-outline-secondary py-0 px-2" title="Voir le reçu">
+                              class="btn btn-sm btn-outline-secondary py-1 px-2" title="Voir le reçu">
                         <i class="bi bi-receipt"></i>
                       </button>
                     </div>
@@ -472,24 +649,39 @@
               </div>
             </div>
             <ng-template #loadingTimeline>
-              <p>Chargement de l'historique...</p>
+              <div class="d-flex align-items-center gap-2 text-muted small py-3">
+                <span class="spinner-border spinner-border-sm"></span> Chargement de l'historique...
+              </div>
             </ng-template>
           </div>
 
         </div>
       </div>
-    </div>
+    </aside>
+
   </div>
 
 </div>
 
+<!-- LOADING FALLBACK -->
 <ng-template #loading>
-  <p>Loading member details...</p>
+  <div class="d-flex flex-column align-items-center justify-content-center py-5 min-vh-50 text-center">
+    <div class="spinner-border text-teal mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
+      <span class="visually-hidden">Chargement...</span>
+    </div>
+    <h5 class="fw-bold text-dark mb-1">Chargement de la fiche membre...</h5>
+    <p class="text-muted small">Veuillez patienter quelques instants.</p>
+  </div>
 </ng-template>
 
 <ng-template #notFound>
-  <p>Member not found.</p>
+  <div class="text-center py-5">
+    <i class="bi bi-person-x-fill text-muted fs-1 mb-2"></i>
+    <h5 class="text-dark font-weight-bold">Membre introuvable</h5>
+    <button (click)="goBack()" class="btn btn-primary mt-3">Retour à la liste</button>
+  </div>
 </ng-template>
+
 
 <app-reregister-modal (close)="toggleReregisterModal()"
                       (save)="handleSaveRegistration($event)"

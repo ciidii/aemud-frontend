@@ -93,6 +93,9 @@ export class MemberDetailComponent implements OnInit {
   isEditAddressInfoModalOpen = false;
   isEditBourseInfoModalOpen = false;
 
+  // Mobile Segmented Tab state
+  activeMobileTab: 'profile' | 'contributions' | 'timeline' = 'profile';
+
   // Fee payment modal
   isPayFeeModalOpen = false;
   selectedRegistrationForFee: RegistrationModel | null = null;
@@ -132,6 +135,49 @@ export class MemberDetailComponent implements OnInit {
 
   get selectedTotalAmount(): number {
     return this.selectedContributions.reduce((sum, item) => sum + (item.montantDu - item.montantPaye), 0);
+  }
+
+  setActiveMobileTab(tab: 'profile' | 'contributions' | 'timeline'): void {
+    this.activeMobileTab = tab;
+  }
+
+  getInitials(firstname?: string, name?: string): string {
+    const f = (firstname || '').trim().charAt(0);
+    const n = (name || '').trim().charAt(0);
+    return (f + n).toUpperCase() || 'M';
+  }
+
+  getAvatarColor(name?: string): { bg: string, color: string } {
+    const colors = [
+      { bg: '#e0f2fe', color: '#0369a1' }, // Blue
+      { bg: '#fef3c7', color: '#b45309' }, // Amber
+      { bg: '#dcfce7', color: '#15803d' }, // Green
+      { bg: '#f0fdfa', color: '#0f766e' }, // Teal
+      { bg: '#ede9fe', color: '#6d28d9' }, // Purple
+      { bg: '#fee2e2', color: '#b91c1c' }, // Red
+      { bg: '#ffedd5', color: '#c2410c' }  // Orange
+    ];
+    const charCode = (name || 'A').charCodeAt(0);
+    return colors[charCode % colors.length];
+  }
+
+  getStatusBadge(member: MemberDataResponse): { label: string, cssClass: string, icon: string } {
+    if (member.status === 'ALUMNI' || (!member.isStudent && member.academicInfo?.studiesDomain === 'Alumni')) {
+      return { label: 'Alumni / Diplômé', cssClass: 'badge-alumni', icon: 'bi-briefcase-fill' };
+    }
+    if (member.status === 'INACTIVE') {
+      return { label: 'Inactif', cssClass: 'badge-inactive', icon: 'bi-pause-circle-fill' };
+    }
+    return { label: 'Étudiant Actif', cssClass: 'badge-active', icon: 'bi-mortarboard-fill' };
+  }
+
+  getWhatsAppUrl(phone?: string): string {
+    if (!phone) return '#';
+    let clean = phone.replace(/[^0-9]/g, '');
+    if (clean.length === 9 && !clean.startsWith('221')) {
+      clean = '221' + clean;
+    }
+    return `https://wa.me/${clean}`;
   }
 
   ngOnInit(): void {
