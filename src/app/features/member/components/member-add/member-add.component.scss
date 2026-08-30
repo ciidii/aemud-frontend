@@ -1,29 +1,53 @@
+@import 'src/assets/scss/variables';
+@import 'src/assets/scss/typography';
+
 .member-add-page-container {
-  max-width: 1400px;
+  max-width: 1200px;
   margin: 0 auto;
+  padding: $space-4 $space-6 $space-8;
 
-  $color-teal: #278F8F;
-
-  .text-teal {
-    color: $color-teal !important;
+  @media (max-width: 768px) {
+    padding: $space-3 $space-3 $space-6;
   }
 
-  .back-link {
-    font-size: 1.35rem;
-    font-weight: 500;
-    transition: color 0.2s ease;
+  .text-teal {
+    color: $primary-500 !important;
+  }
+
+  .back-nav-btn {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: $color-text-secondary;
+    text-decoration: none;
+    transition: color 0.18s ease;
 
     &:hover {
-      color: $color-teal !important;
+      color: $primary-500;
     }
   }
 
   .page-title {
-    font-size: 2.2rem;
-    color: #1e293b;
+    font-size: 2.4rem;
+    font-weight: $font-weight-bold;
+    color: $color-text-primary;
+    letter-spacing: -0.01em;
+
+    @media (max-width: 576px) {
+      font-size: 1.9rem;
+    }
   }
 
   .page-subtitle {
     font-size: 1.4rem;
+    color: $color-text-secondary;
+    line-height: 1.45;
+
+    @media (max-width: 576px) {
+      font-size: 1.25rem;
+    }
   }
-}
+
+  .loading-card {
+    border-color: $color-border-default !important;
+  }
+}

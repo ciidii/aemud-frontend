@@ -1,41 +1,42 @@
-<div class="census-container py-5">
-  <div class="container">
+<div class="census-container">
+  <div class="census-inner-wrapper">
 
-    <!-- Spinner de Chargement Initial -->
-    <div *ngIf="isLoading" class="text-center py-5">
-      <div class="spinner-border text-teal" style="width: 3.5rem; height: 3.5rem;" role="status">
+    <!-- Loading Spinner Initial -->
+    <div *ngIf="isLoading" class="census-loading-state text-center py-5">
+      <div class="spinner-border text-teal mb-3" style="width: 3.5rem; height: 3.5rem;" role="status">
         <span class="visually-hidden">Vérification de l'état de la campagne...</span>
       </div>
-      <p class="text-muted mt-3">Chargement du portail de recensement...</p>
+      <h5 class="fw-bold text-dark mb-1">Portail d'Adhésion & Recensement</h5>
+      <p class="text-muted small">Chargement des données de la campagne...</p>
     </div>
 
     <!-- ÉCRAN DE CAMPAGNE FERMÉE / DÉSACTIVÉE PAR LE SG -->
-    <div *ngIf="!isLoading && censusStatus && !censusStatus.isOpen" class="row justify-content-center animate-fade-in">
-      <div class="col-lg-8 col-xl-7">
-        <div class="card shadow-sm border-0 rounded-4 p-5 text-center bg-white">
-          <div class="icon-circle bg-danger-subtle text-danger mx-auto mb-4">
-            <i class="bi bi-door-closed-fill" style="font-size: 3.5rem;"></i>
+    <div *ngIf="!isLoading && censusStatus && !censusStatus.isOpen" class="row justify-content-center animate-fade-in py-4">
+      <div class="col-lg-8 col-xl-7 col-12">
+        <div class="card closed-campaign-card shadow-sm border-0 rounded-4 p-4 p-md-5 text-center bg-white">
+          <div class="icon-circle bg-danger-subtle text-danger mx-auto mb-3">
+            <i class="bi bi-door-closed-fill"></i>
           </div>
 
           <div class="badge bg-danger-subtle text-danger px-3 py-2 rounded-pill mb-3 fw-bold border border-danger-subtle d-inline-block mx-auto">
             CAMPAGNE CLÔTURÉE
           </div>
 
-          <h2 class="fw-bold text-dark mb-3">Recensement Public Non Accessible</h2>
+          <h2 class="fw-bold text-dark mb-2">Recensement Non Accessible</h2>
           
-          <div class="alert alert-light border p-4 mb-4 rounded-3 text-start">
+          <div class="alert alert-light border p-3 p-md-4 mb-4 rounded-3 text-start">
             <p class="text-dark mb-0 fs-6">
               {{ censusStatus.message }}
             </p>
           </div>
 
-          <div class="d-flex justify-content-center gap-2 mb-4 text-muted small">
-            <span *ngIf="censusStatus.activeMandatName"><i class="bi bi-calendar-event me-1"></i> {{ censusStatus.activeMandatName }}</span>
-            <span *ngIf="censusStatus.activePhaseName">• <i class="bi bi-flag me-1"></i> {{ censusStatus.activePhaseName }}</span>
+          <div class="d-flex justify-content-center gap-3 mb-4 text-muted small flex-wrap">
+            <span *ngIf="censusStatus.activeMandatName"><i class="bi bi-calendar-event me-1 text-teal"></i> {{ censusStatus.activeMandatName }}</span>
+            <span *ngIf="censusStatus.activePhaseName">• <i class="bi bi-flag me-1 text-teal"></i> {{ censusStatus.activePhaseName }}</span>
           </div>
 
           <div class="d-flex justify-content-center gap-3 flex-wrap">
-            <button (click)="goToLogin()" type="button" class="btn btn-teal-primary btn-lg px-4">
+            <button (click)="goToLogin()" type="button" class="btn btn-teal-primary btn-lg px-4 w-100 w-sm-auto">
               <i class="bi bi-box-arrow-in-right me-2"></i> Accéder à l'Espace Membre
             </button>
           </div>
@@ -44,40 +45,47 @@
     </div>
 
     <!-- SI LA CAMPAGNE EST OUVERTE : PARCOURS NORMAL -->
-    <div *ngIf="!isLoading && (!censusStatus || censusStatus.isOpen)">
+    <div *ngIf="!isLoading && (!censusStatus || censusStatus.isOpen)" class="census-active-flow">
 
       <!-- En-tête officiel AEMUD -->
-      <div class="text-center mb-4 header-intro">
-        <div class="badge bg-success-subtle text-success px-3 py-2 rounded-pill mb-3 fw-bold border border-success-subtle">
-          CAMPAGNE OFFICIELLE D'ADHÉSION & RECENSEMENT AEMUD
+      <header class="census-hero-header text-center mb-4">
+        <div class="campaign-badge-pill mb-3">
+          <i class="bi bi-shield-fill-check me-1"></i>
+          <span>CAMPAGNE OFFICIELLE D'ADHÉSION & RECENSEMENT</span>
         </div>
-        <h1 class="display-5 fw-bold text-dark mb-2">Adhésion & Grand Recensement</h1>
-        <p class="lead text-muted mx-auto" style="max-width: 720px;">
-          Étudiants actuels, nouveaux bacheliers et anciens diplômés : rejoignez l'AEMUD et activez votre statut pour le mandat en cours.
+        <h1 class="census-main-title">Adhésion & Grand Recensement</h1>
+        <p class="census-main-subtitle mx-auto">
+          Étudiants actuels, nouveaux bacheliers et anciens diplômés : rejoignez l'AEMUD et officialisez votre statut pour le mandat en cours.
         </p>
 
-        <!-- Stepper Indicator -->
+        <!-- Stepper Indicator Responsive -->
         <div class="stepper-wrapper my-4">
           <div class="step-item" [class.active]="currentStep === 'FORM'" [class.completed]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'">
-            <div class="step-circle">1</div>
+            <div class="step-circle">
+              <i *ngIf="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'" class="bi bi-check-lg"></i>
+              <span *ngIf="currentStep === 'FORM'">1</span>
+            </div>
             <span class="step-label">Informations</span>
           </div>
           <div class="step-line" [class.completed]="currentStep === 'PAYMENT' || currentStep === 'SUCCESS'"></div>
           <div class="step-item" [class.active]="currentStep === 'PAYMENT'" [class.completed]="currentStep === 'SUCCESS'">
-            <div class="step-circle">2</div>
+            <div class="step-circle">
+              <i *ngIf="currentStep === 'SUCCESS'" class="bi bi-check-lg"></i>
+              <span *ngIf="currentStep !== 'SUCCESS'">2</span>
+            </div>
             <span class="step-label">Frais d'Adhésion</span>
           </div>
           <div class="step-line" [class.completed]="currentStep === 'SUCCESS'"></div>
           <div class="step-item" [class.active]="currentStep === 'SUCCESS'" [class.completed]="currentStep === 'SUCCESS'">
             <div class="step-circle">3</div>
-            <span class="step-label">Confirmation & Reçu</span>
+            <span class="step-label">Quittance</span>
           </div>
         </div>
-      </div>
+      </header>
 
       <!-- ÉTAPE 1 : Formulaire Dynamique -->
-      <div *ngIf="currentStep === 'FORM' && schema" class="row justify-content-center">
-        <div class="col-lg-9 col-xl-8">
+      <div *ngIf="currentStep === 'FORM' && schema" class="row justify-content-center animate-fade-in">
+        <div class="col-lg-9 col-xl-8 col-12">
           <app-dynamic-form
             [schema]="schema"
             [submitButtonText]="'Continuer vers le règlement de l\'adhésion'"
@@ -89,18 +97,18 @@
 
       <!-- ÉTAPE 2 : Règlement des Frais d'Adhésion (Wave / Orange Money / Espèces) -->
       <div *ngIf="currentStep === 'PAYMENT'" class="row justify-content-center animate-fade-in">
-        <div class="col-lg-8 col-xl-7">
-          <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 bg-white">
+        <div class="col-lg-8 col-xl-7 col-12">
+          <div class="card payment-step-card shadow-sm border-0 rounded-4 p-3 p-md-5 bg-white">
             <div class="text-center mb-4">
               <div class="icon-circle bg-teal-subtle text-teal mx-auto mb-3">
-                <i class="bi bi-wallet2" style="font-size: 2.4rem;"></i>
+                <i class="bi bi-wallet2"></i>
               </div>
               <h3 class="fw-bold text-dark mb-1">Règlement des Frais d'Adhésion</h3>
               <p class="text-muted small">
                 Adhérent : <strong>{{ submittedMember?.firstname }} {{ submittedMember?.name }}</strong>
               </p>
               <div class="amount-badge py-2 px-4 rounded-pill d-inline-block mt-2">
-                Montant dû : <strong class="fs-4">{{ feeAmount | currency:'XOF':'symbol':'1.0-0' }}</strong>
+                Montant à régler : <strong class="fs-4">{{ feeAmount | currency:'XOF':'symbol':'1.0-0' }}</strong>
               </div>
             </div>
 
@@ -117,15 +125,18 @@
                     </div>
                     <div>
                       <h6 class="fw-bold text-dark mb-0">Wave Sénégal</h6>
-                      <small class="text-muted">Paiement instantané sans frais</small>
+                      <small class="text-muted">Paiement direct sécurisé et instantané</small>
                     </div>
                   </div>
-                  <input type="radio" name="paymentOption" [checked]="selectedPaymentMethod === 'WAVE_MONEY'">
+                  <div class="custom-radio-circle" [class.checked]="selectedPaymentMethod === 'WAVE_MONEY'"></div>
                 </div>
 
-                <div *ngIf="selectedPaymentMethod === 'WAVE_MONEY'" class="payment-extra-info mt-3 p-3 bg-light rounded-3">
-                  <small class="text-muted d-block mb-1">Scannez le QR Code ou validez le transfert vers le compte officiel AEMUD :</small>
-                  <div class="fw-bold text-dark fs-6"><i class="bi bi-phone me-1 text-primary"></i> {{ wavePaymentPhone }} (AEMUD Trésorerie)</div>
+                <div *ngIf="selectedPaymentMethod === 'WAVE_MONEY'" class="payment-extra-info mt-3 p-3 rounded-3 animate-fade-in">
+                  <small class="text-muted d-block mb-1">Effectuez le transfert vers le numéro officiel de la Trésorerie AEMUD :</small>
+                  <div class="fw-bold text-dark fs-6 d-flex align-items-center gap-2">
+                    <i class="bi bi-phone text-teal"></i> {{ wavePaymentPhone }}
+                    <span class="badge bg-teal-subtle text-teal border">Compte Pro</span>
+                  </div>
                 </div>
               </div>
 
@@ -140,15 +151,15 @@
                     </div>
                     <div>
                       <h6 class="fw-bold text-dark mb-0">Orange Money</h6>
-                      <small class="text-muted">Paiement direct par notification USSD</small>
+                      <small class="text-muted">Validation par code USSD (#144#)</small>
                     </div>
                   </div>
-                  <input type="radio" name="paymentOption" [checked]="selectedPaymentMethod === 'ORANGE_MONEY'">
+                  <div class="custom-radio-circle" [class.checked]="selectedPaymentMethod === 'ORANGE_MONEY'"></div>
                 </div>
 
-                <div *ngIf="selectedPaymentMethod === 'ORANGE_MONEY'" class="payment-extra-info mt-3 p-3 bg-light rounded-3">
-                  <label class="form-label small fw-semibold text-dark mb-1">Numéro Orange Money :</label>
-                  <input type="tel" class="form-control form-control-sm" [(ngModel)]="omPhoneNumber" placeholder="77 xxx xx xx">
+                <div *ngIf="selectedPaymentMethod === 'ORANGE_MONEY'" class="payment-extra-info mt-3 p-3 rounded-3 animate-fade-in">
+                  <label class="form-label small fw-semibold text-dark mb-1">Numéro Orange Money de l'adhérent :</label>
+                  <input type="tel" class="form-control modern-phone-input" [(ngModel)]="omPhoneNumber" placeholder="77 xxx xx xx">
                 </div>
               </div>
 
@@ -163,10 +174,10 @@
                     </div>
                     <div>
                       <h6 class="fw-bold text-dark mb-0">Payer en espèces au Campus</h6>
-                      <small class="text-muted">Règlement différé auprès de la trésorerie</small>
+                      <small class="text-muted">Règlement différé auprès de la permanence</small>
                     </div>
                   </div>
-                  <input type="radio" name="paymentOption" [checked]="selectedPaymentMethod === 'CASH'">
+                  <div class="custom-radio-circle" [class.checked]="selectedPaymentMethod === 'CASH'"></div>
                 </div>
               </div>
             </div>
@@ -177,10 +188,10 @@
                       (click)="confirmOnlinePayment()"
                       [disabled]="isProcessingPayment"
                       type="button"
-                      class="btn btn-teal-primary btn-lg w-100 py-3 fw-bold">
+                      class="btn btn-teal-primary btn-lg w-100 py-3 fw-bold shadow-sm">
                 <span *ngIf="isProcessingPayment" class="spinner-border spinner-border-sm me-2"></span>
                 <i *ngIf="!isProcessingPayment" class="bi bi-shield-check me-2"></i>
-                Valider le Paiement de {{ feeAmount | currency:'XOF':'symbol':'1.0-0' }}
+                Confirmer le Paiement ({{ feeAmount | currency:'XOF':'symbol':'1.0-0' }})
               </button>
 
               <button *ngIf="selectedPaymentMethod === 'CASH'"
@@ -188,7 +199,7 @@
                       type="button"
                       class="btn btn-outline-secondary btn-lg w-100 py-3 fw-semibold">
                 <i class="bi bi-arrow-right-circle me-2"></i>
-                Finaliser et payer plus tard en espèces
+                Finaliser et régler en espèces plus tard
               </button>
             </div>
           </div>
@@ -197,15 +208,15 @@
 
       <!-- ÉTAPE 3 : Succès & Quittance Officielle -->
       <div *ngIf="currentStep === 'SUCCESS'" class="row justify-content-center animate-fade-in">
-        <div class="col-lg-8 col-xl-7">
-          <div class="card shadow-sm border-0 rounded-4 p-4 p-md-5 text-center bg-white">
+        <div class="col-lg-8 col-xl-7 col-12">
+          <div class="card success-step-card shadow-sm border-0 rounded-4 p-4 p-md-5 text-center bg-white">
             <div class="icon-circle bg-success-subtle text-success mx-auto mb-3">
-              <i class="bi bi-check-circle-fill" style="font-size: 3rem;"></i>
+              <i class="bi bi-check-circle-fill"></i>
             </div>
 
             <h2 class="fw-bold text-dark mb-2">Adhésion Enregistrée !</h2>
             <p class="text-muted mb-4">
-              Félicitations <strong>{{ submittedMember?.firstname }} {{ submittedMember?.name }}</strong>, vous êtes officiellement enregistré(e) auprès de l'AEMUD.
+              Félicitations <strong>{{ submittedMember?.firstname }} {{ submittedMember?.name }}</strong>, votre inscription auprès de l'AEMUD est confirmée.
             </p>
 
             <!-- Si Quittance de Paiement Réglé en Ligne -->
@@ -216,7 +227,7 @@
                   <small class="text-muted">Quittance Officielle d'Adhésion</small>
                 </div>
                 <div class="text-end">
-                  <span class="badge bg-success text-white px-2 py-1">Payé en ligne</span>
+                  <span class="badge bg-success text-white px-2 py-1">Payé / Enregistré</span>
                   <div class="small fw-bold text-dark mt-1">{{ receipt.receiptNumber }}</div>
                 </div>
               </div>
@@ -232,7 +243,7 @@
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="text-muted">Mode de règlement :</span>
-                  <span class="badge bg-secondary-subtle text-secondary border">{{ receipt.paymentMethod === 'WAVE_MONEY' ? 'Wave' : 'Orange Money' }}</span>
+                  <span class="badge bg-secondary-subtle text-secondary border">{{ receipt.paymentMethod === 'WAVE_MONEY' ? 'Wave' : receipt.paymentMethod === 'ORANGE_MONEY' ? 'Orange Money' : 'Espèces' }}</span>
                 </div>
                 <div class="d-flex justify-content-between">
                   <span class="text-muted">Date de délivrance :</span>
@@ -256,10 +267,10 @@
 
             <!-- Actions Finales -->
             <div class="d-flex justify-content-center gap-3 flex-wrap">
-              <button *ngIf="receipt" (click)="printReceipt()" type="button" class="btn btn-outline-secondary btn-lg px-4">
+              <button *ngIf="receipt" (click)="printReceipt()" type="button" class="btn btn-outline-secondary btn-lg px-4 w-100 w-sm-auto">
                 <i class="bi bi-printer me-2"></i> Imprimer le Reçu
               </button>
-              <button (click)="goToLogin()" type="button" class="btn btn-teal-primary btn-lg px-4">
+              <button (click)="goToLogin()" type="button" class="btn btn-teal-primary btn-lg px-4 w-100 w-sm-auto">
                 <i class="bi bi-box-arrow-in-right me-2"></i> Accéder à l'Espace Membre
               </button>
             </div>
@@ -271,3 +282,4 @@
 
   </div>
 </div>
+
