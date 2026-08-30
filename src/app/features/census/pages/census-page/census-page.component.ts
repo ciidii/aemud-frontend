@@ -27,6 +27,13 @@ export interface CensusReceipt {
   statusPayment: boolean;
 }
 
+export interface CensusStatus {
+  isOpen: boolean;
+  message: string;
+  activeMandatName: string;
+  activePhaseName: string;
+}
+
 @Component({
   selector: 'app-census-page',
   standalone: true,
@@ -40,11 +47,14 @@ export class CensusPageComponent implements OnInit {
   isSubmitting: boolean = false;
   currentStep: CensusStep = 'FORM';
 
+  censusStatus: CensusStatus | null = null;
+
   submittedMember: any = null;
   selectedPaymentMethod: 'WAVE_MONEY' | 'ORANGE_MONEY' | 'CASH' = 'WAVE_MONEY';
   omPhoneNumber: string = '';
   isProcessingPayment: boolean = false;
   feeAmount: number = 2000;
+  wavePaymentPhone: string = '+221 77 123 45 67';
   receipt: CensusReceipt | null = null;
   paidLater: boolean = false;
 
@@ -57,11 +67,30 @@ export class CensusPageComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.loadSchemaAndData();
+    this.checkStatusAndLoadData();
+  }
+
+  private checkStatusAndLoadData(): void {
+    this.isLoading = true;
+    const statusUrl = `${environment.API_URL}/census/status`;
+
+    this.http.get<ResponseEntityApi<CensusStatus>>(statusUrl).subscribe({
+      next: (res) => {
+        this.censusStatus = res.data;
+        if (this.censusStatus && !this.censusStatus.isOpen) {
+          this.isLoading = false;
+          return;
+        }
+        this.loadSchemaAndData();
+      },
+      error: () => {
+        // En cas d'erreur de récupération du statut, on tente le chargement classique
+        this.loadSchemaAndData();
+      }
+    });
   }
 
   private loadSchemaAndData(): void {
-    this.isLoading = true;
     this.formSchemaService.getFormSchema().subscribe({
       next: schema => {
         this.bourseService.getAllBourses().subscribe({

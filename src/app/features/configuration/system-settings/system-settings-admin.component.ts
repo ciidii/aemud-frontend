@@ -21,6 +21,8 @@ export class SystemSettingsAdminComponent implements OnInit {
   wavePaymentPhone: string = '+221 77 123 45 67';
   orangeMoneyPhone: string = '+221 78 123 45 67';
   smsCostPerUnit: number = 20;
+  censusPublicAccessEnabled: boolean = true;
+  censusClosedMessage: string = "La campagne officielle d'adhésion et de recensement est actuellement clôturée. Veuillez contacter le bureau de l'AEMUD pour toute demande.";
 
   private allSettings: SystemSettingModel[] = [];
 
@@ -67,6 +69,12 @@ export class SystemSettingsAdminComponent implements OnInit {
         case 'SMS_COST_PER_UNIT':
           this.smsCostPerUnit = parseFloat(s.value) || 20;
           break;
+        case 'CENSUS_PUBLIC_ACCESS_ENABLED':
+          this.censusPublicAccessEnabled = s.value !== 'false';
+          break;
+        case 'CENSUS_CLOSED_MESSAGE':
+          this.censusClosedMessage = s.value || this.censusClosedMessage;
+          break;
       }
     });
   }
@@ -99,6 +107,16 @@ export class SystemSettingsAdminComponent implements OnInit {
         key: 'SMS_COST_PER_UNIT',
         value: this.smsCostPerUnit.toString(),
         description: 'Coût unitaire d\'un SMS Orange en FCFA.'
+      },
+      {
+        key: 'CENSUS_PUBLIC_ACCESS_ENABLED',
+        value: this.censusPublicAccessEnabled.toString(),
+        description: 'Permet d\'activer ou de suspendre l\'accès public au formulaire de recensement et d\'adhésion.'
+      },
+      {
+        key: 'CENSUS_CLOSED_MESSAGE',
+        value: this.censusClosedMessage,
+        description: 'Message d\'information présenté aux utilisateurs lorsque le recensement public est désactivé.'
       }
     ];
 

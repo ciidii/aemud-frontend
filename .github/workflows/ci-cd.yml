@@ -4,25 +4,12 @@ on:
   push:
     branches:
       - main
-      - master
-      - dev
     tags:
       - 'v*.*.*'
   pull_request:
     branches:
       - main
-      - master
-      - dev
   workflow_dispatch:
-    inputs:
-      target_env:
-        description: 'Deploy target environment'
-        required: true
-        default: 'staging'
-        type: choice
-        options:
-          - staging
-          - production
 
 permissions:
   contents: read
@@ -176,10 +163,9 @@ jobs:
         with:
           images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
           tags: |
-            type=ref,event=branch
-            type=ref,event=tag
+            type=raw,value=latest
             type=sha,format=short,prefix=sha-
-            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' }}
+            type=ref,event=tag
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -192,74 +178,46 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Scan Docker image for vulnerabilities
-        uses: aquasecurity/trivy-action@master
-        with:
-          image-ref: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:sha-${{ github.sha }}
-          format: 'table'
-          severity: 'CRITICAL,HIGH'
-          exit-code: '0'
-
   # ============================================================================
-  # 6. Continuous Deployment - Staging
+  # 6. Continuous Deployment - Single Server
   # ============================================================================
-  deploy-staging:
-    name: 🚀 Deploy to Staging
+  deploy:
+    name: 🚀 Deploy to Server
     needs: [docker-build-push]
-    if: github.ref == 'refs/heads/dev' || (github.event_name == 'workflow_dispatch' && github.event.inputs.target_env == 'staging')
+    if: github.ref == 'refs/heads/main' || startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
     runs-on: ubuntu-latest
-    environment:
-      name: staging
-      url: https://stage.aemud.org
     steps:
-      - name: Deploy to Staging Server via SSH
+      - name: Deploy to Server via SSH
         uses: appleboy/ssh-action@v1.0.3
         if: env.SSH_HOST != ''
         env:
-          SSH_HOST: ${{ secrets.STAGING_SSH_HOST }}
+          SSH_HOST: ${{ secrets.SERVER_SSH_HOST }}
         with:
-          host: ${{ secrets.STAGING_SSH_HOST }}
-          username: ${{ secrets.STAGING_SSH_USER }}
-          key: ${{ secrets.STAGING_SSH_KEY }}
-          port: ${{ secrets.STAGING_SSH_PORT || 22 }}
+          host: ${{ secrets.SERVER_SSH_HOST }}
+          username: ${{ secrets.SERVER_SSH_USER }}
+          key: ${{ secrets.SERVER_SSH_KEY }}
+          port: ${{ secrets.SERVER_SSH_PORT || 22 }}
           script: |
-            echo "=== [STAGING] Starting Deployment of AEMUD Frontend ==="
-            cd /opt/aemud/staging
+            echo "=================================================="
+            echo "🌐 [DEPLOY] Starting AEMUD Frontend Deployment"
+            echo "=================================================="
+            DEPLOY_DIR="/opt/aemud/app"
+            mkdir -p "${DEPLOY_DIR}"
+            cd "${DEPLOY_DIR}"
+            
+            # Authentification GHCR
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-            docker-compose pull aemud-frontend
-            docker-compose up -d --remove-orphans aemud-frontend
-            echo "=== Validating Frontend Healthcheck ==="
-            timeout 30s bash -c 'until curl -sSf http://localhost:80; do sleep 3; done' || exit 1
-            echo "=== [STAGING] Frontend Deployment Success ==="
-
-  # ============================================================================
-  # 7. Continuous Deployment - Production
-  # ============================================================================
-  deploy-production:
-    name: 🌟 Deploy to Production
-    needs: [docker-build-push]
-    if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master' || startsWith(github.ref, 'refs/tags/v') || (github.event_name == 'workflow_dispatch' && github.event.inputs.target_env == 'production')
-    runs-on: ubuntu-latest
-    environment:
-      name: production
-      url: https://aemud.org
-    steps:
-      - name: Deploy to Production Server via SSH
-        uses: appleboy/ssh-action@v1.0.3
-        if: env.SSH_HOST != ''
-        env:
-          SSH_HOST: ${{ secrets.PROD_SSH_HOST }}
-        with:
-          host: ${{ secrets.PROD_SSH_HOST }}
-          username: ${{ secrets.PROD_SSH_USER }}
-          key: ${{ secrets.PROD_SSH_KEY }}
-          port: ${{ secrets.PROD_SSH_PORT || 22 }}
-          script: |
-            echo "=== [PRODUCTION] Starting Zero-Downtime Deployment of AEMUD Frontend ==="
-            cd /opt/aemud/production
-            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
-            docker-compose pull aemud-frontend
-            docker-compose up -d --no-deps aemud-frontend
-            echo "=== Validating Production Frontend Healthcheck ==="
-            timeout 30s bash -c 'until curl -sSf http://localhost:80; do sleep 3; done' || exit 1
-            echo "=== [PRODUCTION] Frontend Deployment Completed Successfully ==="
+            
+            # Téléchargement et redémarrage du conteneur Frontend Nginx
+            docker compose -f docker-compose.prod.yml pull aemud-frontend
+            docker compose -f docker-compose.prod.yml up -d --no-deps aemud-frontend
+            
+            # Vérification de disponibilité HTTP
+            echo "⏳ Validation du Healthcheck Frontend..."
+            timeout 30s bash -c 'until curl -sSf http://localhost:80; do sleep 3; done' || {
+              echo "❌ Frontend check failed!"
+              exit 1
+            }
+            
+            docker image prune -f
+            echo "✅ Déploiement du Frontend terminé avec succès !"
