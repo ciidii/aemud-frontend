@@ -1,10 +1,9 @@
 import {Component, inject, OnInit} from '@angular/core';
-import {RouterOutlet} from "@angular/router";
+import {RouterOutlet, RouterLink} from "@angular/router";
 import {SidebarService} from "../../services/sidebar.service";
 import {Observable, switchMap} from "rxjs";
 import {AsyncPipe, NgClass, NgIf} from "@angular/common";
 import {AsideBareComponent} from "../aside-bare/aside-bare.component";
-import {HeaderComponent} from "../header/header.component";
 import {AppStateService} from "../../../core/services/app-state.service";
 import {
   PeriodeMandatHttpService
@@ -17,11 +16,11 @@ import {
   standalone: true,
   imports: [
     RouterOutlet,
+    RouterLink,
     AsyncPipe,
     NgIf,
     NgClass,
-    AsideBareComponent,
-    HeaderComponent
+    AsideBareComponent
   ]
 })
 export class LayoutComponent implements OnInit {
@@ -37,9 +36,14 @@ export class LayoutComponent implements OnInit {
     this.isMobileOpen$ = this.sidebarService.isMobileOpen$;
   }
 
+  openMobileSidebar(): void {
+    this.sidebarService.openMobile();
+  }
+
   closeMobileSidebar(): void {
     this.sidebarService.closeMobile();
   }
+
 
 
   ngOnInit(): void {

@@ -31,7 +31,53 @@
     </button>
   </div>
 
-  <!-- 2. Navigation Scroll Area -->
+  <!-- 2. Mandate Switcher (Relocalisé depuis le Header) -->
+  <div class="mandat-switcher-section" *ngIf="(activeMandat$ | async) as selectedMandat">
+    <!-- Expanded View -->
+    <div class="mandat-switcher-wrapper">
+      <button (click)="toggleMandatDropdown($event)"
+              class="mandat-pill-btn"
+              [class.dropdown-opened]="isMandatDropdownOpen"
+              [title]="'Changer de mandat (Actuel: ' + selectedMandat.nom + ')'">
+        <div class="mandat-pill-left">
+          <div class="mandat-icon-dot">
+            <i class="bi bi-calendar2-check-fill"></i>
+          </div>
+          <div class="mandat-info">
+            <span class="mandat-label">Mandat actif</span>
+            <span class="mandat-name">{{ selectedMandat.nom }}</span>
+          </div>
+        </div>
+        <i class="bi bi-chevron-expand chevron-icon"></i>
+        <span class="tooltip-text">Mandat : {{ selectedMandat.nom }}</span>
+      </button>
+
+      <!-- Floating Dropdown Menu -->
+      <div *ngIf="isMandatDropdownOpen" class="mandat-dropdown-menu shadow-lg">
+        <div class="dropdown-header-title">
+          <i class="bi bi-calendar2-range me-2"></i> Périodes de Mandat
+        </div>
+        <div class="dropdown-list">
+          <button *ngFor="let m of (mandats$ | async)"
+                  (click)="onMandatChange(m)"
+                  [disabled]="getPeriodeStatus(m) === 'FUTURE'"
+                  [class.selected-mandat]="m.id === selectedMandat.id"
+                  class="mandat-menu-item">
+            <i class="bi status-dot" [ngClass]="{
+              'bi-check-circle-fill status-current': m.id === selectedMandat.id,
+              'bi-play-circle-fill status-active': m.id !== selectedMandat.id && getPeriodeStatus(m) === 'CURRENT',
+              'bi-pause-circle-fill status-passed': getPeriodeStatus(m) === 'PASSED',
+              'bi-clock-fill status-future': getPeriodeStatus(m) === 'FUTURE'
+            }"></i>
+            <span class="item-name">{{ m.nom }}</span>
+            <span *ngIf="m.id === selectedMandat.id" class="badge-active">Actif</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Navigation Scroll Area -->
   <nav class="nav-scroll" aria-label="Navigation principale">
 
     <!-- Groupe: Principal -->
@@ -102,6 +148,24 @@
     <div class="nav-group">
       <span class="group-title">Communication</span>
       <ul class="nav-items">
+        <!-- Notification Trigger Item -->
+        <li class="nav-item notification-item-wrapper">
+          <button (click)="toggleNotificationPopover($event)"
+                  class="nav-link notification-link-btn"
+                  [class.active]="isNotificationPopoverOpen"
+                  type="button">
+            <i class="bi bi-bell-fill"></i>
+            <span class="nav-text">Notifications</span>
+            <span class="nav-counter-badge">10</span>
+            <span class="tooltip-text">Notifications (10 non lues)</span>
+          </button>
+
+          <!-- Floating Popover -->
+          <div *ngIf="isNotificationPopoverOpen" class="notification-sidebar-popover shadow-lg">
+            <app-notification-popover></app-notification-popover>
+          </div>
+        </li>
+
         <li class="nav-item">
           <a class="nav-link" routerLink="/notifications/dashboard" routerLinkActive="active" (click)="onNavItemClick()">
             <i class="bi bi-graph-up-arrow"></i>
@@ -163,7 +227,7 @@
 
   </nav>
 
-  <!-- 3. User Footer -->
+  <!-- 4. User Footer -->
   <div class="user-footer">
     <div class="user-card" [title]="userName + ' (' + userRoleLabel + ')'">
       <div class="avatar">{{ userInitials }}</div>
@@ -179,4 +243,5 @@
   </div>
 
 </div>
+
 
