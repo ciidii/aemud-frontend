@@ -209,9 +209,17 @@ jobs:
             # Authentification GHCR
             echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
             
+            # Détection du fichier d'environnement (.env.prod ou .env)
+            ENV_FLAG=""
+            if [ -f ".env.prod" ]; then
+              ENV_FLAG="--env-file .env.prod"
+            elif [ -f ".env" ]; then
+              ENV_FLAG="--env-file .env"
+            fi
+
             # Téléchargement et redémarrage du conteneur Frontend Nginx
-            docker compose -f docker-compose.prod.yml pull aemud-frontend
-            docker compose -f docker-compose.prod.yml up -d --no-deps aemud-frontend
+            docker compose ${ENV_FLAG} -f docker-compose.prod.yml pull aemud-frontend
+            docker compose ${ENV_FLAG} -f docker-compose.prod.yml up -d --no-deps aemud-frontend
             
             # Vérification de disponibilité HTTP
             echo "⏳ Validation du Healthcheck Frontend..."
