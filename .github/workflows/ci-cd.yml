@@ -223,8 +223,9 @@ jobs:
             
             # Vérification de disponibilité HTTP
             echo "⏳ Validation du Healthcheck Frontend..."
-            timeout 30s bash -c 'until [ "$$(docker inspect --format="{{.State.Health.Status}}" aemud-frontend-prod 2>/dev/null)" = "healthy" ]; do sleep 3; done' || {
-              echo "❌ Frontend check failed!"
+            timeout 60s bash -c 'until [ "$$(docker inspect --format="{{.State.Health.Status}}" aemud-frontend-prod 2>/dev/null)" = "healthy" ]; do sleep 3; done' || {
+              echo "❌ Frontend check failed! Logs du conteneur:"
+              docker logs --tail 30 aemud-frontend-prod
               exit 1
             }
             
