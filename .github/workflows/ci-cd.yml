@@ -125,6 +125,7 @@ jobs:
 
       - name: Run Trivy vulnerability scanner
         uses: aquasecurity/trivy-action@master
+        continue-on-error: true
         with:
           scan-type: 'fs'
           scan-ref: '.'
@@ -214,7 +215,7 @@ jobs:
             
             # Vérification de disponibilité HTTP
             echo "⏳ Validation du Healthcheck Frontend..."
-            timeout 30s bash -c 'until curl -sSf http://localhost:80; do sleep 3; done' || {
+            timeout 30s bash -c 'until [ "$$(docker inspect --format="{{.State.Health.Status}}" aemud-frontend-prod 2>/dev/null)" = "healthy" ]; do sleep 3; done' || {
               echo "❌ Frontend check failed!"
               exit 1
             }

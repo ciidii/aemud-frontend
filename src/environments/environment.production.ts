@@ -7,7 +7,7 @@ export const environment: Environment = {
   identity_API_URL: 'https://app.aemud.com',
   storage_API_URL: 'https://app.aemud.com',
   users_API_URL: 'https://app.aemud.com',
-  API_URL: "/aemud/api/v1",
+  API_URL: "/api/v1",
   features: [
     {
       name: 'loggingSystem',
