@@ -12,6 +12,34 @@
     <!-- Body -->
     <div class="panel-body">
       <form [formGroup]="filterForm">
+        <!-- Group: Statut du Membre (Étudiants vs Alumni) -->
+        <div class="filter-group">
+          <h6>Statut du Membre</h6>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="status" id="memberStatusAll" type="radio"
+                   [value]="null">
+            <label class="form-check-label" for="memberStatusAll">Tous les membres</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="status" id="memberStatusActive" type="radio"
+                   value="ACTIVE">
+            <label class="form-check-label" for="memberStatusActive">Étudiants Actifs</label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="status" id="memberStatusAlumni" type="radio"
+                   value="ALUMNI">
+            <label class="form-check-label" for="memberStatusAlumni">
+              <span class="badge bg-emerald-subtle text-emerald me-1"><i class="bi bi-briefcase me-1"></i>Alumni</span>
+              Diplômés & Bienfaiteurs
+            </label>
+          </div>
+          <div class="form-check">
+            <input class="form-check-input" formControlName="status" id="memberStatusInactive" type="radio"
+                   value="INACTIVE">
+            <label class="form-check-label" for="memberStatusInactive">Inactifs</label>
+          </div>
+        </div>
+
         <!-- Group: Statut de Paiement -->
         <div class="filter-group">
           <h6>Statut de Paiement</h6>

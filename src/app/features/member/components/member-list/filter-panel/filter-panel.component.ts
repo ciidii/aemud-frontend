@@ -50,6 +50,7 @@ export class FilterPanelComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.filterForm = this.formBuilder.group({
+      status: [null],
       paymentStatus: [null],
       registrationStatus: [null],
       club: [],
