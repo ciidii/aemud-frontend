@@ -65,6 +65,7 @@ import {FormSchemaService} from "../../../../core/services/form-schema.service";
 import {FormSchema} from "../../../../core/models/form-schema.model";
 import {DynamicFormComponent} from "../../../../shared/components/dynamic-form/dynamic-form.component";
 import {FormsModule} from "@angular/forms";
+import {SystemSettingsService} from "../../../configuration/services/system-settings.service";
 
 
 @Component({
@@ -105,6 +106,8 @@ export class MemberDetailComponent implements OnInit {
   isSubmittingFee = false;
   isReceiptModalOpen = false;
   receiptRegistration: RegistrationModel | null = null;
+  private initialRegistrationFee = 2000;
+  private reregistrationFee = 1000;
 
   // Full Member Dynamic Form Edit
   isEditFullMemberModalOpen = false;
@@ -127,6 +130,7 @@ export class MemberDetailComponent implements OnInit {
   private router = inject(Router);
   private memberHttpService = inject(MemberHttpService);
   private formSchemaService = inject(FormSchemaService);
+  private systemSettingsService = inject(SystemSettingsService);
   private memberStateService = inject(MemberStateService);
   private contributionService = inject(ContributionService);
   private notificationService = inject(NotificationService);
@@ -193,6 +197,25 @@ export class MemberDetailComponent implements OnInit {
     } else {
       this.notificationService.showError("ID de membre manquant.");
     }
+    this.loadFeeSettings();
+  }
+
+  private loadFeeSettings(): void {
+    this.systemSettingsService.getAllSettings().subscribe({
+      next: (settings) => {
+        const initFee = settings.find(s => s.key === 'REGISTRATION_FEE_INITIAL');
+        if (initFee && initFee.value) {
+          const val = parseFloat(initFee.value);
+          if (!isNaN(val) && val > 0) this.initialRegistrationFee = val;
+        }
+        const reregFee = settings.find(s => s.key === 'REGISTRATION_FEE_REREGISTRATION');
+        if (reregFee && reregFee.value) {
+          const val = parseFloat(reregFee.value);
+          if (!isNaN(val) && val > 0) this.reregistrationFee = val;
+        }
+      },
+      error: () => {}
+    });
   }
 
   // --- Edit Modals Methods ---
@@ -742,7 +765,7 @@ export class MemberDetailComponent implements OnInit {
   // --- REGISTRATION FEE PAYMENT ---
   openPayFeeModal(registration: RegistrationModel): void {
     this.selectedRegistrationForFee = registration;
-    this.feeAmount = registration.registrationType === 'INITIAL' ? 2000 : 1000;
+    this.feeAmount = registration.registrationType === 'INITIAL' ? this.initialRegistrationFee : this.reregistrationFee;
     this.feePaymentMethod = 'CASH';
     this.feeNotes = '';
     this.isPayFeeModalOpen = true;

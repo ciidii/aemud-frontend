@@ -11,6 +11,8 @@ import {DynamicFormComponent} from '../../../../shared/components/dynamic-form/d
 import {environment} from '../../../../../environments/environment';
 import {ResponseEntityApi} from '../../../../core/models/response-entity-api';
 
+import {SystemSettingsService} from '../../../configuration/services/system-settings.service';
+
 export type CensusStep = 'FORM' | 'PAYMENT' | 'SUCCESS';
 
 export interface CensusReceipt {
@@ -61,6 +63,7 @@ export class CensusPageComponent implements OnInit {
   constructor(
     private formSchemaService: FormSchemaService,
     private bourseService: BourseService,
+    private systemSettingsService: SystemSettingsService,
     private http: HttpClient,
     private toastr: ToastrService,
     private router: Router
@@ -68,6 +71,26 @@ export class CensusPageComponent implements OnInit {
 
   ngOnInit(): void {
     this.checkStatusAndLoadData();
+    this.loadDynamicSettings();
+  }
+
+  private loadDynamicSettings(): void {
+    this.systemSettingsService.getAllSettings().subscribe({
+      next: (settings) => {
+        const feeSetting = settings.find(s => s.key === 'REGISTRATION_FEE_INITIAL');
+        if (feeSetting && feeSetting.value) {
+          const parsed = parseFloat(feeSetting.value);
+          if (!isNaN(parsed) && parsed > 0) {
+            this.feeAmount = parsed;
+          }
+        }
+        const waveSetting = settings.find(s => s.key === 'WAVE_PAYMENT_PHONE');
+        if (waveSetting && waveSetting.value) {
+          this.wavePaymentPhone = waveSetting.value;
+        }
+      },
+      error: () => {}
+    });
   }
 
   private checkStatusAndLoadData(): void {
