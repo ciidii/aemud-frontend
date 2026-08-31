@@ -260,6 +260,55 @@
         </div>
       </section>
 
+      <!-- ALUMNI & PROFESSIONAL PROFILE CARD -->
+      <section *ngIf="member.status === 'ALUMNI' || member.alumniProfile" class="permanent-info-card border-alumni-highlight">
+        <div class="card-header">
+          <div class="header-title-group">
+            <div class="card-icon-circle bg-emerald-subtle text-emerald">
+              <i class="bi bi-briefcase-fill"></i>
+            </div>
+            <h5>Profil Professionnel & Réseau Alumni</h5>
+          </div>
+          <span class="badge badge-alumni"><i class="bi bi-award-fill me-1"></i> Alumni AEMUD</span>
+        </div>
+        <div class="card-body info-grid" *ngIf="member.alumniProfile as alumni">
+          <div class="info-pair">
+            <span class="info-key">Métier / Profession</span>
+            <span class="info-value font-weight-bold">{{ alumni.currentProfession || 'Non renseigné' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Entreprise / Institution</span>
+            <span class="info-value">{{ alumni.companyOrInstitution || 'Non renseigné' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Secteur d'activité</span>
+            <span class="info-value">{{ alumni.industrySector || 'Non renseigné' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Année de promotion</span>
+            <span class="info-value">{{ alumni.promotionYear || 'Non renseignée' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Dernier diplôme obtenu</span>
+            <span class="info-value">{{ alumni.lastDegreeObtained || 'Non renseigné' }}</span>
+          </div>
+          <div class="info-pair">
+            <span class="info-key">Résidence actuelle</span>
+            <span class="info-value">{{ (alumni.residenceCity || '') + (alumni.residenceCountry ? (alumni.residenceCity ? ', ' : '') + alumni.residenceCountry : '') || 'Non renseignée' }}</span>
+          </div>
+
+          <!-- Types de Soutien & Engagement -->
+          <div *ngIf="alumni.supportTypes && alumni.supportTypes.length > 0" class="info-pair full-width mt-2">
+            <span class="info-key">Engagements & Soutiens proposés</span>
+            <div class="tag-list mt-1">
+              <span *ngFor="let st of alumni.supportTypes" class="tag tag-alumni-support">
+                <i class="bi bi-heart-fill me-1 text-danger"></i> {{ formatSupportType(st) }}
+              </span>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <!-- ENGAGEMENTS ASSOCIATIFS CARD -->
       <section class="permanent-info-card">
         <div class="card-header">

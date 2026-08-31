@@ -1122,6 +1122,34 @@
 .bg-green-subtle { background-color: #dcfce7 !important; }
 .text-green { color: #15803d !important; }
 
+.bg-emerald-subtle { background-color: #d1fae5 !important; }
+.text-emerald { color: #047857 !important; }
+
+.border-alumni-highlight {
+  border-left: 4px solid #059669 !important;
+}
+
+.badge-alumni {
+  background: linear-gradient(135deg, #059669, #047857) !important;
+  color: $white !important;
+  font-weight: 500;
+  padding: 0.4rem 0.8rem;
+  border-radius: 9999px;
+  font-size: 1.2rem;
+}
+
+.tag-alumni-support {
+  background-color: #f0fdf4 !important;
+  color: #166534 !important;
+  border: 1px solid #bbf7d0 !important;
+  font-weight: 500;
+  padding: 0.35rem 0.8rem;
+  border-radius: 6px;
+  font-size: 1.2rem;
+  display: inline-flex;
+  align-items: center;
+}
+
 .modal-backdrop-custom {
   background-color: rgba(0, 0, 0, 0.55);
   backdrop-filter: blur(3px);

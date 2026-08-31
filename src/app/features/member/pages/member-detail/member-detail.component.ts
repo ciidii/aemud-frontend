@@ -623,13 +623,34 @@ export class MemberDetailComponent implements OnInit {
       legacyInstitution: m.membershipInfo?.legacyInstitution || '',
       arabicProficiency: m.religiousKnowledge?.arabicProficiency || '',
       coranLevel: m.religiousKnowledge?.coranLevel || '',
+      currentProfession: m.alumniProfile?.currentProfession || '',
+      companyOrInstitution: m.alumniProfile?.companyOrInstitution || '',
+      industrySector: m.alumniProfile?.industrySector || '',
+      promotionYear: m.alumniProfile?.promotionYear || '',
+      lastDegreeObtained: m.alumniProfile?.lastDegreeObtained || '',
+      residenceCity: m.alumniProfile?.residenceCity || '',
+      residenceCountry: m.alumniProfile?.residenceCountry || '',
+      supportTypes: m.alumniProfile?.supportTypes || [],
       ...(m.dynamicAttributes || {})
     };
+  }
+
+  formatSupportType(type: string): string {
+    const map: Record<string, string> = {
+      'FINANCIAL_DONATION': 'Soutien & Don Financier',
+      'ACADEMIC_MENTORING': 'Mentorat Académique',
+      'JOB_INTERNSHIP_SHARING': 'Offres d\'Emploi & Stages',
+      'CONFERENCE_SPEAKER': 'Animation de Conférences / Formations',
+      'EVENT_PARTICIPATION': 'Participation aux Événements'
+    };
+    return map[type] || type;
   }
 
   handleFullMemberSave(formData: Record<string, any>): void {
     if (!this.memberId) return;
     this.isUpdatingMember = true;
+
+    const isAlumni = !formData['isStudent'] || this.currentMember?.status === 'ALUMNI';
 
     const updatePayload: any = {
       id: this.memberId,
@@ -671,6 +692,16 @@ export class MemberDetailComponent implements OnInit {
         aqida: this.currentMember?.religiousKnowledge?.aqida || [],
         fiqh: this.currentMember?.religiousKnowledge?.fiqh || []
       },
+      alumniProfile: isAlumni ? {
+        currentProfession: formData['currentProfession'] || this.currentMember?.alumniProfile?.currentProfession,
+        companyOrInstitution: formData['companyOrInstitution'] || this.currentMember?.alumniProfile?.companyOrInstitution,
+        industrySector: formData['industrySector'] || this.currentMember?.alumniProfile?.industrySector,
+        promotionYear: formData['promotionYear'] || this.currentMember?.alumniProfile?.promotionYear,
+        lastDegreeObtained: formData['lastDegreeObtained'] || this.currentMember?.alumniProfile?.lastDegreeObtained,
+        residenceCity: formData['residenceCity'] || this.currentMember?.alumniProfile?.residenceCity,
+        residenceCountry: formData['residenceCountry'] || this.currentMember?.alumniProfile?.residenceCountry,
+        supportTypes: formData['supportTypes'] || this.currentMember?.alumniProfile?.supportTypes || []
+      } : null,
       bourse: formData['bourseId'] || this.currentMember?.bourse?.id,
       clubs: this.currentMember?.clubs?.map(c => c.id) || [],
       commissions: this.currentMember?.commissions?.map(c => c.id) || []
