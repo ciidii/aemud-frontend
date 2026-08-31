@@ -1,11 +1,11 @@
 <div class="filters-container">
   <div class="search-and-actions-bar">
-    <!-- Search Box -->
+    <!-- 1. Search Box -->
     <div class="search-box">
       <i class="bi bi-search search-icon"></i>
       <input type="text"
              class="search-input"
-             placeholder="Rechercher par prénom, nom, téléphone, email, établissement..."
+             placeholder="Rechercher (nom, prénom, téléphone, email, école...)"
              [(ngModel)]="searchTerm"
              (keyup.enter)="applySearchTerm()">
       <button *ngIf="searchTerm"
@@ -22,13 +22,41 @@
       </button>
     </div>
 
-    <!-- Filter Panel Toggle -->
+    <!-- 2. Quick Filter: Statut de Paiement / Cotisation -->
+    <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedPaymentStatus">
+      <i class="bi bi-cash-stack quick-filter-icon"></i>
+      <select class="quick-filter-select"
+              [ngModel]="selectedPaymentStatus"
+              (ngModelChange)="onQuickPaymentStatusChange($event)">
+        <option value="">Cotisation : Toutes</option>
+        <option value="PAID">✓ À jour (Payé)</option>
+        <option value="PENDING">⏳ En attente</option>
+      </select>
+      <i class="bi bi-chevron-down select-chevron"></i>
+    </div>
+
+    <!-- 3. Quick Filter: Statut de Dossier / Inscription -->
+    <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedRegistrationStatus">
+      <i class="bi bi-file-earmark-check quick-filter-icon"></i>
+      <select class="quick-filter-select"
+              [ngModel]="selectedRegistrationStatus"
+              (ngModelChange)="onQuickRegistrationStatusChange($event)">
+        <option [ngValue]="null">Dossier : Tous</option>
+        <option value="COMPLETED">🟢 Complété</option>
+        <option value="UNCOMPLETED">🟠 Incomplet</option>
+        <option value="EXPIRED">🔴 Expiré</option>
+      </select>
+      <i class="bi bi-chevron-down select-chevron"></i>
+    </div>
+
+    <!-- 4. Filter Panel Toggle Button -->
     <button (click)="openFilterPanel.emit()"
             [class.active]="filtersActive"
             type="button"
-            class="btn-filter-drawer">
+            class="btn-filter-drawer"
+            title="Ouvrir les filtres avancés (Clubs, Commissions, Bourses, Mandats)">
       <i class="bi bi-sliders2"></i>
-      <span>Filtres Avancés</span>
+      <span class="d-none d-lg-inline">Filtres Avancés</span>
       <span *ngIf="activeFilterCount > 0" class="filter-count-badge">{{ activeFilterCount }}</span>
     </button>
   </div>
