@@ -16,6 +16,12 @@ interface ColumnDefinition {
 
 const GROUPED_COLUMNS_DATA: { groupTitle: string; columns: ColumnDefinition[] }[] = [
   {
+    groupTitle: 'Statut & Identification',
+    columns: [
+      {id: 'status', label: 'Statut du Membre (Actif / Alumni)'},
+    ]
+  },
+  {
     groupTitle: 'Informations Personnelles',
     columns: [
       {id: 'personalInfo.name', label: 'Nom'},
@@ -34,19 +40,35 @@ const GROUPED_COLUMNS_DATA: { groupTitle: string; columns: ColumnDefinition[] }[
     ]
   },
   {
-    groupTitle: 'Informations Académiques',
+    groupTitle: 'Réseau Alumni & Professionnel',
+    columns: [
+      {id: 'alumniProfile.graduationYear', label: 'Promotion / Année de Sortie'},
+      {id: 'alumniProfile.lastDegreeObtained', label: 'Dernier Diplôme Obtenu'},
+      {id: 'alumniProfile.currentProfession', label: 'Profession Actuelle'},
+      {id: 'alumniProfile.companyOrInstitution', label: 'Entreprise / Institution'},
+      {id: 'alumniProfile.industrySector', label: 'Secteur d\'Activité'},
+      {id: 'alumniProfile.residenceCity', label: 'Ville de Résidence'},
+      {id: 'alumniProfile.residenceCountry', label: 'Pays de Résidence'},
+      {id: 'alumniProfile.supportInterests', label: 'Intérêts & Mécénat'},
+    ]
+  },
+  {
+    groupTitle: 'Cursus Académique (Étudiant)',
     columns: [
       {id: 'academicInfo.institutionName', label: 'Établissement'},
       {id: 'academicInfo.studiesDomain', label: 'Domaine d\'études'},
       {id: 'academicInfo.studiesLevel', label: 'Niveau d\'études'},
+      {id: 'bourse.libelle', label: 'Type de Bourse'},
     ]
   },
   {
-    groupTitle: 'Informations d\'Adhésion',
+    groupTitle: 'Informations d\'Adhésion & Engagements',
     columns: [
       {id: 'membershipInfo.legacyInstitution', label: 'Ancien Établissement'},
       {id: 'membershipInfo.bacSeries', label: 'Série du BAC'},
       {id: 'membershipInfo.yearOfBac', label: 'Année du BAC'},
+      {id: 'clubs', label: 'Clubs'},
+      {id: 'commissions', label: 'Commissions'},
     ]
   },
   {
