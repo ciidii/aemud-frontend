@@ -4,7 +4,7 @@ import {TableBodyComponent} from "./table-body/table-body.component";
 import {TableFooterComponent} from "./table-footer/table-footer.component";
 import {MemberStateService} from "../../services/member.state.service";
 import {MemberHttpService} from "../../services/member.http.service";
-import {catchError, combineLatest, filter, map, Observable, of, Subject, switchMap, take, takeUntil} from "rxjs";
+import {catchError, combineLatest, filter, firstValueFrom, forkJoin, map, Observable, of, Subject, switchMap, take, takeUntil} from "rxjs";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {ExportModalComponent} from './export-modal/export-modal.component';
 import {TableFiltersComponent} from "./table-filters/table-filters.component";
@@ -202,7 +202,7 @@ export class MemberListComponent implements OnInit, OnDestroy {
     this.isDeleteModalOpen = true;
   }
 
-  onDeleteConfirmed(): void {
+  async onDeleteConfirmed(): Promise<void> {
     if (this.memberToDelete) {
       this.memberHttpService.deleteMember(this.memberToDelete.id).subscribe({
         next: () => {
@@ -218,7 +218,25 @@ export class MemberListComponent implements OnInit, OnDestroy {
         }
       });
     } else {
-      this.toggleDeleteModal();
+      const selectedIds = await firstValueFrom(this.memberStateService.selectedMemberIds$);
+      if (selectedIds && selectedIds.length > 0) {
+        const deleteObservables = selectedIds.map(id => this.memberHttpService.deleteMember(id));
+        forkJoin(deleteObservables).subscribe({
+          next: () => {
+            this.toastr.success(`${selectedIds.length} membre(s) supprimé(s) avec succès.`);
+            this.memberStateService.clearSelection();
+            this.isDeleteModalOpen = false;
+            this.memberStateService.fetchMembers().subscribe();
+          },
+          error: () => {
+            this.toastr.error('Une erreur est survenue lors de la suppression groupée.');
+            this.isDeleteModalOpen = false;
+            this.memberStateService.fetchMembers().subscribe();
+          }
+        });
+      } else {
+        this.toggleDeleteModal();
+      }
     }
   }
 
