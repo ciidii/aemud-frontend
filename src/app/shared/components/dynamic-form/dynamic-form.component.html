@@ -1,28 +1,7 @@
 <div #stepperTop class="dynamic-form-container">
 
-  <!-- ================= 1. DESKTOP / TABLET STEPPER HEADER (>= 768px) ================= -->
+  <!-- ================= 1. DESKTOP / TABLET STEPPER TRACK (>= 768px) ================= -->
   <div *ngIf="isStepper && visibleGroups.length > 1" class="d-none d-md-block stepper-desktop-card mb-4 rounded-4 bg-white border shadow-sm">
-    
-    <!-- Top Context Summary (Step Count, Active Title & Progress) -->
-    <div class="stepper-desktop-top-bar d-flex justify-content-between align-items-center px-4 pt-3 pb-2">
-      <div class="d-flex align-items-center gap-3 min-w-0">
-        <span class="desktop-step-badge flex-shrink-0">
-          Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
-        </span>
-        <h6 class="fw-bold text-dark mb-0 active-step-headline text-truncate">
-          {{ currentGroup?.title }}
-        </h6>
-      </div>
-
-      <div class="d-flex align-items-center gap-2 flex-shrink-0">
-        <span class="desktop-progress-text">{{ progressPercentage }}% complété</span>
-        <span *ngIf="nextGroupTitle" class="desktop-next-preview text-muted small d-none d-lg-inline">
-          (Suivant : <strong>{{ nextGroupTitle }}</strong>)
-        </span>
-      </div>
-    </div>
-
-    <!-- Scrollable / Adaptable Stepper Track for Variable Groups -->
     <div #desktopTrackScrollContainer class="stepper-desktop-track-scroll px-3 py-3">
       <div class="stepper-track" [class.dense-track]="visibleGroups.length > 4">
         <ng-container *ngFor="let group of visibleGroups; let idx = index">
@@ -42,7 +21,7 @@
               <span *ngIf="idx >= currentStepIndex">{{ idx + 1 }}</span>
             </div>
 
-            <!-- Step Label (2 lines allowed, no truncation) -->
+            <!-- Step Label -->
             <div class="step-label min-w-0">
               <span class="step-sub">Étape {{ idx + 1 }}</span>
               <span class="step-main" [title]="group.title">{{ group.title }}</span>
@@ -59,29 +38,10 @@
         </ng-container>
       </div>
     </div>
-
   </div>
 
-  <!-- ================= 2. MOBILE STEPPER COCKPIT (< 768px) ================= -->
-  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-cockpit mb-3 p-3 rounded-4 bg-white border shadow-sm">
-    
-    <!-- Top Row: Step Pill + Percentage + Next Step Hint -->
-    <div class="d-flex justify-content-between align-items-center mb-2 gap-2">
-      <div class="d-flex align-items-center gap-2 flex-shrink-0">
-        <span class="mobile-step-pill text-nowrap">
-          Étape {{ currentStepIndex + 1 }}/{{ visibleGroups.length }}
-        </span>
-        <span class="mobile-percent-pill text-nowrap">{{ progressPercentage }}%</span>
-      </div>
-
-      <div *ngIf="nextGroupTitle" class="mobile-next-hint text-truncate" title="Prochaine étape : {{ nextGroupTitle }}">
-        <span class="next-label">Suivant:</span>
-        <span class="next-title text-truncate">{{ nextGroupTitle }}</span>
-        <i class="bi bi-chevron-right ms-1"></i>
-      </div>
-    </div>
-
-    <!-- Horizontal Swipeable Step Chips Ribbon -->
+  <!-- ================= 2. MOBILE STEPPER CHIPS (< 768px) ================= -->
+  <div *ngIf="isStepper && visibleGroups.length > 1" class="d-md-none stepper-mobile-cockpit mb-3 p-2 rounded-4 bg-white border shadow-sm">
     <div #chipsScrollContainer class="mobile-chips-scroll-wrapper">
       <div class="mobile-chips-track">
         <button
@@ -101,7 +61,6 @@
         </button>
       </div>
     </div>
-
   </div>
 
   <!-- ================= 3. ACTIVE FORM STEP CARD ================= -->
@@ -109,16 +68,24 @@
 
     <div class="card shadow-sm border rounded-4 mb-4 form-step-card bg-white animate-fade-in">
       
-      <!-- Card Header -->
+      <!-- Card Header: The Single Source of Truth for Current Section -->
       <div class="card-header bg-white border-bottom py-3 px-3 px-md-4 rounded-top-4">
         <div class="d-flex align-items-start justify-content-between gap-3">
           <div class="d-flex align-items-start flex-grow-1 min-w-0">
             <div class="step-indicator-bar me-3 mt-1 flex-shrink-0"></div>
             <div class="flex-grow-1 min-w-0">
-              <h5 class="card-title mb-1 fw-bold text-dark text-break">{{ currentGroup.title }}</h5>
-              <small *ngIf="currentGroup.description" class="text-muted group-desc-text d-block text-break">
+              <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
+                <span class="section-step-pill">
+                  Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
+                </span>
+                <span *ngIf="nextGroupTitle" class="section-next-hint text-muted d-none d-sm-inline">
+                  • Suivant : <strong>{{ nextGroupTitle }}</strong>
+                </span>
+              </div>
+              <h4 class="card-title mb-1 fw-bold text-dark text-break">{{ currentGroup.title }}</h4>
+              <p *ngIf="currentGroup.description" class="text-muted group-desc-text mb-0 text-break">
                 {{ currentGroup.description }}
-              </small>
+              </p>
             </div>
           </div>
           <span class="badge question-count-badge flex-shrink-0 d-none d-sm-inline-block text-nowrap">
