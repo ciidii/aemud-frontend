@@ -111,7 +111,32 @@
   }
 }
 
-// --- Quick Filter Selects ---
+// --- Quick Filter Selects Group ---
+.quick-filters-group {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  flex-shrink: 0;
+}
+
+.mobile-quick-filters-bar {
+  display: flex;
+  align-items: center;
+  gap: $space-2;
+  overflow-x: auto;
+  padding: $space-1 0 0;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  .quick-filter-select-wrapper {
+    flex-shrink: 0;
+  }
+}
+
 .quick-filter-select-wrapper {
   position: relative;
   display: inline-flex;
@@ -180,11 +205,8 @@
     .quick-filter-select {
       padding: 0.75rem 2.4rem 0.75rem 2.8rem;
       font-size: 1.2rem;
+      min-height: 3.8rem;
     }
-  }
-
-  @media (max-width: 576px) {
-    display: none; // Can be accessed through Filter drawer on very small mobile, or in chips
   }
 }
 

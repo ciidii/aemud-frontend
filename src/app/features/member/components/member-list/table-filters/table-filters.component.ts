@@ -29,6 +29,7 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
   activeFilterCount = 0;
   activeChips: FilterChip[] = [];
   searchTerm = '';
+  selectedMemberStatus: string | null = null;
   selectedPaymentStatus: string = '';
   selectedRegistrationStatus: string | null = null;
 
@@ -40,6 +41,7 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(params => {
       this.searchTerm = params.keyword || '';
+      this.selectedMemberStatus = params.status ?? null;
       this.selectedPaymentStatus = params.paymentStatus || '';
       this.selectedRegistrationStatus = params.registrationStatus ?? null;
       this.calculateActiveFiltersAndChips(params);
@@ -59,6 +61,11 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
   clearSearchTerm(): void {
     this.searchTerm = '';
     this.applySearchTerm();
+  }
+
+  onQuickMemberStatusChange(status: string | null): void {
+    this.selectedMemberStatus = status;
+    this.memberStateService.setStatusTab(status);
   }
 
   onQuickPaymentStatusChange(status: string): void {
