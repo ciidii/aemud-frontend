@@ -68,20 +68,12 @@
 
     <div class="card shadow-sm border rounded-4 mb-4 form-step-card bg-white animate-fade-in">
       
-      <!-- Card Header: The Single Source of Truth for Current Section -->
-      <div class="card-header bg-white border-bottom py-3 px-3 px-md-4 rounded-top-4">
+      <!-- Card Header: Only shown when stepper is NOT active (single-page or non-stepper mode) -->
+      <div *ngIf="!isStepper || visibleGroups.length <= 1" class="card-header bg-white border-bottom py-3 px-3 px-md-4 rounded-top-4">
         <div class="d-flex align-items-start justify-content-between gap-3">
           <div class="d-flex align-items-start flex-grow-1 min-w-0">
             <div class="step-indicator-bar me-3 mt-1 flex-shrink-0"></div>
             <div class="flex-grow-1 min-w-0">
-              <div class="d-flex align-items-center gap-2 mb-1 flex-wrap">
-                <span class="section-step-pill">
-                  Étape {{ currentStepIndex + 1 }} sur {{ visibleGroups.length }}
-                </span>
-                <span *ngIf="nextGroupTitle" class="section-next-hint text-muted d-none d-sm-inline">
-                  • Suivant : <strong>{{ nextGroupTitle }}</strong>
-                </span>
-              </div>
               <h4 class="card-title mb-1 fw-bold text-dark text-break">{{ currentGroup.title }}</h4>
               <p *ngIf="currentGroup.description" class="text-muted group-desc-text mb-0 text-break">
                 {{ currentGroup.description }}
@@ -96,6 +88,14 @@
 
       <!-- Card Body (Grid of Fields) -->
       <div class="card-body p-3 p-md-4">
+        
+        <!-- Context description banner if present (when stepper is active) -->
+        <div *ngIf="isStepper && visibleGroups.length > 1 && currentGroup.description" class="group-description-banner mb-3 p-3 rounded-3 bg-light border-0">
+          <p class="text-muted small mb-0">
+            <i class="bi bi-info-circle-fill text-teal me-1"></i> {{ currentGroup.description }}
+          </p>
+        </div>
+
         <div class="row g-3">
           <div
             *ngFor="let field of currentGroup.fields"
