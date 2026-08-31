@@ -29,6 +29,8 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
   activeFilterCount = 0;
   activeChips: FilterChip[] = [];
   searchTerm = '';
+  selectedPaymentStatus: string = '';
+  selectedRegistrationStatus: string | null = null;
 
   private memberStateService = inject(MemberStateService);
   private destroy$ = new Subject<void>();
@@ -38,6 +40,8 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
       takeUntil(this.destroy$)
     ).subscribe(params => {
       this.searchTerm = params.keyword || '';
+      this.selectedPaymentStatus = params.paymentStatus || '';
+      this.selectedRegistrationStatus = params.registrationStatus ?? null;
       this.calculateActiveFiltersAndChips(params);
     });
   }
@@ -55,6 +59,18 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
   clearSearchTerm(): void {
     this.searchTerm = '';
     this.applySearchTerm();
+  }
+
+  onQuickPaymentStatusChange(status: string): void {
+    this.selectedPaymentStatus = status;
+    this.memberStateService.updateSearchParams({ paymentStatus: status, page: 1 });
+    this.memberStateService.fetchMembers().subscribe();
+  }
+
+  onQuickRegistrationStatusChange(status: string | null): void {
+    this.selectedRegistrationStatus = status;
+    this.memberStateService.updateSearchParams({ registrationStatus: status, page: 1 });
+    this.memberStateService.fetchMembers().subscribe();
   }
 
   removeChip(chip: FilterChip): void {
@@ -115,7 +131,10 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
     }
 
     if (params.registrationStatus) {
-      chips.push({ key: 'registrationStatus', label: `Inscription : ${params.registrationStatus}`, value: params.registrationStatus });
+      const regLabel = params.registrationStatus === 'COMPLETED' ? 'Dossier : Complété' :
+                       params.registrationStatus === 'UNCOMPLETED' ? 'Dossier : Incomplet' :
+                       params.registrationStatus === 'EXPIRED' ? 'Dossier : Expiré' : `Inscription : ${params.registrationStatus}`;
+      chips.push({ key: 'registrationStatus', label: regLabel, value: params.registrationStatus });
     }
 
     if (params.club && params.club.length > 0) {
