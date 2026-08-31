@@ -15,7 +15,19 @@ export interface MemberDataResponse {
   commissions: Commission[];
   registrationOverview: RegistrationOverview;
   religiousKnowledge: ReligiousKnowledge;
+  alumniProfile?: AlumniProfile;
   dynamicAttributes?: Record<string, any>;
+}
+
+export interface AlumniProfile {
+  promotionYear?: string;
+  lastDegreeObtained?: string;
+  currentProfession?: string;
+  companyOrInstitution?: string;
+  industrySector?: string;
+  residenceCity?: string;
+  residenceCountry?: string;
+  supportTypes?: string[];
 }
 
 export interface PersonalInfo {
