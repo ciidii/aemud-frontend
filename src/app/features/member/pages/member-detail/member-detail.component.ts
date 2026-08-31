@@ -171,6 +171,11 @@ export class MemberDetailComponent implements OnInit {
     return { label: 'Étudiant Actif', cssClass: 'badge-active', icon: 'bi-mortarboard-fill' };
   }
 
+  isAlumni(member?: MemberDataResponse): boolean {
+    if (!member) return false;
+    return member.status === 'ALUMNI' || Boolean(member.alumniProfile) || member.isStudent === false;
+  }
+
   getWhatsAppUrl(phone?: string): string {
     if (!phone) return '#';
     let clean = phone.replace(/[^0-9]/g, '');
