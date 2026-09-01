@@ -68,6 +68,9 @@
                     <span class="full-name">
                       {{ member.personalInfo.firstname }} {{ member.personalInfo.name | uppercase }}
                     </span>
+                    <span class="small font-monospace text-teal fw-semibold" *ngIf="member.memberNumber">
+                      {{ member.memberNumber }}
+                    </span>
                     <span class="member-email" *ngIf="member.contactInfo?.email">
                       <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
                     </span>
@@ -227,6 +230,7 @@
 
             <div class="member-names">
               <span class="full-name">{{ member.personalInfo.firstname }} {{ member.personalInfo.name | uppercase }}</span>
+              <span class="small font-monospace text-teal fw-semibold" *ngIf="member.memberNumber">{{ member.memberNumber }}</span>
               <span class="member-email" *ngIf="member.contactInfo?.email">
                 <i class="bi bi-envelope"></i> {{ member.contactInfo.email }}
               </span>

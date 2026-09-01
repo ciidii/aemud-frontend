@@ -1,9 +1,12 @@
 import {BourseModel} from "./bourse.model";
 import {RegistrationOverview} from "./timeline.model";
 
+export type MemberStatusType = 'ACTIVE' | 'INACTIVE' | 'ALUMNI' | 'SUSPENDED' | 'HONORARY' | 'ARCHIVED';
+
 export interface MemberDataResponse {
   id: string;
-  status?: string;
+  memberNumber?: string;
+  status?: MemberStatusType | string;
   isStudent?: boolean;
   personalInfo: PersonalInfo;
   membershipInfo: MembershipInfo;
@@ -101,6 +104,7 @@ export interface RegistrationResponse {
   registrationType: TypeInscription;
   statusPayment: boolean;
   registrationStatus: RegistrationStatus;
+  academicSnapshot?: AcademicInfoRequest;
 }
 
 export enum ArabicProficiency {
@@ -147,4 +151,3 @@ export enum CORAN_LEVEL {
   YASIN = 'YASIN',
   FURQANA = 'FURQANA'
 }
-

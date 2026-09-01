@@ -15,8 +15,56 @@
 .filters-container {
   display: flex;
   flex-direction: column;
-  gap: $space-2;
+  gap: $space-3;
   width: 100%;
+}
+
+.segmented-status-tabs {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  overflow-x: auto;
+  padding-bottom: 0.2rem;
+  scrollbar-width: thin;
+
+  &::-webkit-scrollbar {
+    height: 4px;
+  }
+
+  .tab-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.65rem 1.3rem;
+    border-radius: $radius-md;
+    border: 1px solid $color-border-default;
+    background-color: $gray-100;
+    color: $color-text-secondary;
+    font-size: 1.25rem;
+    font-weight: 500;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all 0.18s ease;
+
+    i {
+      font-size: 1.3rem;
+    }
+
+    &:hover {
+      background-color: $color-background-panel;
+      color: $primary-600;
+      border-color: $primary-300;
+      box-shadow: $shadow-xs;
+    }
+
+    &.active {
+      background-color: rgba($primary-500, 0.08);
+      color: $primary-600;
+      border-color: $primary-400;
+      font-weight: 600;
+      box-shadow: 0 1px 3px rgba($primary-500, 0.12);
+    }
+  }
 }
 
 .search-and-actions-bar {
@@ -107,105 +155,6 @@
 
     @media (max-width: 576px) {
       display: none; // On smartphone, enter key / input handles search, saving precious width
-    }
-  }
-}
-
-// --- Quick Filter Selects Group ---
-.quick-filters-group {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-  flex-shrink: 0;
-}
-
-.mobile-quick-filters-bar {
-  display: flex;
-  align-items: center;
-  gap: $space-2;
-  overflow-x: auto;
-  padding: $space-1 0 0;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-
-  .quick-filter-select-wrapper {
-    flex-shrink: 0;
-  }
-}
-
-.quick-filter-select-wrapper {
-  position: relative;
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-
-  .quick-filter-icon {
-    position: absolute;
-    left: 1.1rem;
-    color: $color-text-muted;
-    font-size: 1.4rem;
-    pointer-events: none;
-    transition: color 0.2s ease;
-  }
-
-  .select-chevron {
-    position: absolute;
-    right: 1rem;
-    color: $color-text-muted;
-    font-size: 1rem;
-    pointer-events: none;
-  }
-
-  .quick-filter-select {
-    appearance: none;
-    -webkit-appearance: none;
-    background: $gray-100;
-    border: 1.5px solid $color-border-default;
-    border-radius: $radius-md;
-    padding: 0.85rem 2.8rem 0.85rem 3.2rem;
-    font-size: 1.3rem;
-    font-weight: 600;
-    color: $color-text-primary;
-    cursor: pointer;
-    min-height: 4.2rem;
-    transition: all 0.2s ease;
-    outline: none;
-    white-space: nowrap;
-
-    &:hover {
-      background: $color-background-hover;
-      border-color: $color-border-strong;
-    }
-
-    &:focus {
-      background: $color-background-panel;
-      border-color: $primary-500;
-      box-shadow: 0 0 0 3px rgba($primary-500, 0.15);
-    }
-  }
-
-  &.has-selection {
-    .quick-filter-icon {
-      color: $primary-600;
-    }
-
-    .quick-filter-select {
-      background: rgba($primary-500, 0.08);
-      border-color: $primary-500;
-      color: $primary-700;
-      font-weight: 700;
-    }
-  }
-
-  @media (max-width: 768px) {
-    .quick-filter-select {
-      padding: 0.75rem 2.4rem 0.75rem 2.8rem;
-      font-size: 1.2rem;
-      min-height: 3.8rem;
     }
   }
 }

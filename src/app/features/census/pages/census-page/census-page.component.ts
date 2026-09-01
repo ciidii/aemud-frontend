@@ -60,6 +60,8 @@ export class CensusPageComponent implements OnInit {
   receipt: CensusReceipt | null = null;
   paidLater: boolean = false;
 
+  submissionErrorMessage: string | null = null;
+
   constructor(
     private formSchemaService: FormSchemaService,
     private bourseService: BourseService,
@@ -143,11 +145,13 @@ export class CensusPageComponent implements OnInit {
 
   handleFormSubmit(payload: Record<string, any>): void {
     this.isSubmitting = true;
+    this.submissionErrorMessage = null;
     const apiUrl = `${environment.API_URL}/census/self-register`;
 
     this.http.post<ResponseEntityApi<any>>(apiUrl, payload).subscribe({
       next: response => {
         this.isSubmitting = false;
+        this.submissionErrorMessage = null;
         this.submittedMember = response.data;
         this.omPhoneNumber = payload['phoneNumber'] || '';
 
@@ -163,8 +167,16 @@ export class CensusPageComponent implements OnInit {
       },
       error: err => {
         this.isSubmitting = false;
-        const msg = err.error?.message || "Une erreur est survenue lors de l'enregistrement.";
-        this.toastr.error(msg, 'Erreur de soumission');
+        let msg = err.error?.message;
+        if (!msg) {
+          if (err.status === 409) {
+            msg = "Cet adhérent est déjà enregistré dans l'association avec cette adresse email ou ce numéro de téléphone.";
+          } else {
+            msg = "Une erreur est survenue lors de l'enregistrement de votre fiche.";
+          }
+        }
+        this.submissionErrorMessage = msg;
+        this.toastr.error(msg, 'Adhérent déjà enregistré', { timeOut: 8000, closeButton: true });
       }
     });
   }

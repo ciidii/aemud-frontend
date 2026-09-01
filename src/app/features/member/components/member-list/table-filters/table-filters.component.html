@@ -1,4 +1,28 @@
 <div class="filters-container">
+  <!-- 0. Fast Segmented Status Tabs -->
+  <div class="segmented-status-tabs">
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === null && !selectedPaymentStatus" (click)="onQuickMemberStatusChange(null)">
+      <i class="bi bi-people-fill"></i>
+      <span>Tous les Adhérents</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ACTIVE'" (click)="onQuickMemberStatusChange('ACTIVE')">
+      <i class="bi bi-mortarboard-fill text-teal"></i>
+      <span>Étudiants Actifs</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ALUMNI'" (click)="onQuickMemberStatusChange('ALUMNI')">
+      <i class="bi bi-award-fill text-emerald"></i>
+      <span>Réseau Alumni</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedPaymentStatus === 'PENDING'" (click)="onQuickPaymentStatusChange(selectedPaymentStatus === 'PENDING' ? '' : 'PENDING')">
+      <i class="bi bi-hourglass-split text-warning"></i>
+      <span>Cotisations en Attente</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'INACTIVE'" (click)="onQuickMemberStatusChange('INACTIVE')">
+      <i class="bi bi-pause-circle-fill text-muted"></i>
+      <span>Inactifs / À Régulariser</span>
+    </button>
+  </div>
+
   <!-- 1. Search Bar & Action Controls -->
   <div class="search-and-actions-bar">
     <!-- Search Box -->
@@ -6,8 +30,9 @@
       <i class="bi bi-search search-icon"></i>
       <input type="text"
              class="search-input"
-             placeholder="Rechercher (nom, prénom, téléphone, email, école...)"
+             placeholder="Recherche instantanée (nom, prénom, téléphone, email, école, matricule...)"
              [(ngModel)]="searchTerm"
+             (ngModelChange)="onSearchInput($event)"
              (keyup.enter)="applySearchTerm()">
       <button *ngIf="searchTerm"
               (click)="clearSearchTerm()"
@@ -16,55 +41,6 @@
               title="Effacer la recherche">
         <i class="bi bi-x-circle-fill"></i>
       </button>
-      <button (click)="applySearchTerm()"
-              type="button"
-              class="btn-search-trigger">
-        Rechercher
-      </button>
-    </div>
-
-    <!-- Desktop Quick Filters Group (>= 768px) -->
-    <div class="quick-filters-group d-none d-md-flex">
-      <!-- Quick Filter: Type de Membre (Étudiant / Alumni / Inactif) -->
-      <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedMemberStatus">
-        <i class="bi bi-mortarboard quick-filter-icon"></i>
-        <select class="quick-filter-select"
-                [ngModel]="selectedMemberStatus"
-                (ngModelChange)="onQuickMemberStatusChange($event)">
-          <option [ngValue]="null">Type : Tous</option>
-          <option value="ACTIVE">🎓 Étudiants Actifs</option>
-          <option value="ALUMNI">💼 Alumni / Diplômés</option>
-          <option value="INACTIVE">👤 Inactifs</option>
-        </select>
-        <i class="bi bi-chevron-down select-chevron"></i>
-      </div>
-
-      <!-- Quick Filter: Statut de Paiement / Cotisation -->
-      <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedPaymentStatus">
-        <i class="bi bi-cash-stack quick-filter-icon"></i>
-        <select class="quick-filter-select"
-                [ngModel]="selectedPaymentStatus"
-                (ngModelChange)="onQuickPaymentStatusChange($event)">
-          <option value="">Cotisation : Toutes</option>
-          <option value="PAID">✓ À jour (Payé)</option>
-          <option value="PENDING">⏳ En attente</option>
-        </select>
-        <i class="bi bi-chevron-down select-chevron"></i>
-      </div>
-
-      <!-- Quick Filter: Statut de Dossier / Inscription -->
-      <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedRegistrationStatus">
-        <i class="bi bi-file-earmark-check quick-filter-icon"></i>
-        <select class="quick-filter-select"
-                [ngModel]="selectedRegistrationStatus"
-                (ngModelChange)="onQuickRegistrationStatusChange($event)">
-          <option [ngValue]="null">Dossier : Tous</option>
-          <option value="COMPLETED">🟢 Complété</option>
-          <option value="UNCOMPLETED">🟠 Incomplet</option>
-          <option value="EXPIRED">🔴 Expiré</option>
-        </select>
-        <i class="bi bi-chevron-down select-chevron"></i>
-      </div>
     </div>
 
     <!-- Filter Panel Toggle Button -->
@@ -74,53 +50,9 @@
             class="btn-filter-drawer"
             title="Ouvrir les filtres avancés (Clubs, Commissions, Bourses, Mandats)">
       <i class="bi bi-sliders2"></i>
-      <span class="d-none d-xl-inline">Filtres Avancés</span>
+      <span class="d-none d-sm-inline">Filtres Avancés</span>
       <span *ngIf="activeFilterCount > 0" class="filter-count-badge">{{ activeFilterCount }}</span>
     </button>
-  </div>
-
-  <!-- 2. Mobile Quick Filters Scroll Row (< 768px) -->
-  <div class="d-md-none mobile-quick-filters-bar">
-    <!-- Mobile Quick Filter: Type de Membre -->
-    <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedMemberStatus">
-      <i class="bi bi-mortarboard quick-filter-icon"></i>
-      <select class="quick-filter-select"
-              [ngModel]="selectedMemberStatus"
-              (ngModelChange)="onQuickMemberStatusChange($event)">
-        <option [ngValue]="null">Type : Tous</option>
-        <option value="ACTIVE">🎓 Étudiants Actifs</option>
-        <option value="ALUMNI">💼 Alumni / Diplômés</option>
-        <option value="INACTIVE">👤 Inactifs</option>
-      </select>
-      <i class="bi bi-chevron-down select-chevron"></i>
-    </div>
-
-    <!-- Mobile Quick Filter: Cotisation -->
-    <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedPaymentStatus">
-      <i class="bi bi-cash-stack quick-filter-icon"></i>
-      <select class="quick-filter-select"
-              [ngModel]="selectedPaymentStatus"
-              (ngModelChange)="onQuickPaymentStatusChange($event)">
-        <option value="">Cotisation : Toutes</option>
-        <option value="PAID">✓ À jour (Payé)</option>
-        <option value="PENDING">⏳ En attente</option>
-      </select>
-      <i class="bi bi-chevron-down select-chevron"></i>
-    </div>
-
-    <!-- Mobile Quick Filter: Dossier -->
-    <div class="quick-filter-select-wrapper" [class.has-selection]="!!selectedRegistrationStatus">
-      <i class="bi bi-file-earmark-check quick-filter-icon"></i>
-      <select class="quick-filter-select"
-              [ngModel]="selectedRegistrationStatus"
-              (ngModelChange)="onQuickRegistrationStatusChange($event)">
-        <option [ngValue]="null">Dossier : Tous</option>
-        <option value="COMPLETED">🟢 Complété</option>
-        <option value="UNCOMPLETED">🟠 Incomplet</option>
-        <option value="EXPIRED">🔴 Expiré</option>
-      </select>
-      <i class="bi bi-chevron-down select-chevron"></i>
-    </div>
   </div>
 
   <!-- Active Filter Chips Row -->

@@ -83,6 +83,10 @@ export class MemberStateService {
   setStatusTab(status: string | null) {
     this.updateSearchParams({
       status: status || null,
+      paymentStatus: "",
+      mandatIds: [],
+      phaseIds: [],
+      registrationStatus: null,
       page: 1
     });
     this.fetchMembers().subscribe();
@@ -151,5 +155,9 @@ export class MemberStateService {
   updateSearchParams(partial: Partial<SearchParams>) {
     const current = this._searchMemberParamsObject$.getValue();
     this._searchMemberParamsObject$.next({...current, ...partial});
+  }
+
+  getCurrentSearchParams(): SearchParams {
+    return this._searchMemberParamsObject$.getValue();
   }
 }

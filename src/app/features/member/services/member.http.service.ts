@@ -30,7 +30,7 @@ export class MemberHttpService {
     });
   }
 
-  addMember(member: any) {
+  addMember(member: any): Observable<ResponseEntityApi<MemberDataResponse>> {
     const options = {
       headers: new HttpHeaders().set("Content-Type", "application/json")
     };
@@ -39,6 +39,16 @@ export class MemberHttpService {
 
   getMemberById(id: string): Observable<ResponseEntityApi<MemberDataResponse>> {
     return this._http.get<ResponseEntityApi<MemberDataResponse>>(`${this._url}/${id}`);
+  }
+
+  getMemberByPhoneNumber(numberPhone: string): Observable<ResponseEntityApi<MemberDataResponse>> {
+    return this._http.get<ResponseEntityApi<MemberDataResponse>>(`${this._url}/numberphone`, {
+      params: { numberphone: numberPhone }
+    });
+  }
+
+  updateMemberStatus(memberId: string, status: string): Observable<ResponseEntityApi<MemberDataResponse>> {
+    return this._http.patch<ResponseEntityApi<MemberDataResponse>>(`${this._url}/${memberId}/status`, { status });
   }
 
   getMemberRegistrationTimeline(memberId: string): Observable<MandateTimelineItem[]> {

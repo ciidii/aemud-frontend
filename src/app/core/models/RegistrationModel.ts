@@ -1,4 +1,5 @@
 import {PhaseModel} from "../../features/configuration/periode-mandat/models/phase.model";
+import {AcademicInfoRequest} from "./member-data.model";
 
 export enum RegistrationStatus {
   EXPIRED = "EXPIRED",
@@ -14,6 +15,7 @@ export enum TypeInscription {
 export interface RegistrationModel {
   id: string;
   member: string;
+  memberNumber?: string;
   mandatName: string;
   phase: PhaseModel;
   dateInscription: string;
@@ -24,4 +26,5 @@ export interface RegistrationModel {
   receiptNumber?: string;
   paymentMethod?: string;
   paymentDate?: string;
+  academicSnapshot?: AcademicInfoRequest;
 }
