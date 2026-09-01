@@ -166,7 +166,7 @@ export class MemberDetailComponent implements OnInit {
   }
 
   getStatusBadge(member: MemberDataResponse): { label: string, cssClass: string, icon: string } {
-    if (member.status === 'ALUMNI' || (!member.isStudent && member.academicInfo?.studiesDomain === 'Alumni')) {
+    if (member.status === 'ALUMNI') {
       return { label: 'Alumni / Diplômé', cssClass: 'badge-alumni', icon: 'bi-briefcase-fill' };
     }
     if (member.status === 'INACTIVE') {
@@ -177,7 +177,7 @@ export class MemberDetailComponent implements OnInit {
 
   isAlumni(member?: MemberDataResponse): boolean {
     if (!member) return false;
-    return member.status === 'ALUMNI' || Boolean(member.alumniProfile) || member.isStudent === false;
+    return member.status === 'ALUMNI';
   }
 
   getWhatsAppUrl(phone?: string): string {
@@ -801,6 +801,57 @@ export class MemberDetailComponent implements OnInit {
         this.notificationService.showError("Erreur lors de l'enregistrement du paiement.");
         console.error('Pay fee failed', err);
       }
+    });
+  }
+
+  // --- CHANGE STATUS MODAL ---
+  isChangeStatusModalOpen = false;
+  selectedNewStatus: string = 'ACTIVE';
+  isUpdatingStatus = false;
+  statusOptions = [
+    { value: 'ACTIVE', label: 'Étudiant Actif', icon: 'bi-mortarboard-fill', css: 'text-success' },
+    { value: 'ALUMNI', label: 'Alumni / Diplômé', icon: 'bi-briefcase-fill', css: 'text-primary' },
+    { value: 'INACTIVE', label: 'Inactif', icon: 'bi-pause-circle-fill', css: 'text-secondary' },
+    { value: 'SUSPENDED', label: 'Suspendu', icon: 'bi-slash-circle-fill', css: 'text-danger' },
+    { value: 'HONORARY', label: 'Membre d\'Honneur', icon: 'bi-award-fill', css: 'text-warning' }
+  ];
+
+  openChangeStatusModal(): void {
+    if (this.currentMember?.status) {
+      this.selectedNewStatus = this.currentMember.status;
+    }
+    this.isChangeStatusModalOpen = true;
+  }
+
+  closeChangeStatusModal(): void {
+    this.isChangeStatusModalOpen = false;
+  }
+
+  confirmChangeStatus(): void {
+    if (!this.memberId) return;
+    this.isUpdatingStatus = true;
+
+    this.memberHttpService.updateMemberStatus(this.memberId, this.selectedNewStatus).subscribe({
+      next: (res) => {
+        this.isUpdatingStatus = false;
+        this.notificationService.showSuccess(`Statut du membre mis à jour : ${this.selectedNewStatus}`);
+        this.closeChangeStatusModal();
+        this.loadData();
+      },
+      error: (err) => {
+        this.isUpdatingStatus = false;
+        this.notificationService.showError("Échec de la mise à jour du statut.");
+        console.error('Update status failed', err);
+      }
+    });
+  }
+
+  copyMatricule(num?: string): void {
+    if (!num) return;
+    navigator.clipboard.writeText(num).then(() => {
+      this.notificationService.showSuccess(`Matricule copié : ${num}`);
+    }).catch(() => {
+      this.notificationService.showInfo(`Matricule : ${num}`);
     });
   }
 

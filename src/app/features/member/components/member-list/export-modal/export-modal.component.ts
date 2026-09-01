@@ -18,6 +18,7 @@ const GROUPED_COLUMNS_DATA: { groupTitle: string; columns: ColumnDefinition[] }[
   {
     groupTitle: 'Statut & Identification',
     columns: [
+      {id: 'memberNumber', label: 'Matricule Officiel (AEMUD-YYYY-XXXXX)'},
       {id: 'status', label: 'Statut du Membre (Actif / Alumni)'},
     ]
   },

@@ -2,7 +2,7 @@ import {Component, EventEmitter, inject, OnDestroy, OnInit, Output} from '@angul
 import {FormsModule} from "@angular/forms";
 import {CommonModule, NgFor, NgIf} from "@angular/common";
 import {MemberStateService} from "../../../services/member.state.service";
-import {Subject, takeUntil} from "rxjs";
+import {debounceTime, distinctUntilChanged, Subject, takeUntil} from "rxjs";
 
 export interface FilterChip {
   key: string;
@@ -35,8 +35,21 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
 
   private memberStateService = inject(MemberStateService);
   private destroy$ = new Subject<void>();
+  private searchSubject = new Subject<string>();
 
   ngOnInit(): void {
+    this.searchSubject.pipe(
+      debounceTime(350),
+      distinctUntilChanged(),
+      takeUntil(this.destroy$)
+    ).subscribe(term => {
+      this.memberStateService.updateSearchParams({
+        keyword: term ? term.trim() : null,
+        page: 1
+      });
+      this.memberStateService.fetchMembers().subscribe();
+    });
+
     this.memberStateService.searchMemberParamsObject$.pipe(
       takeUntil(this.destroy$)
     ).subscribe(params => {
@@ -53,6 +66,10 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
     this.destroy$.complete();
   }
 
+  onSearchInput(value: string): void {
+    this.searchSubject.next(value);
+  }
+
   applySearchTerm(): void {
     this.memberStateService.updateSearchParams({keyword: this.searchTerm ? this.searchTerm.trim() : null, page: 1});
     this.memberStateService.fetchMembers().subscribe();
@@ -60,7 +77,7 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
 
   clearSearchTerm(): void {
     this.searchTerm = '';
-    this.applySearchTerm();
+    this.searchSubject.next('');
   }
 
   onQuickMemberStatusChange(status: string | null): void {
@@ -70,7 +87,15 @@ export class TableFiltersComponent implements OnInit, OnDestroy {
 
   onQuickPaymentStatusChange(status: string): void {
     this.selectedPaymentStatus = status;
-    this.memberStateService.updateSearchParams({ paymentStatus: status, page: 1 });
+    this.selectedMemberStatus = null;
+    this.memberStateService.updateSearchParams({
+      status: null,
+      paymentStatus: status,
+      mandatIds: [],
+      phaseIds: [],
+      registrationStatus: null,
+      page: 1
+    });
     this.memberStateService.fetchMembers().subscribe();
   }
 

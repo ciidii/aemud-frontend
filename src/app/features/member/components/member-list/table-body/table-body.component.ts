@@ -137,7 +137,7 @@ export class TableBodyComponent implements OnInit {
   }
 
   getStatusBadge(member: MemberDataResponse): { label: string, cssClass: string, icon: string } {
-    if (member.status === 'ALUMNI' || (!member.isStudent && member.academicInfo?.studiesDomain === 'Alumni')) {
+    if (member.status === 'ALUMNI') {
       return { label: 'Alumni / Diplômé', cssClass: 'badge-alumni', icon: 'bi-briefcase-fill' };
     }
     if (member.status === 'INACTIVE') {

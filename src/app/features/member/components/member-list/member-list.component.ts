@@ -82,56 +82,50 @@ export class MemberListComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // 1. Initialiser l'état depuis l'URL (Deep Linking / Bookmarking)
     this.route.queryParamMap.pipe(take(1)).subscribe(params => {
       this.isSmsSelectMode = params.get('smsSelect') === 'true';
       if (this.isSmsSelectMode) {
         this.memberStateService.clearSelection();
       }
-    });
 
-    // 1. Déclencher le chargement initial des mandats
-    this.appStateService.loadInitialMandat().subscribe();
+      const status = params.get('status');
+      const keyword = params.get('keyword');
+      const paymentStatus = params.get('paymentStatus');
+      const pageStr = params.get('page');
+      const page = pageStr ? parseInt(pageStr, 10) : 1;
 
-    // 2. Écouter les sélections de mandat (actif par défaut ou sélection manuelle)
-    this.appStateService.activeMandat$.pipe(
-      switchMap(activeMandat => {
-        if (activeMandat) {
-          return this.phaseService.getMandatPhases(activeMandat.id).pipe(
-            map(phases => {
-              const activePhase = phases.find(p => p.status === PhaseStatus.CURRENT);
-              return { activeMandat, activePhase };
-            }),
-            catchError(() => of({ activeMandat, activePhase: undefined }))
-          );
-        }
-        return of({ activeMandat: null, activePhase: undefined });
-      }),
-      takeUntil(this.destroy$)
-    ).subscribe(({ activeMandat, activePhase }) => {
-      if (activeMandat) {
-        if (activePhase) {
-          this.memberStateService.updateSearchParams({
-            mandatIds: [activeMandat.id],
-            phaseIds: [activePhase.id],
-            page: 1
-          });
-        } else {
-          this.memberStateService.updateSearchParams({
-            mandatIds: [activeMandat.id],
-            phaseIds: [],
-            page: 1
-          });
-        }
-      } else {
-        // Mode "Tous les mandats (Historique global)"
+      if (status || keyword || paymentStatus || pageStr) {
         this.memberStateService.updateSearchParams({
-          mandatIds: [],
-          phaseIds: [],
-          page: 1
+          status: status || null,
+          keyword: keyword || null,
+          paymentStatus: paymentStatus || '',
+          page: !isNaN(page) && page > 0 ? page : 1
         });
       }
-      this.memberStateService.fetchMembers().subscribe();
     });
+
+    // 2. Synchroniser les changements de paramètres dans l'URL du navigateur
+    this.memberStateService.searchMemberParamsObject$.pipe(
+      takeUntil(this.destroy$)
+    ).subscribe(params => {
+      const queryParams: any = {};
+      if (params.keyword) queryParams.keyword = params.keyword;
+      if (params.status) queryParams.status = params.status;
+      if (params.paymentStatus) queryParams.paymentStatus = params.paymentStatus;
+      if (params.page && params.page > 1) queryParams.page = params.page;
+      if (this.isSmsSelectMode) queryParams.smsSelect = 'true';
+
+      this.router.navigate([], {
+        relativeTo: this.route,
+        queryParams,
+        replaceUrl: true
+      });
+    });
+
+    // 3. Charger le mandat initial et déclencher la récupération des membres
+    this.appStateService.loadInitialMandat().subscribe();
+    this.memberStateService.fetchMembers().subscribe();
   }
 
   ngOnDestroy(): void {

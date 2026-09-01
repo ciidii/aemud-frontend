@@ -17,6 +17,10 @@
         <div class="header-names-block">
           <div class="name-and-status">
             <h1 class="member-full-name">{{ personalInfo.firstname }} {{ personalInfo.name }}</h1>
+            <span *ngIf="member.memberNumber" class="badge-matricule" title="Cliquer pour copier le matricule officiel" (click)="copyMatricule(member.memberNumber)">
+              <i class="bi bi-person-badge"></i> {{ member.memberNumber }}
+              <i class="bi bi-copy ms-1 text-muted"></i>
+            </span>
             <span class="status-pill" [ngClass]="getStatusBadge(member).cssClass">
               <i [ngClass]="getStatusBadge(member).icon" class="bi"></i>
               {{ getStatusBadge(member).label }}
@@ -81,6 +85,11 @@
           <i class="bi bi-three-dots-vertical"></i>
         </button>
         <ul [class.show]="isActionsDropdownOpen" class="actions-dropdown-menu">
+          <li>
+            <a (click)="openChangeStatusModal()">
+              <i class="bi bi-arrow-repeat text-warning"></i> Changer le statut du membre...
+            </a>
+          </li>
           <li>
             <a (click)="openEditFullMemberModal()">
               <i class="bi bi-pencil-square text-primary"></i> Modifier le formulaire complet
@@ -718,11 +727,18 @@
                       <div class="phase-info">
                         <i [ngClass]="{
                           'bi-check-circle-fill text-success': phaseItem.status === 'REGISTERED',
-                          'bi-exclamation-diamond-fill text-warning': phaseItem.status === 'MISSED_OPEN',
+                          'bi-exclamation-diamond-fill text-warning': phaseItem.status === 'MISSED_OPEN' || phaseItem.status === 'REGISTRATION_REQUIRED',
+                          'bi-lock-fill text-muted': phaseItem.status === 'BLOCKED_BY_MISSED_MANDATE',
                           'bi-slash-circle-fill text-muted': phaseItem.status === 'MISSED_CLOSED',
+                          'bi-door-open-fill text-teal': phaseItem.status === 'REGISTRATION_OPEN',
                           'bi-hourglass-split text-info': phaseItem.status === 'PENDING'
                         }" class="bi phase-icon"></i>
-                        <span class="phase-name">{{ phaseItem.phase.nom }}</span>
+                        <div class="d-flex flex-column">
+                          <span class="phase-name">{{ phaseItem.phase.nom }}</span>
+                          <small *ngIf="phaseItem.registration?.academicSnapshot as snap" class="text-muted fst-italic">
+                            <i class="bi bi-mortarboard me-1"></i>{{ snap.studiesLevel }} — {{ snap.studiesDomain }} ({{ snap.institutionName }})
+                          </small>
+                        </div>
                       </div>
 
                       <div class="phase-status">
@@ -732,6 +748,9 @@
                             <span *ngIf="phaseItem.registration?.statusPayment" class="badge bg-success-subtle text-success border">Frais Réglés</span>
                             <span *ngIf="!phaseItem.registration?.statusPayment" class="badge bg-warning-subtle text-warning-emphasis border">Frais Impayés</span>
                           </div>
+                          <span *ngSwitchCase="'REGISTRATION_REQUIRED'" class="badge bg-warning-light" title="Mandat antérieur non renouvelé">Régularisation requise</span>
+                          <span *ngSwitchCase="'BLOCKED_BY_MISSED_MANDATE'" class="badge bg-secondary-light" title="Régulariser le mandat précédent">Bloqué</span>
+                          <span *ngSwitchCase="'REGISTRATION_OPEN'" class="badge bg-teal-subtle text-teal border">Inscriptions ouvertes</span>
                           <span *ngSwitchCase="'MISSED_OPEN'" class="badge bg-warning-light">Action requise</span>
                           <span *ngSwitchCase="'MISSED_CLOSED'" class="badge bg-secondary-light">Manqué</span>
                           <span *ngSwitchCase="'PENDING'" class="badge bg-info-light">À venir</span>
@@ -1103,6 +1122,66 @@
         <button type="button" class="btn btn-secondary" (click)="closeReceiptModal()">Fermer</button>
         <button type="button" class="btn btn-teal-primary" onclick="window.print()">
           <i class="bi bi-printer me-1"></i> Imprimer la Quittance
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Changement de Statut Membre -->
+<div *ngIf="isChangeStatusModalOpen" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-bottom py-3 px-4 bg-white rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="me-3 bg-warning-subtle text-warning-emphasis rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-arrow-repeat fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark mb-0">Modifier le Statut du Membre</h5>
+            <small class="text-muted">
+              {{ currentMember?.personalInfo?.firstname }} {{ currentMember?.personalInfo?.name }}
+            </small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="closeChangeStatusModal()" aria-label="Close"></button>
+      </div>
+
+      <div class="modal-body p-4 bg-light-subtle">
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-dark">Sélectionnez le nouveau statut :</label>
+          <div class="d-flex flex-column gap-2">
+            <div *ngFor="let opt of statusOptions"
+                 class="p-3 border rounded-3 bg-white d-flex align-items-center justify-content-between cursor-pointer"
+                 [class.border-teal]="selectedNewStatus === opt.value"
+                 [class.bg-teal-subtle]="selectedNewStatus === opt.value"
+                 (click)="selectedNewStatus = opt.value">
+              <div class="d-flex align-items-center gap-3">
+                <i class="bi {{ opt.icon }} fs-5 {{ opt.css }}"></i>
+                <div>
+                  <div class="fw-bold text-dark">{{ opt.label }}</div>
+                  <small class="text-muted" *ngIf="opt.value === 'ALUMNI'">Diplômé / Insertion professionnelle (exonéré de cotisations)</small>
+                  <small class="text-muted" *ngIf="opt.value === 'ACTIVE'">Étudiant poursuivant son cursus</small>
+                  <small class="text-muted" *ngIf="opt.value === 'INACTIVE'">Adhérent n'ayant pas renouvelé son inscription</small>
+                  <small class="text-muted" *ngIf="opt.value === 'SUSPENDED'">Adhésion suspendue temporairement</small>
+                  <small class="text-muted" *ngIf="opt.value === 'HONORARY'">Membre bienfaiteur d'honneur</small>
+                </div>
+              </div>
+              <input type="radio" name="memberStatusRadio" [value]="opt.value" [(ngModel)]="selectedNewStatus" class="form-check-input ms-2">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer border-top py-3 px-4 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeChangeStatusModal()">Annuler</button>
+        <button type="button"
+                class="btn btn-teal-primary"
+                [disabled]="isUpdatingStatus"
+                (click)="confirmChangeStatus()">
+          <span *ngIf="isUpdatingStatus" class="spinner-border spinner-border-sm me-1"></span>
+          <i *ngIf="!isUpdatingStatus" class="bi bi-check2-circle me-1"></i>
+          Appliquer le Changement
         </button>
       </div>
     </div>
