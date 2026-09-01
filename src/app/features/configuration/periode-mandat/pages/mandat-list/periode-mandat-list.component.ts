@@ -4,7 +4,7 @@ import {Router} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map} from 'rxjs/operators';
 import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
-import {PeriodeMandatDto} from '../../models/periode-mandat.model';
+import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
 import {NotificationService} from "../../../../../core/services/notification.service";
 import {AppStateService} from "../../../../../core/services/app-state.service";
 import {ConfirmDeleteModalComponent} from "../../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
@@ -17,7 +17,10 @@ import {ConfirmDeleteModalComponent} from "../../../../../shared/components/conf
   styleUrls: ['./periode-mandat-list.component.scss']
 })
 export class PeriodeMandatListComponent implements OnInit {
-  periodeMandats$!: Observable<PeriodeMandatDto[]>;
+  allMandats: PeriodeMandatDto[] = [];
+  filteredMandats: PeriodeMandatDto[] = [];
+  selectedTab: 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED' = 'ALL';
+
   isLoading = true;
   hasError = false;
   isActivatingId: string | null = null;
@@ -36,7 +39,7 @@ export class PeriodeMandatListComponent implements OnInit {
   loadPeriodeMandats(): void {
     this.isLoading = true;
     this.hasError = false;
-    this.periodeMandats$ = this.periodeMandatHttpService.getAllPeriodeMandats().pipe(
+    this.periodeMandatHttpService.getAllPeriodeMandats().pipe(
       map(response => response.data || []),
       finalize(() => this.isLoading = false),
       catchError((err) => {
@@ -45,7 +48,60 @@ export class PeriodeMandatListComponent implements OnInit {
         this.hasError = true;
         return of([]);
       })
-    );
+    ).subscribe(mandats => {
+      this.allMandats = mandats;
+      this.applyFilter();
+    });
+  }
+
+  setFilterTab(tab: 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED'): void {
+    this.selectedTab = tab;
+    this.applyFilter();
+  }
+
+  applyFilter(): void {
+    if (this.selectedTab === 'ACTIVE') {
+      this.filteredMandats = this.allMandats.filter(m => m.status === 'ACTIVE' || m.estActif);
+    } else if (this.selectedTab === 'DRAFT_UPCOMING') {
+      this.filteredMandats = this.allMandats.filter(m => m.status === 'DRAFT' || m.status === 'UPCOMING');
+    } else if (this.selectedTab === 'ARCHIVED') {
+      this.filteredMandats = this.allMandats.filter(m => m.status === 'CLOSED_ARCHIVED' || (!m.estActif && m.status !== 'DRAFT' && m.status !== 'UPCOMING'));
+    } else {
+      this.filteredMandats = [...this.allMandats];
+    }
+  }
+
+  getMandatStatusBadge(mandat: PeriodeMandatDto): { label: string; class: string; icon: string } {
+    const status = mandat.status || (mandat.estActif ? 'ACTIVE' : 'CLOSED_ARCHIVED');
+    switch (status) {
+      case 'ACTIVE':
+        return { label: 'Mandat Actif', class: 'badge-active', icon: 'bi-check-circle-fill' };
+      case 'DRAFT':
+        return { label: 'Brouillon', class: 'badge-draft', icon: 'bi-pencil-fill' };
+      case 'UPCOMING':
+        return { label: 'À venir', class: 'badge-upcoming', icon: 'bi-calendar-plus' };
+      case 'CLOSED_ARCHIVED':
+      default:
+        return { label: 'Archivé', class: 'badge-archived', icon: 'bi-archive-fill' };
+    }
+  }
+
+  getPhaseStatusBadge(phase: any): { label: string; class: string } {
+    const s = phase.status ? phase.status.toUpperCase() : 'FUTURE';
+    switch (s) {
+      case 'CURRENT':
+      case 'ACTIVE':
+        return { label: 'En cours', class: 'phase-active' };
+      case 'EXTENDED':
+        return { label: 'Prolongée', class: 'phase-extended' };
+      case 'CLOSED':
+      case 'PASSED':
+        return { label: 'Clôturée', class: 'phase-closed' };
+      case 'FUTURE':
+      case 'PLANNED':
+      default:
+        return { label: 'À venir', class: 'phase-planned' };
+    }
   }
 
   goToAdd(): void {
@@ -63,7 +119,7 @@ export class PeriodeMandatListComponent implements OnInit {
 
   activateMandat(mandat: PeriodeMandatDto, event: Event): void {
     event.stopPropagation();
-    if (mandat.estActif) return;
+    if (mandat.status === 'ACTIVE' || mandat.estActif) return;
 
     this.isActivatingId = mandat.id;
     this.periodeMandatHttpService.activatePeriodeMandat(mandat.id).subscribe({

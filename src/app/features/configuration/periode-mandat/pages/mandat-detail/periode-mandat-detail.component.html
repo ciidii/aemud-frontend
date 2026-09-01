@@ -29,11 +29,10 @@
           <div class="mandat-title-info">
             <div class="title-row">
               <h1 class="mandat-title">{{ periodeMandat.nom }}</h1>
-              <span *ngIf="periodeMandat.estActif" class="badge-status badge-active">
-                <span class="pulse-dot"></span> Mandat Actif
-              </span>
-              <span *ngIf="!periodeMandat.estActif" class="badge-status badge-inactive">
-                Mandat Inactif
+              <span class="badge-status" [ngClass]="getMandatStatusBadge(periodeMandat).class">
+                <span *ngIf="periodeMandat.status === 'ACTIVE' || periodeMandat.estActif" class="pulse-dot"></span>
+                <i class="bi" [ngClass]="getMandatStatusBadge(periodeMandat).icon"></i>
+                {{ getMandatStatusBadge(periodeMandat).label }}
               </span>
             </div>
             <div class="mandat-dates-row">
@@ -51,7 +50,8 @@
         </div>
 
         <div class="header-actions">
-          <button *ngIf="!periodeMandat.estActif"
+          <!-- Activation button -->
+          <button *ngIf="periodeMandat.status !== 'ACTIVE' && !periodeMandat.estActif"
                   (click)="activateMandat(periodeMandat)"
                   [disabled]="isActivating"
                   type="button"
@@ -59,6 +59,17 @@
             <i class="bi bi-lightning-charge-fill" *ngIf="!isActivating"></i>
             <span class="spinner-border spinner-border-sm me-1" *ngIf="isActivating"></span>
             <span>Définir comme Mandat Actif</span>
+          </button>
+
+          <!-- Archive button if active -->
+          <button *ngIf="periodeMandat.status === 'ACTIVE' || periodeMandat.estActif"
+                  (click)="updateMandatStatus('CLOSED_ARCHIVED')"
+                  [disabled]="isUpdatingStatus"
+                  type="button"
+                  class="btn-header-action btn-archive"
+                  title="Clôturer et archiver ce mandat">
+            <i class="bi bi-archive-fill"></i>
+            <span>Clôturer / Archiver</span>
           </button>
 
           <button (click)="goToEdit(periodeMandat.id)"
@@ -87,7 +98,7 @@
                 <i class="bi bi-diagram-3-fill text-teal me-2"></i>
                 Frise Chronologique des Phases
               </h3>
-              <p class="section-subtitle">Visualisation de la répartition temporelle des phases sur l'ensemble du mandat.</p>
+              <p class="section-subtitle">Visualisation de la répartition temporelle des phases et des éventuelles périodes inter-phases.</p>
             </div>
           </div>
           <div class="timeline-wrapper">
@@ -106,21 +117,30 @@
                 <i class="bi bi-calendar4-week text-teal me-2"></i>
                 Découpage des Phases & Pilotage des Campagnes ({{ periodeMandat.phases.length }})
               </h3>
-              <p class="section-subtitle">Gérez les cycles administratifs et ouvrez les campagnes d'adhésion pour chaque phase.</p>
+              <p class="section-subtitle">Gérez les cycles administratifs, lancez ou prolongez les campagnes d'adhésion pour chaque phase.</p>
             </div>
           </div>
 
           <div class="phases-grid">
             <div *ngFor="let phase of periodeMandat.phases"
-                 [class.is-current-phase]="phase.status === 'CURRENT'"
+                 [class.is-current-phase]="phase.status === 'CURRENT' || phase.status === 'EXTENDED'"
                  class="phase-card">
               <!-- Phase Card Header -->
               <div class="phase-card-top">
                 <div class="phase-name-badge">
                   <h4 class="phase-name">{{ phase.nom }}</h4>
-                  <span class="phase-status-badge" [ngClass]="'status-' + (phase.status ? phase.status.toLowerCase() : 'future')">
-                    {{ phase.status === 'CURRENT' ? 'En cours' : phase.status === 'PASSED' ? 'Terminée' : 'À venir' }}
+                  <span class="phase-status-badge" [ngClass]="getPhaseStatusBadge(phase).class">
+                    {{ getPhaseStatusBadge(phase).label }}
                   </span>
+                </div>
+              </div>
+
+              <!-- Motif de prolongation banner if extended -->
+              <div *ngIf="phase.motifProlongation" class="prolongation-alert">
+                <i class="bi bi-info-circle-fill"></i>
+                <div>
+                  <strong>Prolongation motivée :</strong>
+                  <p class="mb-0">{{ phase.motifProlongation }}</p>
                 </div>
               </div>
 
@@ -147,8 +167,9 @@
                   <div class="info-texts">
                     <div class="d-flex align-items-center gap-2">
                       <span class="info-label">Campagne d'adhésion</span>
-                      <span *ngIf="isCampaignOpen(phase)" class="badge bg-success-subtle text-success border px-2 py-0">Ouverte</span>
-                      <span *ngIf="!isCampaignOpen(phase)" class="badge bg-secondary-subtle text-secondary border px-2 py-0">Clôturée / En attente</span>
+                      <span *ngIf="isCampaignOpen(phase) && phase.status !== 'EXTENDED'" class="badge bg-success-subtle text-success border px-2 py-0">Ouverte</span>
+                      <span *ngIf="phase.status === 'EXTENDED'" class="badge bg-purple-subtle text-purple border px-2 py-0">Prolongée</span>
+                      <span *ngIf="!isCampaignOpen(phase) && phase.status !== 'EXTENDED'" class="badge bg-secondary-subtle text-secondary border px-2 py-0">Clôturée / En attente</span>
                     </div>
                     <span class="info-value" *ngIf="phase.dateDebutInscription && phase.dateFinInscription">
                       Du {{ phase.dateDebutInscription | arrayDate }} au {{ phase.dateFinInscription | arrayDate }}
@@ -166,9 +187,18 @@
                         (click)="openCampaignModal(phase)"
                         type="button"
                         class="btn-phase-action btn-open-campaign"
-                        title="Ouvrir la campagne d'inscription et notifier les membres">
+                        title="Ouvrir la campagne d'inscription">
                   <i class="bi bi-megaphone-fill"></i>
-                  <span>Lancer la Campagne</span>
+                  <span>Lancer Campagne</span>
+                </button>
+
+                <button *ngIf="isCampaignOpen(phase)"
+                        (click)="openProlongModal(phase)"
+                        type="button"
+                        class="btn-phase-action btn-prolong-campaign"
+                        title="Prolonger exceptionnellement la campagne avec motif">
+                  <i class="bi bi-calendar-plus-fill"></i>
+                  <span>Prolonger</span>
                 </button>
 
                 <button *ngIf="isCampaignOpen(phase)"
@@ -177,7 +207,7 @@
                         class="btn-phase-action btn-close-campaign"
                         title="Clôturer immédiatement la campagne">
                   <i class="bi bi-lock-fill"></i>
-                  <span>Clôturer Campagne</span>
+                  <span>Clôturer</span>
                 </button>
 
                 <button [routerLink]="['/phases', 'edit', phase.id]"
@@ -241,6 +271,61 @@
           <span *ngIf="isSubmittingCampaign" class="spinner-border spinner-border-sm me-1"></span>
           <i *ngIf="!isSubmittingCampaign" class="bi bi-check-lg me-1"></i>
           Confirmer l'ouverture
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Prolonger la Campagne d'Adhésion -->
+<div *ngIf="isProlongModalOpen" class="modal fade show d-block modal-backdrop-custom" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content rounded-4 border-0 shadow-lg">
+      <div class="modal-header border-bottom py-3 px-4 bg-white rounded-top-4">
+        <div class="d-flex align-items-center">
+          <div class="me-3 bg-purple-subtle text-purple rounded-circle d-flex align-items-center justify-content-center" style="width: 42px; height: 42px;">
+            <i class="bi bi-calendar-plus-fill fs-5"></i>
+          </div>
+          <div>
+            <h5 class="modal-title fw-bold text-dark mb-0">Prolonger la Campagne d'Adhésion</h5>
+            <small class="text-muted">{{ selectedPhaseForProlong?.nom }}</small>
+          </div>
+        </div>
+        <button type="button" class="btn-close" (click)="closeProlongModal()" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-4">
+        <p class="text-secondary small mb-4">
+          La prolongation repousse la date limite d'adhésion. Conformément à la gouvernance de l'AEMUD, un motif officiel est obligatoire pour justifier cette décision.
+        </p>
+
+        <div class="mb-3">
+          <label class="form-label fw-semibold text-dark">Nouvelle date de fin des inscriptions <span class="text-danger">*</span></label>
+          <input type="date" class="form-control form-control-lg" [(ngModel)]="prolongEndDate">
+        </div>
+
+        <div class="mb-4">
+          <label class="form-label fw-semibold text-dark">Motif officiel de la prolongation <span class="text-danger">*</span></label>
+          <textarea class="form-control"
+                    rows="3"
+                    [(ngModel)]="prolongMotif"
+                    placeholder="Ex: Décision du Secrétariat Général suite au décalage de la rentrée universitaire UCAD..."></textarea>
+          <div class="form-text small">Ce motif sera enregistré dans l'historique de gouvernance.</div>
+        </div>
+
+        <div class="alert alert-warning py-2 px-3 small d-flex align-items-center gap-2 mb-0">
+          <i class="bi bi-exclamation-triangle-fill fs-5 text-warning"></i>
+          <span>Cette action prolongera la fenêtre d'enregistrement des membres pour cette phase.</span>
+        </div>
+      </div>
+      <div class="modal-footer border-top py-3 px-4 bg-light rounded-bottom-4">
+        <button type="button" class="btn btn-outline-secondary" (click)="closeProlongModal()">Annuler</button>
+        <button type="button"
+                class="btn btn-purple-primary"
+                [disabled]="isSubmittingProlong || !prolongEndDate || !prolongMotif.trim()"
+                (click)="submitProlongCampaign()">
+          <span *ngIf="isSubmittingProlong" class="spinner-border spinner-border-sm me-1"></span>
+          <i *ngIf="!isSubmittingProlong" class="bi bi-check2-circle me-1"></i>
+          Enregistrer la prolongation
         </button>
       </div>
     </div>

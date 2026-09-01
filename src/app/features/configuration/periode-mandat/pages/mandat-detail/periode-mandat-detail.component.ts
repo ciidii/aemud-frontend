@@ -1,12 +1,12 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AsyncPipe, CommonModule, DatePipe, NgFor, NgIf} from '@angular/common';
 import {ActivatedRoute, Router, RouterLink} from '@angular/router';
-import {BehaviorSubject, Observable, of} from 'rxjs';
-import {catchError, finalize, map, switchMap, tap} from 'rxjs/operators';
+import {Observable, of} from 'rxjs';
+import {catchError, finalize, map, tap} from 'rxjs/operators';
 import {FormsModule} from '@angular/forms';
 import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
 import {PhaseHttpService} from '../../services/phase-http.service';
-import {PeriodeMandatDto} from '../../models/periode-mandat.model';
+import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
 import {PhaseModel} from '../../models/phase.model';
 import {PhaseTimelineComponent} from '../../components/phase-timeline/phase-timeline.component';
 import {ArrayDatePipe} from "../../../../../core/pipes/array-data.pipe";
@@ -39,18 +39,26 @@ export class PeriodeMandatDetailComponent implements OnInit {
   currentMandat: PeriodeMandatDto | null = null;
   mandatId: string | null = null;
 
-  // Activation state
+  // Activation & Status transition state
   isActivating = false;
+  isUpdatingStatus = false;
 
   // Delete modal
   isDeleteModalOpen = false;
 
-  // Campaign modal
+  // Open Campaign modal
   isCampaignModalOpen = false;
   selectedPhaseForCampaign: PhaseModel | null = null;
   campaignStartDate = '';
   campaignEndDate = '';
   isSubmittingCampaign = false;
+
+  // Prolong Campaign modal
+  isProlongModalOpen = false;
+  selectedPhaseForProlong: PhaseModel | null = null;
+  prolongEndDate = '';
+  prolongMotif = '';
+  isSubmittingProlong = false;
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
@@ -88,12 +96,45 @@ export class PeriodeMandatDetailComponent implements OnInit {
     );
   }
 
+  getMandatStatusBadge(mandat: PeriodeMandatDto): { label: string; class: string; icon: string } {
+    const status = mandat.status || (mandat.estActif ? 'ACTIVE' : 'CLOSED_ARCHIVED');
+    switch (status) {
+      case 'ACTIVE':
+        return { label: 'Mandat Actif', class: 'badge-active', icon: 'bi-check-circle-fill' };
+      case 'DRAFT':
+        return { label: 'Brouillon', class: 'badge-draft', icon: 'bi-pencil-fill' };
+      case 'UPCOMING':
+        return { label: 'À venir', class: 'badge-upcoming', icon: 'bi-calendar-plus' };
+      case 'CLOSED_ARCHIVED':
+      default:
+        return { label: 'Archivé', class: 'badge-archived', icon: 'bi-archive-fill' };
+    }
+  }
+
+  getPhaseStatusBadge(phase: PhaseModel): { label: string; class: string } {
+    const s = phase.status ? phase.status.toUpperCase() : 'FUTURE';
+    switch (s) {
+      case 'CURRENT':
+      case 'ACTIVE':
+        return { label: 'En cours', class: 'status-current' };
+      case 'EXTENDED':
+        return { label: 'Prolongée', class: 'status-extended' };
+      case 'CLOSED':
+      case 'PASSED':
+        return { label: 'Terminée', class: 'status-passed' };
+      case 'FUTURE':
+      case 'PLANNED':
+      default:
+        return { label: 'À venir', class: 'status-future' };
+    }
+  }
+
   goToEdit(periodeMandatId: string): void {
     this.router.navigate(['/periode-mandats', 'edit', periodeMandatId]);
   }
 
   activateMandat(mandat: PeriodeMandatDto): void {
-    if (mandat.estActif) return;
+    if (mandat.status === 'ACTIVE' || mandat.estActif) return;
     this.isActivating = true;
     this.periodeMandatHttpService.activatePeriodeMandat(mandat.id).subscribe({
       next: (res) => {
@@ -108,6 +149,23 @@ export class PeriodeMandatDetailComponent implements OnInit {
         this.isActivating = false;
         this.notificationService.showError("Impossible d'activer ce mandat.");
         console.error('Failed to activate mandat', err);
+      }
+    });
+  }
+
+  updateMandatStatus(status: MandatStatus): void {
+    if (!this.currentMandat) return;
+    this.isUpdatingStatus = true;
+    this.periodeMandatHttpService.updateMandatStatus(this.currentMandat.id, status).subscribe({
+      next: () => {
+        this.isUpdatingStatus = false;
+        this.notificationService.showSuccess(`Le statut du mandat a été mis à jour.`);
+        this.loadMandat();
+      },
+      error: (err) => {
+        this.isUpdatingStatus = false;
+        this.notificationService.showError("Erreur lors du changement de statut.");
+        console.error('Failed to update status', err);
       }
     });
   }
@@ -136,7 +194,7 @@ export class PeriodeMandatDetailComponent implements OnInit {
     });
   }
 
-  // Campaign management
+  // Campaign management (Open)
   openCampaignModal(phase: PhaseModel): void {
     this.selectedPhaseForCampaign = phase;
     this.campaignStartDate = this.dateArrayToString(phase.dateDebutInscription) || this.dateArrayToString(phase.dateDebut);
@@ -171,6 +229,46 @@ export class PeriodeMandatDetailComponent implements OnInit {
         this.isSubmittingCampaign = false;
         this.notificationService.showError("Échec de l'ouverture de la campagne d'adhésion.");
         console.error('Failed to open campaign', err);
+      }
+    });
+  }
+
+  // Campaign management (Prolong)
+  openProlongModal(phase: PhaseModel): void {
+    this.selectedPhaseForProlong = phase;
+    this.prolongEndDate = this.dateArrayToString(phase.dateFinInscription) || this.dateArrayToString(phase.dateFin);
+    this.prolongMotif = phase.motifProlongation || '';
+    this.isProlongModalOpen = true;
+  }
+
+  closeProlongModal(): void {
+    this.isProlongModalOpen = false;
+    this.selectedPhaseForProlong = null;
+    this.prolongMotif = '';
+  }
+
+  submitProlongCampaign(): void {
+    if (!this.selectedPhaseForProlong || !this.prolongEndDate || !this.prolongMotif.trim()) {
+      this.notificationService.showError("Veuillez préciser la nouvelle date de fin et le motif officiel.");
+      return;
+    }
+
+    this.isSubmittingProlong = true;
+    this.phaseHttpService.prolongRegistrationCampaign(
+      this.selectedPhaseForProlong.id,
+      this.prolongEndDate,
+      this.prolongMotif.trim()
+    ).subscribe({
+      next: () => {
+        this.isSubmittingProlong = false;
+        this.notificationService.showSuccess(`Campagne d'adhésion prolongée avec succès !`);
+        this.closeProlongModal();
+        this.loadMandat();
+      },
+      error: (err) => {
+        this.isSubmittingProlong = false;
+        this.notificationService.showError("Échec de la prolongation de la campagne.");
+        console.error('Failed to prolong campaign', err);
       }
     });
   }

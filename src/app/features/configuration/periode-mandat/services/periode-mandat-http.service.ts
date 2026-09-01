@@ -40,4 +40,8 @@ export class PeriodeMandatHttpService {
   public activatePeriodeMandat(id: string): Observable<ResponseEntityApi<PeriodeMandatDto>> {
     return this.http.patch<ResponseEntityApi<PeriodeMandatDto>>(`${this.url}/periode-mandats/${id}/activate`, {});
   }
+
+  public updateMandatStatus(id: string, status: string): Observable<ResponseEntityApi<PeriodeMandatDto>> {
+    return this.http.patch<ResponseEntityApi<PeriodeMandatDto>>(`${this.url}/periode-mandats/${id}/status?status=${status}`, {});
+  }
 }
