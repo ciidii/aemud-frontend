@@ -44,6 +44,13 @@ export class PhaseHttpService {
     });
   }
 
+  public prolongRegistrationCampaign(phaseId: string, newEndDate: string, motif: string): Observable<ResponseEntityApi<void>> {
+    return this.http.patch<ResponseEntityApi<void>>(`${this.url}/${phaseId}/prolong-registrations`, {
+      newEndDate,
+      motif
+    });
+  }
+
   public closeRegistrationCampaign(phaseId: string): Observable<ResponseEntityApi<void>> {
     return this.http.patch<ResponseEntityApi<void>>(`${this.url}/${phaseId}/close-registrations`, {});
   }

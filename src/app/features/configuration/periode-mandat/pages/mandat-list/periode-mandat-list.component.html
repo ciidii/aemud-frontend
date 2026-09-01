@@ -4,12 +4,10 @@
     <div class="header-left">
       <div class="title-row">
         <h1 class="page-title">Gestion des Mandats & Temporalité</h1>
-        <ng-container *ngIf="periodeMandats$ | async as mandats">
-          <span class="count-badge">
-            <i class="bi bi-clock-history"></i>
-            {{ mandats.length }} mandat{{ mandats.length > 1 ? 's' : '' }}
-          </span>
-        </ng-container>
+        <span class="count-badge">
+          <i class="bi bi-clock-history"></i>
+          {{ allMandats.length }} mandat{{ allMandats.length > 1 ? 's' : '' }}
+        </span>
       </div>
       <p class="page-subtitle">Pilotez les mandats de l'AEMUD, leur découpage en phases temporelles et les fenêtres d'adhésion.</p>
     </div>
@@ -21,6 +19,40 @@
       </button>
     </div>
   </header>
+
+  <!-- Segmented Status Tabs -->
+  <div class="mandat-status-tabs-container">
+    <div class="segmented-tabs">
+      <button type="button"
+              class="tab-btn"
+              [class.active]="selectedTab === 'ALL'"
+              (click)="setFilterTab('ALL')">
+        <i class="bi bi-grid-fill"></i>
+        <span>Tous les Mandats ({{ allMandats.length }})</span>
+      </button>
+      <button type="button"
+              class="tab-btn"
+              [class.active]="selectedTab === 'ACTIVE'"
+              (click)="setFilterTab('ACTIVE')">
+        <i class="bi bi-lightning-charge-fill text-teal"></i>
+        <span>Mandat Actif</span>
+      </button>
+      <button type="button"
+              class="tab-btn"
+              [class.active]="selectedTab === 'DRAFT_UPCOMING'"
+              (click)="setFilterTab('DRAFT_UPCOMING')">
+        <i class="bi bi-hourglass-split text-warning"></i>
+        <span>Brouillons & À venir</span>
+      </button>
+      <button type="button"
+              class="tab-btn"
+              [class.active]="selectedTab === 'ARCHIVED'"
+              (click)="setFilterTab('ARCHIVED')">
+        <i class="bi bi-archive-fill text-secondary"></i>
+        <span>Archivés</span>
+      </button>
+    </div>
+  </div>
 
   <!-- Main Content -->
   <div class="page-content">
@@ -44,24 +76,25 @@
     </div>
 
     <!-- Data State -->
-    <ng-container *ngIf="periodeMandats$ | async as periodeMandats">
+    <div *ngIf="!isLoading && !hasError">
       <!-- Empty State -->
-      <div *ngIf="!isLoading && !hasError && periodeMandats.length === 0" class="empty-state-card">
+      <div *ngIf="filteredMandats.length === 0" class="empty-state-card">
         <div class="empty-icon-circle">
           <i class="bi bi-calendar4-week"></i>
         </div>
-        <h2>Aucun mandat configuré</h2>
-        <p>Démarrez la gouvernance en créant le premier mandat de l'association.</p>
-        <button (click)="goToAdd()" type="button" class="btn-create-mandat">
+        <h2>Aucun mandat trouvé</h2>
+        <p *ngIf="selectedTab === 'ALL'">Démarrez la gouvernance en créant le premier mandat de l'association.</p>
+        <p *ngIf="selectedTab !== 'ALL'">Aucun mandat ne correspond à ce filtre.</p>
+        <button *ngIf="selectedTab === 'ALL'" (click)="goToAdd()" type="button" class="btn-create-mandat">
           <i class="bi bi-plus-lg"></i> Créer une période de mandat
         </button>
       </div>
 
       <!-- Mandates Grid -->
-      <div *ngIf="!isLoading && periodeMandats.length > 0" class="mandates-grid">
-        <div *ngFor="let mandat of periodeMandats"
+      <div *ngIf="filteredMandats.length > 0" class="mandates-grid">
+        <div *ngFor="let mandat of filteredMandats"
              (click)="goToDetail(mandat.id)"
-             [class.is-active-mandat]="mandat.estActif"
+             [class.is-active-mandat]="mandat.status === 'ACTIVE' || mandat.estActif"
              class="mandate-card">
 
           <!-- Card Header -->
@@ -70,11 +103,10 @@
               <h3 class="mandat-nom">{{ mandat.nom }}</h3>
             </div>
             <div class="status-indicator">
-              <span *ngIf="mandat.estActif" class="badge-status badge-active" title="Mandat actuellement actif dans l'application">
-                <span class="pulse-dot"></span> Mandat Actif
-              </span>
-              <span *ngIf="!mandat.estActif" class="badge-status badge-inactive">
-                Inactif
+              <span class="badge-status" [ngClass]="getMandatStatusBadge(mandat).class">
+                <span *ngIf="mandat.status === 'ACTIVE' || mandat.estActif" class="pulse-dot"></span>
+                <i class="bi" [ngClass]="getMandatStatusBadge(mandat).icon"></i>
+                {{ getMandatStatusBadge(mandat).label }}
               </span>
             </div>
           </div>
@@ -112,11 +144,11 @@
               </div>
               <div class="phases-mini-pills">
                 <div *ngFor="let phase of mandat.phases"
-                     [ngClass]="'phase-pill-' + (phase.status ? phase.status.toLowerCase() : 'future')"
+                     [ngClass]="getPhaseStatusBadge(phase).class"
                      class="phase-mini-pill"
-                     title="Phase {{ phase.nom }}">
+                     title="Phase {{ phase.nom }} - {{ getPhaseStatusBadge(phase).label }}">
                   <span class="pill-name">{{ phase.nom }}</span>
-                  <span class="pill-status-dot"></span>
+                  <span class="pill-badge-txt">{{ getPhaseStatusBadge(phase).label }}</span>
                 </div>
               </div>
             </div>
@@ -124,7 +156,7 @@
 
           <!-- Card Footer Actions -->
           <div class="card-footer-actions" (click)="$event.stopPropagation()">
-            <button *ngIf="!mandat.estActif"
+            <button *ngIf="mandat.status !== 'ACTIVE' && !mandat.estActif"
                     (click)="activateMandat(mandat, $event)"
                     [disabled]="isActivatingId === mandat.id"
                     type="button"
@@ -156,7 +188,7 @@
           </div>
         </div>
       </div>
-    </ng-container>
+    </div>
   </div>
 </div>
 

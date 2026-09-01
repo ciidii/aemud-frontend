@@ -18,7 +18,7 @@ import {PhaseFormItemComponent} from '../../components/phase-form-item/phase-for
 import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
 import {CreatePeriodeMandatModel} from '../../models/CreatePeriodeMandatModel';
 import {CreatePhaseModel} from '../../models/CreatePhaseModel';
-import {PeriodeMandatDto} from '../../models/periode-mandat.model';
+import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
 import {UpdatePhaseModel} from "../../models/UpdatePhaseModel";
 import {NotificationService} from "../../../../../core/services/notification.service";
 
@@ -43,6 +43,7 @@ export interface PeriodeMandatForm {
   dateDebut: FormControl<string | null>;
   dateFin: FormControl<string | null>;
   estActif: FormControl<boolean | null>;
+  status: FormControl<MandatStatus | null>;
   calculatePhasesAutomatically: FormControl<boolean | null>;
   numberOfPhases: FormControl<number | null>;
   phases: FormArray<FormGroup<PhaseFormGroup>>;
@@ -73,22 +74,17 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
     return {mandateDateOrder: true};
   }
 
-  const items = phases.controls.map(p => p.value);
+  const items = phases.controls
+    .map(p => p.value)
+    .filter(v => v.dateDebut && v.dateFin);
+
+  if (items.length === 0) {
+    return null;
+  }
+
   const sorted = [...items].sort((a, b) => new Date(a.dateDebut!).getTime() - new Date(b.dateDebut!).getTime());
 
-  // Check 1: First phase must start exactly on mandate start date
-  const firstPhaseStart = normalizeDate(new Date(sorted[0].dateDebut!));
-  if (firstPhaseStart.getTime() !== mandateStart.getTime()) {
-    return {phaseGap: true, message: 'La première phase doit commencer à la date de début de la période.'};
-  }
-
-  // Check 2: Last phase must end exactly on mandate end date
-  const lastPhaseEnd = normalizeDate(new Date(sorted[sorted.length - 1].dateFin!));
-  if (lastPhaseEnd.getTime() !== mandateEnd.getTime()) {
-    return {phaseGap: true, message: 'La dernière phase doit se terminer à la date de fin de la période.'};
-  }
-
-  // Check 3: All phases must be contiguous, without gaps or overlaps, and within the mandate period
+  // Check: all phases within mandate bounds and valid date range
   for (let i = 0; i < sorted.length; i++) {
     const start = normalizeDate(new Date(sorted[i].dateDebut!));
     const end = normalizeDate(new Date(sorted[i].dateFin!));
@@ -97,13 +93,19 @@ const phasesValidator: ValidatorFn = (control: AbstractControl): ValidationError
       return {phaseDateOrder: true, message: `La phase "${sorted[i].nom}" a une date de début après sa date de fin.`};
     }
 
+    if (start.getTime() < mandateStart.getTime()) {
+      return {phaseOutsideMandate: true, message: `La phase "${sorted[i].nom}" commence avant le début du mandat.`};
+    }
+
+    if (end.getTime() > mandateEnd.getTime()) {
+      return {phaseOutsideMandate: true, message: `La phase "${sorted[i].nom}" se termine après la fin du mandat.`};
+    }
+
+    // Check overlap with next phase (inter-phase gaps / vacations are ALLOWED!)
     if (i < sorted.length - 1) {
       const nextStart = normalizeDate(new Date(sorted[i + 1].dateDebut!));
-      const expectedNextStart = new Date(end);
-      expectedNextStart.setUTCDate(expectedNextStart.getUTCDate() + 1);
-
-      if (nextStart.getTime() !== expectedNextStart.getTime()) {
-        return {phaseOverlapOrGap: true, message: 'Les phases doivent être continues et ne pas se chevaucher.'};
+      if (end.getTime() >= nextStart.getTime()) {
+        return {phaseOverlap: true, message: `La phase "${sorted[i].nom}" et la phase suivante se chevauchent.`};
       }
     }
   }
@@ -165,9 +167,10 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
       nom: this.fb.control<string | null>(null, Validators.required),
       dateDebut: this.fb.control<string | null>(null, Validators.required),
       dateFin: this.fb.control<string | null>(null, Validators.required),
-      estActif: this.fb.control<boolean | null>(true),
+      estActif: this.fb.control<boolean | null>(false),
+      status: this.fb.control<MandatStatus | null>('DRAFT'),
       calculatePhasesAutomatically: this.fb.control<boolean | null>(true),
-      numberOfPhases: this.fb.control<number | null>(null),
+      numberOfPhases: this.fb.control<number | null>(2),
       phases: this.fb.array<FormGroup<PhaseFormGroup>>([])
     }, {validators: phasesValidator});
 
@@ -243,11 +246,14 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
       });
     }
 
+    const statusValue = formValue.status || (formValue.estActif ? 'ACTIVE' : 'DRAFT');
+
     const periodeMandatPayload: CreatePeriodeMandatModel = {
       nom: formValue.nom!,
       dateDebut: formValue.dateDebut!,
       dateFin: formValue.dateFin!,
-      estActif: formValue.estActif!,
+      estActif: formValue.estActif || statusValue === 'ACTIVE',
+      status: statusValue,
       calculatePhasesAutomatically: formValue.calculatePhasesAutomatically!,
       numberOfPhases: formValue.calculatePhasesAutomatically ? formValue.numberOfPhases : undefined,
       createPhases: createPhases.length > 0 ? createPhases : undefined,
@@ -292,6 +298,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
           dateDebut: this.dateArrayToString(periodeMandat.dateDebut),
           dateFin: this.dateArrayToString(periodeMandat.dateFin),
           estActif: periodeMandat.estActif,
+          status: periodeMandat.status || (periodeMandat.estActif ? 'ACTIVE' : 'CLOSED_ARCHIVED'),
           calculatePhasesAutomatically: false, // Force manual mode for editing phases
           numberOfPhases: null
         });
