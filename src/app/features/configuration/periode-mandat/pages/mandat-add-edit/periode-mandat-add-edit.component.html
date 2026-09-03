@@ -1,95 +1,197 @@
-<div class="mandat-form-container">
-  <h2>{{ (periodeMandatId ? 'Modifier' : 'Ajouter') + ' une période de mandat' }}</h2>
-
-  <form (ngSubmit)="onSubmit()" [formGroup]="periodeMandatForm">
-    <div class="form-section">
-      <h3>Informations Générales de la Période de Mandat</h3>
-      <div class="form-group">
-        <label for="nom">Nom de la période de mandat</label>
-        <input formControlName="nom" id="nom" type="text">
-        <div *ngIf="periodeMandatForm.get('nom')?.invalid && periodeMandatForm.get('nom')?.touched" class="error-message">
-          Le nom de la période de mandat est requis.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="dateDebut">Date de début</label>
-        <input formControlName="dateDebut" id="dateDebut" type="date">
-        <div *ngIf="periodeMandatForm.get('dateDebut')?.invalid && periodeMandatForm.get('dateDebut')?.touched" class="error-message">
-          La date de début est requise.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="dateFin">Date de fin</label>
-        <input formControlName="dateFin" id="dateFin" type="date">
-        <div *ngIf="periodeMandatForm.get('dateFin')?.invalid && periodeMandatForm.get('dateFin')?.touched" class="error-message">
-          La date de fin est requise.
-        </div>
-      </div>
-
-      <div class="form-group">
-        <label for="status">Statut du Mandat</label>
-        <select formControlName="status" id="status">
-          <option value="DRAFT">Brouillon (En préparation)</option>
-          <option value="UPCOMING">À venir (Planifié)</option>
-          <option value="ACTIVE">Actif (Mandat courant officiel)</option>
-          <option value="CLOSED_ARCHIVED">Archivé (Historique)</option>
-        </select>
-        <small class="form-text">Si vous choisissez "Actif", ce mandat deviendra immédiatement le mandat courant de l'AEMUD.</small>
-      </div>
-    </div>
-
-    <div class="form-section">
-      <h3>Gestion des Phases</h3>
-      <div class="phase-mode-selector">
-        <label class="mode-option">
-          <input [value]="true" formControlName="calculatePhasesAutomatically" type="radio">
-          <span>Génération Automatique</span>
-        </label>
-        <label class="mode-option">
-          <input [value]="false" formControlName="calculatePhasesAutomatically" type="radio">
-          <span>Gestion Manuelle</span>
-        </label>
-      </div>
-
-      <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === true" class="automatic-phase-options">
-        <div class="form-group">
-          <label for="numberOfPhases">Nombre de phases souhaité</label>
-          <input formControlName="numberOfPhases" id="numberOfPhases" min="1" type="number">
-          <small class="form-text">Laissez vide pour générer 2 phases de durée égale. Le système couvrira 100% de la
-            période de mandat.</small>
-        </div>
-      </div>
-
-      <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === false" class="manual-phase-options">
-        <ng-container *ngIf="periodeMandatForm.get('dateDebut')?.value && periodeMandatForm.get('dateFin')?.value">
-          <app-phase-timeline
-            [periodeMandatEndDate]="periodeMandatForm.get('dateFin')?.value!"
-            [periodeMandatStartDate]="periodeMandatForm.get('dateDebut')?.value!"
-            [phases]="timelinePhases">
-          </app-phase-timeline>
-        </ng-container>
-        <ng-container *ngIf="!periodeMandatForm.get('dateDebut')?.value || !periodeMandatForm.get('dateFin')?.value">
-          <p class="info-message">Veuillez définir les dates de début et de fin de la période de mandat pour gérer les phases
-            manuellement.</p>
-        </ng-container>
-
-
-        <div formArrayName="phases">
-          <div *ngFor="let phaseControl of phasesFormArray.controls; let i = index">
-            <app-phase-form-item
-              (delete)="removePhase(i)"
-              [index]="i"
-              [phaseForm]="phaseControl">
-            </app-phase-form-item>
+<div class="mandat-form-page">
+  <!-- Page Header (Harmonized with Member Module) -->
+  <header class="page-header">
+    <div class="header-container">
+      <div class="top-row">
+        <div class="left-section">
+          <button (click)="goBack()" type="button" class="btn-back-nav" title="Retour à la liste des mandats">
+            <i class="bi bi-arrow-left"></i>
+          </button>
+          <div class="title-block">
+            <h1 class="page-title">{{ (periodeMandatId ? 'Modifier le Mandat' : 'Créer un Mandat') }}</h1>
+            <p class="page-subtitle">Définissez la temporalité officielle, le statut de gouvernance et le calendrier des phases.</p>
           </div>
         </div>
 
-        <button (click)="addPhase()" class="add-phase-button" type="button">+ Ajouter une phase</button>
+        <div class="right-section">
+          <button (click)="goBack()" type="button" class="btn-action btn-secondary">
+            Annuler
+          </button>
+          <button (click)="onSubmit()"
+                  [disabled]="periodeMandatForm.invalid || isLoading"
+                  type="button"
+                  class="btn-action btn-primary">
+            <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+            <i *ngIf="!isLoading" class="bi bi-check2 me-1"></i>
+            <span>{{ (periodeMandatId ? 'Mettre à jour' : 'Enregistrer') }}</span>
+          </button>
+        </div>
       </div>
     </div>
+  </header>
 
-    <button [disabled]="periodeMandatForm.invalid" type="submit">Enregistrer</button>
-  </form>
+  <!-- Form Content -->
+  <main class="page-content">
+    <form (ngSubmit)="onSubmit()" [formGroup]="periodeMandatForm" class="mandat-form-layout">
+      <!-- Section 1: Informations Générales -->
+      <section class="section-card">
+        <div class="card-section-header">
+          <div class="header-icon">
+            <i class="bi bi-info-circle-fill"></i>
+          </div>
+          <div>
+            <h2 class="section-title">Informations Générales</h2>
+            <p class="section-subtitle">Nom officiel du mandat et période de validité globale.</p>
+          </div>
+        </div>
+
+        <div class="form-body">
+          <div class="form-group mb-4">
+            <label for="nom" class="form-label">
+              Nom du mandat <span class="text-danger">*</span>
+            </label>
+            <input formControlName="nom"
+                   id="nom"
+                   type="text"
+                   class="form-control"
+                   placeholder="Ex: Mandat 2024-2025">
+            <div *ngIf="periodeMandatForm.get('nom')?.invalid && periodeMandatForm.get('nom')?.touched" class="error-message">
+              <i class="bi bi-exclamation-circle-fill"></i> Le nom du mandat est requis.
+            </div>
+          </div>
+
+          <div class="dates-grid mb-4">
+            <div class="form-group">
+              <label for="dateDebut" class="form-label">
+                Date de début <span class="text-danger">*</span>
+              </label>
+              <input formControlName="dateDebut"
+                     id="dateDebut"
+                     type="date"
+                     class="form-control">
+              <div *ngIf="periodeMandatForm.get('dateDebut')?.invalid && periodeMandatForm.get('dateDebut')?.touched" class="error-message">
+                <i class="bi bi-exclamation-circle-fill"></i> La date de début est requise.
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="dateFin" class="form-label">
+                Date de fin <span class="text-danger">*</span>
+              </label>
+              <input formControlName="dateFin"
+                     id="dateFin"
+                     type="date"
+                     class="form-control">
+              <div *ngIf="periodeMandatForm.get('dateFin')?.invalid && periodeMandatForm.get('dateFin')?.touched" class="error-message">
+                <i class="bi bi-exclamation-circle-fill"></i> La date de fin est requise.
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group mb-0">
+            <label for="status" class="form-label">Statut du Mandat</label>
+            <select formControlName="status" id="status" class="form-select">
+              <option value="DRAFT">Brouillon (En préparation)</option>
+              <option value="UPCOMING">À venir (Planifié)</option>
+              <option value="ACTIVE">Actif (Mandat courant officiel)</option>
+              <option value="CLOSED_ARCHIVED">Archivé (Historique)</option>
+            </select>
+            <small class="form-text text-muted mt-2 d-block">
+              <i class="bi bi-info-circle me-1"></i> Si vous choisissez "Actif", ce mandat deviendra immédiatement le mandat courant de l'AEMUD.
+            </small>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section 2: Découpage des Phases -->
+      <section class="section-card">
+        <div class="card-section-header">
+          <div class="header-icon">
+            <i class="bi bi-layers-fill"></i>
+          </div>
+          <div>
+            <h2 class="section-title">Découpage des Phases</h2>
+            <p class="section-subtitle">Organisez les semestres ou phases administratives du mandat.</p>
+          </div>
+        </div>
+
+        <div class="form-body">
+          <!-- Segmented Mode Selector -->
+          <div class="phase-mode-selector mb-4">
+            <label class="mode-option" [class.selected]="periodeMandatForm.get('calculatePhasesAutomatically')?.value === true">
+              <input [value]="true" formControlName="calculatePhasesAutomatically" type="radio">
+              <i class="bi bi-magic me-2"></i>
+              <span>Génération Automatique</span>
+            </label>
+            <label class="mode-option" [class.selected]="periodeMandatForm.get('calculatePhasesAutomatically')?.value === false">
+              <input [value]="false" formControlName="calculatePhasesAutomatically" type="radio">
+              <i class="bi bi-sliders me-2"></i>
+              <span>Gestion Manuelle</span>
+            </label>
+          </div>
+
+          <!-- Auto Phase Options -->
+          <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === true" class="automatic-phase-options">
+            <div class="form-group">
+              <label for="numberOfPhases" class="form-label">Nombre de phases souhaité</label>
+              <input formControlName="numberOfPhases"
+                     id="numberOfPhases"
+                     min="1"
+                     max="10"
+                     type="number"
+                     class="form-control"
+                     placeholder="Ex: 2">
+              <small class="form-text text-muted mt-2 d-block">
+                <i class="bi bi-lightbulb me-1"></i> Laissez vide pour générer 2 phases de durée égale. Le système couvrira 100% de la période du mandat.
+              </small>
+            </div>
+          </div>
+
+          <!-- Manual Phase Options -->
+          <div *ngIf="periodeMandatForm.get('calculatePhasesAutomatically')?.value === false" class="manual-phase-options">
+            <div *ngIf="periodeMandatForm.get('dateDebut')?.value && periodeMandatForm.get('dateFin')?.value" class="timeline-container mb-4">
+              <app-phase-timeline
+                [periodeMandatEndDate]="periodeMandatForm.get('dateFin')?.value!"
+                [periodeMandatStartDate]="periodeMandatForm.get('dateDebut')?.value!"
+                [phases]="timelinePhases">
+              </app-phase-timeline>
+            </div>
+
+            <div *ngIf="!periodeMandatForm.get('dateDebut')?.value || !periodeMandatForm.get('dateFin')?.value" class="info-alert mb-4">
+              <i class="bi bi-info-circle-fill me-2"></i>
+              <span>Veuillez définir les dates de début et de fin du mandat ci-dessus pour configurer les phases manuellement.</span>
+            </div>
+
+            <!-- Phases Form Array -->
+            <div formArrayName="phases" class="phases-form-list">
+              <div *ngFor="let phaseControl of phasesFormArray.controls; let i = index" class="phase-form-wrapper">
+                <app-phase-form-item
+                  (delete)="removePhase(i)"
+                  [index]="i"
+                  [phaseForm]="phaseControl">
+                </app-phase-form-item>
+              </div>
+            </div>
+
+            <button (click)="addPhase()" class="btn-add-phase" type="button">
+              <i class="bi bi-plus-circle-fill"></i>
+              <span>Ajouter une phase</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Bottom Action Bar (Mobile & Desktop) -->
+      <div class="form-bottom-actions">
+        <button (click)="goBack()" type="button" class="btn-action btn-secondary">
+          Annuler
+        </button>
+        <button [disabled]="periodeMandatForm.invalid || isLoading" type="submit" class="btn-action btn-primary">
+          <span *ngIf="isLoading" class="spinner-border spinner-border-sm me-2"></span>
+          <i *ngIf="!isLoading" class="bi bi-check2 me-1"></i>
+          <span>{{ (periodeMandatId ? 'Mettre à jour le Mandat' : 'Enregistrer le Mandat') }}</span>
+        </button>
+      </div>
+    </form>
+  </main>
 </div>

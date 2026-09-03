@@ -1,6 +1,7 @@
 import {Component, inject, OnInit} from '@angular/core';
 import {AsyncPipe, CommonModule, NgFor, NgIf} from '@angular/common';
 import {Router} from '@angular/router';
+import {FormsModule} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map} from 'rxjs/operators';
 import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
@@ -9,23 +10,35 @@ import {NotificationService} from "../../../../../core/services/notification.ser
 import {AppStateService} from "../../../../../core/services/app-state.service";
 import {ConfirmDeleteModalComponent} from "../../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 
+export type MandatFilterTab = 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED';
+
 @Component({
   selector: 'app-periode-mandat-list',
   standalone: true,
-  imports: [CommonModule, NgFor, NgIf, AsyncPipe, ConfirmDeleteModalComponent],
+  imports: [CommonModule, NgFor, NgIf, AsyncPipe, FormsModule, ConfirmDeleteModalComponent],
   templateUrl: './periode-mandat-list.component.html',
   styleUrls: ['./periode-mandat-list.component.scss']
 })
 export class PeriodeMandatListComponent implements OnInit {
   allMandats: PeriodeMandatDto[] = [];
   filteredMandats: PeriodeMandatDto[] = [];
-  selectedTab: 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED' = 'ALL';
+  selectedTab: MandatFilterTab = 'ALL';
+  searchTerm = '';
+
+  activeMandat: PeriodeMandatDto | null = null;
 
   isLoading = true;
   hasError = false;
   isActivatingId: string | null = null;
   isDeleteModalOpen = false;
   mandatToDelete: PeriodeMandatDto | null = null;
+
+  statusTabs: { value: MandatFilterTab; label: string; icon: string }[] = [
+    { value: 'ALL', label: 'Tous les Mandats', icon: 'bi-grid-fill' },
+    { value: 'ACTIVE', label: 'Mandat Actif', icon: 'bi-lightning-charge-fill' },
+    { value: 'DRAFT_UPCOMING', label: 'Brouillons & À venir', icon: 'bi-hourglass-split' },
+    { value: 'ARCHIVED', label: 'Archivés', icon: 'bi-archive-fill' }
+  ];
 
   private periodeMandatHttpService = inject(PeriodeMandatHttpService);
   private appStateService = inject(AppStateService);
@@ -50,25 +63,63 @@ export class PeriodeMandatListComponent implements OnInit {
       })
     ).subscribe(mandats => {
       this.allMandats = mandats;
+      this.activeMandat = mandats.find(m => m.status === 'ACTIVE' || m.estActif) || null;
       this.applyFilter();
     });
   }
 
-  setFilterTab(tab: 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED'): void {
+  setFilterTab(tab: MandatFilterTab): void {
     this.selectedTab = tab;
     this.applyFilter();
   }
 
-  applyFilter(): void {
-    if (this.selectedTab === 'ACTIVE') {
-      this.filteredMandats = this.allMandats.filter(m => m.status === 'ACTIVE' || m.estActif);
-    } else if (this.selectedTab === 'DRAFT_UPCOMING') {
-      this.filteredMandats = this.allMandats.filter(m => m.status === 'DRAFT' || m.status === 'UPCOMING');
-    } else if (this.selectedTab === 'ARCHIVED') {
-      this.filteredMandats = this.allMandats.filter(m => m.status === 'CLOSED_ARCHIVED' || (!m.estActif && m.status !== 'DRAFT' && m.status !== 'UPCOMING'));
-    } else {
-      this.filteredMandats = [...this.allMandats];
+  onSearchChange(): void {
+    this.applyFilter();
+  }
+
+  clearSearch(): void {
+    this.searchTerm = '';
+    this.applyFilter();
+  }
+
+  getTabCount(tab: MandatFilterTab): number {
+    switch (tab) {
+      case 'ALL':
+        return this.allMandats.length;
+      case 'ACTIVE':
+        return this.allMandats.filter(m => m.status === 'ACTIVE' || m.estActif).length;
+      case 'DRAFT_UPCOMING':
+        return this.allMandats.filter(m => m.status === 'DRAFT' || m.status === 'UPCOMING').length;
+      case 'ARCHIVED':
+        return this.allMandats.filter(m => m.status === 'CLOSED_ARCHIVED' || (!m.estActif && m.status !== 'DRAFT' && m.status !== 'UPCOMING')).length;
+      default:
+        return 0;
     }
+  }
+
+  applyFilter(): void {
+    let result = [...this.allMandats];
+
+    // Status filter
+    if (this.selectedTab === 'ACTIVE') {
+      result = result.filter(m => m.status === 'ACTIVE' || m.estActif);
+    } else if (this.selectedTab === 'DRAFT_UPCOMING') {
+      result = result.filter(m => m.status === 'DRAFT' || m.status === 'UPCOMING');
+    } else if (this.selectedTab === 'ARCHIVED') {
+      result = result.filter(m => m.status === 'CLOSED_ARCHIVED' || (!m.estActif && m.status !== 'DRAFT' && m.status !== 'UPCOMING'));
+    }
+
+    // Search filter
+    if (this.searchTerm && this.searchTerm.trim() !== '') {
+      const term = this.searchTerm.toLowerCase().trim();
+      result = result.filter(m => {
+        const nomMatches = m.nom ? m.nom.toLowerCase().includes(term) : false;
+        const phaseMatches = m.phases ? m.phases.some(p => p.nom && p.nom.toLowerCase().includes(term)) : false;
+        return nomMatches || phaseMatches;
+      });
+    }
+
+    this.filteredMandats = result;
   }
 
   getMandatStatusBadge(mandat: PeriodeMandatDto): { label: string; class: string; icon: string } {

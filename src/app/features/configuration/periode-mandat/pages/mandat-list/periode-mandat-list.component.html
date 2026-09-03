@@ -1,62 +1,74 @@
 <div class="mandat-list-page">
-  <!-- Page Header -->
-  <header class="page-header shadow-sm">
-    <div class="header-left">
-      <div class="title-row">
-        <h1 class="page-title">Gestion des Mandats & Temporalité</h1>
-        <span class="count-badge">
-          <i class="bi bi-clock-history"></i>
-          {{ allMandats.length }} mandat{{ allMandats.length > 1 ? 's' : '' }}
-        </span>
-      </div>
-      <p class="page-subtitle">Pilotez les mandats de l'AEMUD, leur découpage en phases temporelles et les fenêtres d'adhésion.</p>
-    </div>
+  <!-- Page Header (Harmonized with Member Module) -->
+  <header class="page-header">
+    <div class="header-container">
+      <div class="top-row">
+        <div class="left-section">
+          <div class="title-with-badge">
+            <h1 class="page-title">Gestion des Mandats</h1>
+            <span class="count-badge" *ngIf="!isLoading">
+              <i class="bi bi-calendar-range-fill"></i>
+              {{ allMandats.length }} mandat{{ allMandats.length > 1 ? 's' : '' }}
+            </span>
+            <span class="active-mandat-indicator" *ngIf="activeMandat && !isLoading">
+              <span class="pulse-dot"></span>
+              <span class="indicator-label">Actif :</span>
+              <strong>{{ activeMandat.nom }}</strong>
+            </span>
+          </div>
+          <p class="page-subtitle">Pilotez la gouvernance temporelle de l'AEMUD, les cycles administratifs et les campagnes d'adhésion.</p>
+        </div>
 
-    <div class="header-right">
-      <button (click)="goToAdd()" type="button" class="btn-create-mandat">
-        <i class="bi bi-plus-lg"></i>
-        <span>Créer un Mandat</span>
-      </button>
+        <div class="right-section">
+          <button (click)="goToAdd()" type="button" class="btn-action btn-primary" title="Créer un nouveau mandat">
+            <i class="bi bi-plus-lg"></i>
+            <span>Nouveau Mandat</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Segment Quick Filter Tabs -->
+      <div class="status-tabs-nav">
+        <button *ngFor="let tab of statusTabs"
+                type="button"
+                class="tab-pill"
+                [class.active]="selectedTab === tab.value"
+                (click)="setFilterTab(tab.value)">
+          <i class="bi" [ngClass]="tab.icon"></i>
+          <span>{{ tab.label }}</span>
+          <span class="tab-count">({{ getTabCount(tab.value) }})</span>
+        </button>
+      </div>
     </div>
   </header>
 
-  <!-- Segmented Status Tabs -->
-  <div class="mandat-status-tabs-container">
-    <div class="segmented-tabs">
-      <button type="button"
-              class="tab-btn"
-              [class.active]="selectedTab === 'ALL'"
-              (click)="setFilterTab('ALL')">
-        <i class="bi bi-grid-fill"></i>
-        <span>Tous les Mandats ({{ allMandats.length }})</span>
+  <!-- Filter & Search Bar -->
+  <div class="filter-bar-section">
+    <div class="search-input-wrapper">
+      <i class="bi bi-search search-icon"></i>
+      <input type="text"
+             class="search-input"
+             [(ngModel)]="searchTerm"
+             (ngModelChange)="onSearchChange()"
+             placeholder="Rechercher par nom de mandat ou phase..."
+             aria-label="Rechercher un mandat">
+      <button *ngIf="searchTerm"
+              type="button"
+              class="btn-clear-search"
+              (click)="clearSearch()"
+              title="Effacer la recherche">
+        <i class="bi bi-x-circle-fill"></i>
       </button>
-      <button type="button"
-              class="tab-btn"
-              [class.active]="selectedTab === 'ACTIVE'"
-              (click)="setFilterTab('ACTIVE')">
-        <i class="bi bi-lightning-charge-fill text-teal"></i>
-        <span>Mandat Actif</span>
-      </button>
-      <button type="button"
-              class="tab-btn"
-              [class.active]="selectedTab === 'DRAFT_UPCOMING'"
-              (click)="setFilterTab('DRAFT_UPCOMING')">
-        <i class="bi bi-hourglass-split text-warning"></i>
-        <span>Brouillons & À venir</span>
-      </button>
-      <button type="button"
-              class="tab-btn"
-              [class.active]="selectedTab === 'ARCHIVED'"
-              (click)="setFilterTab('ARCHIVED')">
-        <i class="bi bi-archive-fill text-secondary"></i>
-        <span>Archivés</span>
-      </button>
+    </div>
+
+    <div class="search-stats" *ngIf="searchTerm">
+      <span>{{ filteredMandats.length }} résultat{{ filteredMandats.length > 1 ? 's' : '' }}</span>
     </div>
   </div>
 
   <!-- Main Content -->
-  <div class="page-content">
-    <!-- Loading State -->
+  <main class="page-content">
+    <!-- Loading Skeleton Grid -->
     <div *ngIf="isLoading" class="loading-grid">
       <div *ngFor="let _ of [1, 2, 3]" class="mandate-card skeleton-card">
         <div class="skeleton-shimmer skeleton-title"></div>
@@ -83,24 +95,31 @@
           <i class="bi bi-calendar4-week"></i>
         </div>
         <h2>Aucun mandat trouvé</h2>
-        <p *ngIf="selectedTab === 'ALL'">Démarrez la gouvernance en créant le premier mandat de l'association.</p>
-        <p *ngIf="selectedTab !== 'ALL'">Aucun mandat ne correspond à ce filtre.</p>
-        <button *ngIf="selectedTab === 'ALL'" (click)="goToAdd()" type="button" class="btn-create-mandat">
-          <i class="bi bi-plus-lg"></i> Créer une période de mandat
-        </button>
+        <p *ngIf="searchTerm">Aucun mandat ne correspond à votre recherche "<strong>{{ searchTerm }}</strong>".</p>
+        <p *ngIf="!searchTerm && selectedTab === 'ALL'">Démarrez la gouvernance en créant le premier mandat de l'association.</p>
+        <p *ngIf="!searchTerm && selectedTab !== 'ALL'">Aucun mandat ne correspond à ce filtre actuellement.</p>
+        
+        <div class="empty-actions">
+          <button *ngIf="searchTerm" (click)="clearSearch()" type="button" class="btn-clear-filter">
+            <i class="bi bi-x-lg"></i> Réinitialiser la recherche
+          </button>
+          <button *ngIf="!searchTerm && selectedTab === 'ALL'" (click)="goToAdd()" type="button" class="btn-action btn-primary">
+            <i class="bi bi-plus-lg"></i> Créer une période de mandat
+          </button>
+        </div>
       </div>
 
       <!-- Mandates Grid -->
       <div *ngIf="filteredMandats.length > 0" class="mandates-grid">
-        <div *ngFor="let mandat of filteredMandats"
-             (click)="goToDetail(mandat.id)"
-             [class.is-active-mandat]="mandat.status === 'ACTIVE' || mandat.estActif"
-             class="mandate-card">
+        <article *ngFor="let mandat of filteredMandats"
+                 (click)="goToDetail(mandat.id)"
+                 [class.is-active-mandat]="mandat.status === 'ACTIVE' || mandat.estActif"
+                 class="mandate-card">
 
           <!-- Card Header -->
           <div class="card-header-row">
             <div class="mandat-name-wrapper">
-              <h3 class="mandat-nom">{{ mandat.nom }}</h3>
+              <h2 class="mandat-nom">{{ mandat.nom }}</h2>
             </div>
             <div class="status-indicator">
               <span class="badge-status" [ngClass]="getMandatStatusBadge(mandat).class">
@@ -113,7 +132,7 @@
 
           <!-- Card Body -->
           <div class="card-body-content">
-            <!-- Dates Range -->
+            <!-- Dates Range Box -->
             <div class="date-range-box">
               <div class="date-col">
                 <span class="date-label">Date Début</span>
@@ -150,6 +169,9 @@
                   <span class="pill-name">{{ phase.nom }}</span>
                   <span class="pill-badge-txt">{{ getPhaseStatusBadge(phase).label }}</span>
                 </div>
+                <div *ngIf="mandat.phases.length === 0" class="no-phases-text">
+                  <span>Aucune phase configurée</span>
+                </div>
               </div>
             </div>
           </div>
@@ -160,7 +182,8 @@
                     (click)="activateMandat(mandat, $event)"
                     [disabled]="isActivatingId === mandat.id"
                     type="button"
-                    class="btn-action-card btn-activate">
+                    class="btn-action-card btn-activate"
+                    title="Définir ce mandat comme actif">
               <i class="bi bi-lightning-charge-fill" *ngIf="isActivatingId !== mandat.id"></i>
               <span class="spinner-border spinner-border-sm me-1" *ngIf="isActivatingId === mandat.id"></span>
               <span>Activer</span>
@@ -168,15 +191,18 @@
 
             <button (click)="goToDetail(mandat.id)"
                     type="button"
-                    class="btn-action-card btn-view">
+                    class="btn-action-card btn-view"
+                    title="Voir les détails et phases">
               <i class="bi bi-eye"></i>
               <span>Détail</span>
             </button>
 
             <button (click)="goToEdit(mandat.id, $event)"
                     type="button"
-                    class="btn-action-card btn-edit">
+                    class="btn-action-card btn-edit"
+                    title="Modifier le mandat">
               <i class="bi bi-pencil"></i>
+              <span class="btn-text">Modifier</span>
             </button>
 
             <button (click)="openDeleteModal(mandat, $event)"
@@ -186,10 +212,10 @@
               <i class="bi bi-trash3"></i>
             </button>
           </div>
-        </div>
+        </article>
       </div>
     </div>
-  </div>
+  </main>
 </div>
 
 <!-- Confirm Delete Modal -->
