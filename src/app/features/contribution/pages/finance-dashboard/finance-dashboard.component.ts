@@ -34,7 +34,7 @@ export class FinanceDashboardComponent implements OnInit {
 
     this.financeService.getDashboardStats().subscribe({
       next: (res) => {
-        if (res.success && res.data) {
+        if (res && res.data) {
           this.stats = res.data;
         }
         this.loadRecentPayments();
@@ -49,7 +49,7 @@ export class FinanceDashboardComponent implements OnInit {
   loadRecentPayments(): void {
     this.financeService.getRecentPayments(15).subscribe({
       next: (res) => {
-        if (res.success && res.data) {
+        if (res && res.data) {
           this.recentPayments = res.data;
         }
         this.isLoading = false;

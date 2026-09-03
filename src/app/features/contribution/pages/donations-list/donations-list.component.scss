@@ -1,0 +1,63 @@
+.donations-page-container {
+  padding: 1.5rem;
+}
+
+.page-title {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.page-subtitle {
+  color: #64748b;
+  font-size: 0.9rem;
+  margin: 0.25rem 0 0;
+}
+
+.text-teal {
+  color: #0f766e !important;
+}
+
+.btn-teal {
+  background-color: #0f766e;
+  border-color: #0f766e;
+  color: white;
+
+  &:hover {
+    background-color: #115e59;
+    border-color: #115e59;
+    color: white;
+  }
+}
+
+.bg-purple-soft {
+  background-color: #f3e8ff;
+}
+
+.text-purple {
+  color: #7e22ce !important;
+}
+
+.modal-backdrop-custom {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1050;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+}
+
+.modal-dialog-custom {
+  background: white;
+  border-radius: 0.75rem;
+  max-width: 500px;
+  width: 100%;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.2);
+}
