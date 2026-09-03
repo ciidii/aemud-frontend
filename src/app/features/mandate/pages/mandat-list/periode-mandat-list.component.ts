@@ -4,11 +4,11 @@ import {Router} from '@angular/router';
 import {FormsModule} from '@angular/forms';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map} from 'rxjs/operators';
-import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
-import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
-import {NotificationService} from "../../../../../core/services/notification.service";
-import {AppStateService} from "../../../../../core/services/app-state.service";
-import {ConfirmDeleteModalComponent} from "../../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {MandateHttpService} from '../../services/mandate-http.service';
+import {MandateModel, PeriodeMandatDto} from '../../models/mandate.model';
+import {NotificationService} from '../../../../core/services/notification.service';
+import {AppStateService} from '../../../../core/services/app-state.service';
+import {ConfirmDeleteModalComponent} from '../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
 
 export type MandatFilterTab = 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED';
 
@@ -20,12 +20,12 @@ export type MandatFilterTab = 'ALL' | 'ACTIVE' | 'DRAFT_UPCOMING' | 'ARCHIVED';
   styleUrls: ['./periode-mandat-list.component.scss']
 })
 export class PeriodeMandatListComponent implements OnInit {
-  allMandats: PeriodeMandatDto[] = [];
-  filteredMandats: PeriodeMandatDto[] = [];
+  allMandats: MandateModel[] = [];
+  filteredMandats: MandateModel[] = [];
   selectedTab: MandatFilterTab = 'ALL';
   searchTerm = '';
 
-  activeMandat: PeriodeMandatDto | null = null;
+  activeMandat: MandateModel | null = null;
 
   isLoading = true;
   hasError = false;
@@ -40,7 +40,7 @@ export class PeriodeMandatListComponent implements OnInit {
     { value: 'ARCHIVED', label: 'Archivés', icon: 'bi-archive-fill' }
   ];
 
-  private periodeMandatHttpService = inject(PeriodeMandatHttpService);
+  private mandateHttpService = inject(MandateHttpService);
   private appStateService = inject(AppStateService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
@@ -52,7 +52,7 @@ export class PeriodeMandatListComponent implements OnInit {
   loadPeriodeMandats(): void {
     this.isLoading = true;
     this.hasError = false;
-    this.periodeMandatHttpService.getAllPeriodeMandats().pipe(
+    this.mandateHttpService.getAllMandates().pipe(
       map(response => response.data || []),
       finalize(() => this.isLoading = false),
       catchError((err) => {
@@ -156,24 +156,24 @@ export class PeriodeMandatListComponent implements OnInit {
   }
 
   goToAdd(): void {
-    this.router.navigate(['/periode-mandats', 'add']);
+    this.router.navigate(['/mandats', 'add']);
   }
 
   goToEdit(periodeMandatId: string, event?: Event): void {
     if (event) event.stopPropagation();
-    this.router.navigate(['/periode-mandats', 'edit', periodeMandatId]);
+    this.router.navigate(['/mandats', 'edit', periodeMandatId]);
   }
 
   goToDetail(periodeMandatId: string): void {
-    this.router.navigate(['/periode-mandats', periodeMandatId]);
+    this.router.navigate(['/mandats', periodeMandatId]);
   }
 
-  activateMandat(mandat: PeriodeMandatDto, event: Event): void {
+  activateMandat(mandat: MandateModel, event: Event): void {
     event.stopPropagation();
     if (mandat.status === 'ACTIVE' || mandat.estActif) return;
 
     this.isActivatingId = mandat.id;
-    this.periodeMandatHttpService.activatePeriodeMandat(mandat.id).subscribe({
+    this.mandateHttpService.activateMandate(mandat.id).subscribe({
       next: (res) => {
         this.isActivatingId = null;
         this.notificationService.showSuccess(`Le mandat "${mandat.nom}" est désormais le mandat actif.`);
@@ -207,7 +207,7 @@ export class PeriodeMandatListComponent implements OnInit {
     const id = this.mandatToDelete.id;
     const name = this.mandatToDelete.nom;
 
-    this.periodeMandatHttpService.deletePeriodeMandat(id).subscribe({
+    this.mandateHttpService.deleteMandate(id).subscribe({
       next: () => {
         this.notificationService.showSuccess(`Le mandat "${name}" a été supprimé avec succès.`);
         this.closeDeleteModal();

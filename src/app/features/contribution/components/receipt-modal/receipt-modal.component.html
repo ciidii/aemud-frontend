@@ -1,0 +1,107 @@
+<div *ngIf="isOpen && receipt" class="modal-backdrop-custom" (click)="onClose()">
+  <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+    <!-- Modal Header Actions -->
+    <div class="modal-actions-bar no-print">
+      <button class="btn btn-outline-secondary btn-sm" (click)="printReceipt()">
+        <i class="bi bi-printer-fill me-1"></i> Imprimer / Enregistrer PDF
+      </button>
+      <button class="btn-close ms-2" (click)="onClose()" aria-label="Fermer"></button>
+    </div>
+
+    <!-- Official Printable Paper Ticket / Receipt -->
+    <div class="receipt-paper" id="printable-receipt">
+      <!-- Header / Logo -->
+      <div class="receipt-header">
+        <div class="org-badge">
+          <i class="bi bi-shield-check"></i> AEMUD
+        </div>
+        <div class="org-title">
+          <h4>ASSOCIATION DES ÉTUDIANTS MUSULMANS DE DAKAR</h4>
+          <p class="org-subtitle">Commission Trésorerie & Finances — Université Cheikh Anta Diop (UCAD)</p>
+        </div>
+        <div class="receipt-badge-status">
+          <span class="paid-stamp">PAYÉ / QUITTANCÉ</span>
+        </div>
+      </div>
+
+      <hr class="receipt-divider" />
+
+      <!-- Meta Info (N° Reçu & Date) -->
+      <div class="receipt-meta-grid">
+        <div class="meta-item">
+          <span class="meta-label">N° DE QUITTANCE</span>
+          <span class="meta-val highlight-num">{{ receipt.receiptNumber }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">DATE D'ENCAISSEMENT</span>
+          <span class="meta-val">{{ receipt.paymentDate | date:'dd MMMM yyyy' }}</span>
+        </div>
+        <div class="meta-item">
+          <span class="meta-label">MODE DE RÈGLEMENT</span>
+          <span class="meta-val method-pill" [ngClass]="getMethodBadgeClass(receipt.paymentMethod)">
+            {{ getMethodLabel(receipt.paymentMethod) }}
+          </span>
+        </div>
+        <div class="meta-item" *ngIf="receipt.transactionReference">
+          <span class="meta-label">RÉFÉRENCE OPÉRATEUR</span>
+          <span class="meta-val mono">{{ receipt.transactionReference }}</span>
+        </div>
+      </div>
+
+      <!-- Member Details -->
+      <div class="receipt-member-box">
+        <div class="member-avatar-circle">
+          <i class="bi bi-person-fill"></i>
+        </div>
+        <div class="member-details-info">
+          <h5 class="member-name">{{ receipt.memberFullName || 'Adhérent AEMUD' }}</h5>
+          <span class="member-number" *ngIf="receipt.memberNumber">
+            Matricule : <strong>{{ receipt.memberNumber }}</strong>
+          </span>
+        </div>
+      </div>
+
+      <!-- Months Covered Table -->
+      <div class="receipt-items-section">
+        <div class="section-title">Détail des Mensualités Soldées</div>
+        <div class="months-pills-container" *ngIf="receipt.monthsCovered && receipt.monthsCovered.length > 0; else noMonths">
+          <span *ngFor="let m of receipt.monthsCovered" class="month-chip">
+            <i class="bi bi-calendar-check me-1"></i> {{ m }}
+          </span>
+        </div>
+        <ng-template #noMonths>
+          <p class="text-muted fst-italic">Cotisation forfaitaire ou don enregistré.</p>
+        </ng-template>
+      </div>
+
+      <!-- Total Amount Box -->
+      <div class="receipt-total-box">
+        <div class="total-label">MONTANT TOTAL ENCAISSÉ</div>
+        <div class="total-amount">{{ receipt.amountPaid | number:'1.0-0' }} <span class="currency">FCFA</span></div>
+      </div>
+
+      <!-- Notes / Remarks -->
+      <div class="receipt-notes" *ngIf="receipt.notes">
+        <strong>Observation :</strong> {{ receipt.notes }}
+      </div>
+
+      <!-- Signatures Footer -->
+      <div class="receipt-footer">
+        <div class="signature-col">
+          <span class="sig-label">Encaisseur :</span>
+          <span class="sig-name">{{ receipt.recordedBy || 'Trésorerie Générale' }}</span>
+        </div>
+        <div class="signature-col text-end">
+          <span class="sig-label">Cachet & Visa de la Trésorerie :</span>
+          <div class="digital-seal">
+            <i class="bi bi-patch-check-fill me-1"></i> VISA TRÉSORERIE AEMUD
+          </div>
+        </div>
+      </div>
+
+      <div class="receipt-legal-notice">
+        Ce document certifie le règlement intégral des sommes mentionnées ci-dessus au profit de l'AEMUD.
+      </div>
+    </div>
+  </div>
+</div>

@@ -3,10 +3,9 @@ import {CommonModule} from '@angular/common';
 import {FormBuilder, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import {ActivatedRoute, Router} from '@angular/router';
 import {finalize, of, Subscription, switchMap} from 'rxjs';
-import {PhaseHttpService} from "../../../periode-mandat/services/phase-http.service";
-import {UpdatePhaseModel} from "../../../periode-mandat/models/UpdatePhaseModel";
-import {PhaseModel} from "../../../periode-mandat/models/phase.model";
-import {NotificationService} from "../../../../../core/services/notification.service";
+import {PhaseHttpService} from '../../services/phase-http.service';
+import {UpdatePhaseModel, PhaseModel} from '../../models/phase.model';
+import {NotificationService} from '../../../../core/services/notification.service';
 
 @Component({
   selector: 'app-phase-edit',
@@ -46,7 +45,7 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
         this.phaseId = params.get('id');
         if (!this.phaseId) {
           this.notificationService.showError("ID de phase non trouvé.");
-          this.router.navigate(['/periode-mandats/list']);
+          this.router.navigate(['/mandats', 'list']);
           return of(null);
         }
         this.periodeMandatId = this.route.snapshot.queryParamMap.get('periodeMandatId');
@@ -127,9 +126,9 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
 
   navigateBack(): void {
     if (this.periodeMandatId) {
-      this.router.navigate(['/periode-mandats', this.periodeMandatId]);
+      this.router.navigate(['/mandats', this.periodeMandatId]);
     } else {
-      this.router.navigate(['/periode-mandats', 'list']);
+      this.router.navigate(['/mandats', 'list']);
     }
   }
 

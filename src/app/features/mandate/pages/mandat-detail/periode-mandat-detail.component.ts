@@ -4,15 +4,15 @@ import {ActivatedRoute, Router, RouterLink} from '@angular/router';
 import {Observable, of} from 'rxjs';
 import {catchError, finalize, map, tap} from 'rxjs/operators';
 import {FormsModule} from '@angular/forms';
-import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
+import {MandateHttpService} from '../../services/mandate-http.service';
 import {PhaseHttpService} from '../../services/phase-http.service';
-import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
+import {MandateModel, MandateStatus, PeriodeMandatDto} from '../../models/mandate.model';
 import {PhaseModel} from '../../models/phase.model';
 import {PhaseTimelineComponent} from '../../components/phase-timeline/phase-timeline.component';
-import {ArrayDatePipe} from "../../../../../core/pipes/array-data.pipe";
-import {NotificationService} from "../../../../../core/services/notification.service";
-import {AppStateService} from "../../../../../core/services/app-state.service";
-import {ConfirmDeleteModalComponent} from "../../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import {ArrayDatePipe} from '../../../../core/pipes/array-data.pipe';
+import {NotificationService} from '../../../../core/services/notification.service';
+import {AppStateService} from '../../../../core/services/app-state.service';
+import {ConfirmDeleteModalComponent} from '../../../../shared/components/confirm-delete-modal/confirm-delete-modal.component';
 
 @Component({
   selector: 'app-periode-mandat-detail',
@@ -33,10 +33,10 @@ import {ConfirmDeleteModalComponent} from "../../../../../shared/components/conf
   styleUrls: ['./periode-mandat-detail.component.scss']
 })
 export class PeriodeMandatDetailComponent implements OnInit {
-  periodeMandat$: Observable<PeriodeMandatDto | null> | undefined;
+  periodeMandat$: Observable<MandateModel | null> | undefined;
   isLoading = true;
   hasError = false;
-  currentMandat: PeriodeMandatDto | null = null;
+  currentMandat: MandateModel | null = null;
   mandatId: string | null = null;
 
   // Activation & Status transition state
@@ -62,7 +62,7 @@ export class PeriodeMandatDetailComponent implements OnInit {
 
   private route = inject(ActivatedRoute);
   private router = inject(Router);
-  private periodeMandatHttpService = inject(PeriodeMandatHttpService);
+  private mandateHttpService = inject(MandateHttpService);
   private phaseHttpService = inject(PhaseHttpService);
   private appStateService = inject(AppStateService);
   private notificationService = inject(NotificationService);
@@ -81,7 +81,7 @@ export class PeriodeMandatDetailComponent implements OnInit {
 
     this.isLoading = true;
     this.hasError = false;
-    this.periodeMandat$ = this.periodeMandatHttpService.getPeriodeMandatById(this.mandatId).pipe(
+    this.periodeMandat$ = this.mandateHttpService.getMandateById(this.mandatId).pipe(
       map(response => response.data),
       tap(mandat => {
         this.currentMandat = mandat;
@@ -130,13 +130,13 @@ export class PeriodeMandatDetailComponent implements OnInit {
   }
 
   goToEdit(periodeMandatId: string): void {
-    this.router.navigate(['/periode-mandats', 'edit', periodeMandatId]);
+    this.router.navigate(['/mandats', 'edit', periodeMandatId]);
   }
 
-  activateMandat(mandat: PeriodeMandatDto): void {
+  activateMandat(mandat: MandateModel): void {
     if (mandat.status === 'ACTIVE' || mandat.estActif) return;
     this.isActivating = true;
-    this.periodeMandatHttpService.activatePeriodeMandat(mandat.id).subscribe({
+    this.mandateHttpService.activateMandate(mandat.id).subscribe({
       next: (res) => {
         this.isActivating = false;
         this.notificationService.showSuccess(`Le mandat "${mandat.nom}" a été activé avec succès.`);
@@ -153,10 +153,10 @@ export class PeriodeMandatDetailComponent implements OnInit {
     });
   }
 
-  updateMandatStatus(status: MandatStatus): void {
+  updateMandatStatus(status: MandateStatus): void {
     if (!this.currentMandat) return;
     this.isUpdatingStatus = true;
-    this.periodeMandatHttpService.updateMandatStatus(this.currentMandat.id, status).subscribe({
+    this.mandateHttpService.updateMandateStatus(this.currentMandat.id, status).subscribe({
       next: () => {
         this.isUpdatingStatus = false;
         this.notificationService.showSuccess(`Le statut du mandat a été mis à jour.`);
@@ -180,11 +180,11 @@ export class PeriodeMandatDetailComponent implements OnInit {
 
   confirmDelete(): void {
     if (!this.mandatId) return;
-    this.periodeMandatHttpService.deletePeriodeMandat(this.mandatId).subscribe({
+    this.mandateHttpService.deleteMandate(this.mandatId).subscribe({
       next: () => {
         this.notificationService.showSuccess("Le mandat a été supprimé avec succès.");
         this.closeDeleteModal();
-        this.router.navigate(['/periode-mandats', 'list']);
+        this.router.navigate(['/mandats', 'list']);
       },
       error: (err) => {
         this.notificationService.showError("Erreur lors de la suppression du mandat.");
