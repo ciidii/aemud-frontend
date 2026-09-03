@@ -1,167 +1,445 @@
-@import 'variables';
-@import 'typography';
+@import 'src/assets/scss/variables';
+@import 'src/assets/scss/typography';
 
-.container {
-  max-width: 900px;
-  margin: $space-8 auto;
-  padding: 0 $space-4;
+// ============================================================
+// PHASE FORM PAGE CONTAINER
+// ============================================================
+
+.phase-form-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100%;
+  width: 100%;
+  background-color: $color-background-body;
 }
+
+// ============================================================
+// STICKY HEADER (Harmonized with Mandate & Member Pages)
+// ============================================================
 
 .page-header {
-  margin-bottom: $space-4;
-  .btn-back {
-    background: none;
-    border: none;
-    color: $color-text-secondary;
-    @include text-body-regular;
-    display: inline-flex;
-    align-items: center;
-    gap: $space-2;
-    cursor: pointer;
-    padding: $space-2 0;
-    &:hover {
-      color: $color-text-primary;
-    }
-  }
-}
-
-.content-card {
-  padding: $space-6;
+  position: sticky;
+  top: 0;
+  z-index: 1020;
+  width: 100%;
   background-color: $color-background-panel;
-  border-radius: $radius-md;
-  box-shadow: $shadow-md;
-}
+  border-bottom: 1px solid $color-border-default;
+  padding: $space-3 $space-6;
+  box-shadow: $shadow-xs;
 
-// Display Mode Styles
-.display-view {
-  .display-header {
+  @media (max-width: 768px) {
+    padding: $space-2 $space-3;
+  }
+
+  .header-container {
+    width: 100%;
+  }
+
+  .top-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: $space-6;
-    padding-bottom: $space-4;
-    border-bottom: 1px solid $color-border-default;
-    h2 {
-      @include text-heading-3;
-      margin: 0;
+    flex-wrap: wrap;
+    gap: $space-3;
+
+    @media (max-width: 576px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $space-2;
     }
   }
-  .details-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-    gap: $space-6;
-  }
-  .detail-item {
-    .detail-label {
-      @include text-label;
-      color: $color-text-secondary;
-      margin-bottom: $space-1;
-      display: block;
-    }
-    .detail-value {
-      @include text-body-regular;
-      font-weight: $font-weight-bold;
-      word-break: break-word;
-    }
-  }
-}
 
-// Edit Mode Styles
-.edit-view {
-  h2 {
-    @include text-heading-3;
-    color: $color-text-primary;
-    margin-bottom: $space-6;
-    text-align: center;
-  }
+  .left-section {
+    display: flex;
+    align-items: center;
+    gap: $space-3;
+    min-width: 0;
+    flex: 1;
 
-  .form-section {
-    margin-bottom: $space-6;
-  }
-
-  .form-group {
-    margin-bottom: $space-4;
-
-    label {
-      @include text-label;
-      display: block;
-      margin-bottom: $space-1;
-      color: $color-text-secondary;
-    }
-
-    input[type="text"],
-    input[type="date"] {
-      width: 100%;
-      padding: $form-input-padding-y $form-input-padding-x;
-      border: 1px solid $form-input-border-color;
-      border-radius: $form-input-border-radius;
-      background-color: $form-input-background;
-      @include text-body-regular;
+    .btn-back-nav {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.8rem;
+      height: 3.8rem;
+      border-radius: 50%;
+      border: 1px solid $color-border-default;
+      background-color: $color-background-panel;
       color: $color-text-primary;
-      &:focus {
-        outline: none;
-        border-color: $color-border-focus;
-        box-shadow: 0 0 0 0.2rem rgba($color-border-focus, 0.25);
+      cursor: pointer;
+      font-size: 1.6rem;
+      transition: all 0.18s ease;
+      flex-shrink: 0;
+
+      &:hover {
+        background-color: $color-background-hover;
+        border-color: $color-border-strong;
+        color: $primary-500;
+      }
+    }
+
+    .title-block {
+      .page-title {
+        font-size: 2.2rem;
+        font-weight: $font-weight-bold;
+        color: $color-text-primary;
+        margin: 0;
+        letter-spacing: -0.02em;
+        line-height: 1.2;
+
+        @media (max-width: 576px) {
+          font-size: 1.8rem;
+        }
+      }
+
+      .page-subtitle {
+        font-size: 1.3rem;
+        color: $color-text-secondary;
+        margin: 0.3rem 0 0;
+
+        @media (max-width: 576px) {
+          display: none;
+        }
       }
     }
   }
 
-  .error-message {
-    @include text-body-small;
-    color: $danger-500;
-    margin-top: $space-1;
-  }
-
-  .form-actions {
+  .right-section {
     display: flex;
-    justify-content: flex-end;
-    gap: $space-3;
-    margin-top: $space-8;
-    padding-top: $space-4;
-    border-top: 1px solid $color-border-default;
+    align-items: center;
+    gap: $space-2;
+
+    @media (max-width: 576px) {
+      width: 100%;
+
+      .btn-action {
+        flex: 1;
+        justify-content: center;
+      }
+    }
+
+    .btn-action {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.8rem 1.6rem;
+      border-radius: $radius-md;
+      font-size: 1.35rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      border: 1px solid transparent;
+      min-height: 3.8rem;
+
+      &.btn-secondary {
+        background-color: $white;
+        color: $color-text-primary;
+        border-color: $color-border-default;
+
+        &:hover {
+          background-color: $color-background-hover;
+          border-color: $color-border-strong;
+        }
+      }
+
+      &.btn-primary {
+        background-color: $primary-500;
+        color: $white;
+        border-color: $primary-500;
+
+        &:hover:not(:disabled) {
+          background-color: $primary-600;
+          box-shadow: 0 4px 12px rgba($primary-500, 0.25);
+        }
+
+        &:disabled {
+          opacity: 0.6;
+          cursor: not-allowed;
+        }
+      }
+    }
   }
 }
 
-// Shared Button Styles
-.btn-primary, .btn-secondary {
-  padding: $button-padding-y $button-padding-x;
-  border-radius: $button-border-radius;
-  @include text-button;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out, border-color 0.2s ease-in-out;
+// ============================================================
+// PHASE STATUS BADGES
+// ============================================================
+
+.phase-status-badge {
   display: inline-flex;
   align-items: center;
-  gap: $space-2;
-  border: 1px solid transparent;
-  text-decoration: none;
-}
+  gap: 0.5rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: $radius-full;
+  font-size: 1.2rem;
+  font-weight: 600;
 
-.btn-primary {
-  background-color: $primary-500;
-  color: $color-text-on-primary;
-  &:hover {
-    background-color: $primary-600;
+  &.badge-current {
+    background-color: rgba($primary-500, 0.12);
+    color: $primary-700;
+    border: 1px solid rgba($primary-500, 0.3);
   }
-  &:disabled {
-    background-color: $primary-500;
-    opacity: 0.6;
-    cursor: not-allowed;
-  }
-}
 
-.btn-secondary {
-  background-color: transparent;
-  color: $color-text-secondary;
-  border-color: $color-border-default;
-  &:hover {
+  &.badge-extended {
+    background-color: rgba($warning-500, 0.12);
+    color: $warning-900;
+    border: 1px solid rgba($warning-500, 0.3);
+  }
+
+  &.badge-future {
+    background-color: rgba($info-500, 0.12);
+    color: $info-900;
+    border: 1px solid rgba($info-500, 0.3);
+  }
+
+  &.badge-closed {
     background-color: $gray-200;
-    color: $color-text-primary;
+    color: $gray-700;
+    border: 1px solid $color-border-default;
+  }
+
+  &.badge-default {
+    background-color: $gray-100;
+    color: $color-text-secondary;
   }
 }
 
-.loading-indicator {
-  text-align: center;
-  padding: $space-12;
-  @include text-body-regular;
-  color: $color-text-secondary;
+// ============================================================
+// MAIN PAGE CONTENT
+// ============================================================
+
+.page-content {
+  padding: $space-6;
+  max-width: 88rem;
+  width: 100%;
+  margin: 0 auto;
+  flex: 1;
+
+  @media (max-width: 768px) {
+    padding: $space-3;
+  }
 }
+
+.phase-edit-layout {
+  display: flex;
+  flex-direction: column;
+  gap: $space-6;
+
+  @media (max-width: 768px) {
+    gap: $space-4;
+  }
+}
+
+// ============================================================
+// SECTION CARD
+// ============================================================
+
+.section-card {
+  background-color: $color-background-panel;
+  border-radius: $radius-lg;
+  border: 1px solid $color-border-default;
+  padding: $space-5;
+  box-shadow: $shadow-xs;
+
+  @media (max-width: 768px) {
+    padding: $space-4;
+  }
+
+  .card-section-header {
+    display: flex;
+    align-items: flex-start;
+    gap: $space-3;
+    margin-bottom: $space-5;
+    padding-bottom: $space-3;
+    border-bottom: 1px solid $color-border-default;
+
+    .header-icon {
+      width: 4rem;
+      height: 4rem;
+      border-radius: $radius-md;
+      background-color: rgba($primary-500, 0.1);
+      color: $primary-500;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.8rem;
+      flex-shrink: 0;
+    }
+
+    .section-title {
+      font-size: 1.8rem;
+      font-weight: $font-weight-bold;
+      color: $color-text-primary;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .section-subtitle {
+      font-size: 1.3rem;
+      color: $color-text-muted;
+      margin: 0.4rem 0 0;
+    }
+  }
+}
+
+// ============================================================
+// FORM INPUTS & LAYOUT
+// ============================================================
+
+.form-label {
+  display: block;
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: $color-text-primary;
+  margin-bottom: $space-1;
+}
+
+.form-control {
+  width: 100%;
+  height: 4.2rem;
+  padding: 0.8rem 1.4rem;
+  background-color: $white;
+  border: 1px solid $color-border-default;
+  border-radius: $radius-md;
+  font-size: 1.35rem;
+  color: $color-text-primary;
+  transition: all 0.2s ease;
+
+  &::placeholder {
+    color: $color-text-muted;
+  }
+
+  &:focus {
+    outline: none;
+    border-color: $primary-500;
+    box-shadow: 0 0 0 3px rgba($primary-500, 0.15);
+  }
+
+  &.is-invalid {
+    border-color: $danger-500;
+    background-color: rgba($danger-500, 0.02);
+
+    &:focus {
+      box-shadow: 0 0 0 3px rgba($danger-500, 0.15);
+    }
+  }
+}
+
+.dates-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: $space-4;
+
+  @media (max-width: 576px) {
+    grid-template-columns: 1fr;
+    gap: $space-3;
+  }
+}
+
+.info-alert {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  padding: 1rem 1.4rem;
+  background-color: rgba($info-500, 0.08);
+  border: 1px solid rgba($info-500, 0.25);
+  border-radius: $radius-md;
+  color: $info-900;
+  font-size: 1.25rem;
+}
+
+.error-message {
+  font-size: 1.2rem;
+  color: $danger-500;
+  margin-top: 0.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.form-hint {
+  font-size: 1.2rem;
+}
+
+// ============================================================
+// FORM BOTTOM ACTIONS
+// ============================================================
+
+.form-bottom-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: $space-3;
+  padding: $space-4 0;
+
+  @media (max-width: 576px) {
+    flex-direction: column-reverse;
+
+    .btn-action {
+      width: 100%;
+      justify-content: center;
+    }
+  }
+
+  .btn-action {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    padding: 0.9rem 2rem;
+    border-radius: $radius-md;
+    font-size: 1.35rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border: 1px solid transparent;
+    min-height: 4.2rem;
+
+    &.btn-secondary {
+      background-color: $white;
+      color: $color-text-primary;
+      border-color: $color-border-default;
+
+      &:hover {
+        background-color: $color-background-hover;
+        border-color: $color-border-strong;
+      }
+    }
+
+    &.btn-primary {
+      background-color: $primary-500;
+      color: $white;
+      border-color: $primary-500;
+
+      &:hover:not(:disabled) {
+        background-color: $primary-600;
+        box-shadow: 0 4px 12px rgba($primary-500, 0.25);
+      }
+
+      &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+      }
+    }
+  }
+}
+
+// ============================================================
+// LOADING STATE
+// ============================================================
+
+.loading-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: $space-12 $space-4;
+  text-align: center;
+  min-height: 30rem;
+
+  .loading-text {
+    margin-top: $space-3;
+    font-size: 1.4rem;
+    color: $color-text-secondary;
+  }
+}
+
