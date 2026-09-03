@@ -301,13 +301,13 @@
       display: inline-flex;
       align-items: center;
       gap: 0.6rem;
-      padding: 0.65rem 1.2rem;
+      padding: 0.65rem 1.25rem;
       border-radius: $radius-full;
       font-size: 1.25rem;
       font-weight: 500;
       color: $color-text-secondary;
       background: $gray-100;
-      border: 1px solid transparent;
+      border: 1px solid $color-border-default;
       cursor: pointer;
       white-space: nowrap;
       transition: all 0.18s ease;
@@ -316,6 +316,8 @@
 
       i {
         font-size: 1.3rem;
+        color: $color-text-muted;
+        transition: color 0.18s ease;
       }
 
       .tab-count {
@@ -324,22 +326,30 @@
       }
 
       &:hover {
-        background: $color-background-hover;
+        background: $gray-200;
         color: $color-text-primary;
+        border-color: $color-border-strong;
+
+        i {
+          color: $color-text-primary;
+        }
       }
 
       &.active {
-        background: $primary-500;
-        color: $white;
+        background: rgba($primary-500, 0.12);
+        color: $primary-700;
+        border-color: rgba($primary-500, 0.4);
         font-weight: 600;
-        box-shadow: 0 2px 8px rgba($primary-500, 0.35);
+        box-shadow: none;
 
         i {
-          color: $white;
+          color: $primary-600;
         }
 
         .tab-count {
           opacity: 1;
+          color: $primary-700;
+          font-weight: 600;
         }
       }
     }
