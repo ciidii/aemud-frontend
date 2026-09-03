@@ -1,65 +1,102 @@
-@import 'variables';
-@import 'typography';
+@import 'src/assets/scss/variables';
+@import 'src/assets/scss/typography';
 
 .phase-item-card {
   border: 1px solid $color-border-default;
-  border-radius: $radius-md;
+  border-radius: $radius-lg;
   padding: $space-4;
-  margin-bottom: $space-4;
-  background-color: $color-background-panel;
-  box-shadow: $shadow-sm;
-  position: relative;
+  background-color: $white;
+  box-shadow: $shadow-xs;
+  transition: all 0.2s ease;
 
-  .form-group {
+  &:hover {
+    border-color: $color-border-strong;
+    box-shadow: $shadow-sm;
+  }
+
+  .phase-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
     margin-bottom: $space-3;
+    padding-bottom: $space-2;
+    border-bottom: 1px solid $color-border-default;
 
-    label {
-      @include text-label;
-      display: block;
-      margin-bottom: $space-1;
-      color: $color-text-secondary;
+    .phase-number-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.85rem;
+      background-color: rgba($primary-500, 0.1);
+      color: $primary-700;
+      border-radius: $radius-full;
+      font-size: 1.2rem;
+      font-weight: 600;
     }
 
-    input[type="text"],
-    input[type="date"] {
-      width: 100%;
-      padding: $form-input-padding-y $form-input-padding-x;
-      border: 1px solid $form-input-border-color;
-      border-radius: $form-input-border-radius;
-      background-color: $form-input-background;
-      @include text-body-regular;
-      color: $color-text-primary;
+    .btn-delete-phase {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.4rem 0.8rem;
+      background-color: transparent;
+      color: $danger-500;
+      border: 1px solid transparent;
+      border-radius: $radius-md;
+      font-size: 1.2rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.15s ease;
 
-      &:focus {
-        outline: none;
-        border-color: $color-border-focus;
-        box-shadow: 0 0 0 0.2rem rgba($color-border-focus, 0.25);
+      &:hover {
+        background-color: rgba($danger-500, 0.08);
+        border-color: rgba($danger-500, 0.25);
       }
     }
   }
 
-  .error-message {
-    @include text-body-small;
-    color: $danger-500;
-    margin-top: $space-1;
+  .form-label {
+    display: block;
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: $color-text-secondary;
+    margin-bottom: 0.4rem;
   }
 
-  .delete-button {
-    position: absolute;
-    top: $space-3;
-    right: $space-3;
-    background-color: $danger-500;
-    color: $white;
-    border: none;
-    border-radius: $radius-sm;
-    padding: $space-1 $space-2;
-    cursor: pointer;
-    @include text-body-small;
-    font-weight: $font-weight-bold;
-    transition: background-color 0.2s ease-in-out;
+  .form-control {
+    width: 100%;
+    height: 3.8rem;
+    padding: 0.6rem 1.2rem;
+    background-color: $gray-100;
+    border: 1px solid $color-border-default;
+    border-radius: $radius-md;
+    font-size: 1.3rem;
+    color: $color-text-primary;
+    transition: all 0.2s ease;
 
-    &:hover {
-      background-color: $danger-500
+    &:focus {
+      outline: none;
+      background-color: $white;
+      border-color: $primary-500;
+      box-shadow: 0 0 0 3px rgba($primary-500, 0.15);
     }
   }
+
+  .dates-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: $space-3;
+
+    @media (max-width: 576px) {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  .error-message {
+    font-size: 1.15rem;
+    color: $danger-500;
+    margin-top: 0.3rem;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+  }
 }
+

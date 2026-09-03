@@ -20,10 +20,10 @@
   <!-- Data State -->
   <ng-container *ngIf="periodeMandat$ | async as periodeMandat">
     <div *ngIf="periodeMandat && !isLoading" class="mandat-content">
-      <!-- Fixed Modern Header -->
-      <header class="detail-header shadow-sm">
+      <!-- Fixed Modern Header (Harmonized with Member Module) -->
+      <header class="detail-header">
         <div class="header-left">
-          <a routerLink="/periode-mandats/list" class="btn-back" title="Retour à la liste">
+          <a routerLink="/periode-mandats/list" class="btn-back-nav" title="Retour à la liste des mandats">
             <i class="bi bi-arrow-left"></i>
           </a>
           <div class="mandat-title-info">
@@ -37,12 +37,12 @@
             </div>
             <div class="mandat-dates-row">
               <span class="date-tag">
-                <i class="bi bi-calendar-range text-teal"></i>
+                <i class="bi bi-calendar-range text-primary"></i>
                 Du {{ dateArrayToString(periodeMandat.dateDebut) | date: 'dd MMMM yyyy' : '' : 'fr' }}
                 au {{ dateArrayToString(periodeMandat.dateFin) | date: 'dd MMMM yyyy' : '' : 'fr' }}
               </span>
               <span class="phases-count-tag">
-                <i class="bi bi-layers"></i>
+                <i class="bi bi-layers-fill text-muted"></i>
                 {{ periodeMandat.phases.length }} Phase{{ periodeMandat.phases.length > 1 ? 's' : '' }}
               </span>
             </div>
@@ -58,7 +58,7 @@
                   class="btn-header-action btn-activate">
             <i class="bi bi-lightning-charge-fill" *ngIf="!isActivating"></i>
             <span class="spinner-border spinner-border-sm me-1" *ngIf="isActivating"></span>
-            <span>Définir comme Mandat Actif</span>
+            <span>Définir Actif</span>
           </button>
 
           <!-- Archive button if active -->
@@ -76,7 +76,7 @@
                   type="button"
                   class="btn-header-action btn-edit">
             <i class="bi bi-pencil-square"></i>
-            <span>Modifier le Mandat</span>
+            <span>Modifier</span>
           </button>
 
           <button (click)="openDeleteModal()"
@@ -91,7 +91,7 @@
       <!-- Main Body -->
       <div class="detail-body">
         <!-- Timeline Section -->
-        <section class="section-card timeline-card shadow-sm">
+        <section class="section-card timeline-card">
           <div class="card-section-header">
             <div>
               <h3 class="section-title">

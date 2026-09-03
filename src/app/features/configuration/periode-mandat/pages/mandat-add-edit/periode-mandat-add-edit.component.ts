@@ -329,6 +329,10 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
   }
 
 
+  goBack(): void {
+    this.router.navigate(['/periode-mandats', 'list']);
+  }
+
   ngOnDestroy(): void {
     this.routeSubscription?.unsubscribe();
   }
