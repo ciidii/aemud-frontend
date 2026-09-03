@@ -1,9 +1,7 @@
 import {inject, Injectable} from '@angular/core';
 import {BehaviorSubject, catchError, map, Observable, of, shareReplay, tap} from "rxjs";
-import {PeriodeMandatDto} from "../../features/configuration/periode-mandat/models/periode-mandat.model";
-import {
-  PeriodeMandatHttpService
-} from "../../features/configuration/periode-mandat/services/periode-mandat-http.service";
+import {PeriodeMandatDto} from "../../features/mandate/models/mandate.model";
+import {MandateHttpService} from "../../features/mandate/services/mandate-http.service";
 
 
 @Injectable({
@@ -17,7 +15,7 @@ export class AppStateService {
   private readonly _mandats$: BehaviorSubject<PeriodeMandatDto[]> = new BehaviorSubject<PeriodeMandatDto[]>([]);
   public readonly mandats$: Observable<PeriodeMandatDto[]> = this._mandats$.asObservable();
 
-  private mandatHttpService = inject(PeriodeMandatHttpService);
+  private mandatHttpService = inject(MandateHttpService);
   private initialLoad$?: Observable<PeriodeMandatDto | null>;
 
   /**

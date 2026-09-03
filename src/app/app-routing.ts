@@ -17,9 +17,15 @@ export const routes: Routes = [
     canActivate: [authGuard],
     children: [
       {
+        path: 'mandats',
+        loadChildren: () => import('./features/mandate/mandate.routes').then(m => m.MANDATE_ROUTES),
+        canActivate: [authGuard],
+        title: 'Gouvernance & Mandats',
+      },
+      {
         path: 'periode-mandats',
-        loadChildren: () => import('./features/configuration/periode-mandat/periode-mandat.routes').then(m => m.PERIODE_MANDAT_ROUTES),
-        title: 'Périodes de Mandat',
+        redirectTo: 'mandats',
+        pathMatch: 'prefix',
       },
       {
         path: 'phases',

@@ -15,12 +15,10 @@ import {ActivatedRoute, Router} from '@angular/router';
 import {catchError, finalize, Subscription, of} from "rxjs";
 import {PhaseTimelineComponent, TimelinePhase} from '../../components/phase-timeline/phase-timeline.component';
 import {PhaseFormItemComponent} from '../../components/phase-form-item/phase-form-item.component';
-import {PeriodeMandatHttpService} from '../../services/periode-mandat-http.service';
-import {CreatePeriodeMandatModel} from '../../models/CreatePeriodeMandatModel';
-import {CreatePhaseModel} from '../../models/CreatePhaseModel';
-import {MandatStatus, PeriodeMandatDto} from '../../models/periode-mandat.model';
-import {UpdatePhaseModel} from "../../models/UpdatePhaseModel";
-import {NotificationService} from "../../../../../core/services/notification.service";
+import {MandateHttpService, PeriodeMandatHttpService} from '../../services/mandate-http.service';
+import {CreateMandateModel, CreatePeriodeMandatModel, MandateModel, MandatStatus, MandateStatus} from '../../models/mandate.model';
+import {CreatePhaseModel, UpdatePhaseModel} from '../../models/phase.model';
+import {NotificationService} from '../../../../core/services/notification.service';
 
 // ----------------------------------------------------
 // ✔ PHASE FORM GROUP INTERFACE
@@ -271,9 +269,9 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
       next: () => {
         const action = this.periodeMandatId ? 'mise à jour' : 'créée';
         this.notificationService.showSuccess(`La période de mandat a été ${action} avec succès.`);
-        this.router.navigate(['/periode-mandats', 'list']); // Corrected navigation
+        this.router.navigate(['/mandats', 'list']); // Corrected navigation
       },
-      error: (err) => {
+      error: (err: any) => {
         console.error(err);
         this.notificationService.showError('Une erreur est survenue lors de la sauvegarde de la période de mandat.');
       }
@@ -284,13 +282,13 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
     this.isLoading = true;
     this.periodeMandatHttpService.getPeriodeMandatById(id).pipe(
       finalize(() => this.isLoading = false),
-      catchError(err => {
+      catchError((err: any) => {
         console.error('Error fetching periode mandat for edit:', err);
         this.notificationService.showError('Erreur lors du chargement de la période de mandat.');
-        this.router.navigate(['/periode-mandats', 'list']);
+        this.router.navigate(['/mandats', 'list']);
         return of(null);
       })
-    ).subscribe(response => {
+    ).subscribe((response: any) => {
       if (response && response.data) {
         const periodeMandat = response.data;
         this.periodeMandatForm.patchValue({
@@ -298,7 +296,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
           dateDebut: this.dateArrayToString(periodeMandat.dateDebut),
           dateFin: this.dateArrayToString(periodeMandat.dateFin),
           estActif: periodeMandat.estActif,
-          status: periodeMandat.status || (periodeMandat.estActif ? 'ACTIVE' : 'CLOSED_ARCHIVED'),
+          status: (periodeMandat.status as MandatStatus) || (periodeMandat.estActif ? 'ACTIVE' : 'CLOSED_ARCHIVED'),
           calculatePhasesAutomatically: false, // Force manual mode for editing phases
           numberOfPhases: null
         });
@@ -307,7 +305,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
         this.phasesFormArray.clear();
         this.deletedPhaseIds = []; // Reset deleted IDs on load
 
-        periodeMandat.phases.forEach(phase => {
+        periodeMandat.phases.forEach((phase: any) => {
           this.phasesFormArray.push(this.fb.group<PhaseFormGroup>({
             id: this.fb.control<string | null>(phase.id), // Populate the ID
             nom: this.fb.control<string | null>(phase.nom, Validators.required),
@@ -330,7 +328,7 @@ export class PeriodeMandatAddEditComponent implements OnInit, OnDestroy {
 
 
   goBack(): void {
-    this.router.navigate(['/periode-mandats', 'list']);
+    this.router.navigate(['/mandats', 'list']);
   }
 
   ngOnDestroy(): void {
