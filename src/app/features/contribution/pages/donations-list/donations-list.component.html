@@ -1,0 +1,136 @@
+<div class="donations-page-container">
+
+  <!-- Header -->
+  <div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="page-title">
+        <i class="bi bi-heart-fill text-danger me-2"></i> Mécénat & Solidarité Alumni
+      </h2>
+      <p class="page-subtitle">
+        Collecte des dons des anciens diplômés et mécènes pour le financement des bourses et des actions sociales.
+      </p>
+    </div>
+    <div class="d-flex gap-2">
+      <a routerLink="/contributions" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Tableau de bord
+      </a>
+      <button class="btn btn-primary" (click)="openDonationModal()">
+        <i class="bi bi-plus-lg me-1"></i> Enregistrer un Don
+      </button>
+    </div>
+  </div>
+
+  <!-- Messages -->
+  <div *ngIf="errorMessage" class="alert alert-danger mb-3">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="alert alert-success mb-3">{{ successMessage }}</div>
+
+  <!-- Total Bar & Filters -->
+  <div class="card shadow-sm mb-4">
+    <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div class="d-flex align-items-center gap-2">
+        <label class="fw-bold small text-muted text-uppercase mb-0">Affectation :</label>
+        <select class="form-select form-select-sm w-auto" [(ngModel)]="selectedPurposeFilter" (change)="applyFilter()">
+          <option value="ALL">Toutes les affectations</option>
+          <option *ngFor="let p of purposes" [value]="p">{{ p }}</option>
+        </select>
+      </div>
+
+      <div class="total-badge-box">
+        <span class="text-muted small me-2">TOTAL SÉLECTIONNÉ :</span>
+        <span class="fs-5 fw-bold text-teal">{{ getTotalDonationsAmount() | number:'1.0-0' }} FCFA</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- Donations Table -->
+  <div class="card shadow-sm">
+    <div class="table-responsive">
+      <table class="table table-hover align-middle mb-0">
+        <thead class="table-light">
+          <tr>
+            <th>Reçu N°</th>
+            <th>Date</th>
+            <th>Bienfaiteur / Donateur</th>
+            <th>Affectation / Cause</th>
+            <th>Moyen</th>
+            <th class="text-end">Montant</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let d of filteredDonations">
+            <td class="font-monospace fw-bold text-teal">{{ d.receiptNumber }}</td>
+            <td>{{ d.donationDate | date:'dd/MM/yyyy' }}</td>
+            <td>
+              <strong>{{ d.donorName }}</strong>
+              <small class="text-muted d-block" *ngIf="d.donorEmail">{{ d.donorEmail }}</small>
+            </td>
+            <td>
+              <span class="badge bg-purple-soft text-purple border">
+                {{ d.purpose }}
+              </span>
+            </td>
+            <td>
+              <span class="badge bg-light text-dark border">{{ d.paymentMethod }}</span>
+            </td>
+            <td class="text-end fw-bold text-teal fs-6">
+              {{ d.amount | number:'1.0-0' }} FCFA
+            </td>
+          </tr>
+          <tr *ngIf="filteredDonations.length === 0">
+            <td colspan="6" class="text-center py-4 text-muted">
+              Aucun don enregistré pour ce critère.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+</div>
+
+<!-- Modal Enregistrement d'un Don -->
+<div *ngIf="isDonationModalOpen" class="modal-backdrop-custom" (click)="closeDonationModal()">
+  <div class="modal-dialog-custom" (click)="$event.stopPropagation()">
+    <div class="modal-header-custom p-3 border-bottom d-flex justify-content-between align-items-center">
+      <h5 class="mb-0 fw-bold"><i class="bi bi-gift-fill text-danger me-2"></i> Enregistrer un Don / Mécénat</h5>
+      <button class="btn-close" (click)="closeDonationModal()"></button>
+    </div>
+    <div class="p-3">
+      <form (ngSubmit)="onSubmitDonation()">
+        <div class="mb-3">
+          <label class="form-label fw-bold small">Nom complet du donateur / Entreprise *</label>
+          <input type="text" class="form-control" [(ngModel)]="newDonorName" name="newDonorName" placeholder="Ex: Dr. Fatou Diop (Alumni 2018)" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold small">Adresse Email (pour envoi du reçu)</label>
+          <input type="email" class="form-control" [(ngModel)]="newDonorEmail" name="newDonorEmail" placeholder="donateur@exemple.com" />
+        </div>
+        <div class="row g-2 mb-3">
+          <div class="col-6">
+            <label class="form-label fw-bold small">Montant du Don (FCFA) *</label>
+            <input type="number" class="form-control" [(ngModel)]="newAmount" name="newAmount" min="500" step="5000" required />
+          </div>
+          <div class="col-6">
+            <label class="form-label fw-bold small">Mode de règlement *</label>
+            <select class="form-select" [(ngModel)]="newPaymentMethod" name="newPaymentMethod">
+              <option value="WAVE_MONEY">Wave Money</option>
+              <option value="ORANGE_MONEY">Orange Money</option>
+              <option value="CASH">Espèces</option>
+              <option value="VIREMENT">Virement bancaire</option>
+            </select>
+          </div>
+        </div>
+        <div class="mb-3">
+          <label class="form-label fw-bold small">Affectation du Don *</label>
+          <select class="form-select" [(ngModel)]="newPurpose" name="newPurpose">
+            <option *ngFor="let p of purposes" [value]="p">{{ p }}</option>
+          </select>
+        </div>
+        <button type="submit" class="btn btn-teal w-100 py-2 fw-bold" [disabled]="isSavingDonation || !newDonorName.trim() || newAmount <= 0">
+          <span *ngIf="isSavingDonation" class="spinner-border spinner-border-sm me-1"></span>
+          Valider & Émettre l'Attestation de Don
+        </button>
+      </form>
+    </div>
+  </div>
+</div>

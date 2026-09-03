@@ -1,0 +1,350 @@
+<div class="desk-page-container">
+
+  <!-- Header -->
+  <div class="page-header d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h2 class="page-title">
+        <i class="bi bi-cash-coin text-teal me-2"></i> Guichet d'Encaissement des Cotisations
+      </h2>
+      <p class="page-subtitle">
+        Enregistrement des versements des adhérents, ventilation automatique des arriérés et quittance officielle immédiate.
+      </p>
+    </div>
+    <div>
+      <a routerLink="/contributions" class="btn btn-outline-secondary">
+        <i class="bi bi-arrow-left me-1"></i> Retour au Tableau de bord
+      </a>
+    </div>
+  </div>
+
+  <!-- Messages d'alerte -->
+  <div *ngIf="errorMessage" class="alert alert-danger d-flex align-items-center mb-3">
+    <i class="bi bi-exclamation-triangle-fill me-2 fs-5"></i>
+    <div>{{ errorMessage }}</div>
+  </div>
+  <div *ngIf="successMessage" class="alert alert-success d-flex align-items-center mb-3">
+    <i class="bi bi-check-circle-fill me-2 fs-5"></i>
+    <div>{{ successMessage }}</div>
+  </div>
+
+  <div class="row g-4">
+    <!-- Colonne Gauche : Recherche & Calendrier du membre -->
+    <div class="col-lg-6">
+
+      <!-- Carte Recherche Membre -->
+      <div class="card shadow-sm mb-4">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0 fs-6 fw-bold">
+            <i class="bi bi-person-bounding-box text-teal me-2"></i> 1. Sélectionner l'Adhérent
+          </h5>
+        </div>
+        <div class="card-body">
+          <div class="search-input-group position-relative">
+            <div class="input-group">
+              <span class="input-group-text bg-white border-end-0">
+                <i class="bi bi-search text-muted"></i>
+              </span>
+              <input
+                type="text"
+                class="form-control border-start-0"
+                placeholder="Rechercher par prénom, nom ou numéro de téléphone..."
+                [(ngModel)]="searchKeyword"
+                (input)="onSearch()"
+                autocomplete="off"
+              />
+              <button class="btn btn-teal" type="button" (click)="onSearch()" [disabled]="isSearching">
+                <span *ngIf="isSearching" class="spinner-border spinner-border-sm me-1"></span>
+                Rechercher
+              </button>
+            </div>
+
+            <!-- Liste déroulante des résultats de recherche -->
+            <div *ngIf="searchResults.length > 0" class="search-dropdown-menu shadow">
+              <div
+                *ngFor="let m of searchResults"
+                class="search-dropdown-item"
+                (click)="selectMember(m)"
+              >
+                <div class="d-flex justify-content-between align-items-center">
+                  <div>
+                    <strong class="d-block">{{ m.personalInfo.firstname }} {{ m.personalInfo.name }}</strong>
+                    <small class="text-muted">{{ m.contactInfo.numberPhone || 'Sans tél.' }} — {{ m.academicInfo.institutionName || 'Établissement non renseigné' }}</small>
+                  </div>
+                  <span class="badge bg-light text-dark border">{{ m.status }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Fiche synthétique de l'adhérent sélectionné -->
+          <div *ngIf="selectedMember && calendar" class="member-profile-card mt-3">
+            <div class="d-flex align-items-center gap-3">
+              <div class="member-avatar">
+                <i class="bi bi-person-check-fill"></i>
+              </div>
+              <div class="flex-grow-1">
+                <h5 class="member-title mb-1">
+                  {{ calendar.memberFullName }}
+                </h5>
+                <div class="member-badges d-flex flex-wrap gap-2">
+                  <span class="badge bg-info-subtle text-info border border-info" *ngIf="calendar.memberNumber">
+                    Matricule: {{ calendar.memberNumber }}
+                  </span>
+                  <span class="badge bg-secondary-subtle text-dark border">
+                    <i class="bi bi-mortarboard me-1"></i> {{ calendar.bourseLibelle }}
+                  </span>
+                  <span class="badge bg-teal-subtle text-teal border border-teal">
+                    Mensualité : {{ calendar.monthlyAmount | number:'1.0-0' }} F/mois
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <div class="financial-summary-row mt-3 pt-3 border-top">
+              <div class="summary-item text-center">
+                <span class="summary-label">TOTAL VERSÉ</span>
+                <span class="summary-value text-success">{{ calendar.totalPaid | number:'1.0-0' }} F</span>
+              </div>
+              <div class="summary-item text-center">
+                <span class="summary-label">ARRIÉRÉS ÉCHUS</span>
+                <span class="summary-value" [class.text-danger]="calendar.totalDebt > 0" [class.text-muted]="calendar.totalDebt === 0">
+                  {{ calendar.totalDebt | number:'1.0-0' }} F
+                </span>
+              </div>
+              <div class="summary-item text-center">
+                <span class="summary-label">MONTANT TOTAL ANNUEL</span>
+                <span class="summary-value text-dark">{{ calendar.totalDue | number:'1.0-0' }} F</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Échéancier / Grille des mensualités -->
+      <div class="card shadow-sm" *ngIf="calendar">
+        <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+          <h5 class="mb-0 fs-6 fw-bold">
+            <i class="bi bi-calendar3 text-teal me-2"></i> Échéancier ({{ calendar.phaseNom }})
+          </h5>
+          <span class="badge bg-light text-dark border">{{ calendar.contributions.length }} mois</span>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-hover align-middle mb-0">
+              <thead class="table-light">
+                <tr>
+                  <th *ngIf="allocationMode === 'MANUAL'" class="text-center" style="width: 40px;">Coche</th>
+                  <th>Mois</th>
+                  <th>Montant Dû</th>
+                  <th>Montant Réglé</th>
+                  <th>Statut</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr
+                  *ngFor="let c of calendar.contributions"
+                  [class.table-active]="isContributionSelected(c)"
+                  (click)="allocationMode === 'MANUAL' && toggleContributionSelection(c)"
+                  [style.cursor]="allocationMode === 'MANUAL' && c.status !== 'PAID' ? 'pointer' : 'default'"
+                >
+                  <td *ngIf="allocationMode === 'MANUAL'" class="text-center">
+                    <input
+                      type="checkbox"
+                      class="form-check-input"
+                      [checked]="isContributionSelected(c)"
+                      [disabled]="c.status === 'PAID'"
+                      (click)="$event.stopPropagation(); toggleContributionSelection(c)"
+                    />
+                  </td>
+                  <td class="fw-semibold">
+                    <i class="bi bi-calendar2-month me-1 text-muted"></i> {{ c.month }}
+                  </td>
+                  <td>{{ c.amountDue | number:'1.0-0' }} F</td>
+                  <td>
+                    <span [class.text-success]="c.amountPaid >= c.amountDue" [class.text-muted]="!c.amountPaid">
+                      {{ (c.amountPaid || 0) | number:'1.0-0' }} F
+                    </span>
+                  </td>
+                  <td>
+                    <span class="badge-status" [ngClass]="getStatusBadgeClass(c.status)">
+                      {{ getStatusLabel(c.status) }}
+                    </span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Colonne Droite : Formulaire d'encaissement -->
+    <div class="col-lg-6">
+      <div class="card shadow-sm border-teal-top">
+        <div class="card-header bg-white py-3">
+          <h5 class="mb-0 fs-6 fw-bold">
+            <i class="bi bi-credit-card-fill text-teal me-2"></i> 2. Règlement & Encaissement
+          </h5>
+        </div>
+        <div class="card-body">
+
+          <div *ngIf="!selectedMember" class="text-center py-5 text-muted">
+            <i class="bi bi-person-up fs-1 text-teal d-block mb-2"></i>
+            <p>Veuillez d'abord rechercher et sélectionner un adhérent pour encaisser ses cotisations.</p>
+          </div>
+
+          <form *ngIf="selectedMember && calendar" (ngSubmit)="onSubmitPayment()">
+
+            <!-- Mode de ventilation -->
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase text-muted">Mode d'affectation</label>
+              <div class="row g-2">
+                <div class="col-6">
+                  <div
+                    class="allocation-pill"
+                    [class.active]="allocationMode === 'SMART'"
+                    (click)="allocationMode = 'SMART'"
+                  >
+                    <i class="bi bi-lightning-charge-fill me-1 text-warning"></i>
+                    <strong>Automatique (Smart)</strong>
+                    <small class="d-block text-muted">Arriérés soldés en priorité</small>
+                  </div>
+                </div>
+                <div class="col-6">
+                  <div
+                    class="allocation-pill"
+                    [class.active]="allocationMode === 'MANUAL'"
+                    (click)="allocationMode = 'MANUAL'"
+                  >
+                    <i class="bi bi-check2-square me-1 text-primary"></i>
+                    <strong>Sélection Manuelle</strong>
+                    <small class="d-block text-muted">Cocher les mois désirés</small>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Montant versé -->
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase text-muted">Montant Versé (FCFA) *</label>
+              <div class="input-group input-group-lg">
+                <input
+                  type="number"
+                  class="form-control fw-bold fs-4 text-teal"
+                  [(ngModel)]="amount"
+                  name="amount"
+                  min="100"
+                  step="500"
+                  [readonly]="allocationMode === 'MANUAL'"
+                  required
+                />
+                <span class="input-group-text bg-light text-muted fw-bold">FCFA</span>
+              </div>
+
+              <!-- Prévisualisation des mois en mode Smart -->
+              <div *ngIf="allocationMode === 'SMART'" class="preview-box mt-2">
+                <span class="preview-title">
+                  <i class="bi bi-info-circle me-1"></i> Mois qui seront couverts par ce versement :
+                </span>
+                <div class="preview-chips mt-1">
+                  <span *ngFor="let m of getSmartAllocatedMonthsPreview()" class="badge bg-light text-dark border me-1">
+                    {{ m }}
+                  </span>
+                  <span *ngIf="getSmartAllocatedMonthsPreview().length === 0" class="text-muted fst-italic small">
+                    Saisissez un montant pour voir les mois soldés.
+                  </span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Moyen de paiement -->
+            <div class="mb-3">
+              <label class="form-label fw-bold small text-uppercase text-muted">Mode de Règlement *</label>
+              <div class="row g-2">
+                <div class="col-4">
+                  <div
+                    class="method-btn"
+                    [class.active]="paymentMethod === 'CASH'"
+                    (click)="paymentMethod = 'CASH'"
+                  >
+                    <i class="bi bi-cash-stack d-block fs-4 text-success"></i>
+                    <span>Espèces (Cash)</span>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div
+                    class="method-btn"
+                    [class.active]="paymentMethod === 'WAVE_MONEY'"
+                    (click)="paymentMethod = 'WAVE_MONEY'"
+                  >
+                    <i class="bi bi-phone-fill d-block fs-4 text-info"></i>
+                    <span>Wave Money</span>
+                  </div>
+                </div>
+                <div class="col-4">
+                  <div
+                    class="method-btn"
+                    [class.active]="paymentMethod === 'ORANGE_MONEY'"
+                    (click)="paymentMethod = 'ORANGE_MONEY'"
+                  >
+                    <i class="bi bi-credit-card-2-front-fill d-block fs-4 text-warning"></i>
+                    <span>Orange Money</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Réf de transaction pour Wave / Orange Money -->
+            <div class="mb-3" *ngIf="paymentMethod === 'WAVE_MONEY' || paymentMethod === 'ORANGE_MONEY'">
+              <label class="form-label fw-bold small text-uppercase text-muted">
+                Référence / ID de Transaction Opérateur *
+              </label>
+              <input
+                type="text"
+                class="form-control font-monospace"
+                placeholder="Ex: TXN-WAVE-982143 ou REF-OM-5544"
+                [(ngModel)]="transactionReference"
+                name="transactionReference"
+                required
+              />
+              <small class="text-muted">Indispensable pour le rapprochement et le pointage de trésorerie.</small>
+            </div>
+
+            <!-- Notes & Remarques -->
+            <div class="mb-4">
+              <label class="form-label fw-bold small text-uppercase text-muted">Remarques / Observations</label>
+              <textarea
+                class="form-control"
+                rows="2"
+                placeholder="Ex: Paiement semestriel en avance, reçu remis..."
+                [(ngModel)]="notes"
+                name="notes"
+              ></textarea>
+            </div>
+
+            <!-- Bouton Validation -->
+            <button
+              type="submit"
+              class="btn btn-teal w-100 py-3 fs-5 fw-bold shadow"
+              [disabled]="isSubmitting || amount <= 0"
+            >
+              <span *ngIf="isSubmitting" class="spinner-border spinner-border-sm me-2"></span>
+              <i *ngIf="!isSubmitting" class="bi bi-check2-circle me-2"></i>
+              Valider l'Encaissement & Émettre la Quittance
+            </button>
+          </form>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Quittance Modal -->
+<app-receipt-modal
+  [receipt]="createdReceipt"
+  [isOpen]="isReceiptModalOpen"
+  (close)="closeReceiptModal()">
+</app-receipt-modal>
