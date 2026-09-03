@@ -25,10 +25,11 @@
   gap: 0.8rem;
   overflow-x: auto;
   padding-bottom: 0.2rem;
-  scrollbar-width: thin;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
 
   &::-webkit-scrollbar {
-    height: 4px;
+    display: none;
   }
 
   .tab-btn {
@@ -36,8 +37,8 @@
     align-items: center;
     gap: 0.6rem;
     padding: 0.65rem 1.3rem;
-    border-radius: $radius-md;
-    border: 1px solid $color-border-default;
+    border-radius: $radius-full;
+    border: 1px solid transparent;
     background-color: $gray-100;
     color: $color-text-secondary;
     font-size: 1.25rem;
@@ -51,18 +52,19 @@
     }
 
     &:hover {
-      background-color: $color-background-panel;
-      color: $primary-600;
-      border-color: $primary-300;
-      box-shadow: $shadow-xs;
+      background-color: $color-background-hover;
+      color: $color-text-primary;
     }
 
     &.active {
-      background-color: rgba($primary-500, 0.08);
-      color: $primary-600;
-      border-color: $primary-400;
+      background-color: $primary-500;
+      color: $white;
       font-weight: 600;
-      box-shadow: 0 1px 3px rgba($primary-500, 0.12);
+      box-shadow: 0 2px 8px rgba($primary-500, 0.35);
+
+      i {
+        color: $white;
+      }
     }
   }
 }

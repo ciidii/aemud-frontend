@@ -22,15 +22,4 @@
       </button>
     </div>
   </div>
-
-  <!-- Segment Quick Filter Tabs -->
-  <div class="status-tabs-nav">
-    <button *ngFor="let tab of statusTabs"
-            (click)="onSelectStatusTab(tab.value)"
-            [ngClass]="{'active': (activeStatusTab$ | async) === tab.value}"
-            class="tab-pill">
-      <i class="bi {{ tab.icon }}"></i>
-      <span>{{ tab.label }}</span>
-    </button>
-  </div>
 </div>
