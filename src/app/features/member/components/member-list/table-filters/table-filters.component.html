@@ -1,28 +1,4 @@
 <div class="filters-container">
-  <!-- 0. Fast Segmented Status Tabs -->
-  <div class="segmented-status-tabs">
-    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === null && !selectedPaymentStatus" (click)="onQuickMemberStatusChange(null)">
-      <i class="bi bi-people-fill"></i>
-      <span>Tous les Adhérents</span>
-    </button>
-    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ACTIVE'" (click)="onQuickMemberStatusChange('ACTIVE')">
-      <i class="bi bi-mortarboard-fill text-teal"></i>
-      <span>Étudiants Actifs</span>
-    </button>
-    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ALUMNI'" (click)="onQuickMemberStatusChange('ALUMNI')">
-      <i class="bi bi-award-fill text-emerald"></i>
-      <span>Réseau Alumni</span>
-    </button>
-    <button type="button" class="tab-btn" [class.active]="selectedPaymentStatus === 'PENDING'" (click)="onQuickPaymentStatusChange(selectedPaymentStatus === 'PENDING' ? '' : 'PENDING')">
-      <i class="bi bi-hourglass-split text-warning"></i>
-      <span>Cotisations en Attente</span>
-    </button>
-    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'INACTIVE'" (click)="onQuickMemberStatusChange('INACTIVE')">
-      <i class="bi bi-pause-circle-fill text-muted"></i>
-      <span>Inactifs / À Régulariser</span>
-    </button>
-  </div>
-
   <!-- 1. Search Bar & Action Controls -->
   <div class="search-and-actions-bar">
     <!-- Search Box -->
@@ -52,6 +28,30 @@
       <i class="bi bi-sliders2"></i>
       <span class="d-none d-sm-inline">Filtres Avancés</span>
       <span *ngIf="activeFilterCount > 0" class="filter-count-badge">{{ activeFilterCount }}</span>
+    </button>
+  </div>
+
+  <!-- 2. Fast Segmented Status Tabs (Directement en dessous de la barre de recherche) -->
+  <div class="segmented-status-tabs">
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === null && !selectedPaymentStatus" (click)="onQuickMemberStatusChange(null)">
+      <i class="bi bi-people-fill"></i>
+      <span>Tous les Adhérents</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ACTIVE'" (click)="onQuickMemberStatusChange('ACTIVE')">
+      <i class="bi bi-mortarboard-fill text-teal"></i>
+      <span>Étudiants Actifs</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'ALUMNI'" (click)="onQuickMemberStatusChange('ALUMNI')">
+      <i class="bi bi-award-fill text-emerald"></i>
+      <span>Réseau Alumni</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedPaymentStatus === 'PENDING'" (click)="onQuickPaymentStatusChange(selectedPaymentStatus === 'PENDING' ? '' : 'PENDING')">
+      <i class="bi bi-hourglass-split text-warning"></i>
+      <span>Cotisations en Attente</span>
+    </button>
+    <button type="button" class="tab-btn" [class.active]="selectedMemberStatus === 'INACTIVE'" (click)="onQuickMemberStatusChange('INACTIVE')">
+      <i class="bi bi-pause-circle-fill text-muted"></i>
+      <span>Inactifs / À Régulariser</span>
     </button>
   </div>
 

@@ -185,78 +185,16 @@
     }
   }
 
-  // Segment Quick Filter Tabs (Scrollable on mobile)
-  .status-tabs-nav {
-    display: flex;
-    align-items: center;
-    gap: $space-2;
-    overflow-x: auto;
-    padding-bottom: $space-1;
-    -webkit-overflow-scrolling: touch;
-    scrollbar-width: none; // Hide on Firefox
-
-    &::-webkit-scrollbar {
-      display: none; // Hide on Chrome/Safari
-    }
-
-    .tab-pill {
-      display: inline-flex;
-      align-items: center;
-      gap: 0.6rem;
-      padding: 0.65rem 1.2rem;
-      border-radius: $radius-full;
-      font-size: 1.25rem;
-      font-weight: 500;
-      color: $color-text-secondary;
-      background: $gray-100;
-      border: 1px solid transparent;
-      cursor: pointer;
-      white-space: nowrap;
-      transition: all 0.18s ease;
-      flex-shrink: 0;
-      min-height: 3.6rem;
-
-      i {
-        font-size: 1.3rem;
-      }
-
-      .tab-count {
-        font-size: 1.15rem;
-        opacity: 0.85;
-      }
-
-      &:hover {
-        background: $color-background-hover;
-        color: $color-text-primary;
-      }
-
-      &.active {
-        background: $primary-500;
-        color: $white;
-        font-weight: 600;
-        box-shadow: 0 2px 8px rgba($primary-500, 0.35);
-
-        i {
-          color: $white;
-        }
-
-        .tab-count {
-          opacity: 1;
-        }
-      }
-    }
-  }
 }
 
 // ============================================================
-// FILTER & SEARCH BAR
+// FILTER & SEARCH TOOLBAR (Integrated Search & Status Tabs)
 // ============================================================
 
-.filter-bar-section {
+.filter-toolbar-section {
   display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: $space-3;
+  flex-direction: column;
+  gap: $space-2;
   padding: $space-3 $space-6;
   background-color: $color-background-panel;
   border-bottom: 1px solid $color-border-default;
@@ -265,14 +203,28 @@
     padding: $space-2 $space-3;
   }
 
+  .toolbar-main-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: $space-4;
+    width: 100%;
+
+    @media (max-width: 992px) {
+      flex-direction: column;
+      align-items: stretch;
+      gap: $space-2;
+    }
+  }
+
   .search-input-wrapper {
     position: relative;
     display: flex;
     align-items: center;
     flex: 1;
-    max-width: 44rem;
+    max-width: 40rem;
 
-    @media (max-width: 768px) {
+    @media (max-width: 992px) {
       max-width: 100%;
     }
 
@@ -327,11 +279,78 @@
     }
   }
 
+  // Segment Quick Filter Tabs (Same level on desktop, underneath on mobile)
+  .status-tabs-nav {
+    display: flex;
+    align-items: center;
+    gap: $space-2;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; // Hide on Firefox
+
+    &::-webkit-scrollbar {
+      display: none; // Hide on Chrome/Safari
+    }
+
+    @media (max-width: 992px) {
+      width: 100%;
+      padding-bottom: 0.2rem;
+    }
+
+    .tab-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.6rem;
+      padding: 0.65rem 1.2rem;
+      border-radius: $radius-full;
+      font-size: 1.25rem;
+      font-weight: 500;
+      color: $color-text-secondary;
+      background: $gray-100;
+      border: 1px solid transparent;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.18s ease;
+      flex-shrink: 0;
+      min-height: 3.6rem;
+
+      i {
+        font-size: 1.3rem;
+      }
+
+      .tab-count {
+        font-size: 1.15rem;
+        opacity: 0.85;
+      }
+
+      &:hover {
+        background: $color-background-hover;
+        color: $color-text-primary;
+      }
+
+      &.active {
+        background: $primary-500;
+        color: $white;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba($primary-500, 0.35);
+
+        i {
+          color: $white;
+        }
+
+        .tab-count {
+          opacity: 1;
+        }
+      }
+    }
+  }
+
   .search-stats {
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     color: $color-text-muted;
     font-weight: 500;
     white-space: nowrap;
+    padding-left: 0.4rem;
   }
 }
 

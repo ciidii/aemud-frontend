@@ -1,5 +1,5 @@
 <div class="mandat-list-page">
-  <!-- Page Header (Harmonized with Member Module) -->
+  <!-- Page Header (Compact & Clean - Identity & Action Only) -->
   <header class="page-header">
     <div class="header-container">
       <div class="top-row">
@@ -26,8 +26,31 @@
           </button>
         </div>
       </div>
+    </div>
+  </header>
 
-      <!-- Segment Quick Filter Tabs -->
+  <!-- Filter & Search Toolbar (Integrated: Search Bar + Status Filter Tabs) -->
+  <div class="filter-toolbar-section">
+    <div class="toolbar-main-row">
+      <!-- Search Box -->
+      <div class="search-input-wrapper">
+        <i class="bi bi-search search-icon"></i>
+        <input type="text"
+               class="search-input"
+               [(ngModel)]="searchTerm"
+               (ngModelChange)="onSearchChange()"
+               placeholder="Rechercher par nom de mandat ou phase..."
+               aria-label="Rechercher un mandat">
+        <button *ngIf="searchTerm"
+                type="button"
+                class="btn-clear-search"
+                (click)="clearSearch()"
+                title="Effacer la recherche">
+          <i class="bi bi-x-circle-fill"></i>
+        </button>
+      </div>
+
+      <!-- Segment Quick Filter Tabs (Same level on desktop, underneath on mobile) -->
       <div class="status-tabs-nav">
         <button *ngFor="let tab of statusTabs"
                 type="button"
@@ -40,29 +63,10 @@
         </button>
       </div>
     </div>
-  </header>
 
-  <!-- Filter & Search Bar -->
-  <div class="filter-bar-section">
-    <div class="search-input-wrapper">
-      <i class="bi bi-search search-icon"></i>
-      <input type="text"
-             class="search-input"
-             [(ngModel)]="searchTerm"
-             (ngModelChange)="onSearchChange()"
-             placeholder="Rechercher par nom de mandat ou phase..."
-             aria-label="Rechercher un mandat">
-      <button *ngIf="searchTerm"
-              type="button"
-              class="btn-clear-search"
-              (click)="clearSearch()"
-              title="Effacer la recherche">
-        <i class="bi bi-x-circle-fill"></i>
-      </button>
-    </div>
-
+    <!-- Active Search Stats -->
     <div class="search-stats" *ngIf="searchTerm">
-      <span>{{ filteredMandats.length }} résultat{{ filteredMandats.length > 1 ? 's' : '' }}</span>
+      <span>{{ filteredMandats.length }} résultat{{ filteredMandats.length > 1 ? 's' : '' }} trouvé{{ filteredMandats.length > 1 ? 's' : '' }}</span>
     </div>
   </div>
 
