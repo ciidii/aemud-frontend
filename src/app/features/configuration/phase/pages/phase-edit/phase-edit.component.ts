@@ -21,7 +21,7 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
   periodeMandatId: string | null = null;
   phaseData: PhaseModel | null = null;
 
-  isEditMode = false;
+  isEditMode = true;
   isLoading = true;
   isSaving = false;
 
@@ -34,9 +34,9 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.phaseForm = this.fb.group({
-      nom: ['', Validators.required],
-      dateDebut: [{value: '', }, Validators.required],
-      dateFin: [{value: '', }, Validators.required],
+      nom: ['', [Validators.required, Validators.minLength(2)]],
+      dateDebut: ['', Validators.required],
+      dateFin: ['', Validators.required],
       dateDebutInscription: [''],
       dateFinInscription: ['']
     });
@@ -52,26 +52,43 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
         this.periodeMandatId = this.route.snapshot.queryParamMap.get('periodeMandatId');
         return this.phaseHttpService.getPhaseById(this.phaseId);
       })
-    ).subscribe(response => {
-      if (response && response.data) {
-        this.phaseData = response.data;
+    ).subscribe({
+      next: (response) => {
+        if (response && response.data) {
+          this.phaseData = response.data;
+          const phase = this.phaseData as any;
+          this.phaseForm.patchValue({
+            nom: phase.nom,
+            dateDebut: this.dateArrayToString(phase.dateDebut),
+            dateFin: this.dateArrayToString(phase.dateFin),
+            dateDebutInscription: this.dateArrayToString(phase.dateDebutInscription),
+            dateFinInscription: this.dateArrayToString(phase.dateFinInscription)
+          });
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error("Error loading phase:", err);
+        this.notificationService.showError("Impossible de charger les données de la phase.");
+        this.isLoading = false;
       }
-      this.isLoading = false;
     });
   }
 
-  toggleEditMode(enable: boolean): void {
-    this.isEditMode = enable;
-    if (enable && this.phaseData) {
-      // The API for a single phase returns dates as strings
-      const phase = this.phaseData as any;
-              this.phaseForm.patchValue({
-                nom: phase.nom,
-                dateDebut: this.dateArrayToString(phase.dateDebut),
-                dateFin: this.dateArrayToString(phase.dateFin),
-                dateDebutInscription: this.dateArrayToString(phase.dateDebutInscription),
-                dateFinInscription: this.dateArrayToString(phase.dateFinInscription)
-              });    }
+  getPhaseStatusBadge(status: string | undefined): { label: string; class: string; icon: string } {
+    switch (status) {
+      case 'CURRENT':
+        return { label: 'En cours', class: 'badge-current', icon: 'bi-play-circle-fill' };
+      case 'EXTENDED':
+        return { label: 'Prolongée', class: 'badge-extended', icon: 'bi-clock-history' };
+      case 'FUTURE':
+        return { label: 'À venir', class: 'badge-future', icon: 'bi-calendar-event' };
+      case 'PASSED':
+      case 'CLOSED':
+        return { label: 'Terminée', class: 'badge-closed', icon: 'bi-check-circle-fill' };
+      default:
+        return { label: status || 'Inconnu', class: 'badge-default', icon: 'bi-dot' };
+    }
   }
 
   onSubmit(): void {
@@ -86,32 +103,26 @@ export class PhaseEditComponent implements OnInit, OnDestroy {
 
     const payload: UpdatePhaseModel = {
       id: this.phaseId,
-      nom: formValue.nom,
+      nom: formValue.nom.trim(),
       dateDebut: formValue.dateDebut,
       dateFin: formValue.dateFin,
       dateDebutInscription: formValue.dateDebutInscription || undefined,
       dateFinInscription: formValue.dateFinInscription || undefined
     };
-    console.log("###############")
-    console.log(payload);
-    console.log("###############")
+
     this.phaseHttpService.updatePhase(this.phaseId, payload).pipe(
       finalize(() => this.isSaving = false)
     ).subscribe({
       next: (updatedPhase) => {
         this.notificationService.showSuccess("La phase a été mise à jour avec succès.");
-        this.phaseData = updatedPhase; // Refresh data with the updated version
-        this.toggleEditMode(false); // Switch back to display mode
+        this.phaseData = updatedPhase;
+        this.navigateBack();
       },
       error: (err) => {
         console.error("Error updating phase:", err);
         this.notificationService.showError("Une erreur est survenue lors de la mise à jour de la phase.");
       }
     });
-  }
-
-  cancelEdit(): void {
-    this.toggleEditMode(false);
   }
 
   navigateBack(): void {
